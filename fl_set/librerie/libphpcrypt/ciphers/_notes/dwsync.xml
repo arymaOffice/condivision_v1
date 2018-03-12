@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="3DES.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242265984012" remote="130701403200000000" Dst="1" />
+<file name="3Way.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242263084008" remote="130701403200000000" Dst="1" />
+<file name="AES128.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242259884003" remote="130701403200000000" Dst="1" />
+<file name="AES256.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242254883996" remote="130701403200000000" Dst="1" />
+<file name="AES192.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242257484000" remote="130701403200000000" Dst="1" />
+<file name="ARC4.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242252383993" remote="130701403200000000" Dst="1" />
+<file name="Blowfish.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242249783989" remote="130701403200000000" Dst="1" />
+<file name="CAST128.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242244383982" remote="130701403200000000" Dst="1" />
+<file name="CAST256.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242237973972" remote="130701403200000000" Dst="1" />
+<file name="DES.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242232373964" remote="130701403800000000" Dst="1" />
+<file name="Enigma.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242228673959" remote="130701403800000000" Dst="1" />
+<file name="RC2.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242225873955" remote="130701403800000000" Dst="1" />
+<file name="Rijndael128.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242216073941" remote="130701403800000000" Dst="1" />
+<file name="Rijndael192.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242213573938" remote="130701403800000000" Dst="1" />
+<file name="Rijndael.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242222773951" remote="130701403800000000" Dst="1" />
+<file name="Rijndael256.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242211073934" remote="130701403800000000" Dst="1" />
+<file name="SimpleXOR.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242208773931" remote="130701403800000000" Dst="1" />
+<file name="Vigenere.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242203073923" remote="130701403800000000" Dst="1" />
+<file name="Skipjack.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130662242206173928" remote="130701403800000000" Dst="1" />
+</dwsync>

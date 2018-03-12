@@ -1,0 +1,21 @@
+.form-login{
+	background: white none repeat scroll 0% 0%;width: 450px;margin: 166px auto 0px;padding: 20px;
+
+
+}
+
+.navbar, .toolbar, .subnavbar,.searchbar {
+    background: #454545;
+}
+
+a {
+
+    color: #454545;
+
+}
+
+
+label.label-checkbox input[type="checkbox"]:checked + .item-media i.icon-form-checkbox, label.label-checkbox input[type="radio"]:checked + .item-media i.icon-form-checkbox, label.label-checkbox input[type="checkbox"]:checked ~ .item-after i.icon-form-checkbox, label.label-checkbox input[type="radio"]:checked ~ .item-after i.icon-form-checkbox, label.label-checkbox input[type="checkbox"]:checked ~ .item-inner i.icon-form-checkbox, label.label-checkbox input[type="radio"]:checked ~ .item-inner i.icon-form-checkbox {
+    border-color: #454545;
+    background-color: #454545;
+}

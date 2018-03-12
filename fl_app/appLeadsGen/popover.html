@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="theme-color" content="#2196f3">
+    <title>Lead Generator</title>
+    <link rel="stylesheet" href="../build/css/framework7.material.css">
+    <link rel="stylesheet" href="../build/css/framework7.material.colors.css">
+    <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="css/kitchen-sink.css">
+    <link rel="stylesheet" href="./firma/signature-pad.css">
+    
+
+    <link rel="icon" href="img/icon.png">
+  </head>
+  <body>
+
+
+<div data-page="firma" class="page">
+  <div class="navbar">
+    <div class="navbar-inner">
+      <div class="left"><a href="index.php" class="back link icon-only"><i class="icon icon-back"></i></a></div>
+      <div class="center">Indietro</div>
+    </div>
+  </div>
+  <div class="page-content">
+
+
+<div id="signature" style="text-align:center;"><img id="sign" src=""></div>
+ <div id="signature-pad" class="m-signature-pad">
+    <div class="m-signature-pad--body">
+      <canvas></canvas>
+    </div>
+    <div class="m-signature-pad--footer">
+      <div class="description">Firma</div>
+      <button class="button clear" data-action="clear">Cancella</button>
+      <button class="button save" data-action="save">Salva Firma</button>
+    </div>
+
+
+  </div>
+ 
+  <script src="firma/signature_pad.js"></script>
+  <script src="firma/app.js"></script>
+
+  </div>
+</div>
+
+</body></html>

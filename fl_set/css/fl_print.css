@@ -1,0 +1,410 @@
+/* CSS Document */
+/* Concept by Michele Fazio.it */
+
+
+body {
+	font-family: Arial, sans-serif;
+    color: #333333;
+	font-size: 14px !important;
+	background: url(../icons/bg_body.jpg) top repeat-x;
+	text-align: center; 
+	margin: 1mm;
+	padding: 0px;
+}
+	
+a:link, a:visited {
+	color: #565353;
+	text-decoration: none;
+}
+
+a:hover, a:active, .selected a:link, .selected a:visited {
+	color: #565353;
+	text-decoration: none;
+}
+a:active {
+	color: #565353;
+}
+
+h1{font-size: 16px;}
+h2{font-size: 14px;} .dati h2 { font-size: 12px; font-weight: normal; }
+h3{font-size: 14px;}
+h4{font-size: 12px;}
+h5{font-size: 10px;}
+h6{font-size: 10px;}
+hr { padding: 3px; border:  #CCCCCC 1px solid; clear: both; height: 10px;}
+img, object {border: none;}
+
+.subcolor { color: #666666; }
+ 
+/* Div */
+#clear {
+	width: 994px;
+	height: 0px;
+	background: #FFFFFF;
+	text-align: center;
+	margin: 0px auto 0px auto;
+	padding: 0px;
+	border: none;
+	clear: both;
+	}
+	
+#map {
+text-align: left;
+width: auto;
+margin: auto;
+margin-left: 15px;
+
+}
+
+#container {
+	min-width: 994px;
+	width: auto;
+	height: auto;
+	margin: 0px auto 0px auto;
+	padding: 0px;
+	border: none;
+	position: relative;
+	background: #FFFFFF;
+	}
+	
+#intro { visibility: hidden; position: absolute; top: 0px; left: 0px; width: 50px; z-index: 1;}
+#tabs { border: none; }
+#menu_top,#submenu,#testata_admin,#testata,#menu,#subtestata,#messaggi_alert  {
+	display: none;
+	
+	}
+			
+#menu,#menu_toggler,#side_menu,#scroll-up,.info,#up_menu,.filtri,.strumenti, .stumenti_modulo, #menu_modulo,.filterToggle,#send-sms,i, .fa {
+	display: none;
+		
+	}
+
+#corpo {
+	width: inherit;
+	height: auto !important;
+	margin: 0px auto 0px auto;
+	padding: 0px 2px 0px 2px;
+	text-align: left;
+	background: url(fl_set/icons/colore.jpg) repeat-x scroll bottom;
+	}
+
+#corpo h1,#corpo h2 { margin: 0px; padding: 0px; }
+#corpo h2 { color: #565353; }
+#corpo p { margin: 0px; line-height: 160%;}
+#footer {
+	display: none;
+	}
+.show {}
+#content { width: 100%;  margin: 0px; float: none; text-align: left; padding: 0px;}
+#content h2 { margin: 10px 0px 0px 0px;  }
+#box_menu { float: left; width: 20%; margin: 0px; text-align: left; padding: 0px; }
+/* Liste */
+
+ul { list-style-image: url(fl_set/icons/list.jpg); }
+ol {}
+dl { margin: 0px; padding: 10px 0px 10px 25px; text-align: left; font-weight:600; }
+dt { margin: 0px; padding: 0px;}
+dd { margin: 0px; padding: 0px; line-height: 25px; border-bottom: dashed #CCCCCC thin !important; border-bottom: dashed #CCCCCC 0.1em; }
+li { line-height: 28px;}
+#menu_accordion { margin: 0px; padding: 3px; display: none;}
+#menu_accordion a:link,#menu_accordion a:visited { color: #333333; }
+#menu_accordion a:hover { color: #FF9933; }
+.acc_principale { list-style: none; border: 1px solid #CCCCCC; margin: 5px 0px; padding: 5px; } .acc_principale a { color: #333333; }
+.acc_sub { list-style: none; margin: 0px 0px 0px 10px; padding: 0px;}
+object { text-align: center; margin: auto;}
+
+/* Table */
+
+
+.dati,.dati2 { 	
+	border-spacing: 1px; 
+	border-collapse: separate; 
+	caption-side: top; 
+	width: 100%; 
+	height: auto; 
+	margin: 20px 0;
+	padding: 0px; 
+	vertical-align: middle; 
+	font-size: 14px;  
+	border: none;
+	}
+
+.dati th { text-align: left;    }
+.dati td { 	border: 1px solid #F4F4F4;
+ text-align: left; page-break-after: auto; page-break-before: auto;  vertical-align: middle;  margin: 0px; padding: 1px; min-height: 0px;  }
+.dati tr { line-height: auto; page-break-after: auto; page-break-before: auto; }
+.dati tr:nth-child(even) { background: #D7D7D7; }
+
+/* Commons */
+
+.form_row { 
+
+	margin: 10px auto auto auto; 
+
+	text-align: right; 
+
+	width: 500px;
+
+	height: auto;
+
+	padding-right: 20px;}
+	
+#main_select select { padding: 5px; border: 1px solid #ccc; background: #ffffcc;}
+
+.input_text { width: 400px;   margin-top: 20px; }
+.input_text input { width: 400px; padding: 5px; font-size: 0.9em; }
+
+.select_text { width: auto; text-align: left;   margin: 0px; line-height: 50px;  margin: 25px;}
+.select_text option { padding: 0px 10px 0px 0px;   border: none;}
+
+.input_check { width: 40%; text-align: left;   margin: 25px; }
+.input_check input { width: 50px; height: 50px; }
+
+.disabled {  margin-top: 20px; margin-bottom: 20px; text-align: left; } 
+.disabled input { width: 50px; padding: 5px;}
+
+.par_btn { margin-top: 10px;}
+.createdate { font-size: smaller;}	
+
+/* Messaggi di Errore */
+
+.esito { width: 80%; margin: 50px auto 50px auto; height: auto; padding: 10px 5px 20px 5px; border: 1px dashed #CCCCCC; text-align: center;}
+.esito h2 {
+	text-align: center;
+	color: #CC0000;
+}
+.esito p { width: auto; text-decoration: none; }
+
+.clear {clear: both;}
+.hide {display: none;}
+br {clear: none;}
+.center { text-align: center; }
+.strong { font-weight: bold; }
+.corsivo { font-style: oblique; }
+.titolo_bg { background: #F3F3F3; color: #118743;  text-align: center; padding: 8px 5px 8px 5px; width: 100%; margin: 5px 0px 5px 0px;}
+.riga_sx { background: #FCFCFC; color: #118743;  text-align: left; padding: 8px 5px 8px 5px; width: 100%; margin: 5px 0px 5px 0px;}
+.percorso { float: left; }
+.strumenti { float: right; }
+
+.box_div { border: 1px solid #CCCCCC; margin: 10px 10px; padding: 0px; }
+.box_div h3 { height: auto; vertical-align: middle; background: #333333; color: #FFFFFF; padding: 10px 5px; margin: 0px;  }
+.box_div h3.letto { background: #FF9933; color: #333333;}
+.box_div p { padding: 5px; }
+.box_div p.leggi { text-align: right; padding-right: 5px; }
+
+.intro_box { width: 250px; float: left; border: 1px solid #CCCCCC; padding: 5px; margin: 20px 0px 0px 50px; height: auto; min-height: 250px;}
+.intro_box h3, .intro_box p { margin: 0px; padding: 0px; color: #333333;}
+.intro_box h3 a { color:#333333 ;}
+
+.thumbnail { padding: 3px; margin-top: 6px; border: 1px #CCCCCC solid; }
+.thumbnail:hover { }
+.icona_libreria { float: left; font-size: smaller; };
+.icona_libreria img { width: 100px; height: auto;}
+/* Tabella Modifica dei servizi */
+#tab_mod_4 { width: 100%;}
+#tab_mod_4 td { width: auto; vertical-align: top;}
+#tab_mod_4 p { width: 300px;}
+
+/* Tabella Modifica dei servizi */
+#tab_mod_5 { width: 100%;}
+#tab_mod_5 td { width: auto; vertical-align: top;}
+#tab_mod_5 p { width: 95%; background:#F7F7F7;}
+.domanda { padding: 2px; margin: 25px 0px 3px 0px;}
+/* Commons */
+.showcode {font-family: monospace; font-weight: bold; font-size: 0.9em; color: rgb(255,0,0);}
+.clear {clear: both;}
+.hide {display: none;}
+
+.right { text-align: right; float: right;}
+
+#loading { display: none; margin: 5px 0px; }
+
+
+.geo_strumenti, .geo_cerca, .geo_title { width: 95%; padding: 10px; margin: auto;}
+.geo_cerca, .geo_title { line-height: 30px;}
+
+#geo_map { width: 550px; height: 500px;}
+#geo_message { background-color: #990000; height: 30px; width: 100%; color: #FFFFFF;} 
+.geo_link { margin: 5px 0px 10px 0px;}
+
+#riepilogo_itinerario { width: 50%;}
+#dati_itinerario { width: 50%; float: left;}
+
+/* Contents */
+.help_form { margin-left: 40px; font-size: smaller;}
+#help_titolo:after {content: " Campo Richiesto.";} 
+/* Classes */
+
+.small { font-size: smaller;}
+.riga { clear: both; margin: 10px 0px 10px 0px;}
+.titolo_info { border: 1px solid  #CCCCCC;  width: 90%; padding: 2px; margin: 10px auto 20px 10px; }
+.utility { float: right; }
+.utility a:link { color: #666666;}
+.testa_paragrafo { background-color: #FFFFCC; padding: 10px; margin: 10px 0px 2px 0px; border: 1pt solid #CCCCCC; }
+.sottotitolo_scheda { margin: 5px 0px 2px 0px; }
+.icona_catalogo { width: auto !important; height: auto !important;  max-width: 200px; max-height: 200px; width: 180px; height: 200px; padding: 3px; border: solid 1px #CCCCCC; margin: 10px 0px 0px 0px; display: inline; }
+.tematica { }
+
+/* Messaggi di Errore */
+
+.esito { width: 80%; margin: 50px auto 50px auto; height: auto; padding: 10px 5px 20px 5px; border: 1px dashed #990000; text-align: center;}
+.esito h2 { text-align: center; color: #990000;}
+.esito p { width: auto; text-decoration: none; }
+
+/* Paginazione */
+.paginazione { margin: 0px auto auto 20px; width: auto; clear: both;}
+.paginazione h2, .paginazione h1 { font-size: 1.0em; float: left; line-height: 20px;  }
+.paginazione a:link, .paginazione a:visited, .paginazione a:hover { padding: 2px 4px 2px 4px; }
+.paginazione a:visited {} 
+.paginazione .spento { text-decoration: none;}
+.paginazione .pagina_selezionata {  }
+
+/* Risultati Strutture Users */
+.riga_res { width:100%; margin: 10px 0px 0px 0px; position: static; clear: both; height: 80px;}
+.riga_res img.homeitem { float: left; border: thick solid; margin: 2px 15px 2px 0px;}
+.stella { float: none; border: none; margin: 0px; }
+hr { display:none; }
+.label_dx {
+	border: thin #999999;
+	width: 90%;
+	text-align: left;
+	margin: 25px 10px 0px 10px;
+	padding: 0px;
+	position: inherit;
+	}
+.txt_titolo { font-size: 19px; margin: 10px 0px; padding: 30px; margin-bottom: 30px;}
+.txt_articolo { margin: 10px 0px; padding: 30px; margin-bottom: 30px;}
+#image_sele { padding: 5px; border: solid 1px #CCCCCC;}
+#text_content p { margin: 10px 2px; }
+#text_content strong { font-weight: 900; }
+.noprint { display: none; }
+
+
+#print_container { background: #fff; margin: 0; width: 775px; text-align: left; }
+.print_p label { background: #F8F8F8; padding: 4px; display: inline-block; width: 30%; }
+.txt_header { background: #E9E9E9; padding: 4px;  }
+#txt_lat, #txt_lon, #txt_account_id, #txt_status_anagrafica { display: none; }
+#txt_head_punto_vendita { page-break-before: always; }
+.printonly { display: block; } 
+.hideMobile,.noprint,.no-print,#preloader{ display: none; }
+
+.info_sede_operativa, .info_sede_legale { display: block; }
+.msg {
+	padding: 2px 4px;
+	text-align: center;
+	display: inline-block;
+	margin: 2px 2px 2px 0;
+	text-transform: uppercase;
+	font-size: smaller;
+}
+
+.yellow { background: #E8E23E; color: #150404; }
+.yellowlight { background: #F8FFD6;  }
+
+.green, .green a, a.green {
+	background: #3DA042;
+	color: #FFFFFF;
+}
+.gray, .gray a, a.gray {
+	background: #848484;
+	color: #FFFFFF;
+}
+.graylight, .graylight a, a.graylight {
+	background: #DCDCDC;
+	color: #FFFFFF;
+}
+.red, .red a, a.red {
+	background: #DA3235;
+	color: #FFFFFF;
+}
+.orange, .orange a, a.orange {
+	background: rgb(247, 170, 71);
+	color: #FFFFFF;
+}
+.purple, .purple a, a.purple {
+	background: rgb(139, 96, 170);
+	color: #FFFFFF;
+}
+.turquoise, .turquoise a, a.turquoise {
+	background: rgb(0, 177, 157);
+	color: #FFFFFF;
+}
+.blue, .blue a, a.blue {
+	background: #4788EF;
+	color: #FFFFFF;
+}
+
+
+.col-sm-1 {
+	float: left;
+	width: 100%;
+	position: relative;
+}
+.col-sm-2 {
+	float: left;
+	width: 20%;
+	position: relative;
+}
+.col-sm-3 {
+	float: left;
+	width: 30%;
+	position: relative;
+}
+.col-sm-4 {
+	float: left;
+	width: 40%;
+	position: relative;
+	margin: 0;
+}
+.col-sm-5 {
+	float: left;
+	width: 50%;
+	position: relative;
+	margin: 0;
+}
+.col-sm-6 {
+	float: left;
+	width: 60%;
+	position: relative;
+	margin: 0;
+}
+.col-sm-7 {
+	float: left;
+	width: 70%;
+	position: relative;
+	margin: 0;
+}
+.col-sm-10 {
+	float: left;
+	width: 100%;
+	position: relative;
+	margin: 0;
+}
+.col-sm-3 a {
+	color: white;
+}
+
+
+
+
+.preventivo {}
+.preventivo label { display:  inline-block; width:  30%; margin: 2px 0 ; }
+.privacytxt { font-size: 8px; }
+
+
+.decorathio { 
+padding: 20px;
+font-family: 'Times New Roman';
+font-size: 120%;
+border: #d5cfc6 2px dashed;
+page-break-after: always;
+ }
+ .elaborathio { 
+padding: 20px;
+font-family: 'Arial';
+font-size: 100%;
+border: #d5cfc6 2px dashed;
+ }
+
+.deco-title { 
+ }

@@ -1,0 +1,20 @@
+/* CSS Document */
+/* Powered By Michele Fazio */
+
+
+/* Classi */
+body { font-size: 18px; }
+.strong { font-weight: bold; }
+.titolo { font-weight: bolder; font-size: larger;}
+.bg_arancio { background: #FDE7BD; padding: 0px 2px 0px 2px; color: #118743; }
+.maxi { text-decoration: blink; font-size: larger; color: #FF0000;}
+.bold {font-weight: bold}
+.colore {
+	margin: 0px;
+	font-size: 11px !important;
+	margin-bottom: 50px;
+}
+.titolo_barra { line-height: 180%; background: #F0F0F0;}
+.verde { background: #E1FFE1; padding: 5px 10px; border: 1px solid  #009933; margin: 0 0 10px 0;}
+.rosso { color: #FF0000; }
+.blu { color: #0033CC; }

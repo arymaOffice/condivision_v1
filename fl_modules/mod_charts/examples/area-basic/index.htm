@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Highcharts Example</title>
+
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript">
+$(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'area'
+            },
+            title: {
+                text: 'Comparazione 2015 Vs. 2014'
+            },
+            subtitle: {
+                text: 'Punto Vendita Milano 1'
+            },
+             xAxis: {
+			 categories: ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dec'],
+	         minRange: 1,
+	  		 minTickInterval: 1, 	   
+       		 allowDecimals: false
+            
+            },
+            yAxis: {
+                title: {
+                    text: 'Fatturato'
+                },
+                labels: {
+                    formatter: function() {
+                        return this.value / 1000 +'k';
+                    }
+                }
+            },
+            tooltip: {
+                pointFormat: '{series.name}  <b>{point.y:,.0f}</b><br/> EUR {point.x}'
+            },
+            
+            series: [{
+                name: '2014',
+                color: '#C4F8BD',
+				data: [
+                    12000, 14500, 15200, 11300, 9400, 9750, 10800, 16255, 17000,
+                    10871,19000,20000 ]
+            }, {
+                name: '2015',
+                color: '#B4DAFF',
+				data: [11000, 12500, 13200, 12300, 10400, 11750, 11800, 16900, 18000,
+                    12871,null,null]
+            }]
+        });
+    });
+    
+
+		</script>
+	</head>
+	<body>
+<script src="../../js/highcharts.js"></script>
+<script src="../../js/modules/exporting.js"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+	</body>
+</html>

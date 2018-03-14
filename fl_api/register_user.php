@@ -1,6 +1,6 @@
 <?php
 
-include '../fl_config/' . $_SERVER['HTTP_HOST'] . '/customer.php'; // info customer
+include '../fl_config/' . $_SERVER['SERVER_NAME'] . '/customer.php'; // info customer
 
 
 function smail($destinatario,$soggetto,$messaggio){
@@ -13,7 +13,6 @@ function smail($destinatario,$soggetto,$messaggio){
     $mail->Debugoutput = 'html';
     $mail->Host = mail_host;
     $mail->SMTPSecure = 25; 
-    $mail->Port = Port; 
     $mail->Username = mail_user;
     $mail->Password = mail_password;
     $mail->CharSet = 'UTF-8';
@@ -61,12 +60,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //se la richiesta è in post
 
             $ip = $_SERVER['REMOTE_ADDR'];
             $password_pulita = str_replace('.', '', microtime(true));
-            echo smail($email,'Attivazione account 1x2live','Password : '.$password_pulita);
             $password = md5($password_pulita);
 
             $insert = "INSERT INTO `fl_account`(`attivo`, `anagrafica`, `marchio`, `tipo`,  `email`, `nominativo`,  `user`, `password`, `ip`) VALUES (
                 1,1,1,1,'$email','$name','$email','$password','$ip') ";
             if ($conn->query($insert)) {
+                smail($email,'Attivazione account 1x2live','Ciao '.$name.', <br> hai completato con successo la registrazione al servizio 1x2 Live <br> Per accedervi apri questo link
+            <a href="https://'.$_SERVER['SERVER_NAME'].'">https://'.$_SERVER['SERVER_NAME'].'</a> ed effetua il login con le seguenti credenziali User : '.$email.'  Password : '.$password_pulita);
+            
 
                 header('Location: ../fl_app/form1x2live/index.php?col=0&esito=Controlla la casella di posta per attivare l\'account');exit;
             } else {

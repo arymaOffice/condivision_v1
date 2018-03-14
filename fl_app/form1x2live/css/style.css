@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.logo-container {
+  height: 32vh;
+}
+
+.logo-container img {
+  margin: auto;
+  width: 100%;
+}
+
+.form {
+  padding: 1em;
+  height: 60vh;
+}
+
+.submit{
+  background-color: #ad1e24;
+}
+
+@media only screen and (max-width:350px){
+  .logo-container{
+    height: 11vh;
+    margin: 10px;
+  }
+} 

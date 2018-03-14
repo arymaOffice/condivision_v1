@@ -1,13 +1,12 @@
 <?php
 //controllo se ci sono messaggi
-$a = '';
 $color = '';
 $message = '';
 
-if(isset($_GET['col']) && isset($_GET['esito'])){
+if (isset($_GET['col']) && isset($_GET['esito'])) {
 
-    $color = ($_GET['col']) ? '#ad1e24' :'green' ;
-    $message = filter_var($_GET['esito'],FILTER_SANITIZE_STRING);
+    $color = ($_GET['col']) ? '#ad1e24' : 'green';
+    $message = filter_var($_GET['esito'], FILTER_SANITIZE_STRING);
 }
 
 ?>
@@ -21,29 +20,26 @@ if(isset($_GET['col']) && isset($_GET['esito'])){
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="css/materialize.css">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/style_josue.css">
   <title>1X2 Live</title>
 </head>
 
 <body>
   <div class="container valign-wrapper">
 
-    <section class="valign-wrapper logo-container col s12">
+    <div class="row valign-wrapper">
+    <section class="valign-wrapper logo-container col s12 l6">
       <img src="images/1x2live-logo.jpg" alt="">
     </section>
+    <!-- form section -->
+    <section class=" valign-wrapper form col s12 l6">
 
-    <div class="row center-align">
-      <div class="col s12">
-        <?php if($message != ''){ ?>
-        <p style="color:<?php echo $color; ?>;padding:10px">
+        <?php if ($message != '') {?>
+        <span style="color:<?php echo $color; ?>;padding:10px">
           <?php echo $message; ?>
-        </p>
+        </span>
         <?php }?>
-      </div>
-    </div>
 
-    <section class="form">
-      <form action="../../fl_api/register_user.php" method="POST">
+      <form action="../../fl_api/register_user.php" style="width: 100%;" method="POST">
 
         <div class="row center-align">
           <div class="input-field col s12">
@@ -82,6 +78,7 @@ if(isset($_GET['col']) && isset($_GET['esito'])){
 
       </form>
     </section>
+    </div>
   </div>
   <script src="js/materialize.js"></script>
 </body>

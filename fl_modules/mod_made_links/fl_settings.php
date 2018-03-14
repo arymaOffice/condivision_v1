@@ -61,8 +61,7 @@ if(isset($_GET['qualificati'])) { $qualificati_id = check($_GET['qualificati']);
 if(isset($qualificati_id) && @$qualificati_id == 1) {  $tipologia_main .= " AND (email != '' AND telefono != '' AND nome != '') ";	 }
 if(isset($qualificati_id) && @$qualificati_id == 0) {  $tipologia_main .= " AND (email = '' OR telefono = '' OR nome = '' ) ";	 }
 
-// Filtro manuale da sessione
-if($_SESSION['anagrafica'] > 1) $tipologia_main .= ' AND anagrafica_id = '.$_SESSION['anagrafica'];
+
 
 
 

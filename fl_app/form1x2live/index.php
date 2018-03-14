@@ -21,29 +21,33 @@ if(isset($_GET['col']) && isset($_GET['esito'])){
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="css/materialize.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style_josue.css">
   <title>1X2 Live</title>
 </head>
 
 <body>
-  <div class="container">
-    <div class="row center-align">
-      <div class="logo-container col s12">
-        <img src="images/1x2live-logo.jpg" alt="">
-      </div>
-    </div>
+  <div class="container valign-wrapper">
+
+    <section class="valign-wrapper logo-container col s12">
+      <img src="images/1x2live-logo.jpg" alt="">
+    </section>
+
     <div class="row center-align">
       <div class="col s12">
         <?php if($message != ''){ ?>
-            <p style="color:<?php echo $color; ?>;padding:10px"><?php echo $message; ?></p>
-       <?php }?>
+        <p style="color:<?php echo $color; ?>;padding:10px">
+          <?php echo $message; ?>
+        </p>
+        <?php }?>
       </div>
     </div>
+
     <section class="form">
       <form action="../../fl_api/register_user.php" method="POST">
 
         <div class="row center-align">
           <div class="input-field col s12">
-            <input  id="name" name="name" type="text" class="validate" required>
+            <input id="name" name="name" type="text" class="validate" required>
             <label class="active" for="name">Nome</label>
           </div>
         </div>
@@ -57,20 +61,20 @@ if(isset($_GET['col']) && isset($_GET['esito'])){
 
         <div class="row center-align">
           <div class="input-field col s12">
-            <input  id="email" name="email"  type="email" class="validate" required>
+            <input id="email" name="email" type="email" class="validate" required>
             <label class="active" for="email">E-mail</label>
           </div>
         </div>
 
         <div class="row center-align">
           <div class="input-field col s12">
-            <input  id="phone" name="phone" type="tel" class="validate" required>
+            <input id="phone" name="phone" type="tel" class="validate" required>
             <label class="active" for="phone">Telefono</label>
           </div>
         </div>
         <div class="row center-align">
           <div class="input-field col s12">
-            <button class="btn waves-effect waves-light btn-large submit" type="submit" >
+            <button class="btn waves-effect waves-light btn-large submit" type="submit">
               INVIA
             </button>
           </div>

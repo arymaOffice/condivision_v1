@@ -140,7 +140,7 @@ if(isset($_GET['associaEventoCliente'])) {
   //regione 
   var post = 'sel=provincia&filtro=&valore='+$(from).val();
   if(from == 0) post = 'sel=provincia&filtro=regione';
-  var url = '../mod_basic/mod_selectLoader.php';
+  var url = location.host +'/fl_modules/mod_basic/mod_selectLoader.php';
   var posting = $.post(url,post); 
   posting.fail(function( data ) {     });
   posting.always(function( data ) {    });
@@ -157,7 +157,7 @@ if(isset($_GET['associaEventoCliente'])) {
 
 function loadComuni(from,where){ 
   var post = 'sel=comune&filtro=provincia&valore='+$(from).val();
-  var url = '../mod_basic/mod_selectLoader.php';
+  var url = location.host +'/fl_modules/mod_basic/mod_selectLoader.php';
   var posting = $.post(url,post); 
   posting.fail(function( data ) {     });
   posting.always(function( data ) {    });
@@ -174,7 +174,7 @@ function loadComuni(from,where){
 
 function loadCap(from,where){ 
   var post = 'sel=cap&filtro=comune&valore='+$(from).val();
-  var url = '../mod_basic/mod_selectLoader.php';
+  var url = location.host +'/fl_modules/mod_basic/mod_selectLoader.php';
   var posting = $.post(url,post); 
   posting.fail(function( data ) {     });
   posting.always(function( data ) {    });

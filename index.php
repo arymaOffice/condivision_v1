@@ -38,7 +38,7 @@ if (isset($_GET['d'])) {$page = './fl_inc/' . base64_decode(check($_GET['d'])) .
     $page = ROOTPATH . 'dashboards/usertype' . $numpage . '_dashboard.php';}
 
 if($_SESSION['anagrafica_attiva'] == 0){
-    //
+    $page = 'fl_modules/mod_anagrafica2/mod_inserisci_smart.php';
 }
 
 if (file_exists('update.php') && $_SESSION['number'] == 1 && $_SERVER['SERVER_NAME'] != '127.0.0.1' && $_SERVER['SERVER_NAME'] != 'localhost') {
@@ -54,5 +54,5 @@ if (file_exists('update.php') && $_SESSION['number'] == 1 && $_SERVER['SERVER_NA
     unlink('update.php');
 }
 
-@include $page;
+include $page;
 include "fl_inc/footer.php";?>

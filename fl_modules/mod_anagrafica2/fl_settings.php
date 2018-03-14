@@ -101,12 +101,14 @@
 	
 		
 	/* Inclusioni Oggetti Categorie */	
-	include('../../fl_core/dataset/array_statiche.php');
-	include('../../fl_core/dataset/proprietario.php');
-	include('../../fl_core/dataset/provincia.php');
+
+
+	include($_SERVER['DOCUMENT_ROOT'].'/fl_core/dataset/array_statiche.php');
+	include($_SERVER['DOCUMENT_ROOT'].'/fl_core/dataset/proprietario.php');
+	include($_SERVER['DOCUMENT_ROOT'].'/fl_core/dataset/provincia.php');
 	$account_id = $proprietario;
-	require('../../fl_core/class/ARY_dataInterface.class.php');
-	$data_set = new ARY_dataInterface();
+
+
 	$tipologia_attivita = $data_set->get_items_key("punto_vendita");	
 	$stato_nascita = $stato_sede = $stato_residenza = $stato_punto = $stato = $paese = $data_set->data_retriever('fl_stati','descrizione',"WHERE id != 1",'descrizione ASC');
 	
@@ -114,25 +116,14 @@
 
 	function select_type($who){		
 	/* Gestione Oggetto Statica */	
-	$textareas = array('pie_pagina_catalogo','widget','informazioni_disabili','numeri_utili',"bio","note",'info_aggiuntive'); 
-	$select = array('provincia_nascita','scheda_apertura','emesso_da','sesso','forma_giuridica','concessione_fido','marchio','tipo_profilo_scheda','tipologia_attivita','stato_nascita','stato_punto','stato_sede','regione_residenza','stato_residenza','account_id',"tipo_documento","punto_vendita","regione_sede","regione_punto","status_anagrafica","proprietario","status","regione","nazione");
+	$textareas = array(); 
+	$select = array('provincia_nascita','emesso_da','sesso','forma_giuridica','marchio','tipologia_attivita','stato_nascita','stato_punto','stato_sede','regione_residenza','stato_residenza','account_id',"tipo_documento","punto_vendita","regione_sede","regione_punto","status_anagrafica","proprietario","status","regione","nazione",'tipo_profilo','luogo_di_nascita');
 	$select_text = array('comune_punto','comune_sede','comune_residenza','provincia_residenza',"provincia_sede","provincia_punto");
-	$disabled = array("visite");
-	$hidden = array('status_anagrafica','data_creazione','data_aggiornamento','account_id','tipo_utente','operatore','ip','proprietario',"relation");
-	$radio = array('garanzia_fido','catalogo_apri_chiudi','attivo',"fotogallery","videogallery","ecommerce","prenotazioni","catalogo",'commenti');
+	$disabled = array();
+	$hidden = array('status_anagrafica','data_creazione','data_aggiornamento','operatore','ip','proprietario','garanzia_fido','attivo','marchio','data_scadenza_contratto','profilo_genitore','profilo_commissione');
+	$radio = array();
 	$text = array();
 	$multi_selection = array("servizi");	
-	if($_SESSION['usertype'] > 0)array_push($hidden,"proprietario","attivo","status_anagrafica","marchio","account_affiliato",'logo','audio');
-	if(defined('TIPO_DA_ACCOUNT') && @TIPO_DA_ACCOUNT == 1)	array_push($hidden,"tipo_profilo"); // Demanda all'account la tipologia di profilo
-	$calendario = array('data_scadenza_smartcard','data_scadenza_contratto','data_scadenza_pec','data_scadenza','data_emissione','data_nascita');	
-	$file = array("upfile",'logo','photo');
-	$checkbox = array('pagamenti_f24',"tipo_profilo");
-    if(defined('CAMPI_INATTIVI')) array_push($hidden,'centro_di_costo','pagamenti_f24','pin_cassetto_fiscale','data_scadenza_pec'); // Campi disabilitati per cliente governati da file customer.php
-	if($_SESSION['usertype'] > 1) array_push($hidden,'attivo','commenti','tipo_profilo_scheda','catalogo','titolo_catalogo',"fotogallery","videogallery","ecommerce","prenotazioni");
-	if($_SESSION['usertype'] > 1) array_push($disabled,'info_profilo');
-	if(!defined('MULTI_BRAND')) array_push($hidden,'marchio');
-
-
 	$type = 1;
 	
 	if(in_array($who,$select)) { $type = 2; }
@@ -140,10 +131,7 @@
 	if(in_array($who,$textareas)){ $type = 3; }
 	if(in_array($who,$disabled)){ $type = 4; }
 	if(in_array($who,$radio)){ $type = 8; }
-	if(in_array($who,$calendario)){ $type = 20; }
-	if(in_array($who,$file)){ $type = 18; }
 	if(in_array($who,$text)){ $type = 24; }
-	if(in_array($who,$checkbox)){ $type = 19; }
 	if(in_array($who,$multi_selection)){ $type = 23; }
 
     if(in_array($who,$hidden)){ $type = 5; }

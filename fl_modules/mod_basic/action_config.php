@@ -84,7 +84,7 @@ function loadProvince(from,where){
   //regione 
   var post = 'sel=provincia&filtro=&valore='+$(from).val();
   if(from == 0) post = 'sel=provincia&filtro=regione';
-  var url = '../mod_basic/mod_selectLoader.php';
+  var url = location.host +'/fl_modules/mod_basic/mod_selectLoader.php';
   var posting = $.post(url,post); 
   posting.fail(function( data ) {     });
   posting.always(function( data ) {    });
@@ -101,7 +101,7 @@ function loadProvince(from,where){
 
 function loadComuni(from,where){ 
   var post = 'sel=comune&filtro=provincia&valore='+$(from).val();
-  var url = '../mod_basic/mod_selectLoader.php';
+  var url =location.host +'/fl_modules/mod_basic/mod_selectLoader.php';
   var posting = $.post(url,post); 
   posting.fail(function( data ) {     });
   posting.always(function( data ) {    });
@@ -118,7 +118,7 @@ function loadComuni(from,where){
 
 function loadCap(from,where){ 
   var post = 'sel=cap&filtro=comune&valore='+$(from).val();
-  var url = '../mod_basic/mod_selectLoader.php';
+  var url = location.host +'/fl_modules/mod_basic/mod_selectLoader.php';
   var posting = $.post(url,post); 
   posting.fail(function( data ) {     });
   posting.always(function( data ) {    });
@@ -136,7 +136,7 @@ function loadCap(from,where){
 
 function loadSelectIds(from,where){ 
   var post = 'gtx=105&numeric&sel=label&filtro=parent_id&valore='+$(from).val()+' AND tipo_voce = 1';
-  var url = '../mod_basic/mod_selectLoader.php';
+  var url = location.host +'/fl_modules/mod_basic/mod_selectLoader.php';
   var posting = $.post(url,post); 
   posting.fail(function( data ) {     });
   posting.always(function( data ) {    });

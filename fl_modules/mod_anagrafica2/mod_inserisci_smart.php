@@ -1,9 +1,10 @@
 <?php 
 
-require_once('../../fl_core/autentication.php');
+
 $loadSelectComuni = 1;
-$id = ($_SESSION['usertype'] > 1) ? $_SESSION['anagrafica'] : check($_GET['id']);
+$id =  $_SESSION['anagrafica'];
 if($_SESSION['usertype'] > 1) $force_id = $_SESSION['anagrafica']; 
+
 
 include('fl_settings.php'); // Variabili Modulo 
 $tab_div_labels = array('id'=>'Persona','forma_giuridica'=>"Dati Fiscali");
@@ -99,7 +100,7 @@ width: 74px;
 
 
 
-<?php include('../mod_basic/action_estrai.php');  ?>
+<?php include($_SERVER['DOCUMENT_ROOT'].'/fl_modules/mod_basic/action_estrai.php');  ?>
 
 <?php if(isset($_GET['view'])) echo '<input type="hidden" name="info" value="1" />';  
 

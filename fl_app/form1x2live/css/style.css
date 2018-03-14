@@ -3,27 +3,51 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.container {
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
 .logo-container {
-  height: 32vh;
+  height: 22vh;
 }
 
 .logo-container img {
   margin: auto;
-  width: 100%;
+  width: 90%;
 }
 
 .form {
   padding: 1em;
-  height: 60vh;
+  height: 65vh;
+  width: 80%;
 }
 
-.submit{
+.submit {
   background-color: #ad1e24;
 }
 
-@media only screen and (max-width:350px){
-  .logo-container{
-    height: 11vh;
-    margin: 10px;
+@media only screen and (min-width: 961px) {
+  .container {
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-flow: column;
   }
-} 
+
+  .logo-container {
+    padding-right: 5em;
+    border-right: 0.1em solid #ad1e24;
+    height: 90%;
+  }
+
+  .form {
+    padding-left: 5em;
+  }
+
+  .line {
+    background-color: #ad1e24;
+  }
+}

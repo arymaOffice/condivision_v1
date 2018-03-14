@@ -1,6 +1,5 @@
 <?php
 //controllo se ci sono messaggi
-$a = '';
 $color = '';
 $message = '';
 
@@ -21,7 +20,6 @@ if(isset($_GET['col']) && isset($_GET['esito'])){
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="css/materialize.css">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/style_josue.css">
   <title>1X2 Live</title>
 </head>
 

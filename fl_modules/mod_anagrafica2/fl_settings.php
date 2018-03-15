@@ -112,8 +112,11 @@
 	$tipologia_attivita = $data_set->get_items_key("punto_vendita");	
 	$stato_nascita = $stato_sede = $stato_residenza = $stato_punto = $stato =  $data_set->data_retriever('fl_stati','descrizione',"WHERE id != 1",'descrizione ASC');
 
-	$luogo_di_nascita = $data_set->data_retriever('fl_istat_comuni','DISTINCT(comune) as comune','','comune ASC');
-	$provincia_nascita = $data_set->data_retriever('fl_istat_comuni','DISTINCT(provincia) as provincia','','provincia ASC');
+	$luogo_di_nascita = $data_set->data_retriever('fl_istat_comuni','comune','','comune ASC');
+	unset($luogo_di_nascita[0]);
+	$provincia_nascita = $data_set->data_retriever('fl_istat_comuni','provincia',' GROUP BY provincia ','provincia ASC ');
+	unset($provincia_nascita[0]);
+	
 	
 	$mandatory = array("id");
 

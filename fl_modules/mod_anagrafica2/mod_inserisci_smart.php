@@ -103,6 +103,11 @@ width: 74px;
 
 </form>
 
+<script>
+$("form#scheda :input").each(function(){
+ var input = $(this).prop('required',true);.prop(); // This is the jquery object of the input, do what you will
+});
+</script>
 
 
 </div></div></body></html>

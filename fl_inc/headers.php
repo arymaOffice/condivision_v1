@@ -316,7 +316,7 @@ $( "#invio" ).click(function( event ) {
 
 <?php if(isset($text_editor)) { ?> tinymce.triggerSave();  <?php  } ?>
 var form = $( "#scheda" ),
-url = '../mod_basic/save_data.php';
+url = 'fl_modules/mod_basic/save_data.php';
 var data = new FormData(form[0]);
 if($("#results").length == 0) {  form.before('<div id="results"></div>'); }
 

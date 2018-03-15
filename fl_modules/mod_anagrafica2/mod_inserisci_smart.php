@@ -9,7 +9,6 @@ if($_SESSION['usertype'] > 1) $force_id = $_SESSION['anagrafica'];
 include('fl_settings.php'); // Variabili Modulo 
 $tab_div_labels = array('id'=>'Persona','forma_giuridica'=>"Dati Fiscali");
 
-include("../../fl_inc/headers.php");
 
  ?>
 
@@ -103,5 +102,7 @@ width: 74px;
 <input type="hidden" name="goto" value="fl_modules/mod_anagrafica2/mod_opera.php?updateStato" />
 
 </form>
+
+
 
 </div></div></body></html>

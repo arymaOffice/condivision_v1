@@ -110,14 +110,17 @@
 
 
 	$tipologia_attivita = $data_set->get_items_key("punto_vendita");	
-	$stato_nascita = $stato_sede = $stato_residenza = $stato_punto = $stato = $paese = $data_set->data_retriever('fl_stati','descrizione',"WHERE id != 1",'descrizione ASC');
+	$stato_nascita = $stato_sede = $stato_residenza = $stato_punto = $stato =  $data_set->data_retriever('fl_stati','descrizione',"WHERE id != 1",'descrizione ASC');
+
+	$luogo_di_nascita = $data_set->data_retriever('fl_istat_comuni','DISTINCT(comune) as comune','','comune ASC');
+	$provincia_nascita = $data_set->data_retriever('fl_istat_comuni','DISTINCT(provincia) as provincia','','provincia ASC');
 	
 	$mandatory = array("id");
 
 	function select_type($who){		
 	/* Gestione Oggetto Statica */	
 	$textareas = array(); 
-	$select = array('provincia_nascita','emesso_da','sesso','forma_giuridica','marchio','tipologia_attivita','stato_nascita','stato_punto','stato_sede','regione_residenza','stato_residenza','account_id',"tipo_documento","punto_vendita","regione_sede","regione_punto","status_anagrafica","proprietario","status","regione","nazione",'tipo_profilo','luogo_di_nascita');
+	$select = array('emesso_da','sesso','forma_giuridica','marchio','tipologia_attivita','stato_nascita','stato_punto','stato_sede','regione_residenza','stato_residenza','account_id',"tipo_documento","punto_vendita","regione_sede","regione_punto","status_anagrafica","proprietario","status","regione","nazione",'tipo_profilo','provincia_nascita','luogo_di_nascita');
 	$select_text = array('comune_punto','comune_sede','comune_residenza','provincia_residenza',"provincia_sede","provincia_punto");
 	$disabled = array();
 	$hidden = array('status_anagrafica','data_creazione','data_aggiornamento','operatore','ip','proprietario','garanzia_fido','attivo','marchio','data_scadenza_contratto','profilo_genitore','profilo_commissione');

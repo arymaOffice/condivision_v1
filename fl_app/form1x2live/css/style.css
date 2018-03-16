@@ -1,28 +1,14 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.container {
-  flex-direction: column;
-  width: 100vw;
-  height: 100vh;
-}
-
 .logo-container {
-  height: 22vh;
+  width: 100%;
+  margin-bottom: 2em;
 }
 
 .logo-container img {
-  margin: auto;
-  width: 90%;
+  width: 100%;
 }
 
-.form {
-  padding: 1em;
-  height: 65vh;
-  width: 80%;
+.container {
+  height: 100vh;
 }
 
 .submit {
@@ -30,24 +16,26 @@
 }
 
 @media only screen and (min-width: 961px) {
-  .container {
-    margin: auto;
+  div#register.row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-auto-flow: column;
+  }
+
+  div.form.col.s12 {
+    padding: 0 5em;
+  }
+
+  #logo {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    border-right: 0.1em solid #ad1e24;
   }
 
   .logo-container {
-    padding-right: 5em;
-    border-right: 0.1em solid #ad1e24;
-    height: 90%;
+    grid-row: 2;
   }
 
-  .form {
-    padding-left: 5em;
-  }
-
-  .line {
-    background-color: #ad1e24;
+  .logo-container img {
+    width: 100%;
   }
 }

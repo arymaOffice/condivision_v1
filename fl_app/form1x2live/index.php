@@ -1,12 +1,13 @@
 <?php
 //controllo se ci sono messaggi
+$a = '';
 $color = '';
 $message = '';
 
-if (isset($_GET['col']) && isset($_GET['esito'])) {
+if(isset($_GET['col']) && isset($_GET['esito'])){
 
-    $color = ($_GET['col']) ? '#ad1e24' : 'green';
-    $message = filter_var($_GET['esito'], FILTER_SANITIZE_STRING);
+  $color = ($_GET['col']) ? '#ad1e24' :'green' ;
+  $message = filter_var($_GET['esito'],FILTER_SANITIZE_STRING);
 }
 
 ?>
@@ -25,59 +26,61 @@ if (isset($_GET['col']) && isset($_GET['esito'])) {
 
 <body>
   <div class="container valign-wrapper">
-
-    <div class="row valign-wrapper">
-    <section class="valign-wrapper logo-container col s12 l6">
-      <img src="images/1x2live-logo.jpg" alt="">
-    </section>
-    <!-- form section -->
-    <section class=" valign-wrapper form col s12 l6">
-
-        <?php if ($message != '') {?>
-        <span style="color:<?php echo $color; ?>;padding:10px">
-          <?php echo $message; ?>
-        </span>
-        <?php }?>
-
-      <form action="../../fl_api/register_user.php" style="width: 100%;" method="POST">
-
-        <div class="row center-align">
-          <div class="input-field col s12">
-            <input id="name" name="name" type="text" class="validate" required>
-            <label class="active" for="name">Nome</label>
-          </div>
+    <div id="register" class="row">
+      <div id="logo" class="form col s12">
+        <div class="logo-container">
+          <img src="images/1x2live-logo.jpg" alt="">
+        </div>
+      </div>
+    
+      <div class="form col s12">
+        <div class="message center-align">
+          <?php if($message != ''){ ?>
+          <p style="color:<?php echo $color; ?>;padding:10px">
+            <?php echo $message; ?>
+          </p>
+          <?php }?>
+          <p style="padding:10px">MESSAGE HERE!</p>
         </div>
 
-        <div class="row center-align">
-          <div class="input-field col s12">
-            <input id="surname" name="surname" type="text" class="validate" required>
-            <label class="active" for="surname">Cognome</label>
-          </div>
-        </div>
+          <form action="../../fl_api/register_user.php" method="POST">
+            <div class="center-align">
+              <div class="input-field">
+                <input id="name" name="name" type="text" class="validate" required>
+                <label class="active" for="name">Nome</label>
+              </div>
+            </div>
 
-        <div class="row center-align">
-          <div class="input-field col s12">
-            <input id="email" name="email" type="email" class="validate" required>
-            <label class="active" for="email">E-mail</label>
-          </div>
-        </div>
+            <div class="center-align">
+              <div class="input-field">
+                <input id="surname" name="surname" type="text" class="validate" required>
+                <label class="active" for="surname">Cognome</label>
+              </div>
+            </div>
 
-        <div class="row center-align">
-          <div class="input-field col s12">
-            <input id="phone" name="phone" type="tel" class="validate" required>
-            <label class="active" for="phone">Telefono</label>
-          </div>
-        </div>
-        <div class="row center-align">
-          <div class="input-field col s12">
-            <button class="btn waves-effect waves-light btn-large submit" type="submit">
-              INVIA
-            </button>
-          </div>
-        </div>
+            <div class="center-align">
+              <div class="input-field">
+                <input id="email" name="email" type="email" class="validate" required>
+                <label class="active" for="email">E-mail</label>
+              </div>
+            </div>
 
-      </form>
-    </section>
+            <div class="center-align">
+              <div class="input-field">
+                <input id="phone" name="phone" type="tel" class="validate" required>
+                <label class="active" for="phone">Telefono</label>
+              </div>
+            </div>
+            <div class="center-align">
+              <div class="input-field">
+                <button class="btn waves-effect waves-light btn-large submit" type="submit">
+                  INVIA
+                </button>
+              </div>
+            </div>
+          </form>
+
+      </div>
     </div>
   </div>
   <script src="js/materialize.js"></script>

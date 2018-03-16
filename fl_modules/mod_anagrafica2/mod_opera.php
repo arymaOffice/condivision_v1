@@ -10,6 +10,8 @@ if(isset($_GET['updateStato'])){ //aggiorna stato anagrafica
     $_SESSION['anagrafica_attiva'] = 1;
     $update = "UPDATE  `fl_anagrafica` set attivo = 1 WHERE id = ".$_SESSION['anagrafica'];
     $update = mysql_query($update,CONNECT);
+
+    $_SESSION['scelta_abbonamento'] = 1;
     //redirect scelta abbonamento
 }
 

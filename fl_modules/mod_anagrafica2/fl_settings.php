@@ -111,20 +111,23 @@
 
 	$tipologia_attivita = $data_set->get_items_key("punto_vendita");	
 	$stato_nascita = $stato_sede = $stato_residenza = $stato_punto = $stato =  $data_set->data_retriever('fl_stati','descrizione',"WHERE id != 1",'descrizione ASC');
-
-	$luogo_di_nascita = $data_set->data_retriever('fl_istat_comuni','comune','','comune ASC');
-	unset($luogo_di_nascita[0]);
-	$provincia_nascita = $data_set->data_retriever('fl_istat_comuni','provincia',' GROUP BY provincia ','provincia ASC ');
-	unset($provincia_nascita[0]);
+	unset($stato_nascita[0]);unset($stato_sede[0]);unset($stato_residenza[0]);unset($stato_punto[0]);unset($stato[0]);
 	
+	$luogo_di_nascita = $comune_punto = $comune_sede = $comune_residenza = $data_set->data_retriever('fl_istat_comuni','comune','','comune ASC');
+	unset($luogo_di_nascita[0]);unset($comune_punto[0]);unset($comune_sede[0]);unset($comune_residenza[0]);
+	
+	$provincia_nascita = $provincia_residenza; 
+
 	
 	$mandatory = array("id");
 
 	function select_type($who){		
 	/* Gestione Oggetto Statica */	
 	$textareas = array(); 
-	$select = array('emesso_da','sesso','forma_giuridica','marchio','tipologia_attivita','stato_nascita','stato_punto','stato_sede','regione_residenza','stato_residenza','account_id',"tipo_documento","punto_vendita","regione_sede","regione_punto","status_anagrafica","proprietario","status","regione","nazione",'tipo_profilo','provincia_nascita','luogo_di_nascita');
-	$select_text = array('comune_punto','comune_sede','comune_residenza','provincia_residenza',"provincia_sede","provincia_punto");
+	$select = array('emesso_da','sesso','forma_giuridica','marchio','tipologia_attivita','stato_nascita','stato_punto','stato_sede','regione_residenza','stato_residenza','account_id',"tipo_documento","punto_vendita","regione_sede","regione_punto","status_anagrafica","proprietario","status","regione","nazione",'tipo_profilo','provincia_nascita','luogo_di_nascita','provincia_residenza',"provincia_sede","provincia_punto",'comune_punto','comune_sede','comune_residenza');
+
+
+
 	$disabled = array();
 	$hidden = array('status_anagrafica','data_creazione','data_aggiornamento','operatore','ip','proprietario','garanzia_fido','attivo','marchio','data_scadenza_contratto','profilo_genitore','profilo_commissione');
 	$radio = array();
@@ -133,7 +136,6 @@
 	$type = 1;
 	
 	if(in_array($who,$select)) { $type = 2; }
-	if(in_array($who,$select_text)) { $type = 12; }
 	if(in_array($who,$textareas)){ $type = 3; }
 	if(in_array($who,$disabled)){ $type = 4; }
 	if(in_array($who,$radio)){ $type = 8; }

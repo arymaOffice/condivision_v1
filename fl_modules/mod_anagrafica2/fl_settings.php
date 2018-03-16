@@ -102,6 +102,11 @@
 		
 	/* Inclusioni Oggetti Categorie */	
 
+		/* Inclusione classi e dati */	
+		require('../../fl_core/dataset/array_statiche.php'); // Liste di valori statiche
+		require('../../fl_core/class/ARY_dataInterface.class.php'); //Classe di gestione dei dati 
+		$data_set = new ARY_dataInterface();
+
 
 	include($_SERVER['DOCUMENT_ROOT'].'/fl_core/dataset/array_statiche.php');
 	include($_SERVER['DOCUMENT_ROOT'].'/fl_core/dataset/proprietario.php');

@@ -40,7 +40,6 @@ if(isset($_GET['col']) && isset($_GET['esito'])){
             <?php echo $message; ?>
           </p>
           <?php }?>
-          <p style="padding:10px">MESSAGE HERE!</p>
         </div>
 
           <form action="../../fl_api/register_user.php" method="POST">

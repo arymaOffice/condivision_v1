@@ -39,7 +39,7 @@ if (isset($_GET['d'])) {$page = './fl_inc/' . base64_decode(check($_GET['d'])) .
 
 if(@$_SESSION['anagrafica_attiva'] == 0 && $_SESSION['usertype'] != 0){
     $page = 'fl_modules/mod_anagrafica2/mod_inserisci_smart.php';
-}elseif(@$_SESSION['scelta_abbonamento'] == 1 && $_SESSION['usertype'] != 0){
+}elseif(@$_SESSION['scelta_abbonamento'] == 1 && $_SESSION['usertype'] != 0revisioni dai due lati){
     $page = 'fl_modules/mod_live_abbonamenti/mod_user.php';
 }
 

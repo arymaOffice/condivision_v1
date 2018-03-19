@@ -1,0 +1,65 @@
+<?php
+   class Contatti {
+      /* Member variables */
+      var $_nome;
+      var $_cognome;
+      var $_immagine;
+      var $_email;
+      var $_token;
+      
+      
+      function __construct( $nome, $cognome, $immagine, $email, $token) {
+   			$this->_nome = $nome;
+   			$this->_cognome = $cognome;
+   			$this->_immagine = $immagine;
+   			$this->_email = $email;
+   			$this->_token = $token;
+		}
+      
+      
+
+      function setNome($nome){
+         $this->_nome = $nome;
+      }
+      
+      function getNome(){
+         return $this->_nome;
+      }
+      
+      function setCognome($cognome){
+         $this->_cognome = $cognome;
+      }
+      
+      function getCognome(){
+         return $this->_cognome;
+      }
+      
+      function setImmagine($immagine){
+         $this->_immagine = $immagine;
+      }
+      
+      function getImmagine(){
+         return $this->_immagine;
+      }
+      
+      function setEmail($email){
+         $this->_email = $email;
+      }
+      
+      function getEmail(){
+         return $this->_email;
+      }
+      
+      function setToken($token){
+         $this->_token = $token;
+      }
+      
+      function getToken(){
+         return $this->_token;
+      }
+      
+      
+      
+      
+   }
+?>

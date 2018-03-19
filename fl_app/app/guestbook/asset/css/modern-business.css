@@ -1,0 +1,150 @@
+
+.carousel-item {
+	height: 65vh;
+	min-height: 300px;
+	background: no-repeat center center scroll;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.portfolio-item {
+	margin-bottom: 30px;
+}
+
+.btn-circle
+{
+	
+	width: 50px;
+	height: 50px;
+	position: relative;
+	border-radius: 100%;
+	padding: 10px 16px;
+	text-align: center;
+}
+.btn-circle.btn-lg
+{
+
+	font-size: 18px;
+
+}
+
+.myBTNhover{
+	z-index: 10;
+	position: fixed;
+	bottom: 16px;
+	right: 15px;
+}
+
+.div-decorator
+{
+	border-top:3px solid #428BCA;
+	border-right:3px solid #D9534F;
+	border-bottom:3px solid #5CB85C;
+	border-left:3px solid #F0AD4E;
+	margin:30px;
+	border-radius:20px;
+}
+.div-content
+{
+	padding:30px
+}
+
+.icon {
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 50% !important;
+	display: block !important;
+	left: 50%;
+}
+
+.btn-dark {
+	color: #fff;
+	background-color: #9d9d9d;
+	border-color: grey;
+}
+
+ body {
+  font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.846;
+    color: #666666;
+    background-color: #ece9e9;
+    padding-top: 50px;
+   position: relative;
+}
+
+.navbar-inverse {
+    background: rgb(154, 181, 186);
+    border-color: rgb(154, 181, 186);
+    font-weight: bold;
+    font-size: 18px
+}
+.navbar-inverse .navbar-nav>li>a:focus, .navbar-inverse .navbar-nav>li>a:hover {
+    color: #000;
+    background-color: transparent;
+}
+
+.navbar-inverse .navbar-toggle{
+	    border-color: rgb(154, 181, 186);
+}
+.navbar-toggle{
+	background: rgb(154, 181, 186);
+}
+.navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover {
+    background-color: rgb(154, 181, 186);
+}
+
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+    border-color: #fff;
+}
+.navbar-inverse .navbar-nav>li>a {
+	color : #fff;
+}
+pre {
+	tab-size: 8;
+}
+
+@media screen and (max-width: 768px) {
+	.side-collapse-container{
+		width:100%;
+		position:relative;
+		left:0;
+		transition:left .4s;
+	}
+	.side-collapse-container.out{
+		left:200px;
+	}
+	.side-collapse {
+		top:50px;
+		bottom:0;
+		left:0;
+		width:200px;
+		position:fixed;
+		overflow:hidden;
+		transition:width .4s;
+	}
+	.side-collapse.in {
+		width:0;
+	}
+}
+
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+h2.particular { 
+   position: absolute; 
+   top: 80px; 
+   left: 5px; 
+   width: 100%; 
+}
+
+.modal-body {
+    position: relative;
+    padding: 3px;
+    margin-bottom: -10px;
+}

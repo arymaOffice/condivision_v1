@@ -6,9 +6,6 @@ if (isset($_POST["img"])) { // crea l'immagine
 $encodedData = explode(',', $_POST["img"]);
 $data = base64_decode($encodedData[1]);
 
-echo $_SERVER['DOCUMENT_ROOT'];
-
-
 $urlUploadImages = $_SERVER['DOCUMENT_ROOT'].'/images/toShare/';
 $nameImage = $code . '.png';
 $img = imagecreatefromstring($data);

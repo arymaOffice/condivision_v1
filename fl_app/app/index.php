@@ -135,7 +135,6 @@
       </ul>
     </nav>
     <canvas id="capture">
-<<<<<<< HEAD
         <div class="isg-intro">
           <!-- MOBILE LOGO -->
           <div class="isg-mobile-logo">
@@ -177,11 +176,6 @@
 
        <!-- HEADER -->
        <header id="isg-header">
-=======
-
-      <!-- HEADER -->
-      <header id="isg-header">
->>>>>>> 1d44472ef35c1311dfdc911c42e15e1ae0646dd5
         <div class="isg-hamburger">
           <span>Toggle Menu</span>
         </div>
@@ -240,11 +234,6 @@
 
         </div>
       </header>
-<<<<<<< HEAD
-=======
-
-    </canvas>
->>>>>>> 1d44472ef35c1311dfdc911c42e15e1ae0646dd5
     <!-- BOXES -->
     <div id="isg-boxes">
 
@@ -354,21 +343,12 @@
 
   <!-- PANELS PAGES -->
   <div id="isg-panels">
-<<<<<<< HEAD
     <?php include './parts/noi.php'?>
     <?php include './parts/resume.php'?>
     <?php include './parts/gallery.php'?>
     <?php include './parts/contacts.php'?>
     <?php include './parts/rsvp.php'?>
     <?php include './parts/wishlist.php'?>
-=======
-    <?php include('./parts/noi.php') ?>
-    <?php include('./parts/resume.php') ?>
-    <?php include('./parts/gallery.php') ?>
-    <?php include('./parts/contacts.php') ?>
-    <?php include('./parts/rsvp.php') ?>
-    <?php include('./parts/wishlist.php') ?>
->>>>>>> 1d44472ef35c1311dfdc911c42e15e1ae0646dd5
 
 
   </div>
@@ -416,11 +396,7 @@
 
   <!-- GOOGLE MAP -->
   <script type="text/javascript" src="js/markerwithlabel.js"></script>
-<<<<<<< HEAD
   <?php include './js/dvmap.php'?>
-=======
-  <?php include('./js/dvmap.php') ?>
->>>>>>> 1d44472ef35c1311dfdc911c42e15e1ae0646dd5
 
   <script type="text/javascript">
 

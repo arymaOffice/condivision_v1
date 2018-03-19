@@ -2,3 +2,4 @@
 node_modules/
 fl_config/
 fl_core/
+fl_app/app/code/config.php

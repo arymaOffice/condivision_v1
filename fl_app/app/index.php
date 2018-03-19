@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 <?php require_once 'code/config.php';?>
-=======
-<?php require_once('code/config.php');?>
->>>>>>> 1d44472ef35c1311dfdc911c42e15e1ae0646dd5
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -134,49 +130,11 @@
         <li><a href="#rsvp" data-hover="Accedi">Accedi</a></li>
       </ul>
     </nav>
-    <canvas id="capture">
-        <div class="isg-intro">
-          <!-- MOBILE LOGO -->
-          <div class="isg-mobile-logo">
-            <img src="./images/logo.jpg" alt="Logo" />
-          </div>
-
-          <!-- LOGO -->
-          <p class="isg-logo">
-            <img src="./images/logo.jpg" alt="Logo" />
-          </p>
-
-          <h1><?php echo $appName; ?></h1>
-          <p class="isg-subtitle"><?php echo $appSubTitle; ?></p>
-          <!-- HEADER ICONS -->
-          <div id="timer">
-            <h2 style="font-size: 1.0em;padding: 0;margin: 5% 0 0 0;color: white;"><i class="fa fa-heart-o" aria-hidden="true"></i> </h2>
-
-            <ul id="countdown">
-              <li>
-                <span class="days">00</span>
-                <p class="timeRefDays" style="font-size: 12px;">Giorni</p>
-              </li>
-              <li>
-                <span class="hours">00</span>
-                <p class="timeRefHours"  style="font-size: 12px;">Ore</p>
-              </li>
-              <li>
-                <span class="minutes">00</span>
-                <p class="timeRefMinutes"  style="font-size: 12px;">Minuti</p>
-              </li>
-              <li>
-                <span class="seconds">00</span>
-                <p class="timeRefSeconds"  style="font-size: 12px;">Secondi</p>
-              </li>
-            </ul>
-          </div>
-        </div>
-    </canvas>
+    <canvas id="capture"></canvas>
 
        <!-- HEADER -->
        <header id="isg-header">
-        <div class="isg-hamburger">
+        <div class="isg-hamburger data-html2canvas-ignore" data-html2canvas-ignore>
           <span>Toggle Menu</span>
         </div>
         <a id="isg-down-arrow" href="#">
@@ -475,6 +433,8 @@
   function takeScreen(){
     var canvas = document.getElementById('capture');
     var ctx = canvas.getContext('2d');
+    $('#isg-header').width('980px');
+    $('#isg-header').height('720px');
     html2canvas($('#isg-header')[0], {
       canvas:canvas,
       height:720,
@@ -485,6 +445,10 @@
         $(document).append(pHtml);
       }
     });
+    //$('#isg-header').width('1906px');
+    //$('#isg-header').height('1603px');
+    $('#isg-header').width('100%');
+    $('#isg-header').height('100%');
   }
 
   </script>

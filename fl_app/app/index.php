@@ -137,7 +137,7 @@
         <div class="isg-hamburger data-html2canvas-ignore" data-html2canvas-ignore>
           <span>Toggle Menu</span>
         </div>
-        <a id="isg-down-arrow" href="#">
+        <a id="isg-down-arrow data-html2canvas-ignore" data-html2canvas-ignore href="#">
           <i class="fa fa-arrow-circle-o-down"></i>
         </a>
         <div class="isg-intro">
@@ -177,14 +177,14 @@
             </ul>
           </div>
 
-          <ul class="isg-header-icons">
+          <ul class="isg-header-icons data-html2canvas-ignore" data-html2canvas-ignore>
 
 
-            <li class="isg-social">
-              <a href="<?php echo $socialSposo; ?>" class="fa fa-facebook-f" target="_black">Facebook</a>
+            <li class="isg-social data-html2canvas-ignore" data-html2canvas-ignore>
+              <a href="#" onclick="takeScreen()" class="fa fa-facebook-f data-html2canvas-ignore" data-html2canvas-ignore >Facebook</a>
             </li>
             <li class="isg-social">
-              <a href="<?php echo $socialSposa; ?>"  class="fa fa-facebook-f female" target="_black">Facebook</a>
+              <a href="#" onclick="takeScreen()" class="fa fa-facebook-f female data-html2canvas-ignore" data-html2canvas-ignore >Facebook</a>
             </li>
 
           </ul>
@@ -433,27 +433,27 @@
   function takeScreen(){
     var canvas = document.getElementById('capture');
     var ctx = canvas.getContext('2d');
-    $('#isg-header').width('980px');
-    $('#isg-header').height('720px');
+    width = $('#isg-header').width();
+    height = $('#isg-header').height();
+    var image;
+
     html2canvas($('#isg-header')[0], {
       canvas:canvas,
-      height:720,
-      width:980,
-      onrendered: function(canvas) {
-        var image = canvas.toDataURL("image/png");
-        var pHtml = "<img src="+image+" />";
-        $(document).append(pHtml);
-      }
-    });
-    //$('#isg-header').width('1906px');
-    //$('#isg-header').height('1603px');
-    $('#isg-header').width('100%');
-    $('#isg-header').height('100%');
+      height:height,
+      width:width,
+      backgroundColor: '#d7d4d4'  });
+    sendImg();
+  }
+
+  function sendImg(){
+
+    var canvas = document.getElementById('capture');
+    image = canvas.toDataURL("image/png"); 
+
+    $.post('code/create_img.php',{img : image}, function(data){ alert('dsf'); });
   }
 
   </script>
-  <button onclick="takeScreen()">share</button>
-
 
 </body>
 

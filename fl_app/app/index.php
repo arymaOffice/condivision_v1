@@ -126,11 +126,11 @@
     <nav id="isg-hidden-menu">
       <ul class="isg-menu">
         <!--<li class="current"><a href="#portfolio" data-hover="<?php echo $mod_1_title; ?>"><?php echo $mod_1_title; ?></a></li>-->
-        <li><a href="#about" data-hover="Condividi">Condividi</a></li>
+        <li><a href="condividi.php" data-hover="Condividi">Condividi</a></li>
         <li><a href="#rsvp" data-hover="Accedi">Accedi</a></li>
       </ul>
     </nav>
-    <canvas id="capture" style="display:none"></canvas>
+    
 
        <!-- HEADER -->
        <header id="isg-header">
@@ -178,12 +178,12 @@
           <ul class="isg-header-icons data-html2canvas-ignore" data-html2canvas-ignore >
 
 
-            <li class="isg-social data-html2canvas-ignore" >
-              <a href="#" onclick="takeScreen()" class="fa fa-facebook-f data-html2canvas-ignore" >Facebook</a>
+            <li class="isg-social">
+                <a href="<?php echo $socialSposo; ?>" class="fa fa-facebook-f" target="_blank">Facebook</a>
             </li>
             <li class="isg-social">
-              <a href="#" onclick="takeScreen()" class="fa fa-facebook-f female data-html2canvas-ignore"  >Facebook</a>
-            </li>
+              <a href="<?php echo $socialSposa; ?>"  class="fa fa-facebook-f female" target="_blank">Facebook</a>
+          </li>
 
           </ul>
 
@@ -415,61 +415,6 @@
   <link rel="stylesheet" href="../condivision/fl_set/jsc/countdown/countdown.css?vaffanculoGoogle">
   <script type="text/javascript" src="../condivision/fl_set/jsc/countdown/countdown.js"></script>
 
-
-  <style>
-  /* The Modal (background) */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    display:none;
-}
-
-/* Modal Content */
-.modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    height: 80vh;
-
-}
-
-/* The Close Button */
-.close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-}</style>
-
-<!-- The Modal -->
-<div id="myModal" class="modal">
-
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    
-    <iframe src="" id="shareIframe" style="width: 100%;height: 100%;"></iframe>
-  </div>
-
-</div>
   <script>
 
   $(document).ready(function(){
@@ -482,61 +427,6 @@
       // callback function
     });
   });
-
-
-  function takeScreen(){
-    var canvas = document.getElementById('capture');
-    var ctx = canvas.getContext('2d');
-    width = $('#isg-header').width();
-    height = $('#isg-header').height();
-
-    $('#imgAdd').remove();
-    
-    $('#isg-header').append('<img id="imgAdd" src="images/sfondo.jpg" style="width:'+width+'px;height:'+height+'px;z-index:0;position: absolute;top: 0;left: 0;opacity: 0.4;" >');
-  
-
-    var image;
-
-    html2canvas($('#isg-header')[0], {
-      canvas:canvas,
-      height:height,
-      width:width,
-      backgroundColor: 'transparent',
-      onrendered: function(canvas) {
-       
-      }     
-     });
-
-      setTimeout(sendImg, 5000);
-    
-  }
-
-  function sendImg(){
-
-    var canvas = document.getElementById('capture');
-
-    image = canvas.toDataURL("image/png");
-
-    $('#imgAdd').remove();
-
-    $.post('code/create_img.php',{img : image}, function(data){
-      var parsed =  $.parseJSON(data);
-      if(parsed){
-
-          $('#myModal').css('display','block');
-          $('#shareIframe').attr('src','http://www.matrimonioincloud.it/app/condividi.php?id=<?php echo $code; ?>');
-
-        }else{
-          alert('Errore nella crazione dell\'imaggine');
-        }
-    });
-  }
-
-  $('.close').click(function(){
-    $('#myModal').css('display','none');
-
-  });
-
   </script>
 
 </body>

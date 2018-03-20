@@ -137,9 +137,7 @@
         <div class="isg-hamburger data-html2canvas-ignore" data-html2canvas-ignore >
           <span>Toggle Menu</span>
         </div>
-        <a id="isg-down-arrow data-html2canvas-ignore"  href="#">
-          <i class="fa fa-arrow-circle-o-down"></i>
-        </a>
+
         <div class="isg-intro">
           <!-- MOBILE LOGO -->
           <div class="isg-mobile-logo">
@@ -467,6 +465,7 @@
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
+    
     <iframe src="" id="shareIframe" style="width: 100%;height: 100%;"></iframe>
   </div>
 
@@ -475,7 +474,7 @@
 
   $(document).ready(function(){
     $("#countdown").countdown({
-      date: "10 july 2018 00:00:00",
+      date: "10 july 2019 00:00:00",
       format: "on"
     },
 
@@ -490,8 +489,10 @@
     var ctx = canvas.getContext('2d');
     width = $('#isg-header').width();
     height = $('#isg-header').height();
+
+    $('#imgAdd').remove();
     
-    $('#isg-header').append('<img src="images/sfondo.jpg" style="width:100%;height:100%;z-index:-1;position: absolute;top: 0;left: 0;opacity: 0.7;" >');
+    $('#isg-header').append('<img id="imgAdd" src="images/sfondo.jpg" style="width:'+width+'px;height:'+height+'px;z-index:0;position: absolute;top: 0;left: 0;opacity: 0.4;" >');
   
 
     var image;
@@ -503,13 +504,10 @@
       backgroundColor: 'transparent',
       onrendered: function(canvas) {
        
-      }
-
+      }     
+     });
 
       setTimeout(sendImg, 5000);
-
-      
-     });
     
   }
 
@@ -519,7 +517,7 @@
 
     image = canvas.toDataURL("image/png");
 
-    $('#isg-header').css('background','none');
+    $('#imgAdd').remove();
 
     $.post('code/create_img.php',{img : image}, function(data){
       var parsed =  $.parseJSON(data);

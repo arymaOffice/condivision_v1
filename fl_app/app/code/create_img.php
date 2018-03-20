@@ -10,7 +10,7 @@ $urlUploadImages = '../images/toShare/';
 $nameImage = $code . '.png';
 $img = imagecreatefromstring($data);
 if ($img) {
-    
+    header('Content-Type: image/png');
     imagepng($img, $urlUploadImages . $nameImage, 0);
     imagedestroy($img);
     $url['esito'] = 1;

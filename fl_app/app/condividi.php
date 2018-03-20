@@ -21,17 +21,15 @@ $id = filter_var($_GET['id'],FILTER_SANITIZE_NUMBER_INT);
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
     js = d.createElement(s); js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12";
+    js.src = "https://connect.facebook.net/it_IT/sdk.js#xfbml=1&version=v2.12";
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));</script>
 
   <img src="http://www.matrimonioincloud.it/app/images/toShare/<?php echo $id; ?>.png" style="width:100%;height:80%">
-
+  <br>
+  <br>
   <!-- Your share button code -->
-  <div class="fb-share-button" 
-    data-href="http://www.matrimonioincloud.it/app/condividi.php?id=<?php echo $id; ?>" 
-    data-layout="button_count">
-  </div>
+  <div class="fb-share-button" data-href="http://www.matrimonioincloud.it/app/images/toShare/<?php echo $id; ?>.png" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.matrimonioincloud.it%2Fapp%2Fimages%2FtoShare%2F<?php echo $id; ?>.png&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Condividi</a></div>
 
 </body>
 </html>

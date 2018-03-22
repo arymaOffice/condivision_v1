@@ -71,7 +71,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //se la richiesta è in post
 
             $insert = "INSERT INTO `fl_account`(`attivo`, `anagrafica`, `marchio`, `tipo`,  `email`, `nominativo`,  `user`, `password`, `ip`,data_creazione,data_scadenza,operatore,aggiornamento_password) VALUES (
                 1,'$creaAnagrafica',1,1,'$email','$name','$email','$password','$ip',NOW(),DATE_ADD(NOW(), INTERVAL 30 YEAR),1,DATE_ADD(NOW(), INTERVAL 12 MONTH) ) ";
-            if ($conn->query($insert)) {
+            $conn->query($insert);
+            if ($conn->insert_id > 0) {
                 smail($email, 'Attivazione account 1x2live', '<br><br> Ciao ' . $name . ', <br> hai completato con successo la registrazione al servizio 1x2 Live.  <br><br> Per accedervi clicca su questo link
             <a href="https://' . $_SERVER['SERVER_NAME'] . '">https://' . $_SERVER['SERVER_NAME'] . '</a> , <br><br> ed effetua il login con le seguenti credenziali <br><br>User : ' . $email . '  Password : ' . $password_pulita);
 

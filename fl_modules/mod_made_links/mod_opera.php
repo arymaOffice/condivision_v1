@@ -13,7 +13,7 @@ if($_GET['form']){
     $links = array('esito' => '', 'data' => array());
 
     $token = GQD('fl_token', 'token', 'account_id = '.$_SESSION['number']);
-    $token = $token['token'];
+    $token = urlencode($token['token']);
 
     $pollici = GQD('fl_link_resolution', 'risoluzione', 'id = '.$params['pollici']);
 

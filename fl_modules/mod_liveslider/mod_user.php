@@ -1,6 +1,7 @@
 <?php
 // Controlli di Sicurezza
-if (!@$thispage) {echo "Accesso Non Autorizzato";exit;}
+require_once('../../fl_core/autentication.php');
+include('fl_settings.php'); // Variabili Modulo 
 $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 
 ?>
@@ -21,7 +22,8 @@ while ($riga = mysql_fetch_array($risultato)) {
     $slider_info = GQS($tabella . ' s LEFT JOIN fl_link_resolution ls ON ls.id = s.risoluzione ', 'titolo,numero_monitor,pollici,ls.risoluzione,link', 's.id = ' . $riga['sliderId']);
 
     $token = GQD('fl_token', 'token', 'account_id = ' . $_SESSION['number']);
-    $token = $token['token'];
+    $token = urlencode($token['token']);
+
 
     $external = $slider_info[0]['risoluzione'];
 

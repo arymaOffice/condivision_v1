@@ -19,12 +19,12 @@ if (isset($_GET['nome_slider'])) {
     $nome_slider = check($_GET['nome_slider']);
     $id = check($_GET['id']);
 
-    $insert = "INSERT INTO fl_slider (`account_id`, `titolo`, `link`, `risoluzione`, `numero_monitor`) VALUES(" . $_SESSION['number'] . ",\"$nome_slider\",$id,$risoluzione,$n_monitor)";
+   echo  $insert = "INSERT INTO fl_slider (`account_id`, `titolo`, `link`, `risoluzione`, `numero_monitor`) VALUES(" . $_SESSION['number'] . ",\"$nome_slider\",$id,$risoluzione,$n_monitor)";
 
     $insert = mysql_query($insert, CONNECT);
 
     mysql_close(CONNECT);
-    header("Location: mod_user.php?esito=Slider salvato con successo&success=1 ");
+    header("Location: mod_inserisci.php?esito=Slider salvato con successo&success=1 ");
     exit;
 
 }

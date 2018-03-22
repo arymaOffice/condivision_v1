@@ -63,6 +63,7 @@ include '../../fl_inc/module_menu.php';
   top: 110px;
   left: 0px;
   z-index: -10;
+  height: 620px;
 
 }
 
@@ -200,7 +201,7 @@ input.button, .button input, .button, .button a, a.button, .salva, a.salva, a.cr
   function openNewwindow(){
     $('#myModal').css('display','block');
 
-   var link = '../mod_liveslider/mod_user.php?categoria_link=<?php echo $link_info['categoria_link']; ?>&id=<?php echo $id; ?>&risoluzione='+$('input[name="pollici"]:checked').val()+'&n_monitor='+$('input[name="n_monitor"]:checked').val();
+   var link = '../mod_liveslider/mod_inserisci.php?categoria_link=<?php echo $link_info['categoria_link']; ?>&id=<?php echo $id; ?>&risoluzione='+$('input[name="pollici"]:checked').val()+'&n_monitor='+$('input[name="n_monitor"]:checked').val();
 
    $('#iframeLink').prop('src',link);
 
@@ -228,7 +229,8 @@ input.button, .button input, .button, .button a, a.button, .salva, a.salva, a.cr
           n_monitor = $("input[name='n_monitor']:checked");
           if(n_monitor.val() == undefined ) {valore = 1;}else{valore = n_monitor.val() }
             for (i = 0; i < valore; i++){
-              $('#tbMonitor').append('<a href="#" onclick="window.open(\''+parsed.data[i]+'\',\'1x2\',\'directories=no,titlebar=no,toolbar=no,location=0,status=no,menubar=no,scrollbars=no\')"><div style="float:left;margin: 6px;"><i class="fa fa-tv fa-2x"></i></div></a>');
+              var time =  Math.floor((Math.random()*100)+1); 
+              $('#tbMonitor').append('<a href="#" onclick="window.open(\''+parsed.data[i]+'\','+time+',\'directories=no,titlebar=no,toolbar=no,location=0,status=no,menubar=no,scrollbars=no\')"><div style="float:left;margin: 6px;"><i class="fa fa-tv fa-2x"></i></div></a>');
             }
             $('.saveslider').css('display','block');
         }else{

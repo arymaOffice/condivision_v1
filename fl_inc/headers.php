@@ -2,7 +2,7 @@
 <html lang="it">
 
 <head>
-<meta charset="utf-8" /><title><?php echo sitename; ?></title>
+<meta charset="UTF-8"><title><?php echo sitename; ?></title>
 
 <!-- Smarthphone -->
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"> 

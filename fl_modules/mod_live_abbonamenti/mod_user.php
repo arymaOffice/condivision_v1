@@ -41,7 +41,7 @@ include 'fl_settings.php';
 			echo "<td>".$riga['durata']."</td>";	
 			echo "<td>".$riga['periodoLabel']."</td>";	
             echo "<td>".$riga['costo']."</td>";
-            echo "<td><a href='/fl_modules/mod_live_abbonamenti/mod_opera.php?abb='".base64_encode($riga['abbId'])." >Acquista</a></td>";
+            echo "<td><a href='/fl_modules/mod_live_abbonamenti/mod_opera.php?abb=".base64_encode($riga['abbId'])."' >Acquista</a></td>";
 		    echo "</tr>";
 	}
 

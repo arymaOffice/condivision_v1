@@ -119,9 +119,8 @@ $('#nosend').attr('href','#ui-id-2');
 
 $( '#nosend' ).click( function( event ) {
 
-    console.log($(this));
 
-if($(this).href != '#ui-id-2' ){
+if($(this).attr('href') !== '#ui-id-2' ){
 
         event.preventDefault();
 
@@ -152,6 +151,13 @@ if($(this).href != '#ui-id-2' ){
             alert( fail_log );
 
         }
+
+}else{
+    $('#ui-id-2').trigger('click');
+    $("html, body").animate({ scrollTop: 0 }, "slow");
+    $('#nosend').attr('href','#');
+    $('#nosend').html('Salva <i class="fa fa-check"></i>');
+    
 
 }
 

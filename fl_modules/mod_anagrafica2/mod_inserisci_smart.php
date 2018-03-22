@@ -114,9 +114,14 @@ $("form#scheda :input").each(function(){
 });
 
 $('#invio').attr('id','nosend');
+$('#nosend').html('Procedi <i class="fa fa-arrow-right"></i>');
+$('#nosend').attr('href','#ui-id-2');
 
 $( '#nosend' ).click( function( event ) {
 
+    console.log($(this));
+
+if($(this).href != '#ui-id-2' ){
 
         event.preventDefault();
 
@@ -136,7 +141,7 @@ $( '#nosend' ).click( function( event ) {
             }
         });
 
-        
+
         //submit if fail never got set to true
         if ( ! fail ) {
 
@@ -147,6 +152,8 @@ $( '#nosend' ).click( function( event ) {
             alert( fail_log );
 
         }
+
+}
 
 });
 </script>

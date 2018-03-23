@@ -735,15 +735,16 @@ input.button, .button input, .button, .button a, a.button, .salva, a.salva, a.cr
 	border: none;
 	display: inline-block;
 }
-.button a, a.button, a:link.button,a:visited.button {
+.button a, a.button, a:link.button {
 	padding: 6px;
 	color: white;
 }
 .salva, a.salva {
-	width: 100%;
+	width: 80%;
 	padding: 10px 4px;
 	display: inline-block;
 	text-align: center;
+	float: right;
 }
 a.create_new, create_new a {
 	color: white !important;
@@ -2865,10 +2866,3 @@ padding: 5px;
 text-align: right;
 display: block;
 } #resultnominativo  a:focus  { color: red; }
-
-
-.head_title { 
-background: #4b4848;
-padding: 10px 0 10px 0;
-color: white;
-}

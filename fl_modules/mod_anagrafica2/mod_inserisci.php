@@ -73,7 +73,7 @@ if(!isset($_GET['error']) && isset($_GET['first']) && $_GET['id'] > 1){
 <script>
 
 $('#invio').attr('id','nosend');
-$('#nosend').click(function(){
+$('#nosend').click(function(event){
     event.preventDefault();
 
         //validate fields

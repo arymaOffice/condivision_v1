@@ -316,7 +316,7 @@ $( "#invio" ).click(function( event ) {
 
 <?php if(isset($text_editor)) { ?> tinymce.triggerSave();  <?php  } ?>
 var form = $( "#scheda" ),
-url = 'fl_modules/mod_basic/save_data.php';
+url = '/fl_modules/mod_basic/save_data.php';
 var data = new FormData(form[0]);
 if($("#results").length == 0) {  form.before('<div id="results"></div>'); }
 
@@ -504,7 +504,7 @@ $( ".updateField" ).focusout(function( event ) {
   obj['id'] = id;
   var input = $(this);
 
-  var posting = $.ajax({  url: '../mod_basic/save_data.php',  type: 'POST',  data: obj});
+  var posting = $.ajax({  url: '/fl_modules/mod_basic/save_data.php',  type: 'POST',  data: obj});
   posting.fail(function( data ) {  input.attr('class', 'bo-red');  });
   posting.always(function( data ) {  });
   posting.done(function( response ) {    

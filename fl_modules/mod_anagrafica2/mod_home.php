@@ -170,7 +170,7 @@ $(".sede_operativa").css('font-weight','normal');
 			$saldo = '<a data-fancybox-type="iframe" class="fancybox_view"  href="../mod_depositi/mod_user.php?operatore_text='.$account['nominativo'].'&operatore='.$account['id'].'"> &euro; '.numdec($saldo,2).'</a>';
 			$tipo_profilo_label = $tipo[$account['tipo']];
 			if(isset($riga['account']) && @ $riga['account'] != $account['user']) mysql_query("UPDATE $tabella SET account = '".$account['user']."' WHERE id = ".$riga['id']." LIMIT 1");
-			$notifica_icon = '<a data-fancybox-type="iframe" title="Invia Notifica Account" class="fancybox_view_small" href="../mod_notifiche/mod_invia.php?destinatario[]='.$account['id'].'"><i class="fa fa-bell" aria-hidden="true"></i></a>';
+			$notifica_icon = '<a data-fancybox-type="iframe" title="Invia Notifica Account" class="fancybox_view_small" href="../mod_notifiche/mod_invia.php?destinatario[]='.@$account['id'].'"><i class="fa fa-bell" aria-hidden="true"></i></a>';
 			} else {
 			$user_check = "<a href=\"../mod_account/mod_inserisci.php?external&anagrafica_id=".$riga['id']."&email=".$riga['email']."&nominativo=".$riga['ragione_sociale']."\">Crea account</a>";
 			$user_ball = '';
@@ -198,7 +198,7 @@ $(".sede_operativa").css('font-weight','normal');
 			$tot_res++;
 					
 						
-					$nominativo = ($riga['ragione_sociale'] != '') ? ucfirst(checkValue($riga['ragione_sociale'])) : ucfirst(checkValue($riga['nome'])).' '.ucfirst(checkValue($riga['cognome']));		
+					$nominativo = ($riga['ragione_sociale'] != '') ? ucfirst(checkValue($riga['ragione_sociale'])) : ucfirst(checkValue(@$riga['nome'])).' '.ucfirst(checkValue(@$riga['cognome']));		
 					$sede_punto = (!isset($riga['comune_punto'])) ? '' : $riga['comune_punto']." (".@$riga['provincia_punto'].") ".$riga['cap_punto']."<br>".$riga['indirizzo_punto'];
 					echo '<tr>';
 					

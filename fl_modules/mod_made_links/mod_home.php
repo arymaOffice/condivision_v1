@@ -34,6 +34,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 <?php 
     if($_SESSION['usertype'] != 0) echo '<style> .fa.fa-plus-circle{ display:none; } </style>';
 
+$tipologia_main .= (isset($_GET['cat'])) ? ' AND categoria_link='.filter_var($_GET['cat'],FILTER_SANITIZE_NUMBER_INT) : '';
 $start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main);
 $query = "SELECT $select FROM `$tabella` $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
 $risultato = mysql_query($query, CONNECT);

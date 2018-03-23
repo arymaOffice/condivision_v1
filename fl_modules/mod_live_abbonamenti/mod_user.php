@@ -10,7 +10,7 @@ include 'fl_settings.php';
     
 <?php
 	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main);
-	$query = "SELECT $select,free,p.label as periodoLabel,abb.id as abbId FROM `$tabella` abb LEFT JOIN fl_periodi p ON abb.periodo = p.id WHERE abb.id != 1 AND abb.attivo = 1 ORDER BY abb.$ordine LIMIT $start,$step;";
+	$query = "SELECT $select,free,p.label as periodoLabel,abb.id as abbId FROM `$tabella` abb LEFT JOIN fl_periodi p ON abb.periodo = p.id WHERE abb.id != 1 AND abb.attivo = 1  AND free = 0 ORDER BY abb.$ordine LIMIT $start,$step;";
 	$risultato = mysql_query($query, CONNECT);
 ?>
 <br>

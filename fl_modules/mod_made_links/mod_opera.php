@@ -23,7 +23,7 @@ if($_GET['form']){
     if(isset($params['n_monitor']) && isset($params['pollici'])){
 
         for($i = 1; $i <= $params['n_monitor']; $i++){
-            array_push($links['data'],'http://livescore.gcsoft.it/index'.$external.'.html?id='.$link_id.'&monitor_id='.$i.'&monitor_count='.$params['n_monitor'].'&token='.$token);
+            array_push($links['data'],'http://service.1x2live.it/index'.$external.'.html?id='.$link_id.'&monitor_id='.$i.'&monitor_count='.$params['n_monitor'].'&token='.$token);
         }
 
         $links['esito'] = 1;
@@ -32,7 +32,7 @@ if($_GET['form']){
     }elseif(isset($params['pollici'])){
 
         
-        array_push($links['data'],'http://livescore.gcsoft.it/index'.$external.'.html?id='.$link_id.'&monitor_id=1&monitor_count=1'.'&token='.$token);
+        array_push($links['data'],'http://service.1x2live.it/index'.$external.'.html?id='.$link_id.'&monitor_id=1&monitor_count=1'.'&token='.$token);
         $links['esito'] = 1;
         
     }else{

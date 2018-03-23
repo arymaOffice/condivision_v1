@@ -53,6 +53,8 @@ if(isset($_GET['abb'])){
 
     if(mysql_insert_id() > 0){
 
+        $_SESSION['scelta_abbonamento'] = 0;
+
         mysql_close(CONNECT);
         header('Location: /fl_modules/mod_live_abbonamenti/?action=26&esito=1&info_txt=acquisto abbonamento riuscito con successo');
         exit;

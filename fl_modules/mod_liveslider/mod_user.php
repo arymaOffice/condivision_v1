@@ -31,7 +31,7 @@ while ($riga = mysql_fetch_array($risultato)) {
 
     for ($i = 1; $i <= $slider_info[0]['numero_monitor']; $i++) {
 
-        $link = 'http://livescore.gcsoft.it/index' . $external . '.html?id=' . $riga['link_id'] . '&monitor_id=' . $i . '&monitor_count=' . $slider_info[0]['numero_monitor'] . '&token=' . $token;
+        $link = 'http://service.1x2live.it/index' . $external . '.html?id=' . $riga['link_id'] . '&monitor_id=' . $i . '&monitor_count=' . $slider_info[0]['numero_monitor'] . '&token=' . $token;
 
         $monitor_links .= '<a href="' . $link . '" target="_blank"><div style="float:left;margin: 6px;"><i class="fa fa-tv fa-4x"></i></div></a>';
 

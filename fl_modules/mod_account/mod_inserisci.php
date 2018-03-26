@@ -3,7 +3,7 @@
 
 require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
- 
+$new_button = '';
 include("../../fl_inc/headers.php");
 include("../../fl_inc/testata_mobile.php");
 
@@ -74,51 +74,6 @@ foreach($tipo as $valores => $label){ // Recursione Indici di Categoria
 </select>
 </p></div>
 
-<div class="form_row">
-<p class="select_text">
-<label for="account">Seleziona Anagrafica</label>
-
-<select name="anagrafica" id="anagrafica" class="" >
-<option value="0">Nuova anagrafica</option>
-
-<?php
-foreach($anagrafica as $valores => $label){ // Recursione Indici di Categoria
-			$selected = (isset($_GET['anagrafica_id']) && check(@$_GET['anagrafica_id']) == $valores) ? 'selected="selected" ' : '' ;
-			echo "<option $selected  value=\"$valores\">".ucfirst($label)."</option>\r\n";
-			} ?>
-
-</select>
-</p></div>
-
-
-<div class="form_row">
-<p class="select_text">
-<label for="persona_id">Persona</label>
-
-<select name="persona_id" id="persona_id" class="" >
-<option value="0">Nessuno</option>
-
-<?php
-foreach($persona_id as $valores => $label){ // Recursione Indici di Categoria
-			$selected = (isset($_GET['persona_id']) && check(@$_GET['persona_id']) == $valores) ? 'selected="selected" ' : '' ;
-			echo "<option $selected  value=\"$valores\">".ucfirst($label)."</option>\r\n";
-			} ?>
-
-</select>
-</p></div>
-
-
-<div class="form_row"><p class="input_text"><label for="nominativo">Nickname</label>
-<input  type="text" name="nominativo" id="nominativo"  value="<?php if(isset($_GET['nominativo'])) echo check($_GET['nominativo']); ?>"  />
-</p>
-</div>
-
-<div class="form_row">
-<p class="input_text">
-<label for="ip_accesso">Ip accesso</label>
-<input  type="text" name="ip_accesso" id="ip_accesso"  value=""  />
-</p>
-</div>
 
 
 

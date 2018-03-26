@@ -3,7 +3,7 @@
 // Controlli di Sicurezza
 if (!@$thispage) {echo "Accesso Non Autorizzato";exit;}
 
-
+$new_button = '';
 
 if (isset($_GET['ordine'])) {if (!is_numeric($_GET['ordine'])) {exit;} else { $ordine = $ordine_mod[$_GET['ordine']];}}
 

@@ -3,3 +3,4 @@ node_modules/
 fl_config/
 fl_core/
 fl_app/app/code/config.php
+FBintegration/classiPerField/Mysql&curl/classe_connessione_database.php

@@ -14,10 +14,17 @@
 
 	class database {
 		
+<<<<<<< HEAD
 		private static $HOST = "";				//nome host
 		private static $USER = "";								//nome utente
 		private static $PASSWORD = "";				//password utente
 		private static $DATABASE = "";							//nome del database
+=======
+		private static $HOST = "vps6876.mondoservercloud.it";				//nome host
+		private static $USER = "appescap_loc";								//nome utente
+		private static $PASSWORD = "FiringDearlySevensMuch67";				//password utente
+		private static $DATABASE = "appescap_etl";							//nome del database
+>>>>>>> 9b468b677e35c571daaeddcd59fe983b70651627
 		static protected $connessione;
 		
 

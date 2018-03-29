@@ -23,9 +23,8 @@ $searchbox = 'Cerca..';
 
 $module_title = 'Anagrafica';
 $module_menu = '';
-if (isset($_GET['action'])) {
-    $new_button = '';
-}
+$new_button = '';
+
 
 if (isset($_GET['action']) && check(@$_GET['action']) == 4) {
     $module_title = 'Contact Center';

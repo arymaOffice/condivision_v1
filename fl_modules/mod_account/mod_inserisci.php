@@ -133,7 +133,7 @@ Le attività eseguite nell'ambiente gestionale sono registrate per motivi di sic
 
 
 
-<input type="hidden"  name="reload" value="./mod_visualizza.php?id="   />
+<input type="hidden"  name="reload" value="../mod_anagrafica2/mod_inserisci.php?id="   />
 
 
 <input type="submit"  value="Crea Account" class="button"   />

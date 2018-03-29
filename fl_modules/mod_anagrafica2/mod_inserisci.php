@@ -59,9 +59,6 @@ $tab_div_labels = array('marchio' => 'Profilo', 'tipo_documento' => "Dati Docume
 
 
 <?php include '../mod_basic/action_estrai.php';?>
-<input type="hidden" name="info" value="1" />
-
-<input type="hidden" name="dir_upfile" value="icone_articoli" />
 
 <?php 
 if(!isset($_GET['error']) && isset($_GET['first']) && $_GET['id'] > 1){

@@ -15,6 +15,9 @@ $multimonitor = ($link_info['multimonitor']) ? '<span class="msg blue"> multimon
 
 $risoluzioni = GQS('fl_link_resolution', '*', 'id > 1');
 
+//inserimento visita all'evento
+mysql_query('INSERT INTO fl_data_link (id_link,id_account) VALUES ('.$id.','.$_SESSION['number'].')', CONNECT);
+
 include "../../fl_inc/headers.php";
 include '../../fl_inc/testata.php';
 include '../../fl_inc/menu.php';
@@ -220,7 +223,7 @@ input.button, .button input, .button, .button a, a.button, .salva, a.salva, a.cr
       form = $('#monitor').serialize();
 
 
-      $.get('mod_opera.php',{form : form , link_id : <?php echo $link_info['link_id']; ?> ,},function(data){
+      $.get('mod_opera.php',{form : form ,id : <?php echo $id; ?>, link_id : <?php echo $link_info['link_id']; ?> ,},function(data){
 
         var parsed = $.parseJSON(data);
         if(parsed.esito == 1){

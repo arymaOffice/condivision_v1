@@ -151,9 +151,9 @@ function select_type($who)
     $select = array('emesso_da', 'sesso', 'forma_giuridica', 'marchio', 'tipologia_attivita', 'stato_nascita', 'stato_punto', 'stato_sede', 'regione_residenza', 'stato_residenza', 'account_id', "tipo_documento", "punto_vendita", "regione_sede", "regione_punto", "status_anagrafica", "proprietario", "status", "regione", "nazione", 'tipo_profilo', 'provincia_nascita', 'luogo_di_nascita', 'provincia_residenza', "provincia_sede", "provincia_punto", 'comune_punto', 'comune_sede', 'comune_residenza');
 
     $disabled = array();
-    $hidden = array('status_anagrafica', 'data_creazione', 'data_aggiornamento', 'operatore', 'ip', 'proprietario', 'garanzia_fido', 'attivo', 'marchio', 'data_scadenza_contratto', 'profilo_genitore', 'profilo_commissione');
-    $radio = array();
-    $text = array();
+    $hidden = array( 'data_creazione', 'data_aggiornamento', 'operatore', 'ip', 'proprietario', 'garanzia_fido', 'attivo', 'marchio', 'data_scadenza_contratto', 'profilo_genitore', 'profilo_commissione');
+    $radio = array('status_anagrafica');
+    $text = array('note');
     $multi_selection = array("servizi");
     $type = 1;
 

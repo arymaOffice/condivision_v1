@@ -17,7 +17,7 @@ if (!isset($_GET['view'])) {
     include "../../fl_inc/testata_mobile.php";
 }
 
-$tab_div_labels = array('marchio' => 'Profilo', 'tipo_documento' => "Dati Documento", 'forma_giuridica' => "Dati Fiscali", 'tipologia_attivita' => $etichette_anagrafica['tipologia_attivita'], 'telefono' => "Contatti", 'note' => "Note");
+$tab_div_labels = array('marchio' => 'Profilo', 'tipo_documento' => "Dati Documento", 'forma_giuridica' => "Dati Fiscali", 'tipologia_attivita' => $etichette_anagrafica['tipologia_attivita'], 'telefono' => "Contatti");
 ?>
 
 

@@ -161,6 +161,9 @@ if($(this).attr('href') !== '#ui-id-2' ){
 
 }
 
+$('#box_status_anagrafica').css('display','none');
+$('#box_tipo_profilo').css('display','none');
+
 });
 </script>
 

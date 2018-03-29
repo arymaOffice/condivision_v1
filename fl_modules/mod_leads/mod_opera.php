@@ -307,19 +307,20 @@ if (isset($_POST['inviaEmail']))
   
   
   $sendM = smail($destinatario['email'],$oggetto,$mail_body);
-  $send++;
+  
   
   $query = "INSERT INTO `fl_richieste` (`id`, `marchio`,`workflow_id`,`parent_id`, `anagrafica_rel`, `tipo_richiesta`, `data_apertura`, `data_chiusura`, `data_scadenza`, `note`, `operatore`, `data_creazione`, `data_aggiornamento`) 
 			VALUES (NULL, '0','$workflow_id', '$dest_id', '$anagrafica_id', '1', NOW(), '0000-00-00', '0000-00-00', '$messaggioSQL', '".$_SESSION['number']."', NOW(), NOW());";
-  if($sendM == 1) { mysql_query($query,CONNECT); } else { smail(mail_admin,"Errore invio email lead ID: ".$dest_id, $sendM.' :::::::: '.$query); }
+  if($sendM == 1) { $send++; mysql_query($query,CONNECT); } else { mail(mail_admin,"Errore invio email lead ID: ".$dest_id, $sendM.' :::::::: '.$query); }
 
   
   }
 
 smail(mail_admin,"Invio email a ".$send.' contatti ::. '.$oggetto, 'MESSAGGIO BASE INVIATO: '.$testo);
 smail(mail_user,"Invio email a ".$send.' contatti ::. '.$oggetto, 'MESSAGGIO BASE INVIATO: '.$testo); 
+if($sendM == 1) $sendM = '';
 
-$send = 'Mail inviate: '.$send;
+$send = 'Mail inviate: '.$send.' '.$sendM;
 mysql_close(CONNECT);
 header("Location: $rct?$vars&success&esito=$send");
 exit;	
@@ -344,6 +345,24 @@ if(isset($_GET['creaLeadVuoto'])){
 	exit;
 
 }
+
+
+if(isset($_GET['creaLeadVuotoDispo'])){
+
+	$lead_id = check($_GET['lead_id']);
+
+	$query = "INSERT INTO fl_leads_hrc (`nome`, `cognome`, `telefono`, `email`, `status_potential`, `note`,`data_creazione`,`data_aggiornamento`,`data_visita`) VALUES 
+	('','','','',1,'Inserito da calendario disponibilità',NOW(),NOW(),NOW()) " ;
+	mysql_query($query);
+	$lastInsert = mysql_insert_id();
+
+	mysql_query("UPDATE fl_disponibilita_date SET lead_id = ".$lastInsert." WHERE lead_id = ".$lead_id);
+	mysql_close(CONNECT);
+	header("location: ../mod_leads/mod_inserisci.php?new&id=".$lastInsert."&".mysql_error());
+	exit;
+
+}
+
 
 mysql_close(CONNECT);
 header("location: ".$_SESSION['POST_BACK_PAGE']);

@@ -98,11 +98,17 @@ include("../../fl_inc/headers.php");
     
  </table>
 
- <?php } mysql_close(CONNECT); ?>
+ <?php } ?>
 
 <p><a href="#" onclick="location.reload();"><i class="fa fa-refresh" aria-hidden="true"></i> Aggiorna lista </a> 
-<?php if($parent_id > 1) echo '| <a href="../mod_leads/mod_inserisci.php?id='.$parent_id.'" target="_parent"><i class="fa fa-user" aria-hidden="true"></i> Vai a scheda contatto </a>'; ?>
+<?php
+
+$potential = GRD($tables[106],$parent_id); 
+
+if($potential['id'] > 1){ 
+if($parent_id > 1) echo '| <a href="../mod_leads/mod_inserisci.php?id='.$parent_id.'" target="_parent"><i class="fa fa-user" aria-hidden="true"></i> Vai a scheda contatto </a>'; 
+} ?>
 </p>
 
-
+<?php  mysql_close(CONNECT); ?>
 </body></html>

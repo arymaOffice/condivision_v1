@@ -53,26 +53,24 @@ $(document).ready(function(){
 		localStorage.ciSono = parsed.ciSono;
 		localStorage.idTavoli = $.makeArray(parsed.idTavoli);
 		localStorage.idTavoliOpachi = $.makeArray(parsed.idTavoliOpachi);
+		localStorage.idTavoliOpachi2 = parsed.idTavoliOpachi;
 
 		if(localStorage.ciSono != '0'){ // se l'evento è gia settato recupero i tavoli
 
-		for (var i = 0; i < parseInt(localStorage.ciSono) + 2 ; i++) {
-				createTableOneP(i); //funzione che accetta un solo parametro
-				tables ++;
-			}//end for
+		$.each(parsed.idTavoli,function(index,value){
+			createTableOneP(value['numero_tavolo']);
+			tables ++;
+		});
 
 		}//end if
 
 		if(parsed.idTavoliOpachi != ''){ // se l'evento è gia settato recupero i tavoli
 
+		$.each(parsed.idTavoliOpachi,function(index,value){
+			createTableOneP(value['numero_tavolo'],value['evento_id']); //funzione che accetta due parametri
+		});
 
-			tablesOpachi = localStorage.idTavoliOpachi.split(',');
 
-		for(var t= 0 ; t < tablesOpachi.length ; t = t+2){
-			eventoDiverso=parseInt(tablesOpachi[t]);
-			nameTableDiv =parseInt(tablesOpachi[t+1]);
-				createTableOneP(nameTableDiv,eventoDiverso); //funzione che accetta due parametri
-			};//end for
 
 
 		}//end if

@@ -113,7 +113,7 @@ if (isset($_GET['insertTableId'])) { //richiesta di inserire un tavolo
 
 	if ($_GET['diverso'] != 'false') {$insertEventId = check($_GET['diverso']);}
 	//vedo se un tavolo è già stato inserito
-	$contoTavoli = "SELECT count(*) AS quanti FROM $tabella_su_cui_operare WHERE numero_tavolo = $insertTableId AND evento_id = $insertEventId AND layout_id =".$layout_info[0]['id'];
+	$contoTavoli = "SELECT count(*) AS quanti FROM $tabella_su_cui_operare tv LEFT JOIN fl_tavoli_layout l ON l.id = tv.layout_id  WHERE numero_tavolo = $insertTableId AND l.evento_id = $insertEventId AND ambiente_id =".$ambiente_id;
 	$contoTavoli = mysql_query($contoTavoli, CONNECT);
 	$contoTavoli = mysql_fetch_array($contoTavoli);
 	if ($contoTavoli['quanti'] == 0) //se non ci sono tavoli con id ed vento uguale lo aggiungo
@@ -131,16 +131,19 @@ if (isset($_GET['insertTableId'])) { //richiesta di inserire un tavolo
 			$sommaCoperti = "SELECT sum(IF(tipo_commensale != 5,adulti,0)) a, sum(IF(tipo_commensale != 6 && tipo_commensale != 5,bambini,0)) b, sum(IF(tipo_commensale != 6 && tipo_commensale != 5,sedie,0)) s, sum(IF(tipo_commensale != 6 && tipo_commensale != 5,seggioloni,0)) as h,SUM(if(note_intolleranze != '',1,0)) as noteInt,sum(IF(tipo_commensale = 5,adulti + bambini,0)) as seraTot FROM " . $tables[128] . " WHERE tavolo_id = " . $selezionoDatiTavolo['id'];
 			$sommaCoperti = mysql_query($sommaCoperti, CONNECT);
 			$sommaCoperti = mysql_fetch_assoc($sommaCoperti);
-		} else { $selezionoDatiTavolo = "SELECT id,numero_tavolo,nome_tavolo,numero_tavolo_utente,nome_tavolo_utente,asse_x,asse_y,tipo_tavolo_id,angolare FROM $tabella_su_cui_operare WHERE evento_id = $insertEventId AND numero_tavolo = $insertTableId AND layout_id =".$layout_info[0]['id'];
+		} else { 
+			$selezionoDatiTavolo = "SELECT tv.id,numero_tavolo,nome_tavolo,numero_tavolo_utente,nome_tavolo_utente,asse_x,asse_y,tipo_tavolo_id,angolare FROM $tabella_su_cui_operare tv LEFT JOIN fl_tavoli_layout l ON l.id = tv.layout_id WHERE l.evento_id = $insertEventId AND numero_tavolo = $insertTableId AND ambiente_id =".$ambiente_id;
 
 			$selezionoDatiTavolo = mysql_query($selezionoDatiTavolo, CONNECT);
 			$selezionoDatiTavolo = mysql_fetch_assoc($selezionoDatiTavolo);
 			$sommaCoperti = array();
 		}
+		
 		echo json_encode(array_merge($selezionoDatiTavolo, $sommaCoperti), true);
 		exit;
 	}
 
+	exit;
 }
 
 
@@ -331,12 +334,20 @@ if (isset($_GET['evento_id'])) { //in base all'ebento recupero il numero di tavo
 	$layout_info = GQS('fl_tavoli_layout', '*', 'evento_id = '.$evento_principale.' AND ambiente_id = '.$ambiente_id); //mi ritorna info sul layout
 
 
-	$evento_hrc = GQS('fl_eventi_hrc', ' multievento, data_evento ', ' ambiente_principale = ' . $ambiente_id . ' OR ambiente_1 = ' . $ambiente_id . ' OR ambiente_2 = ' . $ambiente_id . ' OR notturno = ' . $ambiente_id . '
-	OR ambienti = ' . $ambiente_id . '  AND id = ' . $evento_principale);
+	$condition = ' ambiente_principale = ' . $ambiente_id . ' OR ambiente_1 = ' . $ambiente_id . ' OR ambiente_2 = ' . $ambiente_id . ' OR notturno = ' . $ambiente_id . '	OR ambienti = ' . $ambiente_id . '  AND id = ' . $evento_principale;
+	if($_SERVER['HTTP_HOST'] == 'calderonimartini.condivision.cloud') $condition = 'ambienti = ' . $ambiente_id . '  AND id = ' . $evento_principale;
 
-	if (@$evento_hrc[0]['multievento']) {
+	$evento_hrc = GQS('fl_eventi_hrc', ' multievento, data_evento ', $condition);
+
+	if ($evento_hrc[0]['multievento'] == 1) {
+
 		$data_evento = substr($evento_hrc[0]['data_evento'], 0, 10);
-		$eventi_coinvolti = GQS('fl_eventi_hrc', 'id', 'ambienti = ' . $ambiente_id . ' AND DATE(data_evento) = "' . $data_evento . '"');
+
+		$condition_1 =  '( ambienti = ' . $ambiente_id . ' OR  ambiente_1 = ' . $ambiente_id . '  OR ambiente_2 = ' . $ambiente_id . '  OR notturno = ' . $ambiente_id . ' )';
+		if($_SERVER['HTTP_HOST'] == 'calderonimartini.condivision.cloud') $condition_1 = ' ambienti = ' . $ambiente_id ;
+
+		$eventi_coinvolti = GQS('fl_eventi_hrc', 'id', $condition_1.' AND DATE(data_evento) = "' . $data_evento . '"');
+
 
 		$evento = implode(',', array_column($eventi_coinvolti, 'id'));
 	}
@@ -357,7 +368,12 @@ if (isset($_GET['evento_id'])) { //in base all'ebento recupero il numero di tavo
 		$daTogliere = array($evento_principale . ',', $evento_principale, ',' . $evento_principale);
 		$evento = str_replace($daTogliere, '', $evento);
 		$evento = trim($evento, ',');
-		$Tavoli_opachi = "SELECT evento_id,numero_tavolo FROM $tabella_su_cui_operare  WHERE evento_id IN($evento) AND layout_id = ".$layout_info[0]['id']."  ORDER BY numero_tavolo DESC";
+
+		//SELECT tv.evento_id, numero_tavolo FROM fl_tavoli tv LEFT JOIN fl_tavoli_layout l ON l.id = tv.`layout_id` WHERE tv.evento_id IN ( 483, 488 )
+		//AND ambiente_id =2
+
+
+		$Tavoli_opachi = "SELECT l.evento_id,numero_tavolo FROM $tabella_su_cui_operare tv LEFT JOIN fl_tavoli_layout l ON l.id = tv.`layout_id`  WHERE l.evento_id IN($evento) AND ambiente_id = ".$ambiente_id."  ORDER BY numero_tavolo DESC";
 		$Tavoli_opachi = mysql_query($Tavoli_opachi, CONNECT);
 		$Tavoli_opachi = mysql_fetch_all_mia($Tavoli_opachi, MYSQL_NUM);
 

@@ -7,7 +7,7 @@ include("../../fl_inc/headers.php");
 require_once('../../fl_set/librerie/html2pdf/html2pdf.class.php');
 
 ob_start(); 
-require_once('note_date.php');
+require_once('mod_disponibilita_note_date.php');
 
 mysql_close(CONNECT);
  echo  $content = ob_get_clean();

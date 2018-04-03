@@ -53,6 +53,7 @@ $(document).ready(function(){
 		localStorage.ciSono = parsed.ciSono;
 		localStorage.idTavoli = $.makeArray(parsed.idTavoli);
 		localStorage.idTavoliOpachi = $.makeArray(parsed.idTavoliOpachi);
+		localStorage.idTavoliOpachi2 = parsed.idTavoliOpachi;
 
 		if(localStorage.ciSono != '0'){ // se l'evento è gia settato recupero i tavoli
 

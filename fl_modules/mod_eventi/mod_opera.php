@@ -95,9 +95,12 @@ if(isset($_POST['evento_id']) && isset($_POST['numero_adulti']) && isset($_POST[
 	//selezione ambienti e  date per lead_id
 	if(isset($_POST['lead_id'])){
 
-		$lead_id = (isset($_POST['lead_id'])) ? check($_POST['lead_id']) : '' ;
-		$sql = "DELETE FROM fl_disponibilita_date WHERE `lead_id` = $lead_id";
+		$lead_id = (isset($_POST['lead_id'])) ? check($_POST['lead_id']) : 0 ;
+		
+		if($lead_id == 0) {
+		$sql = "DELETE FROM fl_disponibilita_date WHERE `lead_id` = 0";
 		$delete = mysql_query($sql,CONNECT);
+		}
 
 		$date_con_ambiente = array();
 		foreach ($_POST as $param_name => $param_val) {
@@ -114,14 +117,20 @@ if(isset($_POST['evento_id']) && isset($_POST['numero_adulti']) && isset($_POST[
 
 			foreach($value as $single_value){
 				$explode = explode('.',$single_value);
-				$values .= "($lead_id,'".$explode[0]."','".$explode[1]."'),";
+				$note = '';
+				if(strstr($explode[1], 'B')) {
+				$explode[1] = str_replace('B','',$explode[1]);
+				$note = 'Taglio Torta';
+				}
+				$values .= "($lead_id,'".$explode[0]."','".$explode[1]."', NOW(), ".$_SESSION['number'].",'$note'),";
 
 			}
 			
 		}
 
 		$values = trim($values,',');
-		$sql = "INSERT INTO fl_disponibilita_date (`lead_id`, `data_disponibile`,ambiente_id) VALUES $values";
+		$sql = "INSERT INTO fl_disponibilita_date (`lead_id`, `data_disponibile`,`ambiente_id`,`data_creazione`,`operatore`,`note`) VALUES $values";
+		
 		$insertDate = mysql_query($sql,CONNECT);
 		mysql_close(CONNECT);
 		echo json_encode(array('action'=>'popup','class'=>'green','url'=>"mod_disponibilita_note.php?lead_id=$lead_id&ambiente",'esito'=>"Salvato Correttamente!")); 

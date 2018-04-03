@@ -39,17 +39,21 @@ mysql_close(CONNECT);
   
 
  <div id="content_scheda" style="clear:both">
- <h1>Inserisci note</h1>
+ <?php if(isset($_GET['leadCollegato'])) { ?><a href="mod_seleziona_disponibilita_ambienti.php?lead_id=<?php echo $lead_id; ?>&closed&b=Disponibilità Ambienti&a=dashboard" class="button purple" target="_parent"><i class="fa fa-pencil" aria-hidden="true"></i>
+  Proponi date </a><?php } ?>
+
+ <h1>Note Disponibilità</h1>
  <?php echo $inputForm; ?>
   
  
 
-  <a href="mod_disponibilita_pdf.php?lead_id=<?php echo $lead_id; ?>" class="button"> Conferma </a>
+  <a href="mod_disponibilita_pdf.php?lead_id=<?php echo $lead_id; ?>" class="button" onclick="javascript:$('.updateField').trigger('focusOut'); "> Procedi </a>
+
  
   </div>
 
 
 
-
+<?php mysql_close(CONNECT); ?>
 
 

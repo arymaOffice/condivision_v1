@@ -331,12 +331,20 @@ if (isset($_GET['evento_id'])) { //in base all'ebento recupero il numero di tavo
 	$layout_info = GQS('fl_tavoli_layout', '*', 'evento_id = '.$evento_principale.' AND ambiente_id = '.$ambiente_id); //mi ritorna info sul layout
 
 
-	$evento_hrc = GQS('fl_eventi_hrc', ' multievento, data_evento ', ' ambiente_principale = ' . $ambiente_id . ' OR ambiente_1 = ' . $ambiente_id . ' OR ambiente_2 = ' . $ambiente_id . ' OR notturno = ' . $ambiente_id . '
-	OR ambienti = ' . $ambiente_id . '  AND id = ' . $evento_principale);
+	$condition = ' ambiente_principale = ' . $ambiente_id . ' OR ambiente_1 = ' . $ambiente_id . ' OR ambiente_2 = ' . $ambiente_id . ' OR notturno = ' . $ambiente_id . '	OR ambienti = ' . $ambiente_id . '  AND id = ' . $evento_principale;
+	if($_SERVER['HTTP_HOST'] == 'calderonimartini.condivision.cloud') $condition = 'ambienti = ' . $ambiente_id . '  AND id = ' . $evento_principale;
 
-	if (@$evento_hrc[0]['multievento']) {
+	$evento_hrc = GQS('fl_eventi_hrc', ' multievento, data_evento ', $condition);
+
+	if ($evento_hrc[0]['multievento'] == 1) {
+
 		$data_evento = substr($evento_hrc[0]['data_evento'], 0, 10);
-		$eventi_coinvolti = GQS('fl_eventi_hrc', 'id', 'ambienti = ' . $ambiente_id . ' AND DATE(data_evento) = "' . $data_evento . '"');
+
+		$condition_1 =  '( ambienti = ' . $ambiente_id . ' OR  ambiente_1 = ' . $ambiente_id . '  OR ambiente_2 = ' . $ambiente_id . '  OR notturno = ' . $ambiente_id . ' )';
+		if($_SERVER['HTTP_HOST'] == 'calderonimartini.condivision.cloud') $condition_1 = ' ambienti = ' . $ambiente_id ;
+
+		$eventi_coinvolti = GQS('fl_eventi_hrc', 'id', $condition_1.' AND DATE(data_evento) = "' . $data_evento . '"');
+
 
 		$evento = implode(',', array_column($eventi_coinvolti, 'id'));
 	}
@@ -357,7 +365,12 @@ if (isset($_GET['evento_id'])) { //in base all'ebento recupero il numero di tavo
 		$daTogliere = array($evento_principale . ',', $evento_principale, ',' . $evento_principale);
 		$evento = str_replace($daTogliere, '', $evento);
 		$evento = trim($evento, ',');
-		$Tavoli_opachi = "SELECT evento_id,numero_tavolo FROM $tabella_su_cui_operare  WHERE evento_id IN($evento) AND layout_id = ".$layout_info[0]['id']."  ORDER BY numero_tavolo DESC";
+
+		//SELECT tv.evento_id, numero_tavolo FROM fl_tavoli tv LEFT JOIN fl_tavoli_layout l ON l.id = tv.`layout_id` WHERE tv.evento_id IN ( 483, 488 )
+		//AND ambiente_id =2
+
+
+		$Tavoli_opachi = "SELECT l.evento_id,numero_tavolo FROM $tabella_su_cui_operare tv LEFT JOIN fl_tavoli_layout l ON l.id = tv.`layout_id`  WHERE l.evento_id IN($evento) AND ambiente_id = ".$ambiente_id."  ORDER BY numero_tavolo DESC";
 		$Tavoli_opachi = mysql_query($Tavoli_opachi, CONNECT);
 		$Tavoli_opachi = mysql_fetch_all_mia($Tavoli_opachi, MYSQL_NUM);
 

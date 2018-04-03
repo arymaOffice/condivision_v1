@@ -180,15 +180,15 @@ echo '<input type="hidden" name="info" value="1" />';
 
 
 
-<?php if(check($_GET['id']) != 1 && $evento['stato_evento'] == 4) { 
-echo "<a  href=\"../mod_basic/action_elimina.php?POST_BACK_PAGE=../mod_eventi/?gtx=$tab_id&amp;unset=".$id."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i> Elimina </a>";
+<?php if(check($_GET['id']) != 1 && ($evento['stato_evento'] == 4 || $evento['stato_evento'] == 0)) { 
+echo "<a  href=\"../mod_basic/action_elimina.php?POST_BACK_PAGE=../mod_eventi/&gtx=$tab_id&amp;unset=".$id."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i> Elimina </a>";
 }
-
 
 if(isset($_GET['lead_id'])) {
 	
 	$dataEvento = check($_GET['data_evento']);
 	$potential = GRD($tables[106],$lead_id); 
+	
 
 	echo "<script type=\"text/javascript\">	
 	$('#periodo_evento').val('".$potential['tipo_interesse']."');
@@ -211,6 +211,24 @@ if(isset($_GET['lead_id'])) {
 	echo "$('#data_fine_evento').val('".substr($dataEvento,8,2)."/".substr($dataEvento,5,2)."/".substr($dataEvento,0,4)." 21:00 ');";
 
 	}
+
+	if(defined('MULTI_AMBIENTE')) {
+	$x = 0;
+	foreach ($preventivo_collegato as $key => $value) {
+			if($x == 0) $dati_preventivo = GRD('fl_preventivi',$key);
+			$x++;
+	}
+	echo "$('#prezzo_base').val('".$dati_preventivo['totale_preventivo']."');";
+	echo "$('#ambiente_principale').val('".$dati_preventivo['ambiente_principale']."');";
+	echo "$('#ambiente_1').val('".$dati_preventivo['ambiente_1']."');";
+	echo "$('#ambiente_2').val('".$dati_preventivo['ambiente_2']."');";
+	echo "$('#notturno').val('".$dati_preventivo['notturno']."');";
+	echo "$('#numero_adulti').val('".$dati_preventivo['numero_adulti']."');";
+	echo "$('#numero_bambini').val('".$dati_preventivo['numero_bambini']."');";
+
+
+	}
+
 	echo "</script>";
 }
 ?>

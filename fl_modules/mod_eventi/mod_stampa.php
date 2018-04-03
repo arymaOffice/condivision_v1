@@ -13,7 +13,7 @@ $id = check($_GET['id']);
 $evento = GRD($tabella,$id); 
 $acconto = $versamento_caparra = '';
 
-$documento_vendita = GQD('fl_doc_vendita','*',' anagrafica_id = '.$evento['anagrafica_cliente']);
+$documento_vendita = GQD('fl_doc_vendita','*',' workflow_id = 6 AND ref_id = '.$evento['id']);
 if($documento_vendita['id'] > 1){
 $totale = GQD('fl_doc_vendita_voci','id,SUM(`subtotale`) AS totale','  `codice` = \'ACC\' AND `fattura_id` = '.$documento_vendita['id']);
 $tipoDoc =  ($documento_vendita['tipo_doc_vendita'] == 0) ? 'Fattura ' : 'Ricevuta ';

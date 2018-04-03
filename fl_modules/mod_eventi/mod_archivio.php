@@ -223,8 +223,10 @@ margin-right: 20px;
 			<span class=\"msg\" style=\"background: $coloreEvento\">".@$tipo_evento[$riga['tipo_evento']]." ".@$centro_di_ricavo[$riga['centro_di_ricavo']]."</span><span class=\"msg gray\">".$periodo_evento[$riga['periodo_evento']]."</span></td>"; 
 			echo "<td><h2>$titolo_ricorrenza</h2>".@$location_evento[$riga['location_evento']]." ".$ambienti_txt."</td>"; 
 			echo "<td><strong>".@$proprietario[$riga['proprietario']]."</td>"; 
-			echo "<td>";
+			echo "<td>";    
 			echo "<a style=\"color: $coloreEvento\" href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Gestione Amministrativa\" > <i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></a>";
+
+			echo "<a style=\"color: $coloreEvento\" href=\"../mod_materieprime/?mod_fabbisogno.php?evento_id=".$riga['id']."\" title=\"Calcola Fabbisogno\" > <i class=\"fa fa-clipboard\" aria-hidden=\"true\"></i></a>";
 			echo "</td>";
 			echo "<td><a href=\"mod_scheda_servizio.php?evento_id=".$riga['id']."&tipo_evento=".$riga['tipo_evento']."&id=$schedaWeddingId\" title=\"Gestione Operativa\" style=\"color:  $colorScheda\"><i class=\"fa fa-address-card\" aria-hidden=\"true\"></i></a></td>";
 			if($riga['stato_evento'] == 4 && $_SESSION['usertype'] == 0) echo "<td><a href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a></td>"; 

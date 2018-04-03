@@ -211,6 +211,13 @@ input.button, .button input, .button, .button a, a.button, .salva, a.salva, a.cr
 
   }
 
+  const FINESTRE = [];
+
+  function openLink(linkpassato,nome){
+    FINESTRE.push(window.open(linkpassato,'"'+nome+'"','directories=no,titlebar=no,toolbar=no,location=0,status=no,menubar=no,scrollbars=no'));
+    
+  }
+
 
 
   $('.close').click(function(e){ $('#myModal').css('display','none'); });
@@ -233,7 +240,7 @@ input.button, .button input, .button, .button a, a.button, .salva, a.salva, a.cr
           if(n_monitor.val() == undefined ) {valore = 1;}else{valore = n_monitor.val() }
             for (i = 0; i < valore; i++){
               var time =  Math.floor((Math.random()*100)+1); 
-              $('#tbMonitor').append('<a href="#" onclick="window.open(\''+parsed.data[i]+'\','+time+',\'directories=no,titlebar=no,toolbar=no,location=0,status=no,menubar=no,scrollbars=no\')"><div style="float:left;margin: 6px;"><i class="fa fa-tv fa-2x"></i></div></a>');
+              $('#tbMonitor').append('<a href="#" onclick="openLink(\''+parsed.data[i]+'\','+time+')"><div style="float:left;margin: 6px;"><i class="fa fa-tv fa-2x"></i></div></a>');
             }
             $('.saveslider').css('display','block');
         }else{
@@ -243,8 +250,4 @@ input.button, .button input, .button, .button a, a.button, .salva, a.salva, a.cr
 
       });
     });
-
-    
-
-
-    </script>
+</script>

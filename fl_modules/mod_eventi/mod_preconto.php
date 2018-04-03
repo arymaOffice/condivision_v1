@@ -3,7 +3,7 @@ require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
 $evento_id = check($_GET['evento_id']);
 $evento = GRD('fl_eventi_hrc',$evento_id); 
-$movimento_cassa = array('Extra','Abbuono');
+$movimento_cassa = array('Aggiungi','Sottrai');
 
 include("../../fl_inc/headers.php");
 
@@ -14,6 +14,7 @@ $riga = '<tr>
 <td>&euro; {{cu}} </td>
 <td>{{qty}}</td>
 <td>&euro; {{totaleVoce}}</td>
+<td><a href="../mod_basic/action_elimina.php?gtx=140&amp;unset={{id}}" title="Elimina"  onclick="return conferma_del();"><i class="fa fa-trash-o"></i></a></td>
 </tr>';
 
 $extra = GQS('fl_registro_cassa','*',' conto_id = '.$evento_id);
@@ -24,6 +25,7 @@ foreach ($extra as $chiave => $valore) {
 	if($valore['quantita'] < 1) $valore['quantita'] = 1;
 
    $item = str_replace('{{totaleVoce}}', numdec($valore['importo']*$valore['quantita'],2), $riga);
+   $item = str_replace('{{id}}', $valore['id'], $item);
    $item = str_replace('{{qty}}', $valore['quantita'], $item);
    $item = str_replace('{{cu}}', $valore['importo'], $item);
    $item = str_replace('{{descrizione}}', $valore['descrizione'], $item);
@@ -100,7 +102,7 @@ $prezzo_operatori = ($evento['prezzo_operatori'] > 0) ? $evento['prezzo_operator
 		?>
 	</select>
 	<input type="text" name="descrizione" placeholder="Descrizione" value=""> &euro; 
-	<input type="number" name="importo" value="0.00" step="100">
+	<input type="number" name="importo" value="0.00">
 	<input type="submit" value="Registra" class="button">
 </form>
 		<form>
@@ -110,6 +112,7 @@ $prezzo_operatori = ($evento['prezzo_operatori'] > 0) ? $evento['prezzo_operator
 					<th>Costo unitario</th>
 					<th>Quantità</th>
 					<th>Totale</th>
+					<th></th>
 				</tr>
 
 				<tr>
@@ -117,6 +120,7 @@ $prezzo_operatori = ($evento['prezzo_operatori'] > 0) ? $evento['prezzo_operator
 					<td>&euro; <?php echo $evento['prezzo_base']; ?></td>
 					<td><?php echo $evento['numero_adulti'] ?></td>
 					<td>&euro; <?php $totale += ($evento['prezzo_base']*$evento['numero_adulti']); echo numdec($evento['prezzo_base']*$evento['numero_adulti'],2); ?></td>
+					<td></td>
 				</tr>
 				
 				<?php if($evento['numero_bambini'] > 0) { ?>
@@ -125,6 +129,7 @@ $prezzo_operatori = ($evento['prezzo_operatori'] > 0) ? $evento['prezzo_operator
 					<td>&euro; <?php echo $evento['prezzo_bambini']; ?></td>
 					<td><?php echo $evento['numero_bambini']; ?></td>
 					<td>&euro; <?php $totale += ($evento['prezzo_bambini']*$evento['numero_bambini']);  echo numdec($evento['prezzo_bambini']*$evento['numero_bambini'],2); ?></td>
+					<td></td>
 				</tr>
 				<?php } ?>
 				<?php if($evento['numero_operatori'] > 0) { ?>
@@ -133,6 +138,7 @@ $prezzo_operatori = ($evento['prezzo_operatori'] > 0) ? $evento['prezzo_operator
 					<td>&euro; <?php echo $prezzo_operatori; ?></td>
 					<td><?php echo $evento['numero_operatori']; ?></td>
 					<td>&euro; <?php $totale += ($prezzo_operatori*$evento['numero_operatori']); echo numdec($prezzo_operatori *$evento['numero_operatori'],2); ?></td>
+					<td></td>
 				</tr>
 				<?php } ?>
 
@@ -142,6 +148,7 @@ $prezzo_operatori = ($evento['prezzo_operatori'] > 0) ? $evento['prezzo_operator
 					<td>&euro; <?php echo $evento['prezzo_serali']; ?></td>
 					<td><?php echo $evento['numero_serali']; ?></td>
 					<td>&euro; <?php $totale += ($evento['prezzo_serali']*$evento['numero_serali']); echo numdec($evento['prezzo_serali']*$evento['numero_serali'],2); ?></td>
+					<td></td>
 				</tr>
 				<?php } ?>
 
@@ -151,6 +158,7 @@ $prezzo_operatori = ($evento['prezzo_operatori'] > 0) ? $evento['prezzo_operator
 					<td>&euro; <?php echo $evento['costi_siae']; ?></td>
 					<td></td>
 					<td>&euro; <?php $totale += $evento['costi_siae']; echo numdec($evento['costi_siae'],2); ?></td>
+					<td></td>
 				</tr>
 				<?php } ?>
 
@@ -187,7 +195,7 @@ if(defined('GESTIONE_CAPARRA')) { $movimento_caparra = array('Versamento','Resti
 		?>
 	</select>
 	<input type="text" name="descrizione" placeholder="Descrizione" value="Caparra Confirmatoria"> &euro; 
-	<input type="number" name="importo" value="<?php echo GESTIONE_CAPARRA; ?>" step="100">
+	<input type="number" name="importo" value="<?php echo GESTIONE_CAPARRA; ?>" >
 	<input type="submit" value="Registra" class="button">
 </form>
 </div>

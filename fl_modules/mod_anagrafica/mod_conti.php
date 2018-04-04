@@ -9,20 +9,10 @@ $anagrafica_id = check($_GET['anagrafica_id']);
 include("../../fl_inc/headers.php");
  ?>
  
-<body style=" background: rgb(244, 244, 244) none repeat scroll 0% 0%; text-align: left; padding: 20px;">
+<body style=" background: rgb(241, 241, 241) none repeat scroll 0% 0%; text-align: left; padding: 20px;">
 
-<?php if(!isset($_GET['view'])) { ?>
 
 <div id="results"><?php if(isset($_GET['esito'])) echo '<h2 class="red">'.check($_GET['esito']).'</h2>'; ?></div>
-
- <style>
- .dati { border-spacing: 0px; }
-.dsh_panel input, .dsh_panel input .calendar { width: 90%; margin: 2px; }
-.dsh_panel select { width: 80%; }
- </style> 
- <div class="dsh_panel big">
-<h1 onClick="$('.dsh_panel_content').show();">Aggiungi Conto <a href="#" class="" style="color: gray"> <i class="fa fa-plus-circle"></i>  </a></h1><span class="open-close"><a href="#"><i class="fa fa-angle-up" aria-hidden="true"></i></a></span>
-<div class="dsh_panel_content" style="display: none;">
 
 <form id="" action="./mod_opera.php" method="post" enctype="multipart/form-data">
 <input type="hidden" name="insert_conto" value="1" />
@@ -32,9 +22,6 @@ include("../../fl_inc/headers.php");
 <input type="text" name="estremi" value="" placeholder="Es. IBAN no. xxxx" />
 <input type="submit" class="button" value="Inserisci Conto" />
 </form>
-</div></div>
-<?php }  ?>
-
 <?php 
 	
 	
@@ -52,7 +39,7 @@ include("../../fl_inc/headers.php");
           
  <?php
 	
-if(mysql_affected_rows() < 1) echo "<p>Nessun elemento</p>";
+
 	
 	while ($riga = mysql_fetch_assoc($risultato)) 
 	{ 

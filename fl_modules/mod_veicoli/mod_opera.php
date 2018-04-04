@@ -1,6 +1,10 @@
 
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once '../../fl_core/autentication.php';
 include 'fl_settings.php'; // Variabili Modulo
 
@@ -60,7 +64,8 @@ if (isset($_GET['q']) && isset($_GET['vdi'])) {
     }
 
     echo json_encode(array('esito' => $esito, 'aggiorna' => $aggiorna, 'valore' => $valore), true);
-
+    exit;
+    
 }
 
 if (isset($_GET['eurotax']) && isset($_GET['targa'])) {
@@ -81,10 +86,11 @@ if (isset($_GET['eurotax']) && isset($_GET['targa'])) {
         $url = urlencode($query);
         $versioni .= '<p style="cursor:pointer;"><a href="mod_opera.php?id=' . $id . '&eurotax&versione=' . $url . '"  class="ajaxLoad">' . $versione['versione'] . ' ' . $versione['codice_eurotax'] . '</a></p>';
     }
-    ;
+    if(count($veicolo['versioni']) == 0) $versioni .= '<p>Nessuna versione rilevata</p>';
 
     echo json_encode(array('esito' => '<script>$(".modal-content").empty();</script> Scegli versione', 'aggiorna' => 'versione', 'valore' => $versioni));
-
+    exit;
+    
 } //fine eutoax e targa
 
 if (isset($_GET['eurotax']) && isset($_GET['versione'])) {
@@ -114,12 +120,12 @@ if (isset($_GET['eurotax']) && isset($_GET['versione'])) {
 
         if (is_numeric($valore)) { //controlla se la risposta è nd
             //update campo
-            $update = "UPDATE " . $tables[96] . " SET ultima_quotazione = '$valore' WHERE id = '$id'";
+            $update = "UPDATE " . $tables[96] . " SET quotazione_attuale = '$valore', data_quotazione  = NOW() WHERE id = '$id'";
             $query = mysql_query($update, CONNECT);
-            $esito = "Quotazione aggiornata";
+            $esito = "Quotazione aggiornata : € ".$valore;
 
         } else {
-            $update = "UPDATE " . $tables[96] . " SET ultima_quotazione = '0' WHERE id = '$id'";
+            $update = "UPDATE " . $tables[96] . " SET quotazione_attuale = '0' WHERE id = '$id'";
             $query = mysql_query($update, CONNECT);
             $esito = "Quotazione rilevata N.D.";
         }
@@ -132,6 +138,7 @@ if (isset($_GET['eurotax']) && isset($_GET['versione'])) {
     }
 
     echo json_encode(array('esito' => $esito, 'aggiorna' => $aggiorna, 'valore' => $valore, 'id' => $id));
+    exit;
 
 }
 

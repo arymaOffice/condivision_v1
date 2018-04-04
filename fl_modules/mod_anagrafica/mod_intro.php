@@ -2,7 +2,7 @@
 
 // Controlli di Sicurezza
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
+$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 ?>
 
 
@@ -88,8 +88,8 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 			
 			$account = get_account($riga['id']);
 			if($account['id'] > 0)  {
-			$documenti = "<a href=\"../mod_dms/?workflow_id=0&proprietario=".$account['id']."&c=NA==&\"><i class=\"fa fa-cloud-download\"></i></a>";	 
-			$folder_condiviso = "<a href=\"../mod_dms/?workflow_id=0&proprietario=".$account['id']."&c=Mw%3D%3D&\"><i class=\"fa fa-cloud-download\"></i></a>";	 
+			$documenti = "<a href=\"../mod_dms/?workflow_id=0&proprietario=".$account['id']."&c=NA==&a=dashboard\"><i class=\"fa fa-cloud-download\"></i></a>";	 
+			$folder_condiviso = "<a href=\"../mod_dms/?workflow_id=0&proprietario=".$account['id']."&c=Mw%3D%3D&a=dashboard\"><i class=\"fa fa-cloud-download\"></i></a>";	 
 			} else {
 			$documenti = '';
 			$folder_condiviso ='';
@@ -101,8 +101,8 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 			$dettegli_utenza = get_tipo_utenza($riga['proprietario']);
 			echo "<td $colore><span class=\"Gletter\"></span></td>"; 
 			echo "<td><span class=\"color\">$nominativo</span><br><span class=\"msg orange\">".$tipo_profilo[$riga['tipo_profilo']]."</span> - P.iva ".$riga['partita_iva']."</td>";
-			echo "<td><a href=\"../mod_conto/?cmy=".base64_encode($riga['id'])."\"><i class=\"fa fa-file-text-o\"></i></a></td>"; 
-			echo "<td><a href=\"../mod_f24/?cmy=".base64_encode($riga['id'])."\"><i class=\"fa fa-file-pdf-o\"></i></a></td>"; 
+			echo "<td><a href=\"../mod_conto/?cmy=".base64_encode($riga['id'])."&a=amministrazione\"><i class=\"fa fa-file-text-o\"></i></a></td>"; 
+			echo "<td><a href=\"../mod_f24/?cmy=".base64_encode($riga['id'])."&a=amministrazione\"><i class=\"fa fa-file-pdf-o\"></i></a></td>"; 
 			echo "<td>$documenti</td>";
 			echo "<td>$folder_condiviso</td>";
 			echo "<td  class=\"hideMobile\" ><a data-fancybox-type=\"iframe\" class=\"fancybox_view\" href=\"mod_visualizza.php?external&action=1&amp;sezione=".@$riga['sezione']."&amp;id=".$riga['id']."&nominativo=".$riga['ragione_sociale']."\" title=\"Scheda di stampa ".ucfirst($riga['ragione_sociale'])."\"> <i class=\"fa fa-print\"></i> </a></td>";

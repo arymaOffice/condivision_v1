@@ -54,7 +54,7 @@ if(isset($_GET['workflow_id'])) $module_title .= ' '.@$workflow_id[check($_GET['
 	if(isset($_GET['ordine'])) { if(!is_numeric($_GET['ordine'])){ exit; } else { $ordine = $ordine_mod[$_GET['ordine']]; }}
 	
 	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,0);
-	$query = "SELECT $select FROM `$tabella` $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
+	$query = "SELECT $select, DATE_FORMAT(data_quotazione,\"%d/%m/%Y\") as dataQuotazione FROM `$tabella` $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
 	$risultato = mysql_query($query, CONNECT);
 
 	?>
@@ -66,7 +66,7 @@ if(isset($_GET['workflow_id'])) $module_title .= ' '.@$workflow_id[check($_GET['
    <th>Cliente</th>
    <th>Data Acquisto/Pagamento</th>
    <th>Targa</th>
-   <th>Ford Protect</th>
+  <!--<th>Ford Protect</th>-->
    <th></th>
     </tr>
     <?php 
@@ -101,9 +101,9 @@ if(isset($_GET['workflow_id'])) $module_title .= ' '.@$workflow_id[check($_GET['
   	      echo "<td>$titolare</td>";
   	      echo "<td>".mydate($riga['data_acquisto'])." <span class=\"msg green\">".@$pagamento_veicolo[$riga['pagamento_veicolo']]."</span></td>";
           echo "<td>".@$riga['targa']."</td>";
-          echo "<td><a href=\"mod_inserisci.php?protect&veicolo_id=".$riga['id']."&id=".$Polizza."\">
+         /* echo "<td><a href=\"mod_inserisci.php?protect&veicolo_id=".$riga['id']."&id=".$Polizza."\">
           <i class=\"fa fa-life-ring\" aria-hidden=\"true\"></i> $StatoPolizza </a>
-          </td>";
+          </td>";*/
 		  echo "<td>";
 		  //vdi identificativo per servizio gt alarm
 		  if($riga['vdi']!= ''){
@@ -114,7 +114,9 @@ if(isset($_GET['workflow_id'])) $module_title .= ' '.@$workflow_id[check($_GET['
 
 		  }
 
-         echo " <a href=\"mod_opera.php?id=".$riga['id']."&eurotax&targa=".@$riga['targa']."\"  class=\"msg blue ajaxLoad\" id='btquotazione".$riga['id']."'>Aggiorna Quotazione</a>
+		  $ultima_quotazione = ($riga['data_quotazione'] == '0000-00-00 00:00:00') ? ' Aggiorna Quotazione' : 'Ultima quotazione :'.$riga['dataQuotazione'] ;
+
+         echo " <a href=\"mod_opera.php?id=".$riga['id']."&eurotax&targa=".@$riga['targa']."\"  class=\"msg ajaxLoad\" id='btquotazione".$riga['id']."'><i class=\"fa fa-history\" aria-hidden=\"true\"></i>$ultima_quotazione </a>
           </td>";
 
           

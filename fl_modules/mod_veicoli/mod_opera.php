@@ -21,7 +21,7 @@ if (isset($_GET['q']) && isset($_GET['vdi'])) {
         4 => 'Servizio sospeso',
         5 => 'Cliente non attivo',
         6 => 'Servizio Scaduto o cessato',
-        100 => 'Errore generico'
+        100 => 'Errore generico',
     );
 
     $vdi = check($_GET['vdi']); //id univoco della macchina
@@ -31,8 +31,6 @@ if (isset($_GET['q']) && isset($_GET['vdi'])) {
     $valore = '';
     $esito = '';
     $richiestaDati = $macNilGps_soapClient->RequestRealTime($vdi);
-
-
 
     if ($richiestaDati['esito'] == 0) {
 
@@ -65,7 +63,7 @@ if (isset($_GET['q']) && isset($_GET['vdi'])) {
 
     echo json_encode(array('esito' => $esito, 'aggiorna' => $aggiorna, 'valore' => $valore), true);
     exit;
-    
+
 }
 
 if (isset($_GET['eurotax']) && isset($_GET['targa'])) {
@@ -78,19 +76,31 @@ if (isset($_GET['eurotax']) && isset($_GET['targa'])) {
     $veicolo = $et->searchTarga($targa);
     $veicolo = json_decode($veicolo, true);
 
-    $update = "UPDATE " . $tables[96] . " SET telaio = '" . $veicolo['telaio'] . "' WHERE id = '$id'";
-    $query = mysql_query($update, CONNECT);
+    if (isset($veicolo['telaio'])) {
 
-    foreach ($veicolo['versioni'] as $versione) { // Scorro le versioni e prendo la prima (o dividiamo il servizio e facciamo selezionare anche la versione da salvare in "allestimento")
-        $query = http_build_query(array('myArray' => $versione));
-        $url = urlencode($query);
-        $versioni .= '<p style="cursor:pointer;"><a href="mod_opera.php?id=' . $id . '&eurotax&versione=' . $url . '"  class="ajaxLoad">' . $versione['versione'] . ' ' . $versione['codice_eurotax'] . '</a></p>';
+        $update = "UPDATE " . $tables[96] . " SET telaio = '" . @$veicolo['telaio'] . "' WHERE id = '$id'";
+        $query = mysql_query($update, CONNECT);
+
     }
-    if(count($veicolo['versioni']) == 0) $versioni .= '<p>Nessuna versione rilevata</p>';
+
+    if(isset($veicolo['versioni'])){
+
+        foreach (@$veicolo['versioni'] as $versione) { // Scorro le versioni e prendo la prima (o dividiamo il servizio e facciamo selezionare anche la versione da salvare in "allestimento")
+            $query = http_build_query(array('myArray' => $versione));
+            $url = urlencode($query);
+            $versioni .= '<p style="cursor:pointer;"><a href="mod_opera.php?id=' . $id . '&eurotax&versione=' . $url . '"  class="ajaxLoad">' . $versione['versione'] . ' ' . $versione['codice_eurotax'] . '</a></p>';
+        }
+
+    }
+
+
+    if (count(@$veicolo['versioni']) == 0) {
+        $versioni .= '<p>Nessuna versione rilevata</p>';
+    }
 
     echo json_encode(array('esito' => '<script>$(".modal-content").empty();</script> Scegli versione', 'aggiorna' => 'versione', 'valore' => $versioni));
     exit;
-    
+
 } //fine eutoax e targa
 
 if (isset($_GET['eurotax']) && isset($_GET['versione'])) {
@@ -100,15 +110,15 @@ if (isset($_GET['eurotax']) && isset($_GET['versione'])) {
     $valore = '';
     $esito = '';
     parse_str($_GET['versione']);
-    $codice_eurotax = check($myArray['codice_eurotax']); 
-	$motornet = check($myArray['codice_motornet']);
+    $codice_eurotax = check($myArray['codice_eurotax']);
+    $motornet = check($myArray['codice_motornet']);
     $id = check($_GET['id']); //id nel db della macchina
 
     $select = "SELECT chilometri_percorsi,anno_immatricolazione FROM " . $tables[96] . " WHERE id = $id";
     $query = @mysql_query($select, CONNECT);
-	$query = mysql_fetch_assoc($query);
-	$km = ($query['chilometri_percorsi'] == '') ? 0 : $query['chilometri_percorsi'];
-	$anno = $query['anno_immatricolazione'];
+    $query = mysql_fetch_assoc($query);
+    $km = ($query['chilometri_percorsi'] == '') ? 0 : $query['chilometri_percorsi'];
+    $anno = $query['anno_immatricolazione'];
 
     if (isset($codice_eurotax) && isset($motornet) && isset($anno) && isset($km)) {
 
@@ -117,12 +127,11 @@ if (isset($_GET['eurotax']) && isset($_GET['versione'])) {
         $result = json_decode($valutazione, true);
         $valore = $result['valutazione']["quotazione_eurotax_giallo_km"];
 
-
         if (is_numeric($valore)) { //controlla se la risposta è nd
             //update campo
             $update = "UPDATE " . $tables[96] . " SET quotazione_attuale = '$valore', data_quotazione  = NOW() WHERE id = '$id'";
             $query = mysql_query($update, CONNECT);
-            $esito = "Quotazione aggiornata : € ".$valore;
+            $esito = "Quotazione aggiornata : € " . $valore;
 
         } else {
             $update = "UPDATE " . $tables[96] . " SET quotazione_attuale = '0' WHERE id = '$id'";

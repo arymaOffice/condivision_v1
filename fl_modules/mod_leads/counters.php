@@ -1,14 +1,19 @@
 
 <?php
 
-$where_count = str_replace('WHERE ','', $tipologia_main);
 
-$bassa = mk_count($tabella,"priorita_contatto = 0 AND ".$where_count);
-$media = mk_count($tabella,"priorita_contatto = 1 AND ".$where_count);
-$alta = mk_count($tabella,"priorita_contatto = 2 AND ".$where_count);
+
+
+
+
+$bassa = mk_count('fl_potentials AS tb1 LEFT JOIN fl_veicoli AS tb2 ON tb1.id = tb2.parent_id  ',"tb1.priorita_contatto = 0 AND ".$where_count);
+$media = mk_count('fl_potentials AS tb1 LEFT JOIN fl_veicoli AS tb2 ON tb1.id = tb2.parent_id   ',"tb1.priorita_contatto = 1 AND ".$where_count);
+$alta = mk_count('fl_potentials AS tb1 LEFT JOIN fl_veicoli AS tb2 ON tb1.id = tb2.parent_id   ',"tb1.priorita_contatto = 2 AND ".$where_count);
 
 
 $totale = $bassa+$media+$alta;
+
+
 
 
 ?>
@@ -209,33 +214,41 @@ display: inline-block;
         
      
         
-	                    <div class="xe-widget xe-progress-counter xe-progress-counter-turquoise" data-count=".num" data-from="0" data-to="520" data-suffix="k" data-duration="3">
-						
-						<div class="xe-background">
-							<i class="fa fa-street-view" aria-hidden="true"></i>
 
-						</div>
-						
-						<div class="xe-upper">
-							<div class="xe-icon">
-								<a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_leads/?priorita_contatto=0"><i class="fa fa-street-view" aria-hidden="true"></i></a>
 
-							</div>
-							<div class="xe-label">
-								<span>LEADS </span>
-								<strong class="num"><a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_leads/?priorita_contatto=0"><?php echo $bassa; ?></a></strong>
-							</div>
-						</div>
-						
-						<div class="xe-progress">
-							<span style="width: 82%;" class="xe-progress-fill" data-fill-from="0" data-fill-to="82" data-fill-unit="%" data-fill-property="width" data-fill-duration="3" data-fill-easing="true"></span>
-						</div>
-						
-						<div class="xe-lower">
-							<span>BASSA PRIORIT&Agrave; (Cold)</span>
-							<strong><?php echo numdec(($bassa/$totale)*100,2); ?>% DEL TOTALE</strong>
-						</div>               
-        			</div>  
+
+                           <div class="xe-widget xe-counter-block xe-counter-block-red" data-count=".num" data-from="0" data-to="520" data-suffix="k" data-duration="3">
+                        
+                        <div class="xe-background">
+                            <i class="fa fa-street-view" aria-hidden="true"></i>
+
+
+                        </div>
+                        
+                        <div class="xe-upper">
+                            <div class="xe-icon">
+                                <a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_leads/?<?php echo $_SERVER['QUERY_STRING']; ?>&priorita_contatto=2" ><i class="fa fa-street-view" aria-hidden="true"></i></a>
+
+
+                            </div>
+                            <div class="xe-label">
+                                <span>Leads</span>
+                                <strong class="num"><a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_leads/?<?php echo $_SERVER['QUERY_STRING']; ?>&priorita_contatto=2" ><?php echo $alta; ?></a></strong>
+                            </div>
+                        </div>
+                        
+                        <div class="xe-progress">
+                            <span style="width: 82%;" class="xe-progress-fill" data-fill-from="0" data-fill-to="82" data-fill-unit="%" data-fill-property="width" data-fill-duration="3" data-fill-easing="true"></span>
+                        </div>
+                        
+                        <div class="xe-lower">
+                            <span>ALTA PRIORIT&Agrave;</span>
+                            <strong><?php if($totale > 0) echo numdec((@$alta/$totale)*100,2); ?>%</strong>
+                        </div>               
+                    </div>  
+
+
+
                     
                       <div class="xe-widget xe-counter-block xe-counter-block-orange" data-count=".num" data-from="0" data-to="520" data-suffix="k" data-duration="3">
 						
@@ -246,12 +259,12 @@ display: inline-block;
 						
 						<div class="xe-upper">
 							<div class="xe-icon">
-								<a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_leads/?priorita_contatto=1"><i class="fa fa-street-view" aria-hidden="true"></i></a>
+								<a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_leads/?<?php echo $_SERVER['QUERY_STRING']; ?>&priorita_contatto=1"><i class="fa fa-street-view" aria-hidden="true"></i></a>
 
 							</div>
 							<div class="xe-label">
 								<span>LEADS</span>
-								<strong class="num"><a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_leads/?priorita_contatto=1"><?php echo $media; ?></a></strong>
+								<strong class="num"><a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_leads/?<?php echo $_SERVER['QUERY_STRING']; ?>&priorita_contatto=1"><?php echo $media; ?></a></strong>
 							</div>
 						</div>
 						
@@ -260,40 +273,37 @@ display: inline-block;
 						</div>
 						
 						<div class="xe-lower">
-							<span>MEDIA PRIORIT&Agrave; (Warm)</span>
-							<strong><?php echo numdec(($media/$totale)*100,2); ?>% DEL TOTALE</strong>
+							<span>MEDIA PRIORIT&Agrave;</span>
+							<strong><?php if($totale > 0) echo numdec((@$media/$totale)*100,2); ?>%</strong>
 						</div>               
         			</div>  
-                    
-                           <div class="xe-widget xe-counter-block xe-counter-block-red" data-count=".num" data-from="0" data-to="520" data-suffix="k" data-duration="3">
-						
-						<div class="xe-background">
-							<i class="fa fa-street-view" aria-hidden="true"></i>
+  
 
+                        <div class="xe-widget xe-progress-counter xe-progress-counter-turquoise" data-count=".num" data-from="0" data-to="520" data-suffix="k" data-duration="3">
+                        
+                        <div class="xe-background">
+                            <i class="fa fa-street-view" aria-hidden="true"></i>
 
-						</div>
-						
-						<div class="xe-upper">
-							<div class="xe-icon">
-								<a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_leads/?priorita_contatto=2" ><i class="fa fa-street-view" aria-hidden="true"></i></a>
+                        </div>
+                        
+                        <div class="xe-upper">
+                            <div class="xe-icon">
+                                <a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_leads/?<?php echo $_SERVER['QUERY_STRING']; ?>&priorita_contatto=0"><i class="fa fa-street-view" aria-hidden="true"></i></a>
 
+                            </div>
+                            <div class="xe-label">
+                                <span>LEADS </span>
+                                <strong class="num"><a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_leads/?<?php echo $_SERVER['QUERY_STRING']; ?>&priorita_contatto=0"><?php echo $bassa; ?></a></strong>
+                            </div>
+                        </div>
+                        
+                        <div class="xe-progress">
+                            <span style="width: 82%;" class="xe-progress-fill" data-fill-from="0" data-fill-to="82" data-fill-unit="%" data-fill-property="width" data-fill-duration="3" data-fill-easing="true"></span>
+                        </div>
+                        
+                        <div class="xe-lower">
+                            <span>BASSA PRIORIT&Agrave;</span>
+                            <strong><?php if($totale > 0) echo numdec((@$bassa/$totale)*100,2); ?>%</strong>
+                        </div>               
+                    </div>  
 
-							</div>
-							<div class="xe-label">
-								<span>Leads</span>
-								<strong class="num"><a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_leads/?priorita_contatto=2" ><?php echo $alta; ?></a></strong>
-							</div>
-						</div>
-						
-						<div class="xe-progress">
-							<span style="width: 82%;" class="xe-progress-fill" data-fill-from="0" data-fill-to="82" data-fill-unit="%" data-fill-property="width" data-fill-duration="3" data-fill-easing="true"></span>
-						</div>
-						
-						<div class="xe-lower">
-							<span>ALTA PRIORIT&Agrave; (Hot)</span>
-							<strong><?php echo numdec(($alta/$totale)*100,2); ?>% DEL TOTALE</strong>
-						</div>               
-        			</div>  
-
-
-<br class="clear">

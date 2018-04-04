@@ -24,7 +24,7 @@ include("../../fl_inc/headers.php");
       </tr>
 	<?php 
 	
-		$query = "SELECT * FROM `fl_calls_log` WHERE `tab_id` = $tab_parent_id AND `item_id` = $id ORDER BY data_creazione DESC;";
+		$query = "SELECT * FROM `fl_calls_log` WHERE `tab_id` = 16 AND `item_id` = $id ORDER BY data_creazione DESC;";
 		$risultato = mysql_query($query, CONNECT);
 
 

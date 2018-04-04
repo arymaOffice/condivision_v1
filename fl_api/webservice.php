@@ -127,9 +127,10 @@ $this->contenuto['info_txt'] = "Inserisci email valido";
 $this->cnv_makedata();
 }
 */
+$status_potentials = array('Da Assegnare','Assegnato a BDC','Appuntamento','Non Interessato','Cliente','Valuta','Acquistato Concorrenza','Preventivo','Assegnato a Venditore','Eliminato');
 
 
-$campi = array('sms_send','id_cliente_fordpower' ,'id_cliente_drakkar' ,'campagna_id','source_potential','priorita_contatto', 'paese', 'company', 'job_title', 'nome', 'cognome', 'email', 'telefono', 'website', 'indirizzo', 'provincia', 'citta', 'cap', 'industry', 'ragione_sociale', 'partita_iva', 'fatturato_annuo', 'numero_dipendenti', 'messaggio', 'tipo_interesse', 'interessato_a', 'periodo_cambio_vettura', 'permuta', 'test_drive', 'data_test_drive', 'pagamento_vettura', 'note','operatore','tipologia_veicolo', 'data_acquisto', 'pagamento_veicolo', 'marca', 'modello', 'colore', 'descrizione', 'anno_immatricolazione', 'chilometri_percorsi', 'alimentazione', 'targa', 'quotazione_attuale','proprietario','venditore');
+$campi = array('professione','sms_send','id_cliente_fordpower' ,'id_cliente_drakkar' ,'campagna_id','source_potential','priorita_contatto', 'paese', 'company', 'job_title', 'nome', 'cognome', 'email', 'telefono', 'website', 'indirizzo', 'provincia', 'citta', 'cap', 'industry', 'ragione_sociale', 'partita_iva', 'fatturato_annuo', 'numero_dipendenti', 'messaggio', 'tipo_interesse', 'interessato_a', 'periodo_cambio_vettura', 'permuta', 'test_drive', 'data_test_drive', 'pagamento_vettura', 'note','operatore','tipologia_veicolo', 'data_acquisto', 'pagamento_veicolo', 'marca', 'modello', 'colore', 'descrizione', 'anno_immatricolazione', 'chilometri_percorsi', 'alimentazione', 'targa', 'quotazione_attuale','proprietario','venditore');
 
 foreach($campi as $chiave => $valore){
 
@@ -138,17 +139,18 @@ foreach($campi as $chiave => $valore){
 
 if(!isset($source_potential)) $source_potential = 1;
 if(!isset($status_potential)) $status_potential = 0;
+$industry = $job_title;
 
-if($email != '' && $email != '@') {
-$telCheck = ($telefono != '' && $telefono != '0' ) ? " OR telefono LIKE '$telefono' " : '';
-$isInDb = GQS('fl_potentials','id,email,telefono,telefono_alternativo',"email =  '$email' $telCheck ");
-if(count($isInDb) > 0 && isset($isInDb[0]['id'])) {
+
+$telCheck = ($telefono != '' && $telefono != 0) ? " OR telefono LIKE '$telefono' " : '';
+$isInDb = GQS('fl_potentials','id,email,telefono,telefono_alternativo,source_potential,status_potential',"(email  != '' AND email  != '@' AND email  != 0 AND email LIKE '$email') $telCheck ");
+
+if(count($isInDb) > 0) {
 
 $sql = "UPDATE `fl_potentials` SET 
 id_cliente_fordpower = '$id_cliente_fordpower' ,
 id_cliente_drakkar = '$id_cliente_drakkar' , 
 status_potential = '$status_potential', 
-campagna_id = '$campagna_id', 
 source_potential = '$source_potential', 
 data_aggiornamento = NOW(), 
 nome = '$nome',
@@ -163,13 +165,22 @@ cap = '$cap',
 industry = '$industry',
 company = '$company',
 partita_iva = '$partita_iva', 
-note = CONCAT('Aggiornato automaticamente $note ',note),
+note = CONCAT('$note ',note),
 operatore = '$operatore', 
 proprietario = '$proprietario', 
-venditore = '$venditore'
+venditore = '$venditore',
+data_associazione_attivita = NOW()
  WHERE id = ".$isInDb[0]['id'].";";
 
 if(mysql_query($sql, CONNECT)){
+
+
+if($isInDb[0]['source_potential'] != $source_potential) { 
+$source_potentials = GRD('fl_campagne_attivita',$source_potential,'oggetto');
+actionTracer(16,$isInDb[0]['id'],10,1,'Passaggio a: '.$source_potentials['oggetto']);
+}
+if($isInDb[0]['status_potential'] != $status_potential) { actionTracer(16,$isInDb[0]['id'],10,1,'Cambio di Status: '.$status_potentials[$status_potential]); }
+
 $this->contenuto['class'] = 'green';
 $this->contenuto['url'] = '#';
 $this->contenuto['esito'] = true;
@@ -179,17 +190,19 @@ $this->contenuto['info_txt'] = "Operazione eseguita correttamente! ".mysql_error
 $this->cnv_makedata();
 }
 }
-}
 
-$sql = "INSERT INTO `fl_potentials` (`id`, `in_use`, `id_cliente_fordpower` ,`id_cliente_drakkar` , `status_potential`, `sent_mail`, `marchio`, `campagna_id`, `source_potential`, `data_aggiornamento`, `is_customer`, `priorita_contatto`, `paese`, `company`, `job_title`, `nome`, `cognome`, `email`, `telefono`, `website`, `indirizzo`, `provincia`, `citta`, `cap`, `industry`, `ragione_sociale`, `partita_iva`, `fatturato_annuo`, `numero_dipendenti`, `messaggio`, `tipo_interesse`, `interessato_a`, `periodo_cambio_vettura`, `permuta`, `test_drive`, `data_test_drive`, `promo_pneumatici`,`pagamento_vettura`, `note`, `operatore`, `proprietario`, `venditore`, `data_creazione`, `data_assegnazione`,`data_scadenza`,`data_scadenza_venditore`) 
-VALUES (NULL, '0', '$id_cliente_fordpower' ,'$id_cliente_drakkar' , '$status_potential', '0', '0', '$campagna_id', '$source_potential', NOW(), '0', '$priorita_contatto', '$paese', '$company', '$job_title', '$nome', '$cognome', '$email', '$telefono', '$website', '$indirizzo', '$provincia', '$citta', '$cap', '$industry', '$company', '$partita_iva', '$fatturato_annuo', '$numero_dipendenti', '$messaggio', '$tipo_interesse', '$interessato_a', '$periodo_cambio_vettura', '$permuta', '$test_drive', '$data_test_drive',0, '$pagamento_vettura', '$note','$operatore', '$proprietario',  '$venditore', NOW(),NOW(),'','');";
+$sql = "INSERT INTO `fl_potentials` (`id`, `in_use`, `id_cliente_fordpower` ,`id_cliente_drakkar` , `status_potential`, `sent_mail`, `marchio`, `campagna_id`, `source_potential`, `data_aggiornamento`, `is_customer`, `priorita_contatto`, `paese`, `company`, `job_title`, `nome`, `cognome`, `email`, `telefono`, `website`, `indirizzo`, `provincia`, `citta`, `cap`, `industry`, `ragione_sociale`, `partita_iva`, `fatturato_annuo`, `numero_dipendenti`, `messaggio`, `tipo_interesse`, `interessato_a`, `periodo_cambio_vettura`, `permuta`, `test_drive`, `data_test_drive`, `promo_pneumatici`,`pagamento_vettura`, `note`, `operatore`, `proprietario`, `venditore`, `data_creazione`, `data_assegnazione`,`data_scadenza`,`data_scadenza_venditore`,`data_associazione_attivita`) 
+VALUES (NULL, '0', '$id_cliente_fordpower' ,'$id_cliente_drakkar' , '$status_potential', '0', '0', '$campagna_id', '$source_potential', NOW(), '0', '$priorita_contatto', '$paese', '$company', '$job_title', '$nome', '$cognome', '$email', '$telefono', '$website', '$indirizzo', '$provincia', '$citta', '$cap', '$industry', '$company', '$partita_iva', '$fatturato_annuo', '$numero_dipendenti', '$messaggio', '$tipo_interesse', '$interessato_a', '$periodo_cambio_vettura', '$permuta', '$test_drive', '$data_test_drive',0, '$pagamento_vettura', '$note','$operatore', '$proprietario',  '$venditore', NOW(),NOW(),'','',NOW());";
 
-mail('vitomichele.fazio@gmail.com', "Inserimento nuovo Lead", $sql);
 
 if(mysql_query($sql, CONNECT)){
 
 $lead_id = mysql_insert_id();
 $mail_subject = "Nuovo Lead Inserito";
+
+$source_potentials = GRD('fl_campagne_attivita',$source_potential,'oggetto');
+actionTracer(16,$lead_id,10,1,'Prima attività: '.$source_potentials['oggetto']);
+
 
 // INSERIMENTO VEICOLO 
 if(trim($marca.$modello) != '') {
@@ -273,8 +286,7 @@ $this->contenuto['esito'] = false;
 $this->contenuto['info_txt'] = "Error 1101: Problema inserimento lead.";
 $mail_message = "ERRORE DATABASE: ".mysql_error().'<br>'.$mail_message;
 $mail_body3 = str_replace("[*CORPO*]",$mail_message,mail_template); 
-//smail( 'support@aryma.it', "Problema inserimento nuovo lead su: ".ROOT,$mail_body3);
-mail('michelefazio@aryma.it',$this->contenuto['info_txt'], $sql.mysql_error());
+mail('server@aryma.it',$this->contenuto['info_txt'], $sql.mysql_error());
 
 }				 
 
@@ -291,6 +303,9 @@ $this->cnv_makedata();
 
 function insert_veicolo(){
 
+	$tipologia_veicolo = '';
+	$data_acquisto = '';
+	$operatore = '';
 
 $this->contenuto['esito'] = false;
 
@@ -334,19 +349,18 @@ foreach($campi as $chiave => $valore){
 $parent_id = $insert_id;
 
 
-$mail_subject = "Nuovo Lead Inserito";
+$mail_subject = "Nuovo Veicolo Inserito";
 
 // INSERIMENTO VEICOLO 
 if(trim($marca.$modello) != '') {
 
 $sql = "INSERT INTO `fl_veicoli` (`id`, `id_drakkar`,`workflow_id`, `parent_id`, `tipologia_veicolo`, `data_acquisto`, `pagamento_veicolo`, `telaio`, `marca`, `modello`, `colore`, `descrizione`, `anno_immatricolazione`, `chilometri_percorsi`, `alimentazione`, `targa`, `quotazione_attuale`, `data_creazione`, `data_aggiornamento`,`data_saldo`,`data_consegna`, `operatore`) 
 VALUES (NULL, '$id_drakkar', 16, '$parent_id', '$tipologia_veicolo', '$data_acquisto', '$pagamento_veicolo', '$telaio','$marca', '$modello', '$colore', '$descrizione', '$anno_immatricolazione', '$chilometri_percorsi', '$alimentazione', '$targa', '$quotazione_attuale', NOW(), NOW(), '$data_saldo', '$data_consegna', '$operatore');";
- mail('vitomichele.fazio@gmail.com','Inserimento Veicolo  ',$mail_message.$sql );
 
 if(mysql_query($sql, CONNECT)){ 
 
    
-mysql_query('UPDATE fl_potentials SET venditore = '.$operatore.', operatore = '.$operatore.' WHERE id = '.$parent_id,CONNECT);
+if($operatore > 1) mysql_query('UPDATE fl_potentials SET venditore = '.$operatore.', operatore = '.$operatore.' WHERE id = '.$parent_id,CONNECT);
 $mail_message .= "<p>Veicolo Inserito!</p>"; 
 
 $lead_id = mysql_insert_id();
@@ -359,17 +373,16 @@ $this->contenuto['insert_id'] = $lead_id.mysql_error();
 $this->contenuto['info_txt'] = "Operazione eseguita correttamente!";
 $this->cnv_makedata();
 $mail_body2 = str_replace("[*CORPO*]",$mail_message,mail_template); 
-smail('support@aryma.it', $mail_subject, $mail_body2);
 
 
 } else {
 
 $this->contenuto['class'] = 'red';
 $this->contenuto['esito'] = false;
-$this->contenuto['info_txt'] = "Error 1101: Problema inserimento lead.".mysql_error();
+$this->contenuto['info_txt'] = "Error 1101: Problema inserimento veicolo.".mysql_error();
 $mail_message = "ERRORE DATABASE: ".mysql_error().'<br>'.$mail_message;
 $mail_body3 = str_replace("[*CORPO*]",$mail_message,mail_template); 
-smail( 'support@aryma.it', "Problema inserimento nuovo lead su: ".ROOT,$mail_body3);
+smail( 'server@aryma.it', "Problema inserimento nuovo veicolo su: ".ROOT,$mail_body3);
 }
 
 }
@@ -425,18 +438,16 @@ foreach($_REQUEST as $chiave => $valore){
 	$updatePreventivi = 'UPDATE fl_rdo SET status_preventivo = 2, data_chiusura = \''.$data_chiusura.'\' WHERE potential_id = '.$getLead[0]['id'];
 	if($getLead[0]['id'] > 1) {
 	mysql_query($updatePreventivi, CONNECT);	
-	mail('vitomichele.fazio@gmail.com', "Update preventivo a vendita", $updatePreventivi.mysql_error());
 
 
 	$updatePreventivo = 'UPDATE fl_rdo SET status_preventivo = 3, data_chiusura = \''.$data_chiusura.'\' WHERE id_fordpower = '.$fordpower_id;
 	mysql_query($updatePreventivo, CONNECT);	
-	mail('vitomichele.fazio@gmail.com', "Update preventivi collegati", $updatePreventivo.mysql_error());
 	$this->contenuto['class'] = 'green';
 	$this->contenuto['esito'] = "OK";
 	$this->contenuto['leads'] = $getLead[0]['id'];
 	$this->contenuto['info_txt'] = 'Operazione eseguita';
 	} else {
-	mail('michelefazio@aryma.it', "Update preventivo senza LEAD", $mail_message.$updatePreventivi.$updatePreventivo.mysql_error());
+	mail('server@aryma.it', "Update preventivo senza LEAD", $mail_message.$updatePreventivi.$updatePreventivo.mysql_error());
 	$this->contenuto['class'] = 'red';
 	$this->contenuto['esito'] = "ERROR";
 	$this->contenuto['leads'] = 0;
@@ -502,7 +513,6 @@ $mail_subject = "Nuovo Preventivo Inserito";
 
 $sql = "INSERT INTO `fl_rdo` (`id`, `id_fordpower`, `marchio`, `anno_fiscale`, `status_preventivo`, `tipo_preventivo` ,`categoria_preventivo` , `cliente_id`, `potential_id`, `supervisore`, `venditore`, `oggetto_preventivo`, `marca`, `modello`, `allestimento`, `descrizione`, `produzione`, `operatore`, `proprietario`, `data_creazione`, `data_apertura`, `data_scadenza`, `data_emissione`, `stima`, `offerta`, `importo_ordine`, `note`) VALUES (NULL, '$id_fordpower', '$marchio', '$anno_fiscale', '$status_preventivo', '$tipo_preventivo','$categoria_preventivo', '$cliente_id', '$potential_id', '$supervisore', '$venditore', '$oggetto_preventivo', '$marca', '$modello', '$allestimento', '$descrizione', '', '$operatore', '$proprietario', '$data_creazione', '$data_apertura', '$data_scadenza', '$data_emissione', '',  '$offerta', '$importo_ordine','$note');";
 
-mail('vitomichele.fazio@gmail.com', $mail_subject, $sql);
 
 if(mysql_query($sql, CONNECT)){ 
 $lead_id = mysql_insert_id();
@@ -521,7 +531,6 @@ $this->contenuto['insert_id'] = $lead_id;
 $this->contenuto['info_txt'] = 'Operazione eseguita';
 $this->cnv_makedata();
 $mail_body2 = str_replace("[*CORPO*]",$mail_message,mail_template); 
-smail('support@aryma.it', $mail_subject, $mail_body2);
 
 
 } else {
@@ -530,7 +539,7 @@ $this->contenuto['esito'] = false;
 $this->contenuto['info_txt'] = "Error 1101: Problema inserimento lead.".mysql_error();
 $mail_message = "ERRORE DATABASE: ".mysql_error().'<br>'.$mail_message;
 $mail_body3 = str_replace("[*CORPO*]",$mail_message,mail_template); 
-smail( 'support@aryma.it', "Problema inserimento nuovo lead su: ".ROOT,$mail_body3);
+smail( 'server@aryma.it', "Problema inserimento nuovo lead su: ".ROOT,$mail_body3);
 }				 
 
 $this->cnv_makedata();
@@ -538,44 +547,11 @@ $this->cnv_makedata();
 } // Lead in
 
 
-function get_attivita(){
-	
-	$dati = array();
-	
-	$query = "SELECT * FROM `fl_campagne_attivita`  WHERE data_inizio < NOW() AND data_fine > NOW() and id > 1 ORDER BY data_creazione DESC";
-	
-	if($risultato = mysql_query($query,CONNECT)){
-	
-	while($riga = mysql_fetch_array($risultato)){
-
-	array_push($dati,array(
-	
-	'id'=>$riga['id'],
-	'oggetto'=>$riga['oggetto'],
-	'descrizione'=>$riga['descrizione'],
-	'scadenza_default_ore'=>$riga['cognscadenza_default_oreo'],
-	'data_inizio'=>$riga['data_inizio'],
-	'data_fine'=>$riga['data_fine']
-	));
-	
-	}	
-	$this->contenuto['class'] = 'green';
-	$this->contenuto['esito'] = "OK";
-	$this->contenuto['leads'] = $dati;
-	
-	} else { 
-	$this->contenuto['class'] = 'red';
-	$this->contenuto['esito'] = "Error 1102: Errore caricamento.".mysql_error();
-	}
-	
-	$this->cnv_makedata();
-}
-
 
 
 function get_leads(){
 	$leads = array();
-	$query = "SELECT * FROM `fl_potentials`  WHERE source_potential = ".$this->attivita_id." ORDER BY data_creazione DESC";
+	$query = "SELECT * FROM `fl_potentials`  WHERE 1 ORDER BY data_creazione DESC";
 	
 	if($risultato = mysql_query($query,CONNECT)){
 	
@@ -805,7 +781,7 @@ function convert_data($data,$mode=0){
 if($mode == 0) {
 $tempo = explode("/",$data);
 $extra = "";
-$data = @mktime(0,0,0,$tempo[1],$tempo[0],$tempo[2]);
+$data = @mktime(0,0,0,@$tempo[1],@$tempo[0],@$tempo[2]);
 } else if($mode == 1){ 
 $tempo = explode("/",$data);
 $extra = "";

@@ -1,0 +1,16 @@
+SELECT *
+FROM `fl_ricettario`
+WHERE id
+IN ( 73, 96, 40 ) 
+
+SELECT nome, nome_tecnico, `porzioni`
+FROM `fl_ricettario` r
+LEFT JOIN fl_ricettario_diba rb ON rb.ricetta_id = r.id
+WHERE r.id
+IN ( 73, 96, 40 ) 
+
+SELECT SUM(quantita) ,m.descrizione ,m.formato ,m.valore_di_conversione , m.unita_di_misura, prezzo_medio
+FROM `fl_ricettario` r
+LEFT JOIN fl_ricettario_diba rb ON rb.ricetta_id = r.id JOIN fl_materieprime m ON m.id = rb.materiaprima_id
+WHERE r.id
+IN ( 73, 96, 40 )  GROUP BY m.id

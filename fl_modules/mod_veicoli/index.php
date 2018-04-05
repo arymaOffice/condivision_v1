@@ -67,6 +67,7 @@ posting.done(function( response ) {  //button.hide();
       $('#versioni').css('display','none');
       $('.modal-content').empty();
       $('#btquotazione'+data.id).html(data.esito);
+      $('#quotazione'+data.id).val(data.valore);
 
    }
 });

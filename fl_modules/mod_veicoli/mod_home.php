@@ -66,6 +66,7 @@ if(isset($_GET['workflow_id'])) $module_title .= ' '.@$workflow_id[check($_GET['
    <th>Cliente</th>
    <th>Data Acquisto/Pagamento</th>
    <th>Targa</th>
+   <th>Quotazione</th>
   <!--<th>Ford Protect</th>-->
    <th></th>
     </tr>
@@ -101,6 +102,7 @@ if(isset($_GET['workflow_id'])) $module_title .= ' '.@$workflow_id[check($_GET['
   	      echo "<td>$titolare</td>";
   	      echo "<td>".mydate($riga['data_acquisto'])." <span class=\"msg green\">".@$pagamento_veicolo[$riga['pagamento_veicolo']]."</span></td>";
           echo "<td>".@$riga['targa']."</td>";
+          echo '<td><input type="text"  id="quotazione'.$riga['id'].'" style="width:80%;" value="'.@$riga['quotazione_attuale'].'" name="quotazione_attuale" class="updateField"  data-rel="'.$riga['id'].'" /> &euro; </span></td></td>';
          /* echo "<td><a href=\"mod_inserisci.php?protect&veicolo_id=".$riga['id']."&id=".$Polizza."\">
           <i class=\"fa fa-life-ring\" aria-hidden=\"true\"></i> $StatoPolizza </a>
           </td>";*/
@@ -114,10 +116,15 @@ if(isset($_GET['workflow_id'])) $module_title .= ' '.@$workflow_id[check($_GET['
 
 		  }
 
-		  $ultima_quotazione = ($riga['data_quotazione'] == '0000-00-00 00:00:00') ? ' Aggiorna Quotazione' : 'Ultima quotazione :'.$riga['dataQuotazione'] ;
+		 if ($riga['data_quotazione'] == '0000-00-00 00:00:00'){
+			echo " <a href=\"mod_opera.php?id=".$riga['id']."&eurotax&targa=".@$riga['targa']."\"  class=\"msg ajaxLoad\" id='btquotazione".$riga['id']."'><i class=\"fa fa-history\" aria-hidden=\"true\"></i></a>
+			</td>";
 
-         echo " <a href=\"mod_opera.php?id=".$riga['id']."&eurotax&targa=".@$riga['targa']."\"  class=\"msg ajaxLoad\" id='btquotazione".$riga['id']."'><i class=\"fa fa-history\" aria-hidden=\"true\"></i>$ultima_quotazione </a>
-          </td>";
+
+		 }else{          echo " <a href=\"mod_opera.php?id=".$riga['id']."&eurotax&codice_motornet=".@$riga['codice_motornet']."&codice_eurotax=".@$riga['codice_eurotax']."\"  class=\"msg ajaxLoad\" id='btquotazione".$riga['id']."'><i class=\"fa fa-history\" aria-hidden=\"true\"></i>".$riga['dataQuotazione']." </a>
+			</td>"; }
+
+
 
           
           //echo "<td><input type=\"text\" value=\"".@$riga['quotazione_attuale']."\" style=\"width: 80%;\" name=\"quotazione_attuale\" class=\"updateField\" data-rel=\"".@$riga['id']."\" /> &euro; </span></td>";

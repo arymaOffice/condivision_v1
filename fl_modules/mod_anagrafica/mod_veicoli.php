@@ -25,7 +25,7 @@ include "../../fl_inc/headers.php";
 
 <?php
 
-$query = "SELECT * FROM `fl_veicoli` WHERE workflow_id = 16 AND `parent_id` = $parent_id";
+$query = "SELECT *,DATE_FORMAT(data_quotazione,\"%d/%m/%Y\") as dataQuotazione FROM `fl_veicoli` WHERE workflow_id = 16 AND `parent_id` = $parent_id";
 $risultato = mysql_query($query, CONNECT);
 if (mysql_affected_rows() == 0) {echo "<p>Nessun Veicolo</p>";} else {
     ?>

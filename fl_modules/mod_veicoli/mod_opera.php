@@ -5,6 +5,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+
 require_once '../../fl_core/autentication.php';
 include 'fl_settings.php'; // Variabili Modulo
 
@@ -66,6 +67,7 @@ if (isset($_GET['q']) && isset($_GET['vdi'])) {
 
 }
 
+
 if (isset($_GET['eurotax']) && isset($_GET['targa'])) {
 
     require_once '../../fl_set/librerie/eurotax/index.php'; //richiesta servizio
@@ -103,15 +105,26 @@ if (isset($_GET['eurotax']) && isset($_GET['targa'])) {
 
 } //fine eutoax e targa
 
-if (isset($_GET['eurotax']) && isset($_GET['versione'])) {
 
+
+
+
+if (isset($_GET['eurotax']) && (isset($_GET['versione']) || isset($_GET['codice_motornet'])  ) ) {
+ 
     require_once '../../fl_set/librerie/eurotax/index.php'; //richiesta servizio
     $aggiorna = '';
     $valore = '';
     $esito = '';
-    parse_str($_GET['versione']);
-    $codice_eurotax = check($myArray['codice_eurotax']);
-    $motornet = check($myArray['codice_motornet']);
+    if(isset($_GET['codice_motornet'])){
+        $codice_eurotax = check($_GET['codice_eurotax']);
+        $motornet = check($_GET['codice_motornet']);
+
+    }else{
+        parse_str($_GET['versione']);
+        $codice_eurotax = check($myArray['codice_eurotax']);
+        $motornet = check($myArray['codice_motornet']);
+    }
+
     $id = check($_GET['id']); //id nel db della macchina
 
     $select = "SELECT chilometri_percorsi,anno_immatricolazione FROM " . $tables[96] . " WHERE id = $id";
@@ -120,7 +133,10 @@ if (isset($_GET['eurotax']) && isset($_GET['versione'])) {
     $km = ($query['chilometri_percorsi'] == '') ? 0 : $query['chilometri_percorsi'];
     $anno = $query['anno_immatricolazione'];
 
+    
+    
     if (isset($codice_eurotax) && isset($motornet) && isset($anno) && isset($km)) {
+
 
         //2 Recupero la quotazione con codice eurotax, anno, km, e motornet
         $valutazione = $et->getValutazione("auto", $anno, 12, $km, $motornet, $codice_eurotax, array(), $codiceOmologazione = "", $targa = "", $telaio = "", $costoHManMec = "", $costoHManCarr = "", $autocarro = 1, array(), $lavoryCarr = array(), $valutazioneDealer = "", $guidKey = "", $annoValutazione = "", $meseValutazione = "");
@@ -129,14 +145,15 @@ if (isset($_GET['eurotax']) && isset($_GET['versione'])) {
 
         if (is_numeric($valore)) { //controlla se la risposta è nd
             //update campo
-            $update = "UPDATE " . $tables[96] . " SET quotazione_attuale = '$valore', data_quotazione  = NOW() WHERE id = '$id'";
+            $update = "UPDATE " . $tables[96] . " SET quotazione_attuale = '$valore', data_quotazione  = NOW(), codice_eurotax = '$codice_eurotax' , codice_motornet = '$motornet'  WHERE id = '$id'";
             $query = mysql_query($update, CONNECT);
             $esito = "Quotazione aggiornata : € " . $valore;
 
         } else {
-            $update = "UPDATE " . $tables[96] . " SET quotazione_attuale = '0' WHERE id = '$id'";
+            $update = "UPDATE " . $tables[96] . " SET quotazione_attuale = '0' ,codice_eurotax = '$codice_eurotax' , codice_motornet = '$motornet' WHERE id = '$id'";
             $query = mysql_query($update, CONNECT);
             $esito = "Quotazione rilevata N.D.";
+            $valore = 0;
         }
         $aggiorna = 'quotazione';
 

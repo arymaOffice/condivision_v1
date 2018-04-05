@@ -30,7 +30,8 @@ include('filtri.php');
       <a href="#"  style=" padding: 8px 20px;
     font-size: 100%;" class="showcheckItems button">Seleziona contatti</a>
     <?php echo '<a style=" padding: 8px 20px;
-    font-size: 100%;" class="button" href="./?'.$_SERVER['QUERY_STRING'].'&proprietario=-1"><i class="fa fa-users" aria-hidden="true"></i>  Mostra tutti</a>'; ?> </p>
+    font-size: 100%;" class="button" href="./?'.$_SERVER['QUERY_STRING'].'&proprietario=-1"><i class="fa fa-users" aria-hidden="true"></i>  Mostra tutti</a>'; ?>
+	<a href="#" style="padding: 8px 20px;" onclick="window.location.href = 'mod_export.php?'+ window.location.search.substring(1) ;" class="button" >Esporta i risultati correnti in excel</a> </p>
 <form method="get">
       
 
@@ -369,8 +370,7 @@ include('filtri.php');
 
 <div class="results" style="position: fixed; bottom: 20px; left: 0; width: 30%; z-index: 9999;"></div>
 
-<a style="margin:10px 30%;" href="#" onclick="window.location.href = 'mod_export.php?'+ window.location.search.substring(1) ;" class="button" >Esporta i risultati correnti in excel</a>
-
+<a style="margin:10px 40%;" href="#" onclick="window.location.href = 'mod_export.php?'+ window.location.search.substring(1) ;" class="button" >Esporta i risultati correnti in excel</a>
 
 <?php 
 if($_SERVER['HTTP_HOST'] == 'dev.bluemotive.it') echo ' <a class="c-red" href="../mod_leads/mod_opera.php?reset" onclick="return conferma(\'Sei sicuro di voler resettare tutto il database?\');"><i class="fa fa-user" aria-hidden="true"></i> Resetta tutti i leads (TEST)</a>';

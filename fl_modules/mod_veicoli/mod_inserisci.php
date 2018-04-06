@@ -8,7 +8,7 @@ if(isset($_GET['protect'])) { $tab_id = 121; $tabella = $tables[$tab_id]; }
 
 unset($chat);
 include("../../fl_inc/headers.php"); 
-if(!isset($_GET['goto'])) include("../../fl_inc/testata_mobile.php");
+if(!isset($_GET['goto']) && !isset($_GET['external'])) include("../../fl_inc/testata_mobile.php");
 
 
 $titolare= '';
@@ -55,6 +55,7 @@ if($veicolo['workflow_id'] > 1 && $veicolo['parent_id'] > 1) {
 } ?>
 <?php include('../mod_basic/action_estrai.php');  ?>
 <?php if(isset($_GET['goto'])) { echo '<input type="hidden" name="goto" value="'.check($_GET['goto']).'" />'; } ?>
+<?php if(isset($_GET['external'])) { echo '<input type="hidden" name="info" value="1" />'; } ?>
 
 
 

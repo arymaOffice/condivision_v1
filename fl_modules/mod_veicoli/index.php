@@ -25,7 +25,7 @@ $(document).on('click',".ajaxLoad",function (event) {
 var href = $(this).attr('href');
 var button = $(this);
 var posting = $.get(href+'&ajax'); 
-button.html( 'Waiting...' );
+button.html( 'Attendi...' );
 posting.fail(function( data ) {   $(this).html( 'Saving Error' );    });
 posting.always(function( data ) {  $(this).html( 'Saving action' );  });
 posting.done(function( response ) {  //button.hide();
@@ -68,8 +68,13 @@ posting.done(function( response ) {  //button.hide();
       $('.modal-content').empty();
       $('#btquotazione'+data.id).html(data.esito);
       $('#quotazione'+data.id).val(data.valore);
-
    }
+
+   if(data.aggiorna == 'btquotazione'){
+    $('#quotazione'+data.id).val('0');
+   }
+
+    
 });
 
 event.preventDefault();

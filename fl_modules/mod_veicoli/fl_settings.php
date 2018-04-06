@@ -96,13 +96,13 @@
 	$select = array('metodo_pagamento','assegnato_a','metodo_di_pagamento',"alimentazione","proprietario",'tipologia_veicolo','pagamento_veicolo');
 	$select_text = array();
 	$disabled = array("data_creazione");
-	$hidden = array('veicolo_id',"data_creazione","data_aggiornamento","marchio","operatore");
+	$hidden = array('veicolo_id',"data_creazione","data_aggiornamento","marchio","operatore",'ultima_posizione');
 	$radio = array();
 	$text = array();
-	$calendario = array('data_contatto','data_acquisto','data_consegna','anno_immatricolazione','data_saldo');	
+	$calendario = array('data_contatto','data_acquisto','data_consegna','anno_immatricolazione','data_saldo','data_quotazione');	
 	$file = array();
 	$checkbox = array('status_vendita');
-	$invisible = array('ultima_posizione','parent_id','workflow_id');
+	$invisible = array('parent_id','workflow_id');
 
 	$type = 1;
 	if(in_array($who,$select)) { $type = 2; }

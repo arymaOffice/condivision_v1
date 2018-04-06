@@ -81,7 +81,7 @@ $(document).on('click',".ajaxLoad",function (event) {
 var href = $(this).attr('href');
 var button = $(this);
 var posting = $.get(href+'&ajax'); 
-button.html( 'Waiting...' );
+button.html( 'ATTENDI...' );
 posting.fail(function( data ) {   $(this).html( 'Saving Error' );    });
 posting.always(function( data ) {  $(this).html( 'Saving action' );  });
 posting.done(function( response ) {  //button.hide();

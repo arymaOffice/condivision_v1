@@ -9,6 +9,16 @@ error_reporting(E_ALL);
 require_once '../../fl_core/autentication.php';
 include 'fl_settings.php'; // Variabili Modulo
 
+
+if(isset($_GET['id']) && isset($_GET['cestinaQuotazione'])){
+
+    $id = check($_GET['id']); //id univoco della macchina
+    $update = "UPDATE " . $tables[96] . " SET quotazione_attuale = 0 , data_quotazione  = '0000-00-00 00:00:00', codice_eurotax = '' , codice_motornet = ''  WHERE id = '$id'";
+    $query = mysql_query($update, CONNECT);
+    echo json_encode(array('esito' =>  "QUOTAZIONE ELIMINATA", 'aggiorna' => 'btquotazione', 'valore' => 0, 'id' => $id));
+    exit;    
+}
+
 //richiesta aggironamento km e posiszione
 if (isset($_GET['q']) && isset($_GET['vdi'])) {
 
@@ -44,8 +54,12 @@ if (isset($_GET['q']) && isset($_GET['vdi'])) {
             $valore = $emplode[0];
 
             //update campo
-            $update = "UPDATE " . $tables[96] . " SET chilometri_percorsi = '$valore' WHERE vdi = '$vdi'";
+            $update = "UPDATE " . $tables[96] . " SET chilometri_rilevati = '$valore' WHERE vdi = '$vdi'";
             $query = mysql_query($update, CONNECT);
+
+            $chilometri_vecchi = GQD($tables[96],'*',' id ="'.$id.'"');
+
+            $valore += (isset($chilometri_vecchi['chilometri_percorsi'])) ? $chilometri_vecchi['chilometri_percorsi'] : 0 ;
 
         } else if ($campoRichiesto == 'posizione') {
 
@@ -141,7 +155,7 @@ if (isset($_GET['eurotax']) && (isset($_GET['versione']) || isset($_GET['codice_
         //2 Recupero la quotazione con codice eurotax, anno, km, e motornet
         $valutazione = $et->getValutazione("auto", $anno, 12, $km, $motornet, $codice_eurotax, array(), $codiceOmologazione = "", $targa = "", $telaio = "", $costoHManMec = "", $costoHManCarr = "", $autocarro = 1, array(), $lavoryCarr = array(), $valutazioneDealer = "", $guidKey = "", $annoValutazione = "", $meseValutazione = "");
         $result = json_decode($valutazione, true);
-        $valore = $result['valutazione']["quotazione_eurotax_giallo_km"];
+        $valore = $result['valutazione']["quotazione_eurotax_blu"];
 
         if (is_numeric($valore)) { //controlla se la risposta è nd
             //update campo
@@ -150,7 +164,7 @@ if (isset($_GET['eurotax']) && (isset($_GET['versione']) || isset($_GET['codice_
             $esito = "Quotazione aggiornata : € " . $valore;
 
         } else {
-            $update = "UPDATE " . $tables[96] . " SET quotazione_attuale = '0' ,codice_eurotax = '$codice_eurotax' , codice_motornet = '$motornet' WHERE id = '$id'";
+            $update = "UPDATE " . $tables[96] . " SET quotazione_attuale = '0' ,codice_eurotax = '$codice_eurotax' , codice_motornet = '$motornet' , data_quotazione  = NOW() WHERE id = '$id'";
             $query = mysql_query($update, CONNECT);
             $esito = "Quotazione rilevata N.D.";
             $valore = 0;

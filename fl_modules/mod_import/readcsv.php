@@ -202,6 +202,8 @@ foreach ($names as $name ) {
                       $exspected2 = array('workflow_id','tipologia_veicolo','data_acquisto','data_saldo','data_consegna','marca','modello');
                       //recupero valori per la query sottostante
                       foreach($exspected2 as $kc => $campoNomex) { if(!isset($val[$campoNomex]) ) { echo 'Manca campo: '. $campoNomex ; unlink($name); exit; }}*/
+                       $val['workflow_id'] = 48; //Forzo inserimento tutti a nuovi
+                       
                       insertUpdate('fl_veicoli',1,$val); // Solo se workflow_id è valorizzato
                    }
 
@@ -232,7 +234,9 @@ foreach ($names as $name ) {
 } // fine foreach
 mysql_close(CONNECT);
 
-if(!isset($_GET['external'])) header("Location: ./?action=9&succes&esito=".$k." record caricati!");
+$ext = (isset($_GET['external'])) ? $_GET['external'] : '';
+
+if($ext == '') header("Location: ./?action=9&succes&esito=".$k." record caricati!");
 if(isset($_GET['external'])) header("Location: ./mod_user.php?id=".$val['source_potential']."&esito=".$k." record caricati!"); 
 
 exit;

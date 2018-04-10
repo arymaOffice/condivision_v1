@@ -785,7 +785,7 @@ $data = @mktime(0,0,0,@$tempo[1],@$tempo[0],@$tempo[2]);
 } else if($mode == 1){ 
 $tempo = explode("/",$data);
 $extra = "";
-$data = trim($tempo[2])."-".trim($tempo[1])."-".trim($tempo[0]);
+$data = trim(@$tempo[2])."-".trim(@$tempo[1])."-".trim($tempo[0]);
  }
 return $data;
 

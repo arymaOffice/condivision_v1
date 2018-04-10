@@ -1,6 +1,6 @@
 // Init App
 var myApp = new Framework7({
-    modalTitle: 'Lead Generation App',
+    modalTitle: 'Bluemotive',
     // Enable Material theme
     material: true,
     
@@ -8,12 +8,9 @@ var myApp = new Framework7({
 
 // Expose Internal DOM library
 var $$ = Dom7;
-var endpoint = '../../fl_api_0.1/';
+var endpoint = 'https://dev.bluemotive.it/fl_api/';
 // Add main view
 var mainView = myApp.addView('.view-main', {
-});
-// Add another view, which is in right panel
-var rightView = myApp.addView('.view-right', {
 });
 
 // Show/hide preloader for remote ajax loaded pages
@@ -22,7 +19,7 @@ $$(document).on('ajaxStart', function (e) {
 	
     if (e.detail.xhr.requestUrl.indexOf('autocomplete-languages.json') >= 0) {
         // Don't show preloader for autocomplete demo requests
-		
+        
         return;
     }
     myApp.showIndicator();
@@ -33,13 +30,22 @@ $$(document).on('ajaxComplete', function (e) {
         return;
     }
     myApp.hideIndicator();
-	
-	
+    
+    
 });
+
+var GlobalToken = "";
+
+if(GlobalToken.leght == 26 ){
+
+    myApp.closeModal('.login-screen');
+}
+
 
 // Callbacks for specific pages when it initialized
 /* ===== Modals Page events  ===== */
 myApp.onPageInit('modals', function (page) {
+
     $$('.demo-alert').on('click', function () {
         myApp.alert('Hello!');
     });
@@ -152,50 +158,50 @@ myApp.onPageInit('swipe-delete modals media-lists', function (page) {
                     myApp.alert('You have clicked red button!');
                 }
             },
-        ],
+            ],
         // Second group
         [
-            {
-                text: 'Cancel'
-            }
+        {
+            text: 'Cancel'
+        }
         ]
-    ];
-    $$('.demo-actions').on('click', function (e) {
-        myApp.actions(actionSheetButtons);
-    });
-    $$('.demo-actions-popover').on('click', function (e) {
+        ];
+        $$('.demo-actions').on('click', function (e) {
+            myApp.actions(actionSheetButtons);
+        });
+        $$('.demo-actions-popover').on('click', function (e) {
         // We need to pass additional target parameter (this) for popover
         myApp.actions(this, actionSheetButtons);
     });
 
-});
+    });
 
 /* ===== Messages Page ===== */
 myApp.onPageInit('messages', function (page) {
     var conversationStarted = false;
     var answers = [
-        'Yes!',
-        'No',
-        'Hm...',
-        'I am not sure',
-        'And what about you?',
-        'May be ;)',
-        'Lorem ipsum dolor sit amet, consectetur',
-        'What?',
-        'Are you sure?',
-        'Of course',
-        'Need to think about it',
-        'Amazing!!!',
+    'Yes!',
+    'No',
+    'Hm...',
+    'I am not sure',
+    'And what about you?',
+    'May be ;)',
+    'Lorem ipsum dolor sit amet, consectetur',
+    'What?',
+    'Are you sure?',
+    'Of course',
+    'Need to think about it',
+    'Amazing!!!',
     ];
     var people = [
-        {
-            name: 'Kate Johnson',
-            avatar: 'http://lorempixel.com/output/people-q-c-100-100-9.jpg'
-        },
-        {
-            name: 'Blue Ninja',
-            avatar: 'http://lorempixel.com/output/people-q-c-100-100-7.jpg'
-        },
+    {
+        name: 'Kate Johnson',
+        avatar: 'http://lorempixel.com/output/people-q-c-100-100-9.jpg'
+    },
+    {
+        name: 'Blue Ninja',
+        avatar: 'http://lorempixel.com/output/people-q-c-100-100-7.jpg'
+    },
 
     ];
     var answerTimeout, isFocused;
@@ -261,14 +267,14 @@ myApp.onPageInit('pull-to-refresh', function (page) {
             var song = songs[Math.floor(Math.random() * songs.length)];
             var author = authors[Math.floor(Math.random() * authors.length)];
             var linkHTML = '<li class="item-content">' +
-                                '<div class="item-media"><img src="' + picURL + '" width="44"/></div>' +
-                                '<div class="item-inner">' +
-                                    '<div class="item-title-row">' +
-                                        '<div class="item-title">' + song + '</div>' +
-                                    '</div>' +
-                                    '<div class="item-subtitle">' + author + '</div>' +
-                                '</div>' +
-                            '</li>';
+            '<div class="item-media"><img src="' + picURL + '" width="44"/></div>' +
+            '<div class="item-inner">' +
+            '<div class="item-title-row">' +
+            '<div class="item-title">' + song + '</div>' +
+            '</div>' +
+            '<div class="item-subtitle">' + author + '</div>' +
+            '</div>' +
+            '</li>';
             ptrContent.find('ul').prepend(linkHTML);
             // When loading done, we need to "close" it
             myApp.pullToRefreshDone();
@@ -290,20 +296,20 @@ myApp.onPageInit('sortable-list', function (page) {
 /* ===== Photo Browser Examples ===== */
 // Create photoprobsers first:
 var photoBrowserPhotos = [
-	{
-		url: 'img/beach.jpg',
-		caption: 'Amazing beach in Goa, India'
-	},
-    'http://placekitten.com/1024/1024',
-    'img/lock.jpg',
-    {
-        url: 'img/monkey.jpg',
-        caption: 'I met this monkey in Chinese mountains'
-    },
-    {
-        url: 'img/mountains.jpg',
-        caption: 'Beautiful mountains in Zhangjiajie, China'
-    }
+{
+  url: 'img/beach.jpg',
+  caption: 'Amazing beach in Goa, India'
+},
+'http://placekitten.com/1024/1024',
+'img/lock.jpg',
+{
+    url: 'img/monkey.jpg',
+    caption: 'I met this monkey in Chinese mountains'
+},
+{
+    url: 'img/mountains.jpg',
+    caption: 'Beautiful mountains in Zhangjiajie, China'
+}
 
 ];
 var photoBrowserStandalone = myApp.photoBrowser({
@@ -430,24 +436,18 @@ myApp.onPageInit('login-screen-embedded', function (page) {
 myApp.onPageInit('virtual-list', function (page) {
 	
 	    // Generate array with 10000 demo items:
-    var leads = [];
-     
-	
-		$$.getJSON('utenti.json.php', {usr_id:'1',token:'api'}, function (data) { 		
+        var leads = [];        
+        
+        $$.getJSON(endpoint+'?get_leads', {attivita_id:25,token:'api'}, function (data) { 
 
-		  $$.each(data, function (i, val) {
-		    
-			leads.push({
-            title: val.nome ,
-            subtitle: val.telefono
-       		 });	
-
-			
-		   });  
-		
-		
+            $$.each(data, function (i, val) {
+             leads.push({
+                title: val.nome ,
+                subtitle: val.telefono
+            });	
 
 
+         });   
 
 
     // Create virtual list
@@ -464,16 +464,16 @@ myApp.onPageInit('virtual-list', function (page) {
         },
         // List item Template7 template
         template: '<li title="{{title}}">' +
-                    '<a href="#" class="item-link item-content">' +
-                      '<div class="item-inner">' +
-                        '<div class="item-title-row">' +
-                          '<div class="item-title">{{title}}</div>' +
-                        '</div>' +
-                        '<div class="item-subtitle">{{subtitle}}</div>' +
-						
-                      '</div>' +
-                    '</a>' +
-                  '</li>',
+        '<a href="#" class="item-link item-content">' +
+        '<div class="item-inner">' +
+        '<div class="item-title-row">' +
+        '<div class="item-title">{{title}}</div>' +
+        '</div>' +
+        '<div class="item-subtitle">{{subtitle}}</div>' +
+        
+        '</div>' +
+        '</a>' +
+        '</li>',
         // Item height
         height: 73,
     });
@@ -481,206 +481,77 @@ myApp.onPageInit('virtual-list', function (page) {
 
 
 
-});
-
-
+    });
 
 
 myApp.onPageInit('nuovo-lead', function (page) {
-    
-/*  
+	
+/*	
 $$.getJSON('http://ford.bluemotive.it/fl_api/?get_items&item_rel=146&token=api', function (data) {
   console.log(data);
 });*/
 
 $$(page.container).find('#permuta2').on('tap click', function () { 
-        if($$('#permuta2_box').css('display') == 'none') { $$('#permuta2_box').show();  } else { $$('#permuta2_box').hide(); }  
-        });
-        
-    
-    $$(page.container).find('#azienda').on('change', function () { 
-       var isChecked = $$(this).prop('checked');
-        if(isChecked == true) { $$('#azienda_box').show();  } else { $$('#azienda_box').hide(); }  
-        });
+  if($$('#permuta2_box').css('display') == 'none') { $$('#permuta2_box').show();  } else { $$('#permuta2_box').hide(); }  
+});
 
 
-    $$(page.container).find('#permuta').on('change', function () { 
-       var isChecked = $$(this).prop('checked');
-        if(isChecked == true) { $$('#permuta_box').show();  } else { $$('#permuta_box').hide(); }  
-        });
+$$(page.container).find('#azienda').on('change', function () { 
+    var isChecked = $$(this).prop('checked');
+    if(isChecked == true) { $$('#azienda_box').show();  } else { $$('#azienda_box').hide(); }  
+});
 
-    $$(page.container).find('#interesse_tap').on('change', function () { 
-       
-        var isChecked = $$(this).prop('checked');
-        if(isChecked == true) { 
-        $$('#interesse_box').show();
-        
-        
-        $$.getJSON(endpoint, {get_items:'1', item_rel:100,token:'api'}, function (data) {        
-           
-           $$.each(data.dati, function (i, val) {
-          console.log(val);   
-          option = '<option value="'+val.id+'">'+val.label+'</option>';
-          $$('#tipo_interesse').append(option);
-          });       
-        });
 
-        
-        /*$$.getJSON(endpoint, {get_items:'1', item_rel:103,token:'api'}, function (data) { 
-        
+$$(page.container).find('#permuta').on('change', function () { 
+ var isChecked = $$(this).prop('checked');
+ if(isChecked == true) { $$('#permuta_box').show();  } else { $$('#permuta_box').hide(); }  
+});
+
+$$(page.container).find('#test_drive').on('change', function () { 
+   var isChecked = $$(this).prop('checked');
+   if(isChecked == true) { 
+      $$('#test_drive_box').show();
+      $$('#veicolo').html('');
+      $$('#location_testdrive').html('');
+
+      $$('#location_testdrive').append('<option value="-1">Seleziona...</option>');
+      $$('#veicolo').append('<option value="-1">Seleziona...</option>');
+
+      $$.getJSON(endpoint, {get_items:'1', item_rel:145,token:'api'}, function (data) {        
           $$.each(data.dati, function (i, val2) {
-          option = '<option value="'+val2.id+'">'+val2.label+'</option>';
-          $$('#interessato_a').append(option);
-          });  
-               
-        });*/
+              option = '<option value="'+val2.id+'">'+val2.label+'</option>';
+              $$('#location_testdrive').append(option);
+          });       
+      });
 
-        
-        } else { $$('#interesse_box').hide(); }  
-        });     
-    
-    $$(page.container).find('.button').on('click', function () {
+      $$.getJSON(endpoint, {get_items:'1', item_rel:146,token:'api'}, function (data) { 		
+
+        $$.each(data.dati, function (i, val) {
+
+            option = '<option value="'+val.id+'">'+val.label+'</option>';
+            $$('#veicolo').append(option);
+        });  		
+    });
+
+
+
+
+  } else { $$('#test_drive_box').hide(); }  
+});	
+
+
+
+$$(page.container).find('.button').on('click', function () {
     var nome = $$(page.container).find('input[name="nome"]').val();
     var telefono = $$(page.container).find('input[name="telefono"]').val();
     var forml = $$(page.container).find('#form-lead')
     var storedData = $$.serializeObject(myApp.formToJSON(forml));
-  
+    
     if(nome != '' && telefono != ''){
-    $$.ajax({
-                url: endpoint+'?insert_lead&token=api',
-                method: 'POST',
-                dataType: 'json',
-                //send "query" to server. Useful in case you generate response dynamically
-                data: storedData,
-                complete: function (e) {
-                    //for (var key in e) {  console.log('COMPLETE: '+key+' '+e[key]); }
-                },
-                error: function (e) {
-                    //for (var key in e) {  console.log('ERRROR: '+key+' '+e[key]);}
-                },
-                success: function (data) {
-                    console.log(data); 
-                    if(data.class == 'green') {
-                     
-                     myApp.addNotification({
-                     message: data.esito,
-                     button: {
-                            text: 'Ok',
-                            color: 'lightgreen'
-                     },
-                     onClose: function () {                    
-                         mainView.router.back(); 
-                        }
-                    });
-                    
-                    mainView.router.back(); 
-                    } else { 
-                    myApp.alert('Esito: ' + data.esito); 
-                    }
-                }
-            });
-
-    } else { 
-        myApp.alert('Inserisci nome e telefono');
-    }
-
-
-    });
-})
-
-
-
-
-myApp.onPageInit('nuovo-appuntamento', function (page) {
-
- $$('#appuntamento_box').hide();
-	
-	$$(page.container).find('#azienda').on('change', function () { 
-	   var isChecked = $$(this).prop('checked');
-		if(isChecked == true) { $$('#azienda_box').show();  } else { $$('#azienda_box').hide(); }  
-		});
-
-
-    $$(page.container).find('#permuta').on('change', function () { 
-       var isChecked = $$(this).prop('checked');
-        if(isChecked == true) { $$('#permuta_box').show();  } else { $$('#permuta_box').hide(); }  
-        });
-
-    $$(page.container).find('#interesse_tap').on('change', function () { 
-	   
-        var isChecked = $$(this).prop('checked');
-		if(isChecked == true) { 
-		$$('#interesse_box').show();
-		
-		
-        $$.getJSON(endpoint, {get_items:'1', item_rel:100,token:'api'}, function (data) {        
-           
-           $$.each(data.dati, function (i, val) {
-          console.log(val);   
-          option = '<option value="'+val.id+'">'+val.label+'</option>';
-          $$('#tipo_interesse').append(option);
-          });       
-        });
-
-        
-        /*$$.getJSON(endpoint, {get_items:'1', item_rel:103,token:'api'}, function (data) { 
-        
-          $$.each(data.dati, function (i, val2) {
-          option = '<option value="'+val2.id+'">'+val2.label+'</option>';
-          $$('#interessato_a').append(option);
-          });  
-               
-        });*/
-
-		
-		} else { $$('#interesse_box').hide(); }  
-		});		
-	
-
-     $$(page.container).find('#appuntamento_tap').on('change', function () { 
-       
-        var isChecked = $$(this).prop('checked');
-        if(isChecked == true) { 
-        $$('#appuntamento_box').show();
-        
-        
-        $$.getJSON(endpoint, {get_items:'1', item_rel:121,token:'api'}, function (data) {        
-           
-          $$.each(data.dati, function (i, val2) {
-          console.log(val2);   
-          option = '<option value="'+val2.id+'">'+val2.label+'</option>';
-          $$('#tipo_appuntamento').append(option);
-          });  
-
-        });
-
-        
-        /*$$.getJSON(endpoint, {get_items:'1', item_rel:103,token:'api'}, function (data) { 
-        
-          $$.each(data.dati, function (i, val2) {
-          option = '<option value="'+val2.id+'">'+val2.label+'</option>';
-          $$('#interessato_a').append(option);
-          });  
-               
-        });*/
-
-        
-        } else { $$('#appuntamento_box').hide(); }  
-        });     
-
-
-
-    $$(page.container).find('.button').on('click', function () {
-    var nome = $$(page.container).find('input[name="nome"]').val();
-    var telefono = $$(page.container).find('input[name="telefono"]').val();
-	var forml = $$(page.container).find('#form-lead')
-	var storedData = $$.serializeObject(myApp.formToJSON(forml));
-  
-	if(nome != '' && telefono != ''){
-	$$.ajax({
-                url: endpoint+'?insert_lead&token=api',
-                method: 'POST',
-                dataType: 'json',
+       $$.ajax({
+        url: endpoint+'?insert_lead&token=api',
+        method: 'POST',
+        dataType: 'json',
                 //send "query" to server. Useful in case you generate response dynamically
                 data: storedData,
                 complete: function (e) {
@@ -691,93 +562,114 @@ myApp.onPageInit('nuovo-appuntamento', function (page) {
 				},
 				success: function (data) {
                     console.log(data); 
+                    if(data.class == 'green') {
 
-					if(data.class == 'green') {
-					 
-					 myApp.addNotification({
-           			 message: data.esito,
-           			 button: {
-                			text: 'Ok',
-                			color: 'lightgreen'
-           			 },
-           			 onClose: function () {             	   
-				  		 mainView.router.back(); 
-            			}
-        			});
-					
-					mainView.router.back(); 
-					} else { 
-					myApp.alert('Esito: ' + data.esito); 
-					}
-                }
-            });
+                      myApp.addNotification({
+                         message: data.esito,
+                         button: {
+                             text: 'Firma autorizzazione',
+                             color: 'lightgreen'
+                         },
+                         onClose: function () {             	   
+                           window.location.assign('popover.html');
+                       }
+                   });
+                      window.location.assign('popover.html');
+					//mainView.router.back(); 
+               } else { 
+                   myApp.alert('Esito: ' + data.esito); 
+               }
+           }
+       });
 
-	} else { 
-	    myApp.alert('Inserisci nome e telefono');
-	}
+   } else { 
+       myApp.alert('Inserisci nome e telefono');
+   }
 
 
-    });
-})
-$$('.login-screen').find('.button').on('click', function () {
+});
+});
+
+
+$$('.login-screen').find('.button').on('click', function (e) {
+    e.preventDefault();
     var username = $$('.login-screen').find('input[name="username"]').val();
     var password = $$('.login-screen').find('input[name="password"]').val();
-	if(username != '' && password != ''){
-	$$.ajax({
-                url: endpoint,
-                method: 'GET',
-                dataType: 'json',
+    if(username != '' && password != ''){
+
+        var d = new Date(); var n = d.getTime(); 
+
+        $$.getJSON(endpoint+'?app_login', {client_id:103 ,time:n }, function (data) {
+
+            if(data.esito == 1){
+                $$.ajax({
+                    url: endpoint,
+                    method: 'GET',
+                    dataType: 'json',
                 //send "query" to server. Useful in case you generate response dynamically
                 data: {
-					usr_login: 1,
-                    user: username,
-					password: password,
-					token: 'app'
-                },
-                success: function (data) {
+                   usr_login: 1,
+                   user: username,
+                   password: password,
+                   token: data.token
+               },
+               success: function (response) {
 
-                    console.log(data); 
-					if(data.esito == 1) {
-					var usr_id = data.usr_id;
-					$$('#welkome').html("Benvenuto "+data.nome);
-					myApp.closeModal('.login-screen');  
-					} else { 
-					myApp.alert('Esito: ' + data.info_txt); 
-					}
+                if(response.esito == 1) {
+                   var usr_id = response.usr_id;
+                   $$('#welkome').html("Benvenuto "+response.user);
+                   window.GlobalToken = data.token;
+                   myApp.closeModal('.login-screen');
+
+                 //fill selectAcivity
+                 $$.getJSON(endpoint+'?get_attivita', {token:data.token }, function (data) {
+                    console.log(data);
+                    $$.each(data.leads, function (i, val) {
+                        $$('#selectAcivity').append('<option value="'+val.id+'">'+val.oggetto+'</option>');
+                    }); 
+                 });
+
+                }else{  
+                    myApp.alert('Esito: ' + data.info_txt);   
                 }
+            }
+        });
+
+             }
+
+         }); 
+
+            } else { 
+               myApp.alert('Inserisci email e password');
+           }
+
+       });
+
+        /* ===== Demo Popover ===== */
+        $$('.popover a').on('click', function () {
+            myApp.closeModal('.popover');
+        });
+
+        /* ===== Color themes ===== */
+        myApp.onPageInit('color-themes', function (page) {
+            $$(page.container).find('.ks-color-theme').click(function () {
+                var classList = $$('body')[0].classList;
+                for (var i = 0; i < classList.length; i++) {
+                    if (classList[i].indexOf('theme') === 0) classList.remove(classList[i]);
+                }
+                classList.add('theme-' + $$(this).attr('data-theme'));
             });
+            $$(page.container).find('.ks-layout-theme').click(function () {
+                var classList = $$('body')[0].classList;
+                for (var i = 0; i < classList.length; i++) {
+                    if (classList[i].indexOf('layout-') === 0) classList.remove(classList[i]);
+                }
+                classList.add('layout-' + $$(this).attr('data-theme'));
+            });
+        });
 
-	} else { 
-	    myApp.alert('Inserisci email e password');
-	}
-	
-});
-
-/* ===== Demo Popover ===== */
-$$('.popover a').on('click', function () {
-    myApp.closeModal('.popover');
-});
-
-/* ===== Color themes ===== */
-myApp.onPageInit('color-themes', function (page) {
-    $$(page.container).find('.ks-color-theme').click(function () {
-        var classList = $$('body')[0].classList;
-        for (var i = 0; i < classList.length; i++) {
-            if (classList[i].indexOf('theme') === 0) classList.remove(classList[i]);
-        }
-        classList.add('theme-' + $$(this).attr('data-theme'));
-    });
-    $$(page.container).find('.ks-layout-theme').click(function () {
-        var classList = $$('body')[0].classList;
-        for (var i = 0; i < classList.length; i++) {
-            if (classList[i].indexOf('layout-') === 0) classList.remove(classList[i]);
-        }
-        classList.add('layout-' + $$(this).attr('data-theme'));
-    });
-});
-
-/* ===== Virtual List ===== */
-myApp.onPageInit('virtual-list', function (page) {
+        /* ===== Virtual List ===== */
+        myApp.onPageInit('virtual-list', function (page) {
     // Generate array with 10000 demo items:
     var items = [];
     for (var i = 0; i < 10000; i++) {
@@ -801,38 +693,38 @@ myApp.onPageInit('virtual-list', function (page) {
         },
         // List item Template7 template
         template: '<li>' +
-                    '<a href="#" class="item-link item-content">' +
-                      '<div class="item-inner">' +
-                        '<div class="item-title-row">' +
-                          '<div class="item-title">{{title}}</div>' +
-                        '</div>' +
-                        '<div class="item-subtitle">{{subtitle}}</div>' +
-                      '</div>' +
-                    '</a>' +
-                  '</li>',
+        '<a href="#" class="item-link item-content">' +
+        '<div class="item-inner">' +
+        '<div class="item-title-row">' +
+        '<div class="item-title">{{title}}</div>' +
+        '</div>' +
+        '<div class="item-subtitle">{{subtitle}}</div>' +
+        '</div>' +
+        '</a>' +
+        '</li>',
         // Item height
         height: 73,
     });
 });
-/* ===== Swiper Two Way Control Gallery ===== */
-myApp.onPageInit('swiper-gallery', function (page) {
-    var swiperTop = myApp.swiper('.ks-swiper-gallery-top', {
-        nextButton: '.swiper-button-next',
-        prevButton: '.swiper-button-prev',
-        spaceBetween: 10
-    });
-    var swiperThumbs = myApp.swiper('.ks-swiper-gallery-thumbs', {
-        slidesPerView: 'auto',
-        spaceBetween: 10,
-        centeredSlides: true,
-        touchRatio: 0.2,
-        slideToClickedSlide: true
-    });
-    swiperTop.params.control = swiperThumbs;
-    swiperThumbs.params.control = swiperTop;
-});
-/* ===== Calendar ===== */
-myApp.onPageInit('calendar', function (page) {
+        /* ===== Swiper Two Way Control Gallery ===== */
+        myApp.onPageInit('swiper-gallery', function (page) {
+            var swiperTop = myApp.swiper('.ks-swiper-gallery-top', {
+                nextButton: '.swiper-button-next',
+                prevButton: '.swiper-button-prev',
+                spaceBetween: 10
+            });
+            var swiperThumbs = myApp.swiper('.ks-swiper-gallery-thumbs', {
+                slidesPerView: 'auto',
+                spaceBetween: 10,
+                centeredSlides: true,
+                touchRatio: 0.2,
+                slideToClickedSlide: true
+            });
+            swiperTop.params.control = swiperThumbs;
+            swiperThumbs.params.control = swiperTop;
+        });
+        /* ===== Calendar ===== */
+        myApp.onPageInit('calendar', function (page) {
     // Default
     var calendarDefault = myApp.calendar({
         input: '#ks-calendar-default',
@@ -863,17 +755,17 @@ myApp.onPageInit('calendar', function (page) {
         header: false,
         footer: false,
         toolbarTemplate:
-            '<div class="toolbar calendar-custom-toolbar">' +
-                '<div class="toolbar-inner">' +
-                    '<div class="left">' +
-                        '<a href="#" class="link icon-only"><i class="icon icon-back"></i></a>' +
-                    '</div>' +
-                    '<div class="center"></div>' +
-                    '<div class="right">' +
-                        '<a href="#" class="link icon-only"><i class="icon icon-forward"></i></a>' +
-                    '</div>' +
-                '</div>' +
-            '</div>',
+        '<div class="toolbar calendar-custom-toolbar">' +
+        '<div class="toolbar-inner">' +
+        '<div class="left">' +
+        '<a href="#" class="link icon-only"><i class="icon icon-back"></i></a>' +
+        '</div>' +
+        '<div class="center"></div>' +
+        '<div class="right">' +
+        '<a href="#" class="link icon-only"><i class="icon icon-forward"></i></a>' +
+        '</div>' +
+        '</div>' +
+        '</div>',
         onOpen: function (p) {
             $$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] +', ' + p.currentYear);
             $$('.calendar-custom-toolbar .left .link').on('click', function () {
@@ -889,18 +781,18 @@ myApp.onPageInit('calendar', function (page) {
     });
 });
 
-/* ===== Pickers ===== */
-myApp.onPageInit('pickers', function (page) {
-    var today = new Date();
+        /* ===== Pickers ===== */
+        myApp.onPageInit('pickers', function (page) {
+            var today = new Date();
 
     // iOS Device picker
     var pickerDevice = myApp.picker({
         input: '#ks-picker-device',
         cols: [
-            {
-                textAlign: 'center',
-                values: ['iPhone 4', 'iPhone 4S', 'iPhone 5', 'iPhone 5S', 'iPhone 6', 'iPhone 6 Plus', 'iPad 2', 'iPad Retina', 'iPad Air', 'iPad mini', 'iPad mini 2', 'iPad mini 3']
-            }
+        {
+            textAlign: 'center',
+            values: ['iPhone 4', 'iPhone 4S', 'iPhone 5', 'iPhone 5S', 'iPhone 6', 'iPhone 6 Plus', 'iPad 2', 'iPad Retina', 'iPad Air', 'iPad mini', 'iPad mini 2', 'iPad mini 3']
+        }
         ]
     });
 
@@ -909,13 +801,13 @@ myApp.onPageInit('pickers', function (page) {
         input: '#ks-picker-describe',
         rotateEffect: true,
         cols: [
-            {
-                textAlign: 'left',
-                values: ('Super Lex Amazing Bat Iron Rocket Lex Cool Beautiful Wonderful Raining Happy Amazing Funny Cool Hot').split(' ')
-            },
-            {
-                values: ('Man Luthor Woman Boy Girl Person Cutie Babe Raccoon').split(' ')
-            },
+        {
+            textAlign: 'left',
+            values: ('Super Lex Amazing Bat Iron Rocket Lex Cool Beautiful Wonderful Raining Happy Amazing Funny Cool Hot').split(' ')
+        },
+        {
+            values: ('Man Luthor Woman Boy Girl Person Cutie Babe Raccoon').split(' ')
+        },
         ]
     });
 
@@ -932,19 +824,19 @@ myApp.onPageInit('pickers', function (page) {
             return values[1];
         },
         cols: [
-            {
-                textAlign: 'left',
-                values: ['Japanese', 'German', 'American'],
-                onChange: function (picker, country) {
-                    if(picker.cols[1].replaceValues){
-                        picker.cols[1].replaceValues(carVendors[country]);
-                    }
+        {
+            textAlign: 'left',
+            values: ['Japanese', 'German', 'American'],
+            onChange: function (picker, country) {
+                if(picker.cols[1].replaceValues){
+                    picker.cols[1].replaceValues(carVendors[country]);
                 }
-            },
-            {
-                values: carVendors.Japanese,
-                width: 160,
-            },
+            }
+        },
+        {
+            values: carVendors.Japanese,
+            width: 160,
+        },
         ]
     });
 
@@ -953,27 +845,27 @@ myApp.onPageInit('pickers', function (page) {
         input: '#ks-picker-custom-toolbar',
         rotateEffect: true,
         toolbarTemplate:
-            '<div class="toolbar">' +
-                '<div class="toolbar-inner">' +
-                    '<div class="left">' +
-                        '<a href="#" class="link toolbar-randomize-link">Randomize</a>' +
-                    '</div>' +
-                    '<div class="right">' +
-                        '<a href="#" class="link close-picker">That\'s me</a>' +
-                    '</div>' +
-                '</div>' +
-            '</div>',
+        '<div class="toolbar">' +
+        '<div class="toolbar-inner">' +
+        '<div class="left">' +
+        '<a href="#" class="link toolbar-randomize-link">Randomize</a>' +
+        '</div>' +
+        '<div class="right">' +
+        '<a href="#" class="link close-picker">That\'s me</a>' +
+        '</div>' +
+        '</div>' +
+        '</div>',
         cols: [
-            {
-                values: ['Mr', 'Ms'],
-            },
-            {
-                textAlign: 'left',
-                values: ('Super Lex Amazing Bat Iron Rocket Lex Cool Beautiful Wonderful Raining Happy Amazing Funny Cool Hot').split(' ')
-            },
-            {
-                values: ('Man Luthor Woman Boy Girl Person Cutie Babe Raccoon').split(' ')
-            },
+        {
+            values: ['Mr', 'Ms'],
+        },
+        {
+            textAlign: 'left',
+            values: ('Super Lex Amazing Bat Iron Rocket Lex Cool Beautiful Wonderful Raining Happy Amazing Funny Cool Hot').split(' ')
+        },
+        {
+            values: ('Man Luthor Woman Boy Girl Person Cutie Babe Raccoon').split(' ')
+        },
         ],
         onOpen: function (picker) {
             picker.container.find('.toolbar-randomize-link').on('click', function () {
@@ -1023,7 +915,7 @@ myApp.onPageInit('pickers', function (page) {
                 values: (function () {
                     var arr = [];
                     for (var i = 1950; i <= 2030; i++) { arr.push(i); }
-                    return arr;
+                        return arr;
                 })(),
             },
             // Space divider
@@ -1036,7 +928,7 @@ myApp.onPageInit('pickers', function (page) {
                 values: (function () {
                     var arr = [];
                     for (var i = 0; i <= 23; i++) { arr.push(i); }
-                    return arr;
+                        return arr;
                 })(),
             },
             // Divider
@@ -1049,11 +941,11 @@ myApp.onPageInit('pickers', function (page) {
                 values: (function () {
                     var arr = [];
                     for (var i = 0; i <= 59; i++) { arr.push(i < 10 ? '0' + i : i); }
-                    return arr;
+                        return arr;
                 })(),
             }
-        ]
-    });
+            ]
+        });
 });
 
 /* ===== Chips  ===== */
@@ -1302,7 +1194,7 @@ myApp.onPageInit('autocomplete', function (page) {
         },
         onChange: function (autocomplete, value) {
             var itemText = [],
-                inputValue = [];
+            inputValue = [];
             for (var i = 0; i < value.length; i++) {
                 itemText.push(value[i].name);
                 inputValue.push(value[i].id);
@@ -1346,16 +1238,16 @@ function createContentPage() {
         '      </div>' +
         '    </div>' +
         '  </div>'
-    );
+        );
     return;
 }
 $$(document).on('click', '.ks-generate-page', createContentPage);
 
 
 function showSign(idImg){
-var dataImage = localStorage.getItem('imgData');
-var bannerImg = document.getElementById(idImg);
-bannerImg.src = "data:image/png;base64," + dataImage;
+    var dataImage = localStorage.getItem('imgData');
+    var bannerImg = document.getElementById(idImg);
+    bannerImg.src = "data:image/png;base64," + dataImage;
 }
 
 

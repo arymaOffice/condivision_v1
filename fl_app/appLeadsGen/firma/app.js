@@ -29,11 +29,10 @@ saveButton.addEventListener("click", function (event) {
     } else {
         //document.getElementById("sign").src = signaturePad.toDataURL();
 		
-		var imgData = getBase64Data(signaturePad.toDataURL("image/png"));
-		localStorage.setItem("imgData", imgData);	
-		showSign("sign");
+		imgData = getBase64Data(signaturePad.toDataURL("image/png"));
+		localStorage.setItem("imgData", imgData);
 		window.location.assign('index.php');
-		
+		//showSign("sign");
     }
 });
 
@@ -56,6 +55,6 @@ function getBase64Image(img) {
 
 function showSign(idImg){
 var dataImage = localStorage.getItem('imgData');
-var bannerImg = document.getElementById(idImg);
+bannerImg = document.getElementById(idImg);
 bannerImg.src = "data:image/png;base64," + dataImage;
 }

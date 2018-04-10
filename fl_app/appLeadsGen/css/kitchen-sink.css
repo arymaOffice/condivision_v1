@@ -348,7 +348,7 @@ div.ks-demo-lazy {
   padding: 15px 10px;
 }
 
-#permuta_box, #permuta2_box,#interesse_box { display: none; }
+#permuta_box, #permuta2_box { display: none; }
 #test_drive_box, #azienda_box { display: none; }
 
 .list-block .item-title {

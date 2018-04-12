@@ -32,7 +32,7 @@ $a = $et->getMarche('AUTO');
 //$a = $et->getModelli('AUTO','ALF',2015);
 //$a = $et->getVersioni('AUTO',"0040", 'ALF', 2015);
 $oggetto = json_decode($a, true);
-for ($i = 2002; $i < 2019; $i++) {
+for ($i = 2017; $i < 2019; $i++) {
     $anno = $i;
 
     foreach ($oggetto['marche'] as $key => $value) {

@@ -8,7 +8,7 @@ var myApp = new Framework7({
 
 // Expose Internal DOM library
 var $$ = Dom7;
-var endpoint = 'https://dev.bluemotive.it/fl_api/';
+var endpoint = 'https://authos.bluemotive.it/fl_api/';
 // Add main view
 var mainView = myApp.addView('.view-main', {
 });
@@ -599,7 +599,7 @@ $$('.login-screen').find('.button').on('click', function (e) {
 
         var d = new Date(); var n = d.getTime(); 
 
-        $$.getJSON(endpoint+'?app_login', {client_id:103 ,time:n }, function (data) {
+        $$.getJSON(endpoint+'?app_login', {client_id:103 ,time:n ,request_id : n , go :1 }, function (data) {
 
             if(data.esito == 1){
                 $$.ajax({

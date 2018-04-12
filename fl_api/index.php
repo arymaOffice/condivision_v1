@@ -65,7 +65,6 @@ if (isset($dataset['usr_login'])) {
     $webservice->token = check($dataset['token']);
     $webservice->do_login();
     foreach ($webservice->contenuto as $chiave => $valore) {$_SESSION[$chiave] = $valore;}
-    ;
     exit;
 }
 
@@ -150,6 +149,31 @@ if (isset($dataset['lost_password'])) {
 
     $webservice->send_login();
     exit;
+}
+
+if(isset($dataset['get_attivita'])){
+    mandatory_fileds(array('token'));
+    session_cache_limiter( 'private_no_expire' );
+    $webservice->token = check($dataset['token']);
+    $webservice->app_start();
+    $webservice->get_attivita();
+}
+
+/* tutte le marche delle auto raccolte nel db , attraverso quello di eurotax*/
+if(isset($dataset['get_marche'])){
+    mandatory_fileds(array('token'));
+    session_cache_limiter( 'private_no_expire' );
+    $webservice->token = check($dataset['token']);
+    $webservice->app_start();
+    $webservice->get_marche();
+}
+/* tutte le auto raccolte nel db , attraverso quello di eurotax*/
+if(isset($dataset['get_modelli'])){
+    mandatory_fileds(array('token'));
+    session_cache_limiter( 'private_no_expire' );
+    $webservice->token = check($dataset['token']);
+    $webservice->app_start();
+    $webservice->get_modelli();
 }
 
 echo json_encode(array('esito' => 0, 'info_txt' => "Specifica un metodo o autentica client"));

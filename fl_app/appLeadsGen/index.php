@@ -65,23 +65,23 @@
                   <a href="#" class="item-link smart-select" data-back-on-select="true">
                     <select name="selectAcivity" class="selezionaAttivita" id="selectAcivity">
                       <option value="">Seleziona ...</option>
-                    </select>                     
+                    </select>
 
                     <div class="item-content bottoni" style="font-size: large">
                       <div class="item-inner">
                         <div class="item-title" style="color:#0b0b0b">Seleziona attività</div>
                       </div>
                     </div>
-                    
+
                   </a>
                 </div>
-                <div class="tablet-25"></div>       
+                <div class="tablet-25"></div>
               </div>
               <br>
               <div class="row">
                 <div class="tablet-5 prima"></div>
                 <div class="tablet-45 seconda">
-                  <a href="nuovo-lead.php">
+                  <a class="link" href="/new/">
                     <div class="item-content bottoni">
                       <div class="item-inner">
                         <div class="item-title">Nuovo Contatto</div>
@@ -90,15 +90,15 @@
                   </a>
                 </div>
                 <div class="tablet-40 terza">
-                  <a href="lista-contatti.php">
+                  <a href="/list/">
                     <div class="item-content bottoni" style="background: grey;">
                       <div class="item-inner">
                         <div class="item-title">Ultimi Contatti </div>
                       </div>
                     </div>
                   </a>
-                </div> 
-                <div class="tablet-5 quarta" ></div>                             
+                </div>
+                <div class="tablet-5 quarta" ></div>
               </div>
               <br>
 
@@ -126,13 +126,13 @@
                             <div class="item-title"></div>
                             <div class="item-input">
                               <p class="selezionaAttivita" style="width: 88%;border: solid 2px grey">
-                                100 Leads              
+                                100 Leads
                               </p>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div class="tablet-25"></div>       
+                      <div class="tablet-25"></div>
                     </div>
                   </div>
                 </div>
@@ -147,13 +147,13 @@
                             <div class="item-title"></div>
                             <div class="item-input">
                               <p class="selezionaAttivita" style="width: 88%;">
-                                100 Leads              
+                                100 Leads
                               </p>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div class="tablet-25"></div>       
+                      <div class="tablet-25"></div>
                     </div>
                   </div>
                 </div>
@@ -168,13 +168,13 @@
                             <div class="item-title"></div>
                             <div class="item-input">
                               <p class="selezionaAttivita" style="width: 88%;border: solid 2px  #2196f3">
-                                100 Leads              
+                                100 Leads
                               </p>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div class="tablet-25"></div>       
+                      <div class="tablet-25"></div>
                     </div>
                   </div>
                 </div>
@@ -194,35 +194,35 @@
           </div>
         </div>
         <div class="page">
-          <div class="page-content login-screen-content" style="background: url(icons/640x1096.jpg)no-repeat;background-position: center 14px;">
+          <div class="page-content login-screen-content" >
             <div class="login-screen-title"> </div><br><br><br><br>
             <div class="content-block">
              <form class="list-block inset form-login" id="form-login" method="POST" accept-charset="UTF-8">
               <ul>
-                <li>
-                  <div class="item-content">
-                    <div class="item-media"><i class="icon icon-form-name"></i></div>
+                  <li class="item-content item-input">
+                    <div class="item-media">
+                      <i class="icon icon-person"></i>
+                    </div>
                     <div class="item-inner">
-                      <div class="item-title label">username</div>
-                      <div class="item-input">
-                        <input type="text" name="username" id="vf_username"  required="">
+                      <div class="item-input-wrap">
+                        <input type="text" placeholder="Username">
+                        <span class="input-clear-button"></span>
                       </div>
                     </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="item-content">
-                    <div class="item-media"><i class="icon icon-form-password"></i></div>
+                  </li>
+                  <li class="item-content item-input">
+                    <div class="item-media">
+                      <i class="icon icon-lock"></i>
+                    </div>
                     <div class="item-inner">
-                      <div class="item-title label">password</div>
-                      <div class="item-input">
-                        <input type="password" name="password" id="vf_password" required="">
+                      <div class="item-input-wrap">
+                        <input type="password" placeholder="Password">
+                        <span class="input-clear-button"></span>
                       </div>
                     </div>
-                  </div>
-                </li>
+                  </li>
               </ul>
-              <div class="content-block"> <input type="submit" value="entra" class="button button-big button-fill" id="btn-submit" > </div>
+              <div class="content-block"> <input type="submit" value="Accedi" class="button button-big button-fill" id="btn-submit" > </div>
 
 
               <div class="list-block-label">Per continuare esegui il login.<br>Se smarrisci la password può essere reimpostata da un amministratore.</div>

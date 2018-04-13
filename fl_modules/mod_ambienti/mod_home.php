@@ -95,7 +95,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 			echo "<tr>"; 
 			$sede = ucfirst($riga['nome_ambiente']);		
 			echo "<td ><span class=\"Gletter\">".$riga['priority']."</span></td>"; 
-			echo "<td><span class=\"color\"><h2>$sede</h2></span> ".$tipo_ambiente[$riga['tipo_ambiente']]."</td>";
+			echo "<td><span class=\"color\"><h2>$sede</h2></span><span class=\"msg blue\">".$riga['id']."/".$riga['codice_ambiente']."</span> ".$tipo_ambiente[$riga['tipo_ambiente']]."</td>";
 			echo "<td class=\"hideMobile\">".$sede_id[$riga['sede_id']]."</td>"; 
 			echo "<td class=\"hideMobile\">".$riga['larghezza_mt']." x ".$riga['profondita_mt']."</td>";
 			echo "<td class=\"hideMobile\">".$riga['capienza_massima']."</td>"; 

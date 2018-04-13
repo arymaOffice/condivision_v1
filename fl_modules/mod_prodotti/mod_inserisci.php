@@ -27,7 +27,7 @@ include("../../fl_inc/testata_mobile.php");
 <?php include('../mod_basic/action_estrai.php');  ?>
 
 
-<?php if(check($_GET['id']) == 1) { ?><input type="hidden" name="reload" value="../mod_prodotti/mod_inserisci.php?t=MQ==&id=" /><?php } ?>
+<?php if(defined('CATALOGO_AVANZATO') && check($_GET['id']) == 1) { ?><input type="hidden" name="reload" value="../mod_prodotti/mod_inserisci.php?t=MQ==&id=" /><?php } ?>
 
 </form>
 

@@ -110,7 +110,7 @@ echo "<a  href=\"../mod_basic/action_elimina.php?POST_BACK_PAGE=../mod_eventi/?g
 
 
       
-$ifYesText = array("segnaposti", "bomboniere", "dolci", "ospiti_serali", "miniclub", "stanza_sposi", "stanze_aggiuntive",'allestimento_fuochi_pirotecnici','buffet_confetti_tavolo','allestimento_confetti','allestimento_sigari_rum','zona_posizione_tavolo','cocktail_bar_allestimento','bomboniere_zona_consegna','bomboniere_tipo_tavolo','bomboniere_allestimento');	
+$ifYesText = array("servizio_afterwedding","segnaposti", "bomboniere", "dolci", "ospiti_serali", "miniclub", "stanza_sposi", "stanze_aggiuntive",'allestimento_fuochi_pirotecnici','buffet_confetti_tavolo','allestimento_confetti','allestimento_sigari_rum','zona_posizione_tavolo','cocktail_bar_allestimento','bomboniere_zona_consegna','bomboniere_tipo_tavolo','bomboniere_allestimento');   
 echo '<style>';
 foreach ($ifYesText as $key => $value) {
 	echo "#box_$value { clear: none; } ";

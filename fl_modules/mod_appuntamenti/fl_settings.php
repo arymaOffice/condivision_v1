@@ -45,6 +45,7 @@
     $ordine_mod = array("start_meeting DESC","potential_rel ASC","operatore ASC","id DESC");
 	$ordine = $ordine_mod[0];	
 	
+	if(!isset($_GET['meeting_location']) && isset($_SESSION['sede_id']))  { $meeting_location_id = $_SESSION['sede_id']; $tipologia_main .= " AND meeting_location = ".$_SESSION['sede_id'];  }
 	
 	/* RICERCA */
 	$tipologia = 0;
@@ -94,7 +95,7 @@
 	$meeting_location = $data_set->data_retriever('fl_sedi','sede',"WHERE id != 1",'sede ASC');
 	$meeting_location[0] = 'Tutte';
 	$proprietario['-1'] = "Tutti";
-
+	$proprietario['1'] = "Sistema";
 
 
 	function select_type($who){
@@ -133,8 +134,9 @@
 	
 	
 	$module_menu = '';
-	$menu = array('Tutti'=>'./?action=23&meeting_location=0');
-	foreach($tipologia_appuntamento as $id => $label){	 $menu[$label] = './?action=23&meeting_location=0&tipologia_appuntamento='.$id; }
+	$menu = array('Tutti'=>'./?action=23');
+	if($meeting_location_id > 0)  $module_title .= ' '.$meeting_location[$meeting_location_id];
+	foreach($tipologia_appuntamento as $id => $label){	 $menu[$label] = './?action=23&tipologia_appuntamento='.$id; }
 
 
 	$b = (!isset($_GET['b'])) ? 'Tutti' : check($_GET['b']);

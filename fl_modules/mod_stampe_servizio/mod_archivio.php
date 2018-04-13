@@ -86,14 +86,15 @@
 			$colore = "class=\"tab_earl_gray\""; 
 	
 			$potential = GRD($tables[106],$riga['lead_id']);
-			$ambienti_id = '';
-			$ambienti_id = explode(',',$riga['ambienti']);
+			
+			$ambiente = ' ';
+			if(isset($riga['ambiente_principale']) && $riga['ambiente_principale'] > 1) $ambiente .= $ambiente_principale[$riga['ambiente_principale']];
+			if(isset($riga['ambiente_1']) && $riga['ambiente_1'] > 1) $ambiente .= ', '. $ambiente_principale[$riga['ambiente_1']];
+			if(isset($riga['ambiente_2']) && $riga['ambiente_2'] > 1) $ambiente .= ', '. $ambiente_principale[$riga['ambiente_2']];
+			if(isset($riga['notturno']) && $riga['notturno'] > 1) $ambiente .= ', '. $ambiente_principale[$riga['notturno']];
+			if(isset($riga['cerimonia']) && $riga['cerimonia'] > 1) $ambiente .= ' Cerimonia: '.$ambiente_principale[$riga['cerimonia']];
 
-			$ambienti_txt = '';
-			foreach ($ambienti_id as $key => $value) {
-				$ambienti_txt .= '<span class="msg orange">'.@$ambienti[$value].'</span>';
-			}
-		$colors = array('-1'=>'red',9=>'#7B3DA0',5=>'#4c9ed9',6=>'#DEBA0F',7=>'#A1CE11',8=>'#1DC59B',12=>'#333',10=>'#666',11=>'#ccc');
+		    $colors = array('-1'=>'red',9=>'#7B3DA0',5=>'#4c9ed9',6=>'#DEBA0F',7=>'#A1CE11',8=>'#1DC59B',12=>'#333',10=>'#666',11=>'#ccc');
 		
 			$coloreEvento = @$colors[$riga['tipo_evento']];
 			$add_calendar = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='.$riga['titolo_ricorrenza'].'&location='.$location_evento[$riga['location_evento']].'&details=Inserito da Condivision&dates='.substr(str_replace('-','',$riga['data_evento']),0,8).'T'.substr(str_replace(':','',$riga['data_evento']),11,8).'/'.substr(str_replace('-','',$riga['data_fine_evento']),0,8).'T'.substr(str_replace(':','',$riga['data_fine_evento']),11,8).'&sf=true&pli=1';
@@ -114,9 +115,15 @@
 		  }
 		  $ultima_revisione = ($revisioni['id'] > 1) ? 'Rev. '.$revisioni['data'].' '.$visto.'<br> '.strip_tags(converti_txt($revisioni['note'])) : $lastUpdate;
 
+  		  $schedaWedding = GQD('fl_ricorrenze_matrimonio','id,evento_id',' evento_id = '.$riga['id']);
+		  $schedaWeddingId = ($schedaWedding['id'] > 1) ? $schedaWedding['id'] : '1&auto';
+		  $colorScheda = ($schedaWedding['id'] > 1) ? $coloreEvento : 'gray';
+		  $titolo_ricorrenza = $tipo_evento[$riga['tipo_evento']].' '.str_replace('Matrimonio',' ', $riga['titolo_ricorrenza']);
+
+
 			echo "<tr ><td $colore><span class=\"Gletter\"></span></td>"; 
 			echo "<td><h2>".mydatetime($riga['data_evento'])."</h2> <span class=\"msg\" style=\"background: $coloreEvento\">".@$tipo_evento[$riga['tipo_evento']]." ".@$centro_di_ricavo[$riga['centro_di_ricavo']]."</span><span class=\"msg gray\">".$periodo_evento[$riga['periodo_evento']]."</span></td>"; 
-			echo "<td><h2>".$riga['titolo_ricorrenza']."</h2>".@$location_evento[$riga['location_evento']]."</td>"; 
+			echo "<td><h2><a href=\"../mod_eventi/mod_scheda_servizio.php?evento_id=".$riga['id']."&tipo_evento=".$riga['tipo_evento']."&id=$schedaWeddingId\">$titolo_ricorrenza</a></h2>".@$location_evento[$riga['location_evento']]." ".$ambiente."</td>"; 
 			echo "<td><h2>".$riga['numero_adulti']."</h2></td>"; 
 			echo "<td><h2>".$riga['numero_bambini']."</h2></td>"; 
 			echo "<td><h2>".$riga['numero_sedie']."</h2></td>"; 

@@ -38,47 +38,12 @@ if(isset($_POST['fattura_id'])) {
 	$codice = check($_POST['codice']);
 	$descrizione = (isset($_POST['descrizione'])) ? check($_POST['descrizione']) : 0;
 	$quantita = check($_POST['quantita']);
-	$importo = check(str_replace(',','.',$_POST['importo']));
+	$imponibile = check(str_replace(',','.',$_POST['importo']));
 	$aliquota = check(str_replace('.00','',$_POST['aliquota']));
-	$subtotale = $importo*$quantita;
 
 
+	inserisci_voci_vendita($fattura_id,$codice,$descrizione,$imponibile,$quantita,$valuta,$aliquota);
 	
-
-	if(defined('importi_lordi')){
-
-		$new = '1.'.$aliquota;
-		$totaleTemporaneo = round_up($subtotale/$new,2);
-		$imposta = $subtotale - $totaleTemporaneo;
-		$importo =  $totaleTemporaneo/$quantita;
-		$subtotale = ($importo*$quantita) + $imposta;
-		$importo = $totaleTemporaneo;
-
-	}else{
-		$new = '0.'.$aliquota;
-		$imposta = $subtotale*$new;
-		$subtotale += $imposta;
-		$importo = $subtotale /$quantita;
-		
-		
-	}
-
-
-
-	/*
-	$impostaCU = (defined('importi_lordi')) ?  ($importo*$aliquota)/(100+$aliquota) : ($importo*$aliquota)/100;
-	if(defined('importi_lordi')) $importo = $importo-$impostaCU;
-
-
-	$imposta = (defined('importi_lordi')) ?  ($totaleImponibile*$aliquota)/(100+$aliquota) : ($totaleImponibile*$aliquota)/100;
-	$subtotale =(defined('importi_lordi')) ?   $totaleImponibile :   $totaleImponibile+$imposta;
-	*/
-
-
-	$query = "INSERT INTO `fl_doc_vendita_voci` (`id`, `fattura_id`, `codice`, `descrizione`, `quantita`, `valuta`,`importo`, `aliquota`, `imposta`, `subtotale`, `operatore`)
-	VALUES (NULL, '$fattura_id', '$codice', '$descrizione', '$quantita','$valuta', '$importo', '$aliquota', '$imposta', '$subtotale', '".$_SESSION['number']."');";
-	mysql_query($query,CONNECT);
-
 }
 
 

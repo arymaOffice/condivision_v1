@@ -3,13 +3,15 @@
 require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
 $id = check($_GET['id']);
-if($id != 1 && defined('FOLDER_DOC_ACQUISTO')) { 
+
+
+if($id != 1) { 
  
  
  $documento = GRD($tabella,$id);
- $tab_div_labels['../mod_dms/uploader.php?PiD='.base64_encode(FOLDER_DOC_ACQUISTO).'&workflow_id='.$tab_id.'&multifile=1&title=Documenti di vendita&NAme[]=Documento&record_id=[*ID*]'] = 'Documenti';
+ if(defined('FOLDER_DOC_ACQUISTO')) $tab_div_labels['../mod_dms/uploader.php?PiD='.base64_encode(FOLDER_DOC_ACQUISTO).'&workflow_id='.$tab_id.'&multifile=1&title=Documenti di vendita&NAme[]=Documento&record_id=[*ID*]'] = 'Documenti';
   
-  }
+ }
 
 
 include("../../fl_inc/headers.php"); include("../../fl_inc/testata_mobile.php");
@@ -31,15 +33,17 @@ include("../../fl_inc/headers.php"); include("../../fl_inc/testata_mobile.php");
 <?php } else { echo '<h1>Nuovo <span class="msg blue">'.$tipo_doc_acquisto[check($_GET['tipo_doc_acquisto'])].'</span>  </h1>'; } ?>
 
 
-<?php if(!defined('FOLDER_DOC_ACQUISTO')) echo "Cartella per documenti di acquisto non definita!"; ?>
 
 <form id="scheda" action="../mod_basic/action_modifica.php" method="post" enctype="multipart/form-data">
 <?php if(isset($_GET['esito'])) { $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p id="esito" class="'.$class.'">'.check($_GET['esito']).'</p>'; }  ?>
 
 <?php include('../mod_basic/action_estrai.php');  ?>
 
-<?php if(check($_GET['id']) == 1) { ?><input type="hidden" name="reload" value="../mod_doc_acquisto/mod_inserisci.php?id=" /><?php } ?>
+<?php if(defined('FOLDER_DOC_ACQUISTO') && check($_GET['id']) == 1) { ?><input type="hidden" name="reload" value="../mod_doc_acquisto/mod_inserisci.php?id=" /><?php } ?>
 
 </form>
 </div>
+
+<?php if(!defined('FOLDER_DOC_ACQUISTO')) echo "Se vuoi salvare una copia digitale dei documenti di acquisto richiedi l'attivazione della <a href=\"../mod_basic/\">cartella digitale dedicata</a>."; ?>
+
 </div></body></html>

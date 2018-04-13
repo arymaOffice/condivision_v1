@@ -88,13 +88,13 @@
 			$pagato = '<a href="mod_opera.php?pagato='.$riga['id'].'" class="red msg">NON SALDATO</a>';
 			$tot_imponibile_sospeso += $imponibile;
 			}
-
+			$rifOrdine = (isset($riga['ordine_id']) && $riga['ordine_id'] != '') ? '<br>Rif. Ordine: '.$riga['ordine_id'] : '';
 
 			echo "<tr>"; 
 		
 			echo "<td $colore><span class=\"Gletter\"></span></td>";
 			echo "<td><span class=\"msg green\">".$tipo_doc_acquisto[$riga['tipo_doc_acquisto']]."</span><h2 style=\"margin: 0; padding: 0; font-size: 200%;\">".$riga['numero_documento']." </h2>".mydate($riga['data_documento'])."</td>"; 
-			echo "<td>".substr($riga['ragione_sociale'],0,50)."</td>";
+			echo "<td>".substr($riga['ragione_sociale'],0,50)." $rifOrdine </td>";
 						echo "<td>".$riga['numero_documento']."</td>";
 
 			echo "<td><span class=\"printonly\">".strip_tags($riga['oggetto_documento'])."</span><input type=\"text\" value=\"".strip_tags($riga['oggetto_documento'])."\" name=\"oggetto_documento\" class=\"updateField hideMobile\" data-rel=\"".$riga['id']."\" />
@@ -102,7 +102,9 @@
 			echo "<td>".$valuta[$riga['valuta']]." ".numdec($riga['imponibile'],2)."</td>";
 			echo "<td>".$valuta[$riga['valuta']]." ".numdec($riga['iva'],2)."</td>";
 			echo "<td>".$valuta[$riga['valuta']]." ".numdec($totale_documento,2)."</td>";
-			echo "<td><a href=\"mod_inserisci.php?external&action=1&amp;id=".$riga['id']."\" title=\"Dettaglio movimentazione\"> <i class=\"fa fa-search\"></i> </a></td>";
+			echo "<td><a href=\"mod_inserisci.php?external&action=1&amp;id=".$riga['id']."\" title=\"Dettaglio Documento\"> <i class=\"fa fa-pencil\"></i> </a>";
+			if(defined('MAGAZZINO')) echo "<a href=\"../mod_giacenze/mod_load.php?dettagli=".$riga['numero_documento']." del ".mydate($riga['data_documento'])."&parent_id=".$riga['id']."&ordine_id=".$riga['ordine_id']."\" title=\"Dettaglio Voci\"> <i class=\"fa fa-cubes\"></i> </a>";
+			echo "</td>";
 			echo "<td>$delete</td>"; 
 		    echo "</tr>"; 
 

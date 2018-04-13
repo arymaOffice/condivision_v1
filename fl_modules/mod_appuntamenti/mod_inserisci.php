@@ -5,7 +5,7 @@ include('fl_settings.php'); // Variabili Modulo
 
 include("../../fl_inc/headers.php");
 if(!isset($_GET['goto'])) include("../../fl_inc/testata_mobile.php");
-
+$id = check($_GET['id']);
 
 ?>
 
@@ -73,8 +73,8 @@ $status = '<span '.$colore.'>'.@$status_potential[$potential['status_potential']
 $telefono = phone_format($potential['telefono'],'39');
 $social = ' <span class="social_icons" style= "font-size: 100%;"><a href="https://www.linkedin.com/commonSearch?type=people&keywords='.$potential['nome'].'%20'.$potential['cognome'].'" target="_blank" title="Cerca questo contatto su Linkedin"><i class="fa fa-linkedin-square"></i></a>
 <a href="https://www.facebook.com/search/top/?q='.$potential['nome'].'%20'.$potential['cognome'].'&init=mag_glass"  target="_blank" title="Cerca questo contatto su Facebook"><i class="fa fa-facebook-square"></i></a>
-<a href="https://twitter.com/search?q='.$potential['nome'].'%20'.$potential['cognome'].'&src=typd"  target="_blank" title="Cerca questo contatto su Twitter"><i class="fa fa-twitter-square"></i></a>
-</span>';
+<a href="https://twitter.com/search?q='.$potential['nome'].'%20'.$potential['cognome'].'&src=typd"  target="_blank" title="Cerca questo contatto su Twitter"><i class="fa fa-twitter-square"></i></a>';
+echo '</span>';
 echo '<div class="info_dati"><h1 style="display: inline-block; margin: 0 0 5px;"><strong><a href="../mod_leads/mod_inserisci.php?id='.$potential['id'].'">'.$potential['nome'].' '.$potential['cognome'].' [Vai a scheda contatto]</a></strong></h1> ';
 echo '<p style="margin: 5px 0px;"><i class="fa fa-phone" style="padding: 3px;"></i> <a href="tel:'.@$telefono.'" class="setAction" style="color: black;" data-gtx="'.base64_encode($tab_id).'" data-id="'.base64_encode($potential['id']).'" data-azione="2"  data-esito="2" data-note="Avvio Chiamata">'.@$telefono.'</a> <i class="fa fa-envelope-o" style="padding: 3px;"></i> <a style="color: black;" href="mailto:'.@$potential['email'].'" class="setAction" data-gtx="'.base64_encode($tab_id).'" data-id="'.base64_encode($potential['id']).'" data-azione="3"  data-esito="5"  data-note="Avvio Composizione Email">'.@$potential['email'].'</a></p>';
 echo $status.$social;
@@ -87,7 +87,7 @@ echo '<textarea cols="3" name="note" class="updateField" id="noteRisalto" placeh
 
 <?php 
 
-$id = check($_GET['id']);
+
 if($id > 1) {
 	$appuntamento = GRD($tabella,$id);
 	if($appuntamento['tipologia_appuntamento'] == 122) {
@@ -114,7 +114,11 @@ if($id > 1) {
 <?php if(check($_GET['id']) == 1 && !isset($_GET['potential_rel'])) { echo '<input type="hidden" name="function" value="creaLeadDaAppuntamento" />'; 
 
 } else {
-echo "<a  href=\"../mod_basic/action_elimina.php?POST_BACK_PAGE=../mod_appuntamenti/&gtx=$tab_id&amp;unset=".$id."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i> Elimina </a>";
+	
+if($id > 1) $appuntamento = GRD($tabella,$id);
+if($id > 1) $add_calendar = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Appuntamento con: '.$potential['nome'].' '.$potential['cognome'].'&location='.$meeting_location[$appuntamento['meeting_location']].'&details=Trovi questo appuntamento anche sul CRM&dates='.substr(str_replace('-','',$appuntamento['start_meeting']),0,8).'T'.substr(str_replace(':','',$appuntamento['start_meeting']),11,8).'/'.substr(str_replace('-','',$appuntamento['start_meeting']),0,8).'T'.substr(str_replace(':','',$appuntamento['start_meeting']),11,8).'&sf=true&pli=1';
+if($id > 1) echo '<a target="_blank" href="'.$add_calendar.'" style="color: green;"><i class="fa fa-calendar-check-o"></i> Aggiungi a Google </a>';
+if($id > 1) echo "<a  href=\"../mod_basic/action_elimina.php?POST_BACK_PAGE=../mod_appuntamenti/&gtx=$tab_id&amp;unset=".$id."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i> Elimina </a>";
 
 }
 

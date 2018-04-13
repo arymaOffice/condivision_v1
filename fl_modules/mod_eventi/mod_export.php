@@ -5,7 +5,7 @@ include('fl_settings.php');
 
 
 $monthSelected = (isset($_GET['mese_evento'])) ? $_GET['mese_evento'] : date('n');
-$tipologia_main = gwhere($campi,'','','id','',0,0);//Imposta i filtri della query prendendo i dati GET e se sono tra i filtri li applica
+$tipologia_main = gwhere($campi,' AND stato_evento != 4','','id','',0,0);//Imposta i filtri della query prendendo i dati GET e se sono tra i filtri li applica
 $anno = array(2017,2018,2019,2020,2021,2022,2023,2024);
 $annoSelected = (isset($_GET['anno'])) ? check($_GET['anno']) : date('Y') ;
 if(isset($_GET['anno'])) $_SESSION['security'] = $annoSelected;
@@ -136,7 +136,7 @@ $sheet->fromArray($valore, NULL, 'A'.$highestRow);
 
 $objPHPExcel->setActiveSheetIndex(0);
 $name = ($name != '') ? $name :  __FILE__;
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'HTML');
 
 if($return == 'source'){
 // Redirect output to a client’s web browser (Excel2007)

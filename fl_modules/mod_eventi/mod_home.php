@@ -2,7 +2,6 @@
 
 
 	$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']; 
-
      	
 	$tipologia_main = gwhere($campi,'WHERE id != 1 AND stato_evento != 4','','id','',0,0);//Imposta i filtri della query prendendo i dati GET e se sono tra i filtri li applica
 	$query = "SELECT * FROM `".$tabella."` ".$tipologia_main;

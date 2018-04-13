@@ -91,8 +91,10 @@ $annoSelected = (isset($_GET['anno'])) ? check($_GET['anno']) : date('Y') ;
 	</ul>	
 
 <div><?php
+
 foreach ($colors as $key => $value) {
-			$totTipo = mk_count('fl_eventi_hrc',' stato_evento != 4 AND tipo_evento = \''.$key.'\' AND (YEAR(data_evento) = '.$annoSelected.') ');  
+			$locationFilter = (isset($_GET['location_evento'])) ? ' AND location_evento = '.check($_GET['location_evento']): '';
+			$totTipo = mk_count('fl_eventi_hrc',' stato_evento != 4 AND tipo_evento = \''.$key.'\' AND (YEAR(data_evento) = '.$annoSelected.') '.$locationFilter);  
 			if($key > 0)  echo '<a href="./?'.$_SERVER['QUERY_STRING'].'&tipo_evento='.$key.'" style="color: white;"><span class="msg" style="background: '.$colors[$key]. '">'.$tipo_evento[$key].' ('.$totTipo.')</span></a>';
 	}
 
@@ -108,15 +110,14 @@ $periodColors = array();
 $periodColors[101] = '#FF00FF';
 $periodColors[102] = '#0066FF';
 $year = $annoSelected;
+$dayColor = 0;
 foreach ($mese as $key => $value) {
 
 $list=array();
 $month = $key;
 
 $tot = mk_count('fl_eventi_hrc',' (MONTH(data_evento) ='. $month.' AND YEAR(data_evento) = '.$year.') '.$tipologia_main );  
-echo '<div class="box" style="min-height: 700px; float: left; width: 8%; margin: 0 2px 4px 0; padding: 0px;"><h2>'. $value.' <span style="font-size: 12px;">('.$tot.')</span></h2><table style="width: 100%;">';	
-
-
+echo '<div class="box planningBox"><h2>'. $value.' <span style="font-size: 12px;">('.$tot.')</span></h2><table style="width: 100%;">';	
 $maxDays = cal_days_in_month (CAL_GREGORIAN, $month ,$year );
 
 for($d=1; $d<=31; $d++)
@@ -125,38 +126,81 @@ for($d=1; $d<=31; $d++)
     if (date('m', $time)==$month)      
     $dayWeek = date('w', $time);
 	$red = ($dayWeek == 0) ? 'c-red' : '';
-	$eventiDelGiorno = GQS('fl_eventi_hrc','numero_adulti,numero_bambini,stato_evento,ambienti,id,titolo_ricorrenza,data_evento,tipo_evento,periodo_evento',' data_evento BETWEEN \''.date('Y-m-d', $time).' 00:00:00\' AND \''.date('Y-m-d', $time).' 23:59:59\''.$tipologia_main );
+	$ambientiSelect = (defined('MULTI_AMBIENTE')) ? ',ambiente_principale,ambiente_1,ambiente_2,notturno' : '';
+	$eventiDelGiorno = GQS('fl_eventi_hrc','data_creazione,lead_id,numero_adulti,numero_bambini,numero_operatori,stato_evento,ambienti,id,titolo_ricorrenza,data_evento,tipo_evento,periodo_evento '.$ambientiSelect,' data_evento BETWEEN \''.date('Y-m-d', $time).' 00:00:00\' AND \''.date('Y-m-d', $time).' 23:59:59\''.$tipologia_main );
 	$eventi = '';
 	$totaleOspiti = 0;
 
 	foreach ($eventiDelGiorno as $key => $value) {
 
 		if($value['id'] > 1 ) {
-			$totaleOspiti += ($value['numero_adulti']+$value['numero_bambini']);
 			
+			$totaleOspiti += ($value['numero_adulti']+$value['numero_bambini']+$value['numero_operatori']);
+			$ambiente = '';
+
 			if(!isset($_GET['totaleOspiti'])) {
+			if(defined('MULTI_AMBIENTE')) { 
+			$ambiente .= 'Sala: ' . $ambiente_principale[$value['ambiente_principale']];
+			if(isset($value['ambiente_1']) && $value['ambiente_1'] > 1) $ambiente .= ', '. $ambiente_principale[$value['ambiente_1']];
+			if(isset($value['ambiente_2']) && $value['ambiente_2'] > 1) $ambiente .= ', '. $ambiente_principale[$value['ambiente_2']];
+			if(isset($value['notturno']) && $value['notturno'] > 1) $ambiente .= ', '. $ambiente_principale[$value['notturno']];
+			if(isset($value['cerimonia']) && $value['cerimonia'] > 1) $ambiente .= ' Cerimonia: '.$ambiente_principale[$value['cerimonia']];
+			} else {
+			$ambientia = explode(',',$value['ambienti']);
+			foreach ($ambientia as $a => $ambi) { $ambiente .= ' '.$ambienti[$ambi];	}
+			}
 
 			$data_split = explode(' ',$value['data_evento']);
 			$times = substr($data_split[1],0,2);
-			$ambientia = explode(',',$value['ambienti']);
-			$ambiente = '';
 			$stato_evento  = ($value['stato_evento'] < 2) ? 'border: red solid 2px;' : '';
 			$titolo_ricorrenza = explode('-',$value['titolo_ricorrenza']);
 			$titolo_ricorrenza = trim(substr(html_entity_decode(str_replace('Matrimonio ','',$titolo_ricorrenza[0])),0,11));
 			$colore = ($value['stato_evento'] > 2) ? $colors['-1'] : $colors[@$value['tipo_evento']];
 
 			if($titolo_ricorrenza == '') $titolo_ricorrenza = 'Senza nome';
-			foreach ($ambientia as $a => $ambi) { $ambiente .= $ambienti[$ambi];	}
 			if($value['stato_evento'] > 2) $ambiente = 'ANNULLATO';
+			$openLink = './mod_inserisci.php?id='.$value['id'].'';
+			$colorePeriodo = $periodColors[$value['periodo_evento']];
+			
+			if(isset($_GET['definizioneMenu'])) {
+				$colorePeriodo = $colore;
 
-			$eventi .= '<div><span style="background: '.$periodColors[$value['periodo_evento']].'; margin: 0; width: 10px; height: 10px;">&nbsp;</span>
-			<span style="display: inline-block; width: 90%;  color: white; padding: 2px; background: '.$colore.'; '.$stato_evento.'" title="'.$ambiente.'"><a href="./mod_inserisci.php?id='.$value['id'].'" style="color: white;"> '.$titolo_ricorrenza.'</a></span></div>';
+				$colore ='gray';
+				$schedaWedding = GQD('fl_ricorrenze_matrimonio','id,evento_id',' evento_id = '.$value['id']);
+				$schedaWeddingId = ($schedaWedding['id'] > 1) ? $schedaWedding['id'] : '1&auto';
+				$openLink = 'mod_scheda_servizio.php?evento_id='.$value['id'].'&tipo_evento='.$value['tipo_evento'].'&id='.$schedaWeddingId;
+				
+				$appTo = GQD('fl_appuntamenti','id, start_meeting','potential_rel > 1 AND start_meeting > \''.$value['data_creazione'].'\' AND  id > 1 AND tipologia_appuntamento = 124 AND potential_rel = '.$value['lead_id']);
+				if($value['lead_id'] > 1 && isset($appTo['start_meeting'])) {
+				$ambiente = 'Appuntamento per le: '.mydatetime($appTo['start_meeting']).' '.$ambiente;
+				$colore ='orange';
+				} else if($value['lead_id'] > 1) {
+				$openLink = '../mod_leads/mod_inserisci.php?id='.$value['lead_id']; //'../mod_appuntamenti/?NO_BACK_PAGE=0&action=23&a=crm&b=crm&tipologia_appuntamento=124&potential_rel='.$value['lead_id'];
+				} else {
+				$openLink = './mod_inserisci.php?id='.$value['id'].'';
+				$colore = 'red';
+				}
+				
+				$menu = mk_count('fl_menu_portate','id != 1 AND evento_id = '.$value['id']);
+				$menuConfermati = mk_count('fl_menu_portate','id != 1 AND confermato = 1 AND evento_id = '.$value['id']);
+				if($menu > 0 && $menu == $menuConfermati) { $colore ='green'; }
+				$ambiente  .= ' Confermati '.$menuConfermati.'/'.$menu.' menù ';
+			}
+
+			$eventi .= '<div class="eventoInPlan"><span style="background: '.$colorePeriodo.'; margin: 0; width: 10px; height: 10px;">&nbsp;</span>
+			<span style="display: inline-block; width: 90%;  color: white; padding: 2px; background: '.$colore.'; '.$stato_evento.'" title="'.$ambiente.'"><a href="'.$openLink.'" style="color: white;"> '.$titolo_ricorrenza.'</a></span></div>';
 			} else { $eventi = '<h2 class="msg gray">'.$totaleOspiti.'</h2>'; }
 
 
 		}
 	}
-    if($d <= $maxDays) echo '<tr><td>'.date('j', $time).' </td><td class="'.$red.'">'.$gsett[$dayWeek].'</td><td>'.$eventi.'</td></tr>';
+    if($d <= $maxDays) echo '<tr>
+    	<td class="'.$red.' day'.$dayColor.'">'.date('j', $time).' </td>
+    	<td class="'.$red.' day'.$dayColor.'" >'.$gsett[$dayWeek].'</td>
+    	<td class="day'.$dayColor.' eventoName">'.$eventi.'</td>
+    	</tr>';
+
+	$dayColor = ($dayColor == 0) ? 1 : 0;
 }
 //echo "<pre>";
 //print_r($list);
@@ -169,3 +213,12 @@ echo '</table></div>';
 
 
 ?>
+
+<style type="text/css">
+	.planningBox { min-height: 1000px; float: left; width: 8.2%; margin: 0 2px 4px 0; padding: 0px;  }
+	.eventoInPlan { margin: 2px 0; } 
+	.eventoName { min-width: 80%; }
+	.day1 { background: #e3e0de; }
+	tr,td { border: 0; border-spacing: 0; border-collapse: collapse; }
+	
+</style>

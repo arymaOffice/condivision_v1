@@ -23,8 +23,7 @@
 	//$tab_div_labels = array('id'=>"Dettagli",'oggetto'=>"Richiesta",'../mod_dms/uploader.php?PiD='.base64_encode(FOLDER_ATTIVAZIONI).'&workflow_id='.$tab_id.'&NAme[]=Allegati&record_id=[*ID*]'=>'Allegati');
 
 	$evento_filter = (isset($_GET['evento_id'])) ? ' AND evento_id = '.check($_GET['evento_id']) : ' AND evento_id = 0';
-	
-
+	if(isset($_GET['eventiAll'])) $evento_filter = ' AND evento_id != 0 ';
 	
 	//$module_title = 'Madre di tutti i moduli'; //Titolo del modulo
 	//$new_button = '';  //Solo se la funzione new richiede un link diverso da quello standard  

@@ -18,16 +18,15 @@ include("../../fl_inc/headers.php");
 
 <?php
 	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,0);
-	$query = "SELECT $select FROM `$tabella` $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
+	$query = "SELECT $select FROM `$tabella` $tipologia_main ORDER BY $ordine;";
 	$risultato = mysql_query($query, CONNECT);
 	
 
-	/*echo '<a target="_parent" href="../mod_menu_portate/?evento_id='.check($_GET['evento_id']).'">
+	if(defined('MULTI_MENU')) { echo '<a target="_parent" href="../mod_menu_portate/?evento_id='.check($_GET['evento_id']).'">
 	<h1 style="font-size: 200%;"><i class="fa fa-sticky-note" aria-hidden="true"></i></h1>
 	Crea o gestisci i Menù</a>';
-
-	<a  href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a></td>"; 
-	*/
+	}
+	
 
 ?>
 
@@ -35,9 +34,11 @@ include("../../fl_inc/headers.php");
   <tr>
     <th></th>
     <th>Descrizione del Menù</th>
-    <th>Portate Selezionate</th>
-    <th>Prezzo</th>
-    <th>Creato il</th>
+    <th>Food Cost</th>
+    <th>Prezzo Vendita</th>
+    <th>Ultimo Aggiornamento</th>
+    <th>Riepilogo</th>
+    <th>Fabbisogno</th>
     <th></th>
   </tr>
   <?php 
@@ -49,16 +50,19 @@ include("../../fl_inc/headers.php");
 	
 	$attivo = ($riga['confermato'] == 0) ? 'tab_orange' : 'tab_green';
 	$statusMenu = @$stato_menu_portate[$riga['stato_menu_portate']];
-
+	$confermato = ($riga['confermato'] == 0) ? '<span class="msg orange"><a href="mod_opera.php?conferma='.$riga['id'].'" onclick="return conferma(\'Confermare menù?\');"">Da Confermare</a></span>' : '<span class="msg green">Confermato</span>';
+	$bolla = (defined('MULTI_LOCATION')) ? "<a data-fancybox-type=\"iframe\" class=\"facyboxParent\" href=\"./mod_bolla.php?preview&evento_id=".$riga['evento_id']."&menuId=".$riga['id']."\" title=\"Bolla\" > <i class=\"fa fa fa-truck\" aria-hidden=\"true\"></i></a>" : '';
 			echo "<tr>"; 				
 			echo "<td class=\"$attivo\"></td>";
-			echo "<td>".$riga['descrizione_menu']."</td>";	
-			echo "<td>--</td>";	
-			echo "<td>".$riga['prezzo_base']."</td>";	
-			echo "<td>".mydate($riga['data_creazione'])."</td>";
+			echo "<td>".$riga['descrizione_menu']." $confermato<br>$statusMenu</td>";	
+			echo "<td>&euro; ".@$riga['food_cost']."</td>";	
+			echo "<td>&euro; ".@$riga['prezzo_base']."</td>";	
+			echo "<td>".mydatetime($riga['data_aggiornamento'])."</td>";
+			echo "<td><a data-fancybox-type=\"iframe\" class=\"facyboxParent\" href=\"./mod_configura.php?preview&evento_id=".$riga['evento_id']."&menuId=".$riga['id']."\" title=\"Ripilogo e Configurazione\" > <i class=\"fa fa-clipboard\" aria-hidden=\"true\"></i></a>$bolla</td>";
+			echo "<td><a data-fancybox-type=\"iframe\" class=\"facyboxParent\" href=\"./mod_fabbisogno.php?evento_id=".$riga['evento_id']."&menuId=".$riga['id']."\" title=\"Calcola Fabbisogno\" > <i class=\"fa fa-cart-plus\" aria-hidden=\"true\"></i></a></td>";
 			echo "<td>
 			<a href=\"".ROOT.$cp_admin."fl_app/MenuElegance/?menuId=".$riga['id']."&eventoId=$evento_id&schedaId=$schedaId\" title=\"Componi Menu\" target=\"_parent\"><i class=\"fa fa-cutlery\" aria-hidden=\"true\"></i></a>
-			<a data-fancybox-type=\"iframe\" class=\"facyboxParent\" href=\"mod_stampa.php?menuId=".$riga['id']."\" title=\"Stampa Menu\" ><i class=\"fa fa-print\" aria-hidden=\"true\"></i></a>";
+			<a data-fancybox-type=\"iframe\" class=\"facyboxParent\" href=\"mod_stampa.php?menuId=".$riga['id']."&evento_id=$evento_id\" title=\"Stampa Menu\" ><i class=\"fa fa-print\" aria-hidden=\"true\"></i></a>";
 		    echo "</tr>";
 	}
 
@@ -68,4 +72,4 @@ include("../../fl_inc/headers.php");
 ?>
 </table>
 
-<?php $start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,0); ?>
+<p>NB: Dopo la definizione del menù o qualsiasi modifica apportata il menù va confermato. Clicca su "Da Confermare" per procedere.</p>

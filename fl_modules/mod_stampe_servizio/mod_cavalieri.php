@@ -52,11 +52,12 @@ if(!isset($_GET['backtop'])) {
 					<tr><td></td> <td><input type="number" value="5" name="backbottom" style="width: 50px;"></td> <td></td></tr>
 				</table>
 				<input type="radio" id="formatoP" name="formato" value="P" checked="checked"><label for="formatoP">Portrait</label>
-
 				<input type="radio" id="formatoL" name="formato" value="L"><label for="formatoL">Landscape</label>
+
 				 font: <input type="number" name="fontsize" value="18" style="width: 60px"  >
 				<input type="hidden" name="evento_id" value="<?php echo $evento_id; ?>">
-				<input type="checkbox" name="printAll" value="1" style="display: inline-block;" > Stampa tutti
+				<label><input type="checkbox" name="printAll" value="1" style="display: inline-block;" > Stampa tutti</label>
+				<label><input type="checkbox" name="soloNumero" value="1" style="display: inline-block;" > Solo numero </label>
 
 				<select name="font">
 				<option>Calibri</option>
@@ -125,7 +126,8 @@ if(!isset($_GET['backtop'])) {
 
 
 		$id_tavolo = $riga['id'];
-		$table_name = urldecode(strtoupper($riga['nome_tavolo']))." ".$riga['numero_tavolo_utente']."<br>".$riga['nome_tavolo_utente'];
+		$nomeTavolo = (isset($_GET['soloNumero'])) ? '' : urldecode(strtoupper($riga['nome_tavolo']));
+		$table_name = $nomeTavolo.$riga['numero_tavolo_utente']."<br>".$riga['nome_tavolo_utente'];
 		$a = $b = $s = $h = 0;
 		$guests_list = '';
 		$total_guests = '';

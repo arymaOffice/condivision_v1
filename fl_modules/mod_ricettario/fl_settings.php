@@ -48,12 +48,12 @@
 	
 	/*Impostazione automatica da tabella */
 	$campi = gcolums($tabella); //Ritorna i campi della tabella
-	$tipologia_main = gwhere($campi,'WHERE id != 1 ','');//Imposta i filtri della query prendendo i dati GET e se sono tra i filtri li applica
-
+	$tipologia_main = gwhere($campi,'WHERE id != 1  ','');//Imposta i filtri della query prendendo i dati GET e se sono tra i filtri li applica
+	$tipologia_main .= (isset($_GET['varianti'])) ? ' AND variante = 1 ' : ' AND variante = 0 ';
 	
 	//Filtri di base (da strutturare quelli avanzati)
 	$basic_filters = array('attivo','portata','categoria_ricetta','famiglia_ricetta','nome');
-	$ordine_mod = array("id DESC"); // Tipologie di ordinamento disponobili 
+	$ordine_mod = array("portata ASC, priorita ASC"); // Tipologie di ordinamento disponobili 
 	$ordine = $ordine_mod[0];
   
  
@@ -69,24 +69,27 @@
 	require_once('../../fl_core/dataset/array_statiche.php'); // Liste di valori statiche
 	require('../../fl_core/class/ARY_dataInterface.class.php'); //Classe di gestione dei dati 
 	$data_set = new ARY_dataInterface();
+	$proprietario  = $data_set->data_retriever('fl_account','nominativo',"WHERE id != 1 ",'nominativo ASC');
 	$tipo_materia = $data_set->get_items_key("tipo_materia");//Crea un array con gli elementi figli dell'elemento con tag X1	
 	$semilavorato_id  = $data_set->data_retriever('fl_ricettario','nome',"WHERE id != 1 AND portata = 8 ",'nome ASC');
 	$categoria_materia = $data_set->get_items_key("categoria_materia");//Crea un array con gli elementi figli dell'elemento con tag X1	
-	$categoria_ricetta = $data_set->get_items_key("categoria_ricetta");//Crea un array con gli elementi figli dell'elemento con tag X1	
+	//$categoria_ricetta = $data_set->get_items_key("categoria_ricetta");//Crea un array con gli elementi figli dell'elemento con tag X1	
 	$famiglia_ricetta = $data_set->data_retriever('fl_cg_res','codice,label','WHERE  attivo = 1 AND parent_id = 0 AND tipo_voce = 1','id ASC');
 	$tipo_servizio_evento = $data_set->get_items_key("tipo_servizio_evento");
 	$tipo_ricetta = array('Ricetta','Ricetta Componibile','Torta Componibile','Buffet','Set Componibile');
+	$categoria_ricetta = $data_set->data_retriever('fl_ricettario_categorie','codice_categoria,descrizione','WHERE id > 1 ','codice_categoria ASC');
+	$materiaprima_id = $data_set->data_retriever('fl_materieprime','codice_articolo,descrizione',' WHERE id != 1 AND tipo_materia = 112','categoria_materia ASC,descrizione ASC'); //Crea un array con i valori X2 della tabella X1
 
 	/*Funzione di merda per gestione dei campi da standardizzare in una classe e legare ad al DB o XML config*/	
 	function select_type($who){
 	
 	$textareas = array('note','preparazione','cottura','presentazione','servizio'); 
-	$select = array('tipo_ricetta','portata','tipo_materia','categoria_materia','unita_di_misura','tipo_servizio_evento');
+	$select = array('portata','tipo_ricetta','tipo_materia','categoria_ricetta','unita_di_misura','tipo_servizio_evento');
 	$select_text = array();
 	$disabled = array('revisione');
-	$hidden = array('anagrafica_id','marchio','operatore','data_creazione','data_aggiornamento');
-	$radio  = array('attivo');	
-	$selectbtn  = array('categoria_ricetta');
+	$hidden = array('merce_collegata','food_cost','priorita','prezzo_vendita','anagrafica_id','marchio','operatore','data_creazione','data_aggiornamento');
+	$radio  = array('variante','attivo');	
+	$selectbtn  = array();
 	$multi_selection  = array('famiglia_ricetta');	
 	$calendario = array();	
 	$file = array();
@@ -115,6 +118,6 @@
 			$action = (isset($_GET['action'])) ? '&action='.check($_GET['action']) : "";
 			$module_menu .= "<li $selected><a href=\"./?portata=$valores$action\">".ucfirst($label)."</a></li>\r\n"; 
 		 }
-	    //$module_menu .= '<li><a href="../../fl_app/MenuElegance/">Componi Menu</a></li>'; 
+	    $module_menu .= '<li><a href="./?varianti">Varianti</a></li>'; 
 
 ?>

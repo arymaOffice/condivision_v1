@@ -6,6 +6,7 @@
 	$module_title = $parametri_modulo['label'];
 	$permesso    = $parametri_modulo['permesso'];
 	$tab_id   = $tab_parent_id   = $parametri_modulo['tab_id'];
+	if(isset($_GET['formatoTab'])) $tab_id  = 116;
 	$tabella     = $tables[$tab_id];
 	$select      = "*";
 	$ordine      = $parametri_modulo['ordine_predefinito']; 
@@ -31,7 +32,7 @@
 	//$new_button = '';  //Solo se la funzione new richiede un link diverso da quello standard  
     $module_menu = '
     <li><a href="../mod_materieprime/">Anagrafica</a></li>
-    <li><a href="../mod_giacenze/">Giacenza</a></li>
+    <li><a href="../mod_materieprime/?action=24">Giacenza</a></li>
     <li><a href="../mod_giacenze/intro.php">Movimenti</a></li>'; //Menu del modulo
 
 
@@ -64,26 +65,26 @@
 	require_once('../../fl_core/dataset/array_statiche.php'); // Liste di valori statiche
 	require('../../fl_core/class/ARY_dataInterface.class.php'); //Classe di gestione dei dati 
 	$data_set = new ARY_dataInterface();
-    $fornitore = $anagrafica_id = $anagrafica_id2 = $data_set->data_retriever('fl_anagrafica','ragione_sociale','WHERE tipo_profilo = 3'); //Crea un array con i valori X2 della tabella X1
+    $fornitore = $anagrafica_id = $anagrafica_id2 = $data_set->data_retriever('fl_anagrafica','ragione_sociale','WHERE tipo_profilo = 3',' ragione_sociale ASC'); //Crea un array con i valori X2 della tabella X1
 	$tipo_materia = $data_set->get_items_key("tipo_materia");//Crea un array con gli elementi figli dell'elemento con tag 
 	$magazzino_base = $data_set->data_retriever('fl_magazzino_anagrafica','codice_magazzino,descrizione','WHERE id > 1 ','codice_magazzino ASC ');
-	$categoria_materia = $data_set->data_retriever($tabella,'categoria_materia','WHERE id > 1 GROUP BY categoria_materia ','categoria_materia ASC ');
-	
-
+	if($tab_id != 116) $categoria_materia = $data_set->data_retriever($tabella,'categoria_materia','WHERE id > 1 GROUP BY categoria_materia ','categoria_materia ASC ');
+	$aggancia_semilavorato = $data_set->data_retriever('fl_ricettario','codice_portata,nome','WHERE id > 1 AND portata = 0','codice_portata ASC, nome ASC ');
+	$unita_di_misura_formato = array('KG'=>'KG','LT'=>'LT','PZ'=>'PZ','BT'=>'BT','CT'=>'CT','CF'=>'CF','PT'=>'PT');
 	/*Funzione di merda per gestione dei campi da standardizzare in una classe e legare ad al DB o XML config*/	
 	function select_type($who){
 	
 	$textareas = array(); 
-	$select = array('categoria_materia','tipo_materia','magazzino_base','anagrafica_id','anagrafica_id2');
-	$select_text = array();
-	$disabled = array();
-	$hidden = array('marchio','operatore','data_creazione','data_aggiornamento');
+	$select = array('fornitore','aggancia_semilavorato','tipo_materia','magazzino_base','anagrafica_id','anagrafica_id2');
+	$select_text = array('categoria_materia');
+	$disabled = array('id_materia');
+	$hidden = array('marchio','operatore','data_creazione','data_aggiornamento','importaz_um','anagrafica_id2');
 	$radio  = array('attivo');	
-	$selectbtn  = array('unita_di_misura');
+	$selectbtn  = array('unita_di_misura_formato','unita_di_misura');
 	$multi_selection  = array();	
-	$calendario = array();	
+	$calendario = array('data_validita','data_scadenza');	
 	$file = array();
-	
+	//if(check($_GET['id']) > 1 && $tab_id != 116) $hidden[] = 'formato';
 	
 	$type = 1; // Default input text
 	

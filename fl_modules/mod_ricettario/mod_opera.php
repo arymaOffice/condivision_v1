@@ -22,8 +22,8 @@ $scarto = (isset($_POST['scarto'])) ? check($_POST['scarto']) : 0;
 $note = (isset($_POST['note'])) ? check($_POST['note']) : '';
 $secquenza = (isset($_POST['secquenza'])) ? check($_POST['secquenza']) : 0;
 
-$sql = "INSERT INTO `fl_ricettario_diba` (`id`, `ricetta_id`, `materiaprima_id`,`semilavorato_id`, `quantita`, `scarto`, `nota`, `sequenza`) 
-VALUES (NULL, '$ricetta_id', '$materiaprima_id',  '$semilavorato_id', '$quantita', '$scarto', '$note', '$secquenza');";
+$sql = "INSERT INTO `fl_ricettario_diba` (`id`, `ricetta_id`, `materiaprima_id`,`semilavorato_id`, `quantita`, `scarto`,`netto`, `nota`, `sequenza`) 
+VALUES (NULL, '$ricetta_id', '$materiaprima_id',  '$semilavorato_id', '$quantita', '$scarto', '$quantita', '$note', '$secquenza');";
 mysql_query($sql);
 
 $sql = "UPDATE $tabella SET data_aggiornamento = NOW(), operatore = ".$_SESSION['number']." WHERE id = $ricetta_id LIMIT 1";
@@ -31,7 +31,7 @@ mysql_query($sql);
 
 
 mysql_close(CONNECT);
-header("Location: ".$_SERVER['HTTP_REFERER']); 
+header("Location: ".$_SERVER['HTTP_REFERER'].'#addIngrediente'); 
 exit;
 
 

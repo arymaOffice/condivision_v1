@@ -3,17 +3,7 @@
 // Controllo Login
 session_start(); 
 if(!isset($_SESSION['user'])){ header("Location: ../../login.php"); exit; }
-require($_SERVER['DOCUMENT_ROOT'].'/fl_core/core.php'); 
-
-
-if(isset($_GET['updateStato'])){ //aggiorna stato anagrafica
-    $_SESSION['anagrafica_attiva'] = 1;
-    $update = "UPDATE  `fl_anagrafica` set attivo = 1 WHERE id = ".$_SESSION['anagrafica'];
-    $update = mysql_query($update,CONNECT);
-
-    $_SESSION['scelta_abbonamento'] = 1;
-    //redirect scelta abbonamento
-}
+require('../../fl_core/settings.php'); 
 
 if(isset($_GET['new'])) {
 

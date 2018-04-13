@@ -37,7 +37,7 @@
 	require('../../fl_core/class/ARY_dataInterface.class.php');
 	$data_set = new ARY_dataInterface();
     $categoria_prodotto = $data_set->data_retriever('fl_cat_prodotti','label','WHERE id > 1 ','label ASC');
-
+    $produttore = $data_set->get_items_key('produttore');
 
 		
 	function select_type($who){

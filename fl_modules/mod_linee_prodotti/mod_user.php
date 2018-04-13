@@ -70,12 +70,12 @@ $(".smartSelect").change(function(e){
     if(remove == 0 && data_qty == 1) {
     	data_qty = prompt("Vuoi specificare una quantità?", data_qty);
     	$("label[for='prodotto"+data_rel+"'] > span").html(prezzo_base*data_qty+' ('+data_qty+'x'+prezzo_base+')');
-    } 
+    }
 
     if(remove == 0 && data_note == 1) {
     	data_note = prompt("Vuoi aggiungere delle note?", '');
     	$("label[for='prodotto"+data_rel+"'] > div").html('<br>'+data_note);
-    } 
+    } else { data_note = ''; }
 
 
 	$.ajax({
@@ -122,7 +122,7 @@ $(".smartSelect").change(function(e){
   			echo "</div>";
 
 			
-			$query2 = "SELECT label,id,prezzo_base,prezzo_variabile,quantita_variabile,richiedi_note FROM `fl_prodotti` WHERE prodotto_id = ".$riga['id'];
+			$query2 = "SELECT label,id,prezzo_base,prezzo_variabile,quantita_variabile,richiedi_note,produttore FROM `fl_prodotti` WHERE prodotto_id = ".$riga['id'];
 			$risultato2 = mysql_query($query2, CONNECT);
 			if(mysql_affected_rows() < 1) echo "Nessun elemento inserito!";
 			
@@ -133,8 +133,8 @@ $(".smartSelect").change(function(e){
 					$checked = (isset($isIn['valore'])) ? 'checked' : '';
 
 					$type = 'checkbox' ;
-					
-					echo '<input '.$checked.' class="smartSelect" data-qta="1" data-prezzo="'.$riga2['prezzo_base'].'" data-prezzo-variabile="'.$riga2['prezzo_variabile'].'" data-qty="'.$riga2['quantita_variabile'].'" data-note="'.$riga2['richiedi_note'].'"  data-rel="'.$riga2['id'].'" type="'.$type.'" value="'.$riga2['id'].'" id="prodotto'.$riga2['id'].'" name="prodotto'.$riga['id'].'"><label for="prodotto'.$riga2['id'].'">'.$riga2['label'].' &euro; <span id="price'.$riga2['id'].'" class="price-show">'.$riga2['prezzo_base'].'</span><div></div></label>';	
+					$prodottoProduttore = ($riga2['produttore'] > 1) ? '('.$produttore[$riga2['produttore']].')' : '';
+					echo '<input '.$checked.' class="smartSelect" data-qta="1" data-prezzo="'.$riga2['prezzo_base'].'" data-prezzo-variabile="'.$riga2['prezzo_variabile'].'" data-qty="'.$riga2['quantita_variabile'].'" data-note="'.$riga2['richiedi_note'].'"  data-rel="'.$riga2['id'].'" type="'.$type.'" value="'.$riga2['id'].'" id="prodotto'.$riga2['id'].'" name="prodotto'.$riga['id'].'"><label for="prodotto'.$riga2['id'].'">'.$riga2['label'].' '.$prodottoProduttore.' &euro; <span id="price'.$riga2['id'].'" class="price-show">'.$riga2['prezzo_base'].'</span><div></div></label>';	
 	
 			}
 	

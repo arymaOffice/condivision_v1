@@ -2,12 +2,12 @@
 
 require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
-
-if(check($_GET['id']) != 1) {
+$id = check($_GET['id']);
+if($id != 1) {
 	/*Se esite questa array, la scheda modifica viene suddivisa all'occorenza del campo specificato o si possono aggiungere sotto schede */
 	$tab_div_labels['./mod_diba.php?record_id=[*ID*]'] = 'Distinta Base';
 }
-
+$_SESSION['POST_BACK_PAGE'] = $_SESSION['POST_BACK_PAGE'].'#'.$id ;
 include("../../fl_inc/headers.php");
 if(!isset($_GET['backToMenu'])) include("../../fl_inc/testata_mobile.php");
 
@@ -71,7 +71,7 @@ echo $load ;
 <?php if(isset($_GET['esito'])) { $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p class="'.$class.'">'.check($_GET['esito']).'</p>'; }  ?>
 <h1>Scheda</h1>
 <?php   include('../mod_basic/action_estrai.php');  ?>
-<?php if(check($_GET['id']) == 1) { ?><input type="hidden" name="reload" value="../mod_ricettario/mod_inserisci.php?t=<?php echo base64_encode(2); ?>&id=" /><?php } ?>
+<?php if(check($_GET['id']) == 1) { ?><input type="hidden" name="reload" value="../mod_ricettario/mod_inserisci.php?t=<?php echo base64_encode(2); ?>&id=" /><?php } else { echo '<input type="hidden" name="info" value="1" />'; } ?>
 <?php if(isset($_GET['backToMenu'])) { ?><input type="hidden" name="reload" value="<?php echo $_SERVER['HTTP_REFERER']; ?>&id=" /><?php } ?>
 </form>
 

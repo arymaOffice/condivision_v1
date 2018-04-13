@@ -39,11 +39,11 @@ include("../../fl_inc/headers.php");
 
 <input type="number" name="quantita" placeholder="" value="1" style="width: 50px;"  />
 <input type="text" name="importo" placeholder="0.00" value="" style="width: 80px;"  />
-<select name="aliquota" id="aliquota" style="width: 100px;">
+<select name="aliquota" id="aliquota" style="width: 150px;">
  <?php 
               
 		     foreach($aliquote as $valores => $label){ // Recursione Indici di Categoria
-          $selected = (defined('aliquota_default') && aliquota_default == $label) ? ' selected="selected" ' : '';
+          $selected = (defined('aliquota_default') && aliquota_default == substr($label,0,2) ) ? ' selected="selected" ' : '';
 			    echo "<option value=\"$label\" $selected>".ucfirst($label)."</option>\r\n"; 
 		    	}
 		 ?>
@@ -88,7 +88,7 @@ include("../../fl_inc/headers.php");
   $importo = $riga['importo'];
 
   if(defined('importi_lordi')) $imponibile = $riga['importo'];
-  if(defined('importi_lordi')) $importo = @(@$riga['subtotale']/@$riga['quantita']);
+  if(defined('importi_lordi')) $importo = $riga['importo']/$riga['quantita'];
 
 	$tot_imponibile +=  $imponibile;
 	$tot_imposta += $riga['imposta'];

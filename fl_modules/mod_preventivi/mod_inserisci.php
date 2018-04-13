@@ -71,7 +71,7 @@ echo '<p>Tel: <a href="tel:'.@$cellulare.'">'.@$cellulare.'</a><a href="tel:'.@$
 
 <?php  if(isset($_GET['POiD'])) {
 
-echo '<input type="hidden" name="goto" value="../mod_preventivi/" />';
+echo '<input type="hidden" name="goto" value="../mod_leads/mod_inserisci.php?t=NA==&id='.$poid.'" />';
 
 } ?>
 </form>
@@ -86,7 +86,7 @@ if(isset($_GET['POiD'])) {
 	echo "<script type=\"text/javascript\">	
 	$('#tipo_preventivo').val('".$persona['interessato_a']."');
 	$('#numero_adulti').val('".$persona['numero_persone']."');
-	$('#oggetto_preventivo').val('Evento ".$persona['cognome']."');";
+	$('#oggetto_preventivo').val('".$oggetto_preventivo."');";
 	if($categoria_modello > 1) echo "$('#tipo_preventivo').val('".$categoria_modello."');";
 	echo "</script>";
 }

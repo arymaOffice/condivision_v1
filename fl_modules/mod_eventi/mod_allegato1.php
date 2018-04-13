@@ -10,9 +10,13 @@ $evento_id = check($_GET['evento_id']);
 $docName = 'ALLEGATO CONTRATTO';
 $azienda = GRD('fl_config',2);
 $evento = GRD($tabella,$evento_id);
+$location = GRD('fl_sedi',$evento['location_evento']); // Dati del cliente che fattura
+$citta_location = $location['citta'];
 $menu = GQD('fl_menu_portate','id,descrizione_menu','evento_id = '.$evento_id);
 $ricorrenza = GQD('fl_ricorrenze_matrimonio','*','evento_id = '.$evento_id);
 $menuId = $menu['id'];
+$persona = ($evento['anagrafica_cliente'] > 1) ? GRD('fl_anagrafica',$evento['anagrafica_cliente']) : GRD($tables[106],$evento['lead_id']); 
+if($evento['anagrafica_cliente2'] > 1) $persona2 = GRD('fl_anagrafica',$evento['anagrafica_cliente2']); 
 
 $filename = 'allegato-'.$evento_id.'.pdf';
 

@@ -93,8 +93,8 @@
 	$textareas = array('informazioni_cliente'); 
 	$select = array('anagrafica_id','categoria_doc_vendita','centro_di_ricavo','valuta','paese','metodo_di_pagamento');
 	$disabled = array();
-	$hidden = array('competenze','rivalsa_inps','rivalsa_cassa','iva_su_cassa_e_rivalsa','ritenuta_su_percentuale','ritenuta_previdenziale','arrotondamento','tipo_doc_vendita','imponibile','non_imponibile','iva','lingua_documento',"anno_di_competenza","contrassegnata",'template','valore_conversione','operatore','proprietario','marchio','anno_di_imposta',"data_creazione",'data_aggiornamento');
-	$radio = array('fattura_elettronica','arrotondamento','marca_da_bollo','iva_su_cassa_e_rivalsa',"pagato");
+	$hidden = array('workflow_id','ref_id','competenze','rivalsa_inps','rivalsa_cassa','iva_su_cassa_e_rivalsa','ritenuta_su_percentuale','ritenuta_previdenziale','arrotondamento','tipo_doc_vendita','imponibile','non_imponibile','iva','lingua_documento',"anno_di_competenza","contrassegnata",'template','valore_conversione','operatore','proprietario','marchio','anno_di_imposta',"data_creazione",'data_aggiornamento');
+	$radio = array('annullata','fattura_elettronica','arrotondamento','marca_da_bollo','iva_su_cassa_e_rivalsa',"pagato");
 	$checkbox = array();
 	$labelbox = array();
 	$text = array();

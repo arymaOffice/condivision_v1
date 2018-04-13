@@ -158,7 +158,7 @@ margin-right: 20px;
 
 
 	<?php
-	
+
 	$promoter = $proprietario;
 
 	if(isset($_GET['ordine'])) { if(!is_numeric($_GET['ordine'])){ exit; } else { $ordine = $ordine_mod[$_GET['ordine']]; }}
@@ -179,10 +179,17 @@ margin-right: 20px;
 			<th scope="col">Ora/Data/Tipo</th>
 			<th scope="col">Evento e Ambienti</th>
 			<th scope="col">Referente Interno</th>
+			<th scope="col">Dovuto</th>
+			<th scope="col">Pagato</th>
+			<th scope="col">Sospeso</th>
 			<th scope="col">Amministrazione</th>
 			<th scope="col">Gestione</th>
 		</tr>
 		<?php 
+	  	
+	  	$totPreconti = 0;
+	  	$totPagamenti = 0;
+	  	$totSospesi = 0;
 
 		while ($riga = mysql_fetch_array($risultato)) 
 		{
@@ -197,13 +204,13 @@ margin-right: 20px;
 			$potential = GRD($tables[106],$riga['lead_id']);
 
 
-			$ambienti_id = '';
-			$ambienti_id = explode(',',$riga['ambienti']);
+			$ambiente = 'Sala: ';
+			if(isset($riga['ambiente_principale']) && $riga['ambiente_principale'] > 1) $ambiente .= $ambiente_principale[$riga['ambiente_principale']];
+			if(isset($riga['ambiente_1']) && $riga['ambiente_1'] > 1) $ambiente .= ', '. $ambiente_principale[$riga['ambiente_1']];
+			if(isset($riga['ambiente_2']) && $riga['ambiente_2'] > 1) $ambiente .= ', '. $ambiente_principale[$riga['ambiente_2']];
+			if(isset($riga['notturno']) && $riga['notturno'] > 1) $ambiente .= ', '. $ambiente_principale[$riga['notturno']];
+			if(isset($riga['cerimonia']) && $riga['cerimonia'] > 1) $ambiente .= ' Cerimonia: '.$ambiente_principale[$riga['cerimonia']];
 
-			$ambienti_txt = '';
-			foreach ($ambienti_id as $key => $value) {
-				$ambienti_txt .= ', '.@$ambienti[$value].'';
-			}
 			
 			$coloreEvento = @$colors[$riga['tipo_evento']];
 			$add_calendar = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='.$riga['titolo_ricorrenza'].'&location='.$location_evento[$riga['location_evento']].'&details=Inserito da Condivision&dates='.substr(str_replace('-','',$riga['data_evento']),0,8).'T'.substr(str_replace(':','',$riga['data_evento']),11,8).'/'.substr(str_replace('-','',$riga['data_fine_evento']),0,8).'T'.substr(str_replace(':','',$riga['data_fine_evento']),11,8).'&sf=true&pli=1';
@@ -215,15 +222,50 @@ margin-right: 20px;
 		  $schedaWeddingId = ($schedaWedding['id'] > 1) ? $schedaWedding['id'] : '1&auto';
 		  $colorScheda = ($schedaWedding['id'] > 1) ? $coloreEvento : 'gray';
 		  $titolo_ricorrenza = $tipo_evento[$riga['tipo_evento']].' '.str_replace('Matrimonio',' ', $riga['titolo_ricorrenza']);
+		 
+		  $precontoEvento = 0;
+		  $precontoEvento += ($riga['prezzo_base']*$riga['numero_adulti']);
+		  $precontoEvento += ($riga['prezzo_bambini']*$riga['numero_bambini']);
+		  
 
-	
+		  $prezzo_operatori += ($riga['prezzo_operatori'] > 0) ? $riga['prezzo_operatori'] : ($riga['prezzo_base']/2);
+		  $precontoEvento += $prezzo_operatori*$riga['numero_operatori'];
+		  if(isset($riga['costi_siae'])) $precontoEvento += $riga['costi_siae'];
+		  $precontoEvento;
+
+
+		  $extra = GQS('fl_registro_cassa','*',' conto_id = '.$riga['id']);
+		  foreach ($extra as $chiave => $valore) { 
+	      if($valore['quantita'] < 1) $valore['quantita'] = 1;
+	      $precontoEvento += $valore['importo']*$valore['quantita'];
+	  	  }
+  	
+
+
+		  $pagatoEvento = GQD("`fl_doc_vendita_voci` a LEFT JOIN fl_doc_vendita b ON a.`fattura_id` = b.id","COUNT(*) AS voci,SUM(a.subtotale) AS totale"," workflow_id = 6 AND ref_id = ".$riga['id']." AND pagato = 1 AND annullata = 0");
+		
+		  $sospeso = (isset($pagatoEvento['totale'])) ? ($precontoEvento-$pagatoEvento['totale']) : $precontoEvento;
+
+
+		  $totPreconti += $precontoEvento;
+	  	  $totPagamenti +=  (isset($pagatoEvento['totale'])) ? $pagatoEvento['totale'] : 0;
+	  	  $totSospesi += $sospeso;
+
+		  $pagatoEvento = (isset($pagatoEvento['totale'])) ? '&euro; '.numdec($pagatoEvento['totale'],2) : '--';
+		  $precontoEvento =  '&euro; '.numdec($precontoEvento,2);
+		  $sospeso =  '&euro; '.numdec($sospeso,2);
+
+
 
 			echo "<tr ><td $colore><span class=\"Gletter\"></span></td>"; 
 			echo "<td><h2>".mydate($riga['data_evento'])."</h2>
 			<span class=\"msg\" style=\"background: $coloreEvento\">".@$tipo_evento[$riga['tipo_evento']]." ".@$centro_di_ricavo[$riga['centro_di_ricavo']]."</span><span class=\"msg gray\">".$periodo_evento[$riga['periodo_evento']]."</span></td>"; 
-			echo "<td><h2>$titolo_ricorrenza</h2>".@$location_evento[$riga['location_evento']]." ".$ambienti_txt."</td>"; 
-			echo "<td><strong>".@$proprietario[$riga['proprietario']]."</td>"; 
-			echo "<td>";
+			echo "<td><h2><a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Gestione Amministrativa\">$titolo_ricorrenza</a></h2>".@$location_evento[$riga['location_evento']]." ".$ambiente."</td>"; 
+			echo "<td><strong>".@$proprietario[$riga['proprietario']]."</strong></td>"; 
+			echo "<td>".@$precontoEvento."</td>"; 
+			echo "<td>".@$pagatoEvento."</td>"; 
+			echo "<td>".@$sospeso."</td>"; 
+			echo "<td>";    
 			echo "<a style=\"color: $coloreEvento\" href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Gestione Amministrativa\" > <i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></a>";
 			echo "</td>";
 			echo "<td><a href=\"mod_scheda_servizio.php?evento_id=".$riga['id']."&tipo_evento=".$riga['tipo_evento']."&id=$schedaWeddingId\" title=\"Gestione Operativa\" style=\"color:  $colorScheda\"><i class=\"fa fa-address-card\" aria-hidden=\"true\"></i></a></td>";
@@ -234,6 +276,13 @@ margin-right: 20px;
 			
 		}
 
+
+			echo "<tr><td colspan=\"3\"></td>"; 
+			echo "<td>Totali </td>"; 
+			echo "<td><strong>&euro; ".numdec($totPreconti,2)."</strong></td>"; 
+			echo "<td><strong>&euro; ".numdec($totPagamenti,2)."</strong></td>"; 
+			echo "<td><strong>&euro; ".numdec($totSospesi,2)."</strong></td>"; 
+			echo "</tr>";
 		echo "</table>";
 
 		$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,1); 

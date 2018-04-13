@@ -1,0 +1,146 @@
+.container {
+  height: 75vh;
+}
+
+.ajaxForm {
+  height: 100%;
+}
+
+#results-header > h3 {
+  color: #fff;
+}
+
+td.codice {
+  width: 10em;
+}
+
+td.numero-field {
+  width: 8em;
+}
+
+.codice-field,
+.portata-field {
+  text-transform: uppercase;
+}
+
+.dati-wrapper {
+  overflow-y: auto;
+  height: 65vh;
+  max-height: 90%;
+}
+
+th.delete-row {
+  text-align: center;
+}
+
+.delete-row:before {
+  font-size: 1.5em;
+  font-family: FontAwesome;
+  content: "\f014";
+  cursor: pointer;
+}
+
+#aggiungi {
+  text-align: right;
+}
+
+#results-container {
+  background-color: #fff;
+  position: absolute;
+  width: 95%;
+  box-shadow: 10px 10px 5px grey;
+  padding-left: 0;
+}
+
+.row-result {
+  padding: 1em;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 0.5em;
+  grid-auto-flow: column;
+  text-align: left;
+  margin: 0;
+}
+
+#results-header > li > h3,
+#results-header {
+  margin: 0;
+}
+
+li.row-result:hover {
+  background-color: wheat;
+}
+
+li:focus {
+  background-color: wheat;
+}
+
+.selected {
+  background-color: wheat;
+}
+
+div.row-result {
+  padding: 0 1em;
+  background-color: #2f2f2f;
+}
+
+.result-field {
+  margin-top: 0;
+  margin-bottom: 0;
+  height: 100%;
+  width: 5em;
+}
+
+#results {
+  margin: 0;
+  width: 100%;
+  padding: 0;
+  border-left: 1px solid #f4f4f4;
+  border-bottom: 1px solid #f4f4f4;
+}
+
+#results > li {
+  list-style-type: none;
+}
+
+td.um {
+  width: 5em;
+}
+
+.highlight {
+  background-color: #3da042;
+}
+
+.aggiungi {
+  cursor: pointer;
+  display: flex;
+  margin: 1em auto;
+  border-radius: 50%;
+  width: 30px;
+  height: 28px;
+  font-size: 7px;
+  padding: 6px;
+  justify-content: center;
+}
+
+.aggiungi label {
+  font-size: 2em;
+  cursor: pointer;
+}
+
+p.portata {
+  width: 100%;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.evento-field {
+  width: 100%;
+}

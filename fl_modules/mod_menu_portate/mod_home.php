@@ -55,7 +55,8 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,0);
 	$query = "SELECT $select FROM `$tabella` $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
 	$risultato = mysql_query($query, CONNECT);
-	
+	//	<a  href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a></td>"; 
+
 
 ?>
 
@@ -67,10 +68,11 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
     <th></th>
     <th>Evento</th>
     <th>Descrizione del Menù</th>
-    <th>Persone</th>
-    <th>Prezzo</th>
     <th>Food Cost</th>
-    <th>Creato il</th>
+    <th>Prezzo Vendita</th>
+    <th>Aggiornato al</th>
+    <th>Riepilogo</th>
+    <th>Fabbisogno</th>
     <th></th>
   </tr>
   <?php 
@@ -81,22 +83,24 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 	{
 	
 	$attivo = ($riga['confermato'] == 0) ? 'tab_orange' : 'tab_green';
-	$confermato = ($riga['confermato'] == 0) ? '<span class="msg orange">Bozza</span>' : '<span class="msg green">Attivo</span>';
+	$confermato = ($riga['confermato'] == 0) ? '<span class="msg orange"><a href="mod_opera.php?conferma='.$riga['id'].'" onclick="return conferma(\'Confermare menù?\');"">Da Confermare</a></span>' : '<span class="msg green">Confermato</span>';
 	$statusMenu = @$stato_menu_portate[$riga['stato_menu_portate']];
+	$evento = GRD($tables[6],$riga['evento_id']);
 
 			echo "<tr>"; 				
 			echo "<td class=\"$attivo\"></td>";
 			echo "<td>$confermato<br>$statusMenu</td>";	
-			echo "<td>".$riga['descrizione_menu']."</td>";	
-			echo "<td>".$riga['numero_persone']."</td>";	
-			echo "<td>".$riga['prezzo_base']."</td>";	
-			echo "<td>n/a</td>";	
-			echo "<td>".mydate($riga['data_creazione'])."</td>";
+			echo "<td><h2>".$evento['titolo_ricorrenza']."</h2> ".$riga['descrizione_menu']."</td>";	
+			echo "<td>&euro; ".$riga['food_cost']."</td>";	
+			echo "<td>&euro; ".$riga['prezzo_base']."</td>";
+			echo "<td>".mydatetime($riga['data_aggiornamento'])."</td>";
+			echo "<td><a style=\"color: $coloreEvento\" data-fancybox-type=\"iframe\" class=\"facyboxParent\" href=\"./mod_configura.php?preview&menuId=".$riga['evento_id']."&menuId=".$riga['id']."\" title=\"Ripilogo e Configurazione\" > <i class=\"fa fa fa-clipboard\" aria-hidden=\"true\"></i></a></td>";
+			echo "<td><a style=\"color: $coloreEvento\" data-fancybox-type=\"iframe\" class=\"facyboxParent\" href=\"./mod_fabbisogno.php?evento_id=".$riga['evento_id']."&menuId=".$riga['id']."\" title=\"Calcola Fabbisogno\" > <i class=\"fa fa-truck\" aria-hidden=\"true\"></i></a></td>";
+
 			echo "<td>
 			<a href=\"".ROOT.$cp_admin."fl_app/MenuElegance/?menuId=".$riga['id']."\" title=\"Componi Menu\" ><i class=\"fa fa-cutlery\" aria-hidden=\"true\"></i></a>
 			<a data-fancybox-type=\"iframe\" class=\"fancybox_view\" href=\"mod_stampa.php?menuId=".$riga['id']."\" title=\"Stampa Menu\" ><i class=\"fa fa-print\" aria-hidden=\"true\"></i></a>
 			<a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Modifica\" > <i class=\"fa fa-search\"></i> </a></td>"; 
-			echo "<td><a  href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a></td>"; 
 		    echo "</tr>";
 	}
 

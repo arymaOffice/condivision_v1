@@ -49,6 +49,7 @@ $changestatus = ($potential['status_potential'] < 2) ? 'status_potential = 1 , `
 
 $tipologia_appuntamentoInfo = ($potential['status_potential'] == 0) ? '&tipologia_appuntamento=122' : ''; 
 $tipologia_appuntamentoInfo = ($potential['status_potential'] == 1) ? '&tipologia_appuntamento=123' : $tipologia_appuntamentoInfo; 
+$tipologia_appuntamentoInfo = ($potential['status_potential'] > 1) ? '&tipologia_appuntamento=124' : $tipologia_appuntamentoInfo; 
 
 
 $telefono = phone_format($potential['telefono'],'39');

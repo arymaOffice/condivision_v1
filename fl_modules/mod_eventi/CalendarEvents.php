@@ -36,13 +36,14 @@ class CalendarEvents {
     if(!empty($ambienti)) {
       $ambientiSql = ' AND (';
       foreach($ambienti AS $key => $val) {
-        $ambientiSql .= " $or ambienti LIKE '%".check($val)."%' OR ambiente_principale = ".check($val)." OR ambiente_1 = ".check($val)." OR ambiente_2 = ".check($val)." OR notturno = ".check($val);
-        $or = ' OR  ';
+      if(defined('MULTI_AMBIENTE')) $ambientiSql .= " $or ambienti LIKE '%".check($val)."%' OR ambiente_principale = ".check($val)." OR ambiente_1 = ".check($val)." OR ambiente_2 = ".check($val)." OR notturno = ".check($val);
+      if(!defined('MULTI_AMBIENTE')) $ambientiSql .= " $or ambienti LIKE '%".check($val)."%' ";
+      $or = ' OR  ';
       }
       $ambientiSql .= ' ) ';
     }
 
-    $query_giorni = "SELECT data_evento FROM " . $sourceTbl.' WHERE stato_evento != 4 AND YEAR(data_evento) = '.$anno.' '.$ambientiSql;
+     $query_giorni = "SELECT data_evento FROM " . $sourceTbl.' WHERE stato_evento != 4 AND YEAR(data_evento) = '.$anno.' '.$ambientiSql;
     $risultato_giorni = mysql_query($query_giorni,CONNECT);
     while($record_giorni = mysql_fetch_assoc($risultato_giorni)){
 
@@ -312,6 +313,7 @@ class CalendarEvents {
     global $ambienti_disponibilta;
     global $codici_ambiente;
     $stringa_ambienti = '';
+    
     foreach ($ambienti_disponibilta as $key => $value) {
       $stringa_ambienti .="<input type='checkbox' title=\"\" value='{{data}}.$key' id='{{data}}.$key' name='data-{{data}}[]' ><label id=\"environments\" class='' title='".$value."' for='{{data}}.$key'>".$codici_ambiente[$key]."</label>";
 
@@ -337,15 +339,15 @@ class CalendarEvents {
           $numero_giorni = cal_days_in_month(CAL_GREGORIAN, $i, $anno);                           //dal mese prelevo il numero dei giorni
 
           if(in_array($i, $mesi)){//********************************************NEW
-            $stringa_calendario .= "<div class='grid-item'>";
-            $stringa_calendario .= "<h3>" . $nome_mese . "</h3>";
+            $stringa_calendario .= "<div class='grid-item a$numeroMese'>";
+            $stringa_calendario .= "<h3>" . $nome_mese . " $anno </h3>";
             for($y = 1; $y <= $numero_giorni; $y++){
 
               if(empty(self::$eventi)){ //controllo se il vettore eventi è vuoto, in caso affermativo stampo il giorno nel calendario
                 $data_in_esame = $anno . "-" . $numeroMese . "-" . $y;
                 $nameOfDay = $giorni_sett[date('N', strtotime($data_in_esame))];
                 $stringa_ambienti_replace = str_replace('{{data}}',$data_in_esame,$stringa_ambienti);
-                $stringa_calendario .= "<p>$y $nameOfDay $stringa_ambienti_replace  </p>";
+                $stringa_calendario .= "<p>$y $nameOfDay $anno $stringa_ambienti_replace  </p>";
               }else{                                                                      //altrimenti vado alla ricerca dell'evento corrispondente al giorno in esame
                 if(strlen($y) == 1){                                                    //compongo il giorno in 2 cifre
                   $giorno = "0" . $y;
@@ -361,11 +363,12 @@ class CalendarEvents {
 
                 $data_in_esame = $anno . "-" . $mese . "-" . $giorno;
 
-
-                $nameOfDay = $giorni_sett[date('N', strtotime($data_in_esame))];
+                $N = date('N', strtotime($data_in_esame));
+                $nameOfDay = $giorni_sett[$N];
                 $stringa_ambienti_replace = str_replace('{{data}}',$data_in_esame,$stringa_ambienti);
                                          //se la ricerca ha dato esito positivo allora stampo uno 0
-                $stringa_calendario .= "<p class='giorni_rossi'><span style='width:100px;display: -webkit-inline-box;'>$y $nameOfDay</span> $stringa_ambienti_replace</p>";
+                $red = ($N == 7) ? ' color: red; ' : '';
+                $stringa_calendario .= "<p class='giorni_rossi'><span style='width:100px;display: -webkit-inline-box; $red '>$y $nameOfDay  </span> $stringa_ambienti_replace</p>";
 
               }
             }

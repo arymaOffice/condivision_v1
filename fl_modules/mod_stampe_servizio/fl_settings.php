@@ -46,6 +46,7 @@
 	$campi = gcolums($tabella); //Ritorna i campi della tabella
 	$tipologia_main = gwhere($campi,'WHERE id != 1 ','','id','data_evento',0,2592000);//Imposta i filtri della query prendendo i dati GET e se sono tra i filtri li applica
 	$basic_filters = array('titolo_ricorrenza','periodo_evento');
+	if(!isset($_GET['stato_evento']) || check($_GET['stato_evento']) < 0) $tipologia_main .= " AND stato_evento != 4 "; 
 
 	
 	
@@ -75,7 +76,7 @@
 	$tipo_evento  = $data_set->data_retriever('fl_cg_res','codice,label','WHERE  attivo = 1 AND parent_id = 0 AND tipo_voce = 1','id ASC');
 	$centro_di_ricavo  = $data_set->data_retriever('fl_cg_res','codice,label','WHERE  attivo = 1 AND parent_id > 0 AND tipo_voce = 1','parent_id ASC, id ASC');
 	$colors  = $data_set->data_retriever('fl_cg_res','colore','WHERE attivo = 1 AND id > 1 AND parent_id = 0 AND tipo_voce = 1 ','id ASC');
-
+	$disposizione_tavoli = array('Non previsto','Tavolo Unico','Tavoli Tondi','Altro: Vedi note');
 
 
 	function select_type($who){

@@ -80,7 +80,7 @@ input[type=radio] + label, input[type=checkbox] + label, .boxbutton {
 	echo CalendarEvents::getEvents($tables[6],$anno,@$_GET['mesi'],@$_GET['ambienti'],'getCalendarButton');   //prelevo il calendario senza i giorni in cui ci sono eventi
 	//calendario completo
 
-	$date_del_lead = GQS($tabella,'DATE_FORMAT(data_evento,"%Y-%m-%d") as data_da_selezionare ','YEAR(data_evento) = '.$anno.' AND lead_id = '.$lead_id);
+	$date_del_lead = GQS($tabella,'DATE_FORMAT(data_evento,"%Y-%m-%d") as data_da_selezionare ','stato_evento != 4 AND YEAR(data_evento) = '.$anno.' AND lead_id = '.$lead_id);
 
 	foreach ($date_del_lead as $value) {
 
@@ -90,3 +90,4 @@ input[type=radio] + label, input[type=checkbox] + label, .boxbutton {
 <input type="hidden" name="lead_id" value="<?php echo $lead_id;?>" >
 <input type="submit" class="button conferma" value="Conferma" >
 </form>
+<?php mysql_close(CONNECT); ?>

@@ -72,17 +72,16 @@
 	$venditore =  $data_set->data_retriever('fl_account','nominativo',"WHERE id != 1 AND attivo = 1 AND (tipo = 4)  ",'nominativo ASC');
 	$venditore[0] = 'Chiunque'; 
 
-	if(defined('MULTI_LOCATION')) {
-	$ambiente_principale =  $data_set->data_retriever('fl_ambienti','nome_ambiente',"WHERE id != 1",'tipo_ambiente ASC');
-	unset($ambiente_principale[0]);
-	unset($ambiente_principale[1]);	
-	$notturno = $ambiente_1 = $ambiente_2 = $ambiente_principale;
+
+	if(defined('MULTI_AMBIENTE')) {
+	$ambiente_tutti =  $data_set->data_retriever('fl_ambienti','nome_ambiente',"WHERE id != 1",'priority ASC, id ASC');
+	$ambiente_principale = $cerimonia =  $notturno = $ambiente_1 = $ambiente_2 = $ambiente_tutti;
 	}
 
 	function select_type($who){		
 	/* Gestione Oggetto Statica */	
 	$textareas = array("testo_preventivo","note","condizioni_preventivo","informativa_privacy","condizioni_pagamento"); 
-	$select = array('notturno','ambiente_principale','ambiente_1','ambiente_2','tipo_preventivo','venditore','supervisore','anno_fiscale','produzione','cliente_id','potential_id');
+	$select = array('cerimonia','notturno','ambiente_principale','ambiente_1','ambiente_2','tipo_preventivo','venditore','supervisore','anno_fiscale','produzione','cliente_id','potential_id');
 	$disabled = array("visite");
 	$hidden = array('data_scadenza',"potential_id",'importo_ordine','stima','descrizione','produzione','venditore','operatore','proprietario','anno_fiscale','supervisore','cliente_id','data_creazione','data_aggiornamento','account_id','tipo_utente','marchio','operatore','ip','proprietario',"relation");
 	$radio = array();

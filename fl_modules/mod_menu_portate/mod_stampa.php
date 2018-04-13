@@ -4,7 +4,11 @@
 require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
 if(!isset($_GET['menuId'])) die('Manca Menu ID');
+$evento_id = check($_GET['evento_id']);
 
+
+$evento = GRD($tabella,$evento_id);
+$ricorrenza = GQD('fl_ricorrenze_matrimonio','*','evento_id = '.$evento_id);
 $menuId = check($_GET['menuId']);
 $filename = 'menu-'.$menuId.'.pdf';
 

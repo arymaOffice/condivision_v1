@@ -121,34 +121,34 @@ echo "Le funzioni di ridimensionamento non sono attive!";
 }
 
 
-
 if(isset($_POST['id'])){
 
 $source = $_FILES['file'];
 $id = check($_POST['id']);
-if(isset($_POST['folder'])) $folder = check($_POST['folder']);
 
-/* Check Estensione */
+
 $info = pathinfo($source['name']); 
 foreach($info as $key => $valore){ if($key == "extension") $ext = $info["extension"]; }
 if(!isset($ext)) error();
 if(in_array(strtolower($ext),$formati)){ error(); } 
-$file_name = $id.'.'.$ext;
+$file_name = strtolower($id.'.jpg');
 
 
-/*Check Dir*/
-if(!@is_dir($folder)) {  if(!@mkdir($folder,0777)) { return $esiti[7]; mysql_close(CONNECT);  break; } }
-if(!is_writable($folder)) {  return $esiti[9]; mysql_close(CONNECT); break; }
 
+if(!is_dir($folder)) {  if(!mkdir($folder,0777)) {  mysql_close(CONNECT); die($esiti[7]);} }
+if(!is_writable($folder)) {  mysql_close(CONNECT);die($esiti[9]);  }
 
 if(is_uploaded_file($source['tmp_name'])){
 	if(move_uploaded_file($source['tmp_name'],$folder.'/'.$file_name)){
-	
+
+
 	} else {
 	error();
 	}
 	
 }}
+
+
 
 
 mysql_close(CONNECT);

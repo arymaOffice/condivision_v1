@@ -68,9 +68,9 @@ include("../../fl_inc/headers.php");
 
 			echo "<td class=\"$colore\"></td>"; 			
 			echo "<td><span class=\"\">
-			<h2><a title=\"Scheda Contatto\"  href=\"../mod_leads/mod_inserisci.php?id=".$riga['potential_id']."\">".checkValue($nominativo)."</a></h2>
+			<h2><a title=\"Scheda Contatto\" href=\"../mod_leads/mod_inserisci.php?id=".$riga['potential_id']."\" target=\"_parent\">".checkValue($nominativo)."</a></h2>
 			</span>
-			<span class=\"\" style=\"font-size: 100%; \"><strong>P".substr($riga['data_creazione'],2,2)."-".str_pad($riga['id'],3,0,STR_PAD_LEFT)."-".@substr($tipo_preventivo[$riga['tipo_preventivo']],0,1)."</strong></span>";
+			<span class=\"\" style=\"font-size: 100%; \"><strong>P".substr($riga['data_creazione'],2,2)."-".str_pad($riga['id'],3,0,STR_PAD_LEFT)."-".strtoupper(@substr(trim($tipo_preventivo[$riga['tipo_preventivo']]),0,2))."</strong></span>";
 			echo "<br>";
 			echo "<span class=\"msg $colore\">".$status_preventivo[$riga['status_preventivo']]."</span> $attesa <span class=\"msg gray\" >".@$tipo_preventivo[$riga['tipo_preventivo']]."</span>
 			
@@ -80,9 +80,9 @@ include("../../fl_inc/headers.php");
 			<strong></strong></span>
 			</td>"; 
 			echo "<td style=\"background: #E8FFE8;\"><strong>&euro; ".$riga['totale_preventivo']."</strong></td>"; 
-			echo "<td  class=\"strumenti\">
+			echo "<td  class=\"strumenti\"><a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Dettagli\" target=\"_parent\"> <i class=\"fa fa-search\"></i> </a>
 			<a data-fancybox-type=\"iframe\" class=\"facyboxParent\" href=\"mod_stampa.php?external&action=1&amp;id=".$riga['id']."\" title=\"Scheda di stampa\"> <i class=\"fa fa-print\"></i> </a>
- 			$inviaPdf </td>";
+ 			$inviaPdf $elimina</td>";
 			echo "<td  class=\"hideMobile\" style=\"font-size: smaller; text-align: right;\" title=\"Aggiornato da: ". @$proprietario[$riga['operatore']]."\"><br>AP. ".mydate($riga['data_preventivo'])."<br />SCAD. ".$scadenza."</td>";
 		    echo "</tr>"; 
 			
@@ -93,3 +93,4 @@ include("../../fl_inc/headers.php");
 
 
 ?>
+<a href="javascript:location.reload();" class="button">Aggiorna Lista</a>

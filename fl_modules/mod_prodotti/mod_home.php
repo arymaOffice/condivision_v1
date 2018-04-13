@@ -87,6 +87,7 @@ float: left;}
 </style>
 
 
+
 	 <table class="dati" summary="Dati">
       <tr>
         <th></th>
@@ -95,7 +96,6 @@ float: left;}
    <?php if(defined('DISEGNO_PRODOTTI')) { ?>  <th>Disegno</th> <?php } ?>
    
  <th>Prodotto/Linea</th>
-		<th>Produttore</th>
         <th></th>
   		<th></th>
       </tr>
@@ -114,12 +114,14 @@ float: left;}
 	
 	$prodotto_da = explode(',',$riga['produttore']);
 	$produttori = '';
+	
 	foreach ($prodotto_da as $key => $value) {
-		$produttori .= '<span class="msg green">'.$produttore[$value].'</span>';
+		if($key > 1) $produttori .= '<span class="msg green">'.$produttore[$value].'</span>';
 	}
 
-	$foto = (!file_exists($folder.$riga['id'].'.jpg')) ? '<i class="fa fa-camera" style="float: left;"></i>' : '<img src="'.$folder.$riga['id'].'.jpg" class="tumb" /> ';
-		if(file_exists($folder.$riga['id'].'.jpg')) $foto .= '<br><a onclick="return conferma(\'Eliminare la foto?\');" href="../mod_basic/elimina.php?delFile='.urldecode($folder.$riga['id']).'.jpg">Elimina Foto</a>';
+
+	$foto = (!file_exists($folder.$riga['id'].'.jpg')) ? '' : '<img src="'.$folder.$riga['id'].'.jpg" class="tumb" /> ';
+	if(file_exists($folder.$riga['id'].'.jpg')) $foto .= '<br><a onclick="return conferma(\'Eliminare la foto?\');" href="../mod_basic/elimina.php?delFile='.urldecode($folder.$riga['id']).'.jpg">Elimina Foto</a>';
 	$load = '
 	<form action="mod_opera.php" method="post" class="dropzone"  id="my-awesome-dropzone" enctype="multipart/form-data">
     <input type="hidden" name="id" value="'.$riga['id'].'">
@@ -146,10 +148,9 @@ float: left;}
 			if(defined('DISEGNO_PRODOTTI')) { echo "<td> $load2 </td>"; }
 			echo "<td>
 				<a href=\"mod_inserisci.php?item_rel=0&amp;action=1&amp;id=".$riga['id']."\" title=\"Modifica\">".ucfirst($riga['label'])."</a>
-				<br><span class=\"msg blue\">".$prodotto_id[$riga['prodotto_id']]."</span></td>";		
+				<br><span class=\"msg blue\">".$prodotto_id[$riga['prodotto_id']]."</span>".$produttori."</td>";		
 
-			echo "<td>".$produttori."</td>";			
-
+	
 			
 			echo "<td><a href=\"mod_inserisci.php?item_rel=0&amp;action=1&amp;id=".$riga['id']."\" title=\"Modifica\"> <i class=\"fa fa-search\"></i> </a></td>"; 
 			echo "<td><a  href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a></td>"; 

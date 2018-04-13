@@ -93,6 +93,7 @@ float: left;}
     <th>Ricetta/Portata</th>
     <th>Food Cost</th>
     <th>Vendita</th>
+    <th>Ordine</th>
     <th></th>
   </tr>
   <?php 
@@ -101,8 +102,10 @@ float: left;}
 	
 	while ($riga = mysql_fetch_array($risultato)) 
 	{
+	$mainColor = ($riga['portata'] < 100) ? 'green' : 'blue';
 	
-	$attivo = ($riga['attivo'] == 1) ? 'tab_green' : 'tab_red';
+	$attivo = ($riga['attivo'] == 1) ? 'tab_'.$mainColor : 'tab_red';
+	if($riga['variante'] == 1) $attivo = 'tab_orange';
 
 	$foto = (!file_exists($folder.$riga['id'].'.jpg')) ? '' : '<img src="'.$folder.$riga['id'].'.jpg" class="tumb" /> ';
 	if(file_exists($folder.$riga['id'].'.jpg')) $foto .= '<br><a onclick="return conferma(\'Eliminare la foto?\');" href="../mod_basic/elimina.php?delFile='.urldecode($folder.$riga['id']).'.jpg">Elimina Foto</a>';
@@ -117,7 +120,7 @@ float: left;}
 	$famiglia_ricettaId = explode(',',$riga['famiglia_ricetta']);
 	$famiglia_ricettaLabels = '';
 	foreach ($famiglia_ricettaId as $value) {
-		$famiglia_ricettaLabels  .= '<span class="msg gray">'.@$famiglia_ricetta[$value].'</span>';
+		if($value > 1) $famiglia_ricettaLabels  .= '<span class="msg gray">'.@$famiglia_ricetta[$value].'</span>';
 	}
 
 
@@ -128,24 +131,31 @@ float: left;}
 	{ 
 	$materiaprima = GRD('fl_materieprime',$componenti['materiaprima_id']);
   	//$quotazione = GQD('fl_listino_acquisto','valuta, prezzo_unitario, data_validita',' id_materia = '.$materiaprima['id'].' ORDER BY data_validita DESC,data_creazione DESC LIMIT 1');
-  	$costo =  ($materiaprima['ultimo_prezzo']*$componenti['quantita'])/$materiaprima['valore_di_conversione'];
+  	$costo =  ($materiaprima['valore_di_conversione'] > 0) ? ($materiaprima['ultimo_prezzo']*$componenti['quantita'])/$materiaprima['valore_di_conversione'] : 0;
   	$foodCost += $costo;
     } 
-    $foodSell = numdec($foodCost*$riga['prezzo_vendita'],2);
+    if($riga['porzioni'] < 1) $riga['porzioni'] = 1;
+    $foodCostPorzione = $foodCost/$riga['porzioni'];
+    $foodSell = numdec($foodCostPorzione*$riga['valore_di_conversione'],2);
+    $foodCostPorzione = numdec($foodCostPorzione,2);
     $foodCost = numdec($foodCost,2);
     $categoria_msg = ($riga['categoria_ricetta'] > 1) ? "<a href=\"\" class=\"msg orange\">".$categoria_ricetta[$riga['categoria_ricetta']]."</a>" : '';
+    $merce = ($riga['merce_collegata'] > 1) ? "<a href=\"../mod_materieprime/mod_inserisci.php?id=".$riga['merce_collegata']."\" class=\"msg blue\">".@$materiaprima_id[$riga['merce_collegata']]."</a>" : '';
+    $note = strip_tags(converti_txt($riga['note']));
+  
 
-			echo "<tr>"; 				
+			echo "<tr id=\"".$riga['id']."\">"; 				
 			echo "<td class=\"$attivo\"></td>";
 			echo "<td> $load </td>";
 
-			echo "<td><h2>".$riga['codice_portata']." ".converti_txt($riga['nome'])."</h2>
-			<a href=\"\" class=\"msg green\">".$portata[$riga['portata']]."<a/>$categoria_msg".$famiglia_ricettaLabels." ".mydatetime($riga['data_aggiornamento'])."<br>".strip_tags(converti_txt($riga['note']))."</td>";	
-			echo "<td><h2 class=\"c-green\">&euro; $foodCost </h2></td>";	
-			echo "<td><h2>&euro; ".$foodSell."</h2></td>";
+			echo "<td><h2>".$riga['codice_portata']." ".converti_txt($riga['nome'])."</h2>".converti_txt($riga['nome_tecnico'])."<br>
+			<a href=\"\" class=\"msg $mainColor\">".$portata[$riga['portata']]."</a>$categoria_msg $merce ".$famiglia_ricettaLabels."  ".mydatetime($riga['data_aggiornamento'])."<br>".$note."</td>";	
+			echo "<td><h2 class=\"c-green\" title=\"&euro; ".$foodCost."x".$riga['porzioni']." Porzioni\">&euro; $foodCostPorzione </h2></td>";	
+			echo "<td><h2 title=\"".$riga['valore_di_conversione']."\">&euro; ".$foodSell."</h2></td>";
+			echo "<td><input type=\"text\" class=\"updateField\" style=\"max-width: 100px;\" data-rel=\"".$riga['id']."\" name=\"priorita\"  value=\"".$riga['priorita']."\" /></td>";
 			echo "<td><a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Modifica\" > <i class=\"fa fa-search\"></i> </a>
-						<a href=\"mod_inserisci.php?copy_record&amp;id=".$riga['id']."\" title=\"Copia\"><i class=\"fa fa-files-o\"></i></a>
-
+			<a href=\"mod_diba.php?record_id=".$riga['id']."\" title=\"Distinta Base\" data-fancybox-type=\"iframe\" class=\"fancybox_view\"><i class=\"fa fa-print\"></i></a>	
+			<!--<a href=\"mod_inserisci.php?copy_record&amp;id=".$riga['id']."\" title=\"Copia\"><i class=\"fa fa-files-o\"></i></a>-->
 			<a  href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a></td>"; 
 		    echo "</tr>";
 	}

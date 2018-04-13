@@ -91,6 +91,16 @@
 			foreach ($ambienti_id as $key => $value) {
 				$ambienti_txt .= '<span class="msg orange">'.@$ambienti[$value].'</span>';
 			}
+
+					$ambiente = 'Sala: ';
+			if(isset($riga['ambiente_principale']) && $riga['ambiente_principale'] > 1) $ambiente .= $ambiente_principale[$riga['ambiente_principale']];
+			if(isset($riga['ambiente_1']) && $riga['ambiente_1'] > 1) $ambiente .= ', '. $ambiente_principale[$riga['ambiente_1']];
+			if(isset($riga['ambiente_2']) && $riga['ambiente_2'] > 1) $ambiente .= ', '. $ambiente_principale[$riga['ambiente_2']];
+			if(isset($riga['notturno']) && $riga['notturno'] > 1) $ambiente .= ', '. $ambiente_principale[$riga['notturno']];
+			if(isset($riga['cerimonia']) && $riga['cerimonia'] > 1) $ambiente .= ' Cerimonia: '.$ambiente_principale[$riga['cerimonia']];
+
+
+
 			
 			$coloreEvento = @$colors[$riga['tipo_evento']];
 			$add_calendar = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='.$riga['titolo_ricorrenza'].'&location='.$location_evento[$riga['location_evento']].'&details=Inserito da Condivision&dates='.substr(str_replace('-','',$riga['data_evento']),0,8).'T'.substr(str_replace(':','',$riga['data_evento']),11,8).'/'.substr(str_replace('-','',$riga['data_fine_evento']),0,8).'T'.substr(str_replace(':','',$riga['data_fine_evento']),11,8).'&sf=true&pli=1';
@@ -101,10 +111,14 @@
 		  $menuPortate = GQD('fl_menu_portate','id,evento_id',' evento_id = '.$riga['id']);
 		  $colorMenu = ($menuPortate['id'] > 1) ? $coloreEvento : 'gray';
 
+		  $schedaWedding = GQD('fl_ricorrenze_matrimonio','id,evento_id',' evento_id = '.$riga['id']);
+		  $schedaWeddingId = ($schedaWedding['id'] > 1) ? $schedaWedding['id'] : '1&auto';
+		  $colorScheda = ($schedaWedding['id'] > 1) ? $coloreEvento : 'gray';
+		  $titolo_ricorrenza = $tipo_evento[$riga['tipo_evento']].' '.str_replace('Matrimonio',' ', $riga['titolo_ricorrenza']);
 
 			echo "<tr ><td $colore><span class=\"Gletter\"></span></td>"; 
 			echo "<td><h2>".mydatetime($riga['data_evento'])."</h2> <span class=\"msg\" style=\"background: $coloreEvento\">".@$tipo_evento[$riga['tipo_evento']]."</span><span class=\"msg gray\">".$periodo_evento[$riga['periodo_evento']]."</span></td>"; 
-			echo "<td><h2>".$riga['titolo_ricorrenza']."</h2>".@$location_evento[$riga['location_evento']]."</td>"; 
+			echo "<td><h2><a href=\"../mod_eventi/mod_scheda_servizio.php?evento_id=".$riga['id']."&tipo_evento=".$riga['tipo_evento']."&id=$schedaWeddingId\">$titolo_ricorrenza</a></h2>".@$location_evento[$riga['location_evento']]." ".$ambiente."</td>"; 
 			echo "<td>";
 			if($riga['multievento'] == 1) echo "<a data-fancybox-type=\"iframe\" class=\"fancybox_view \" href=\"mod_report/mod_prospettobeo.php?data=".substr(0,10,$riga['data_evento'])."\" title=\"Prospetto\" style=\"color:   $colorMenu\"><i class=\"fa fa-map\" aria-hidden=\"true\"></i> PROSPETTO</a>";			
 			if($menuPortate['id'] > 1) echo "<a data-fancybox-type=\"iframe\" class=\"fancybox_view \" href=\"mod_menu_evento.php?evento_id=".$riga['id']."\" title=\"Lista ingresso\" style=\"color:   $colorMenu\"><i class=\"fa fa-map\" aria-hidden=\"true\"></i> MENU TAVOLI</a>";			

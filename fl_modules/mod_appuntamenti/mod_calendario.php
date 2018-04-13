@@ -1,9 +1,9 @@
 <?php 
-		$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']; 
+		if(!isset($_GET['NO_BACK_PAGE'])) $_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']; 
 
 		$potential_rel = (isset($_GET['potential_rel'])) ? "potential_rel=".check($_GET['potential_rel']).'&' : '';	
-
-		$filtro = ($meeting_location_id > 1) ? 'meeting_location = '.$meeting_location_id : '1';
+		$tipologia_appuntamentoInfo = (isset($_GET['tipologia_appuntamento'])) ? "tipologia_appuntamento=".check($_GET['tipologia_appuntamento']).'&' : '';	
+		$filtro = ($meeting_location_id > 1) ? 'id > 1 AND meeting_location = '.$meeting_location_id : 'id > 1';
 		//$filtro .= ($proprietario_id > 1) ? " AND (proprietario = $proprietario_id OR callcenter = $proprietario_id) " : ' ';
 		$query = "SELECT *,`start_meeting` as `start`, COUNT('*') as `tot`  FROM `fl_appuntamenti` WHERE $filtro GROUP BY `start_meeting`,`end_meeting`,`meeting_location` ";
 	
@@ -57,7 +57,7 @@
 								if (start) {
 									var date = start.format("YYYY-MM-DD HH:mm") ;
 									var dateend = end.format("YYYY-MM-DD HH:mm") ;
-									window.location.href = '../mod_appuntamenti/mod_inserisci.php?<?php echo $potential_rel; ?>id=1&start_meeting=' + date + '&end_meeting='+ dateend
+									window.location.href = '../mod_appuntamenti/mod_inserisci.php?<?php echo $potential_rel.$tipologia_appuntamentoInfo; ?>id=1&start_meeting=' + date + '&end_meeting='+ dateend
 								}
 								
 							},

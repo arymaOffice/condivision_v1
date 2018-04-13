@@ -1,3 +1,5 @@
+
+
 // Init App
 var myApp = new Framework7({
     // App root element
@@ -6,11 +8,6 @@ var myApp = new Framework7({
     // Enable Material theme
     material: true,
     routes: [
-        {
-            name: 'home',
-            path: '/',
-            url: 'index.php',
-        },
         {
             name: 'nuovo contatto',
             path: '/new/',
@@ -22,6 +19,11 @@ var myApp = new Framework7({
             url: 'lista-contatti.php',
         },
         {
+            name: 'home',
+            path: '',
+            url: 'index.php',
+        },
+        {
             path: '(.*)',
             url: './pages/404.html',
         },
@@ -31,6 +33,7 @@ var myApp = new Framework7({
 
 // Expose Internal DOM library
 var $$ = Dom7;
+
 var endpoint = 'https://authos.bluemotive.it/fl_api/';
 // Add main view
 var mainView = myApp.views.create('.view-main');
@@ -62,6 +65,14 @@ if (GlobalToken.leght == 26) {
 
     myApp.closeModal('.login-screen');
 }
+
+// Dom Events
+$$('.panel-left').on('panel:open', function () {
+    console.log('Panel left: open');
+  });
+  $$('.panel-left').on('panel:opened', function () {
+    console.log('Panel left: opened');
+  });
 
 
 
@@ -250,12 +261,12 @@ $$('.login-screen').find('.button').on('click', function (e) {
                             myApp.loginScreen.close('.login-screen');
 
                             //fill selectAcivity
-                            myApp.request.json(endpoint + '?get_attivita', { token: data.token }, function (data) {
+                            /*myApp.request.json(endpoint + '?get_attivita', { token: data.token }, function (data) {
 
                                 $$.each(data.leads, function (i, val) {
                                     $$('#selectAcivity').append('<option value="' + val.id + '">' + val.oggetto + '</option>');
                                 });
-                            });
+                            });*/
 
                         } else {
                             myApp.alert('Esito: ' + response.info_txt);
@@ -308,6 +319,3 @@ function showSign(idImg) {
     var bannerImg = document.getElementById(idImg);
     bannerImg.src = "data:image/png;base64," + dataImage;
 }
-
-
-myApp.init();

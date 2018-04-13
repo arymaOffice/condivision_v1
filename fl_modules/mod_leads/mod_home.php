@@ -106,7 +106,7 @@ var totalChecked = 0;
 			
 			
 
-			if((select_type($chiave) == 2 || select_type($chiave) == 19 || select_type($chiave) == 9) && $chiave != 'id' || $chiave == 'status_potential' || $chiave == 'proprietario') {
+			if((select_type($chiave) == 2 || select_type($chiave) == 19) && $chiave != 'id' || $chiave == 'status_potential' || $chiave == 'proprietario') {
 				echo '<div class="filter_box">';
 				echo '  <label>'.$valore.'</label>';
 				echo '<select name="'.$chiave.'" class="select"><option value="-1">Tutti</option>';

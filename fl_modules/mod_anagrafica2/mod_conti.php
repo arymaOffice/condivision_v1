@@ -44,10 +44,11 @@ include("../../fl_inc/headers.php");
 	?>
     
     <table class="dati">
-      <tr>
-   <th style="width: 1%;"></th>
+    <tr>
    <th>Conto</th>
-   <th>Estremi</th>
+   <th>Banca</th>
+    <th>Estremi</th>
+     <th></th>
    </tr>
           
  <?php
@@ -60,7 +61,6 @@ if(mysql_affected_rows() < 1) echo "<p>Nessun elemento</p>";
     
      
       <tr>
-      <td><span class=\"Gletter\"></span></td>
       <td><input type="text" value="<?php echo $riga['intestatario']; ?>" style="width: 100%;" name="intestatario" class="updateField" data-rel="<?php echo $riga['id']; ?>" /></td>
       <td><input type="text" value="<?php echo $riga['descrizione']; ?>" style="width: 100%;" name="descrizione" class="updateField" data-rel="<?php echo $riga['id']; ?>" /></td>
   	  <td><input type="text" value="<?php echo $riga['estremi']; ?>" style="width: 100%;" name="estremi" class="updateField" data-rel="<?php echo $riga['id']; ?>" /></td>

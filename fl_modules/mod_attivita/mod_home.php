@@ -68,7 +68,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 			$urgente = ($riga['urgente'] == 0) ? '' : '<span class="msg red">URGENTE</span>';
 			
 
-			$assegnata_a = ($riga['operatore'] == $_SESSION['number']) ? ' a te' : ' a '.ucfirst($operatore[$riga['operatore']]);
+			$assegnata_a = (@$riga['operatore'] == $_SESSION['number']) ? ' a te' : ' a '.ucfirst(@$operatore[$riga['operatore']]);
 			$assegnata_da = ($riga['proprietario'] == $_SESSION['number']) ? 'Assegnato da te ' : 'Assegnato da '.ucfirst($operatore[$riga['proprietario']]).'';
 			echo "<td $colore></td>"; 			
 			echo "<td><h2><a href=\"mod_visualizza.php?external&action=1&amp;id=".$riga['id']."\" title=\"Vedi\" > ".ucfirst($riga['oggetto'])."</h2></a>".$assegnata_da." ".$assegnata_a." il ".mydate($riga['data_avvio'])." $importante $urgente</td>";
@@ -82,7 +82,8 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 			}
 			
 			echo "<td style=\"text-align: center;\">";
-			if($riga['fatto'] == 0) { echo " <a href=\"mod_opera.php?pubblica=1&amp;id=". $riga['id']."\" title=\"Segna come Fatto\"><i class=\"fa fa-thumbs-up\"></i></a>";} else { echo " <a href=\"mod_opera.php?pubblica=0&amp;id=". $riga['id']."\" title=\"Concluso\" class=\"c-green\"> </a><i class=\"fa fa-check-square c-green\"></i> ";}
+			if($riga['proprietario'] > 1){
+			if($riga['fatto'] == 0) { echo " <a href=\"mod_opera.php?pubblica=1&amp;id=". $riga['id']."\" title=\"Segna come Fatto\"><i class=\"fa fa-thumbs-up\"></i></a>";} else { echo " <a href=\"mod_opera.php?pubblica=0&amp;id=". $riga['id']."\" title=\"Concluso\" class=\"c-green\"> </a><i class=\"fa fa-check-square c-green\"></i> ";}}
 			echo "</td>";
 		   	echo "<td class=\"hideMobile\">";
 			if($_SESSION['number'] ==  $riga['proprietario'] ) echo "<a href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Delete\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a>";

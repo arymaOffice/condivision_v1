@@ -83,7 +83,7 @@ exit;
 
 if (isset($_POST['user']) && $tabella == 'fl_account') {
 $exist = check_record($tabella,'user',$id,check($_POST['user']));
-if($exist == TRUE || strlen(check($_POST['user'])) < 8){	
+if($exist == TRUE || strlen(check($_POST['user'])) < 3){	
 echo json_encode(array('action'=>'info','class'=>'red','url'=>'','esito'=>"Username esistente o non valido"));
 exit;
 }}

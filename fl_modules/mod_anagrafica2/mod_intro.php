@@ -69,10 +69,10 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
   <th style="width: 1%;"></th>
   <th><a href="./?ordine=1">Ragione Sociale</a></th>
   
-  <th class="hideMobile">Prima nota</th>
-  <th>F24</th>
+ <?php if(defined('PRIMANOTA')) { ?> <th class="hideMobile">Prima nota</th> <?php } ?>
+ <?php if(defined('F24')) { ?> <th>F24</th> <?php } ?>
    <th>Archivio Digitale</th>
-    <th>Cartella Condivisa</th>
+
   <th  class="hideMobile"></th>
 </tr>
 <?php 
@@ -100,11 +100,11 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 			$nominativo = ($riga['ragione_sociale'] != '') ? ucfirst($riga['ragione_sociale']) : ucfirst($riga['nome']).' '.ucfirst($riga['cognome']);		
 			$dettegli_utenza = get_tipo_utenza($riga['proprietario']);
 			echo "<td $colore><span class=\"Gletter\"></span></td>"; 
-			echo "<td><span class=\"color\">$nominativo</span><br><span class=\"msg orange\">".$tipo_profilo[$riga['tipo_profilo']]."</span> - P.iva ".$riga['partita_iva']."</td>";
-			echo "<td><a href=\"../mod_conto/?cmy=".base64_encode($riga['id'])."\"><i class=\"fa fa-file-text-o\"></i></a></td>"; 
-			echo "<td><a href=\"../mod_f24/?cmy=".base64_encode($riga['id'])."\"><i class=\"fa fa-file-pdf-o\"></i></a></td>"; 
+			echo "<td><span class=\"color\">$nominativo</span><br><span class=\"msg orange\">".@$tipo_profilo[$riga['tipo_profilo']]."</span><span class=\"msg gray\">".$pagamenti_f24[$riga['pagamenti_f24']]."</span> - P.iva ".$riga['partita_iva']."</td>";
+			if(defined('PRIMANOTA'))  echo "<td><a href=\"../mod_conto/?cmy=".base64_encode($riga['id'])."\"><i class=\"fa fa-file-text-o\"></i></a></td>"; 
+			if(defined('F24'))  echo "<td><a href=\"../mod_f24/?cmy=".base64_encode($riga['id'])."\"><i class=\"fa fa-file-pdf-o\"></i></a></td>"; 
 			echo "<td>$documenti</td>";
-			echo "<td>$folder_condiviso</td>";
+			//echo "<td>$folder_condiviso</td>";
 			echo "<td  class=\"hideMobile\" ><a data-fancybox-type=\"iframe\" class=\"fancybox_view\" href=\"mod_visualizza.php?external&action=1&amp;sezione=".@$riga['sezione']."&amp;id=".$riga['id']."&nominativo=".$riga['ragione_sociale']."\" title=\"Scheda di stampa ".ucfirst($riga['ragione_sociale'])."\"> <i class=\"fa fa-print\"></i> </a></td>";
 		
 		    echo "</tr>"; 

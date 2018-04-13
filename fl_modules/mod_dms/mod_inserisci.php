@@ -22,8 +22,8 @@ $folder_info = folder_info($id);
 
 <h1>Dettagli Risorsa</h1>
 <?php 
-echo 'Proprietà della risorsa: '.$account_id[base64_decode(check($_GET['AiD']))]; //.' '.$proprietario[$folder_info['proprietario']];
-if($id > 1 && (base64_decode(check($_GET['AiD'])) > 11 || $folder_info['proprietario'] == $_SESSION['number'] || $_SESSION['usertype'] == 0)) echo " | <a href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$id."&POST_BACK_PAGE\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i> Elimina </a>"; ?>
+echo 'Proprietà della risorsa: '.@$account_id[base64_decode(check(@$_GET['AiD']))]; //.' '.$proprietario[$folder_info['proprietario']];
+if($id > 1 && (base64_decode(check(@$_GET['AiD'])) > 11 || $folder_info['proprietario'] == $_SESSION['number'] || $_SESSION['usertype'] == 0)) echo " | <a href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$id."&POST_BACK_PAGE\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i> Elimina </a>"; ?>
 <?php if(@$folder_info['file'] != '') { ?>
  | <a href="mod_opera.php?ac=copy&move=<?php echo $id;?>"><i class="fa fa-files-o"></i> Copia </a> | 
 <a href="mod_opera.php?ac=cut&move=<?php echo $id;?>"><i class="fa fa-scissors"></i> Taglia </a>

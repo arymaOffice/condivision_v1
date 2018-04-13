@@ -84,7 +84,7 @@ echo $status.$social;
 <?php 
 
 $evento = GQD('fl_eventi_hrc','*',' lead_id = '.$id.' ORDER BY data_evento DESC LIMIT 1 '); 
-$selectDataRevisione = "SELECT DATE_FORMAT(data_creazione,'%d/%m/%Y %H:%i') as data FROM fl_revisioni_hrc WHERE evento_id = ".$evento['id']." ORDER BY id DESC  LIMIT 1";
+$selectDataRevisione = "SELECT DATE_FORMAT(data_creazione,'%d/%m/%Y %H:%i') as data FROM fl_revisioni_hrc WHERE evento_id = $evento_id ORDER BY id DESC  LIMIT 1";
 $selectDataRevisione = mysql_query($selectDataRevisione,CONNECT);
 $selectDataRevisione = mysql_fetch_assoc($selectDataRevisione);
 $dataRevisione = (@$selectDataRevisione['data'] != '') ? @$selectDataRevisione['data'] : 'Nessuna Revisione' ;

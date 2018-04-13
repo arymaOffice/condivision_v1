@@ -20,7 +20,7 @@ $provincia = check($_GET['provincia']);
     <style type="text/css">
       html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
     </style>
-    <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=<?php echo API_KEY; ?>"></script>
+    <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyAZlP_VevSuAyrZ633RNaCbXG1MUXYyh0M"></script>
 
 
     <script type="text/javascript">

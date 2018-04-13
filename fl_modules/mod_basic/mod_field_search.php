@@ -1,6 +1,6 @@
 <?php
 @require_once('../../fl_core/autentication.php');
-//if(!strstr(@$_SERVER['HTTP_REFERER'],$_SERVER['HTTP_HOST'])) { echo "Non si accettano richieste da remoto"; exit; }
+if(!strstr(@$_SERVER['HTTP_REFERER'],$_SERVER['HTTP_HOST'])) { echo "Non si accettano richieste da remoto"; exit; }
 
 $tabella = $tables[check($_GET['gtx'])];
 
@@ -14,9 +14,11 @@ $where = rtrim ($where,'OR')." ) ";
 
 $query = "SELECT * FROM $tabella $where LIMIT 0,5;";
 $risultato = mysql_query($query,CONNECT);
-echo "<h3>Seleziona elemento:</h3>";
+echo "<h3 style=\"text-align: right;\">Seleziona elemento:</h3>";
 $i = 1;
+
 while ($riga = mysql_fetch_array($risultato)) {
+
 $valore = '';
 foreach($_GET['w'] AS $chiave2 => $valore2) { $valore .= ' '.$riga[$valore2]; }
 

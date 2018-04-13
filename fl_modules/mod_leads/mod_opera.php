@@ -327,24 +327,6 @@ exit;
 }
 
 
-if(isset($_GET['creaLeadVuoto'])){
-
-	$parent_id = check($_GET['parent_id']);
-	$workflow_data = GRD('fl_eventi_hrc',$parent_id );
-	$anagrafica = GRD('fl_anagrafica',$workflow_data['anagrafica_cliente']);
-
-	$query = "INSERT INTO fl_leads_hrc (`nome`, `cognome`, `telefono`, `email`, `status_potential`, `note`) VALUES 
-	('".$anagrafica['nome']."','".$anagrafica['cognome']."','".$anagrafica['telefono']."','".$anagrafica['email']."',4,'Inserito da importazione automatica') " ;
-	mysql_query($query);
-
-	$lastInsert = mysql_insert_id();
-	mysql_query("UPDATE fl_eventi_hrc SET lead_id = ".$lastInsert." WHERE id = ".$workflow_data['id']);
-	mysql_close(CONNECT);
-	header("location: ../mod_leads/mod_richieste.php?reQiD=".$lastInsert."&evento_id=".$parent_id);
-	exit;
-
-}
-
 mysql_close(CONNECT);
 header("location: ".$_SESSION['POST_BACK_PAGE']);
 exit;

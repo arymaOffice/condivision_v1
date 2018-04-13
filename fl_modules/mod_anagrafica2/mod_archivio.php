@@ -127,14 +127,15 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 				
 				
 			if($account['id'] > 0)  { 
-			$user_check = '<a data-fancybox-type="iframe" title="Modifica Account" class="fancybox" href="../mod_account/mod_visualizza.php?external&id='.$account['id'].'">'.$account['user'].'</a><br>'.$account['motivo_sospensione'];
+			$user_check = '<a title="Modifica Account"  href="../mod_account2/mod_visualizza.php?id='.$account['id'].'">'.$account['user'].'</a><br>'.$account['motivo_sospensione'];
 			$user_ball = ($account['attivo'] == 1)  ? "<span class=\"c-green\"><i class=\"fa fa-user\"></i></span>" : "<span class=\"c-red\"><i class=\"fa fa-user\"></i></span>"; 
 			$saldo = balance($account['id']);
 			$saldo = '<a data-fancybox-type="iframe" class="fancybox_view"  href="../mod_depositi/mod_user.php?operatore_text='.$account['nominativo'].'&operatore='.$account['id'].'"> &euro; '.numdec($saldo,2).'</a>';
 			$tipo_profilo = $tipo[$account['tipo']];
+			
 			if($riga['account'] == "") mysql_query("UPDATE $tabella SET account = '".$account['user']."' WHERE id = ".$riga['id']." LIMIT 1");
 			} else {
-			$user_check = "<a href=\"../mod_account/mod_inserisci.php?external&anagrafica_id=".$riga['id']."&email=".$riga['email']."&nominativo=".$riga['ragione_sociale']."\">Crea account</a>";
+			$user_check = "<a href=\"../mod_account2/mod_inserisci.php?anagrafica_id=".$riga['id']."&email=".$riga['email']."&nominativo=".$riga['ragione_sociale']."\">Crea account</a>";
 			$user_ball = '';
 			$saldo = 0;
 			$tipo_profilo = '';
@@ -146,7 +147,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 			} else { $colore = "class=\"tab_red\""; }
 			$elimina =  "<a href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a>" ;
 		    (@$riga['data_scadenza'] < date('Y-m-d')) ? $note = "<span title=\"Documento Scaduto\" class=\"c-red\"><i class=\"fa fa-exclamation-triangle fa-lg\"></i></span>" : $note = "<i class=\"fa fa-exclamation-triangle fa-lg\"></i>";
-			$concessione = (AFFILIAZIONI == 1)  ? " ".$riga['numero_concessione'] : '';
+			$concessione = (defined('AFFILIAZIONI') && AFFILIAZIONI == 1)  ? " ".$riga['numero_concessione'] : '';
 			$tot_res++;
 			
 					echo "<tr>"; 
@@ -154,7 +155,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 					echo "<td $colore><span class=\"Gletter\"></span></td>"; 
 					if(ATTIVA_ACCOUNT_ANAGRAFICA == 1)  echo "<td  class=\"hideMobile\">$user_ball ".$user_check."</td>"; 		
 					echo "<td><span class=\"color\"><strong>".$riga['id']."</strong> $nominativo</span><br>P. iva ".$riga['partita_iva'].'<br>';
-					if(MULTI_BRAND == 1)  echo "<span class=\"msg blue\">".$marchio[$riga['marchio']]."</span>";
+					if(defined('MULTI_BRAND') && MULTI_BRAND == 1)  echo "<span class=\"msg blue\">".$marchio[$riga['marchio']]."</span>";
 					echo "<span class=\"msg orange\">".$tipo_profilo." $concessione </span></td>";
 					echo "<td class=\"hideMobile\">".$riga['comune_sede']." (".@$riga['provincia_sede'].") ".$riga['cap_sede']."<br>".$riga['sede_legale']."</td>"; 
 					echo "<td><i class=\"fa fa-envelope-o\"></i> <a href=\"mailto:".$riga['email']."\">".$riga['email']."</a>

@@ -1,9 +1,5 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 // Controllo Login
 session_start(); 
 if(!isset($_SESSION['user'])){ Header("Location: ../../login.php"); exit; }
@@ -126,14 +122,8 @@ if(isset($_POST['NAme'])) $file_name = base64_decode(check($_POST['NAme'])).'.'.
 
 
 /*Check Dir*/
-if(!@is_dir(DMS_ROOT.$folder.'/')) {  
-	if(!@mkdir(DMS_ROOT.$folder.'/',0777)) { 
-		return $esiti[7]; mysql_close(CONNECT);  exit; } 
-	}
-
-
-
-if(!is_writable(DMS_ROOT.$folder.'/')) {  return $esiti[9]; mysql_close(CONNECT); exit; }
+if(!@is_dir(DMS_ROOT.$folder.'/')) {  if(!@mkdir(DMS_ROOT.$folder.'/',0777)) { return $esiti[7]; mysql_close(CONNECT);  break; } }
+if(!is_writable(DMS_ROOT.$folder.'/')) {  return $esiti[9]; mysql_close(CONNECT); break; }
 if(file_exists(DMS_ROOT.$folder.'/'.$file_name)) {  $file_name = time().$file_name; }
 
 
@@ -147,7 +137,7 @@ if(is_uploaded_file($source['tmp_name'])){
 	$allegato = (isset($_REQUEST['allega_invio'])) ? DMS_ROOT.$folder.'/'.$file_name : '';
 	$allegatoName = (isset($_REQUEST['allega_invio'])) ? $file_name : '';
 
-	if(isset($_REQUEST['notifica']) && $account_id > 1) $notifi = notifica(0,$_SESSION['number'],$account_id,'Nuovo file pubblicato sul cloud di '.client,'<div style="font-family:Helvetica;">'.$descrizione_invio.'<h4> File: '.$file_name.' </h4> <br>Sulla piattaforma puoi accedere alla risorsa pubblicata dopo aver eseguito il login. <br><a href="'.ROOT.'">Accedi da qui</a></div>',1,0,1,0,0,$allegato,$allegatoName);
+	if(isset($_REQUEST['notifica']) && $account_id > 1) $notifi = notifica(0,$_SESSION['number'],$account_id,'Nuovo file pubblicato sul cloud di '.client,'<div style="font-family:Helvetica;">'.$descrizione_invio.'<h4> File: '.$file_name.' </h4> <br>Il File è disponibile come allegato alla presente comunicazione.<br>Sulla piattaforma puoi accedere alla risorsa pubblicata dopo aver eseguito il login. <br><a href="'.ROOT.'">Accedi da qui</a></div>',1,0,1,0,0,$allegato,$allegatoName);
 	mysql_close(CONNECT);
 	exit;
 	

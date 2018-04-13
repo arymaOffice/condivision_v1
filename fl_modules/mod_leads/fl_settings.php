@@ -66,7 +66,7 @@
 	}
 	
 	//Filtri di base (da strutturare quelli avanzati)
-	$basic_filters = array('location_evento','status_potential','proprietario','campagna_id','source_potential','interessato_a','centro_di_ricavo','tipo_interesse','anno_di_interesse');
+	$basic_filters = array('status_potential','proprietario','campagna_id','source_potential','interessato_a','centro_di_ricavo','tipo_interesse','anno_di_interesse');
 	$ordine = $ordine_mod[0].' DESC';	
 
 	/* Strutturazione della query */
@@ -90,7 +90,6 @@
 	include('../../fl_core/dataset/proprietario.php');
 	require('../../fl_core/class/ARY_dataInterface.class.php');
 	$data_set = new ARY_dataInterface();
-	$location_evento = $data_set->data_retriever('fl_sedi','sede',"WHERE id != 1",'sede ASC');
 	$mansione = $data_set->get_items_key("mansione");	
 	$tipo_interesse = $data_set->get_items_key("tipo_interesse");	
 	$interessato_a  = $data_set->data_retriever('fl_cg_res','codice,label','WHERE attivo = 1 AND id > 1 AND parent_id = 0 AND tipo_voce = 1',' id ASC ');
@@ -141,7 +140,7 @@
 	$hidden = array('industry',"paese",'marchio',"data_assegnazione","data_scadenza","data_scadenza_venditore",'venditore',"company","job_title","data_creazione","sent_mail","in_use",'is_customer',"data_aggiornamento","ip","operatore");
 	$radio = array('rito_civile');
 	$text = array();
-	$selectbtn = array('location_evento',"status_potential",'attivo');	
+	$selectbtn = array("status_potential",'attivo');	
 	$calendario = array('data_visita');	
 	$file = array();
 	$invisible = array('priorita_contatto');

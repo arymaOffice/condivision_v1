@@ -197,7 +197,7 @@ $(function() {
 
 <table class="dati" summary="Dati" style=" width: 100%;">
 <tr>
-  <th style="width: 1%;"></th>
+
  <th style="text-align: center;"><input onclick="checkAllFields(1);" id="checkAll"  name="checkAll" type="checkbox" checked /><label for="checkAll"><?php echo $checkRadioLabel; ?></label>
 <?php if(ATTIVA_ACCOUNT_ANAGRAFICA == 1) { ?><th class="noprint"><a href="./?ordine=2&<?php echo $_SERVER['QUERY_STRING']; ?>">Account</a></th><?php } ?>
   <th><a href="./?ordine=3&<?php echo $_SERVER['QUERY_STRING']; ?>">Ragione Sociale</a></th>
@@ -230,7 +230,7 @@ $(function() {
 				
 				
 			if(ATTIVA_ACCOUNT_ANAGRAFICA == 1 && @ $account['id'] > 0 && $show == 1)  { 
-			$user_check = '<a data-fancybox-type="iframe" title="Modifica Account" class="fancybox" href="../mod_account/mod_visualizza.php?external&id='.$account['id'].'">'.$account['user'].'</a><br>'.$account['motivo_sospensione'];
+			$user_check = '<a data-fancybox-type="iframe" title="Modifica Account" class="fancybox" href="../mod_account2/mod_visualizza.php?external&id='.$account['id'].'">'.$account['user'].'</a><br>'.$account['motivo_sospensione'];
 			$user_ball = ($account['attivo'] == 1)  ? "<span class=\"c-green\"><i class=\"fa fa-user\"></i></span>" : "<span class=\"c-red\"><i class=\"fa fa-user\"></i></span>"; 
 			$saldo = balance($account['id']);
 			$saldo = '<a data-fancybox-type="iframe" class="fancybox_view"  href="../mod_depositi/mod_user.php?operatore_text='.$account['nominativo'].'&operatore='.$account['id'].'"> &euro; '.numdec($saldo,2).'</a>';
@@ -240,7 +240,7 @@ $(function() {
 			if(isset($riga['account']) && @ $riga['account'] != $account['user']) mysql_query("UPDATE $tabella SET account = '".$account['user']."' WHERE id = ".$riga['id']." LIMIT 1");
 			$notifica_icon = '<a data-fancybox-type="iframe" title="Invia Notifica Account" class="fancybox_view_small" href="../mod_notifiche/mod_invia.php?destinatario[]='.$account['id'].'"><i class="fa fa-bell" aria-hidden="true"></i></a>';
 			} else {
-			$user_check = "<a href=\"../mod_account/mod_inserisci.php?external&anagrafica_id=".$riga['id']."&email=".$riga['email']."&nominativo=".$riga['ragione_sociale']."\">Crea account</a>";
+			$user_check = "<a href=\"../mod_account2/mod_inserisci.php?external&anagrafica_id=".$riga['id']."&email=".$riga['email']."&nominativo=".$riga['ragione_sociale']."\">Crea account</a>";
 			$user_ball = '';
 			$saldo = 0;
 			$tipo_profilo = '';
@@ -250,10 +250,15 @@ $(function() {
 			
 			
 			if($show==1) {
-			if($riga['status_anagrafica'] == 3) { 
-			$colore = "class=\"tab_green\"";  
-			} else if($riga['status_anagrafica'] != 4) { $colore = "class=\"tab_orange\""; 
-			} else { $colore = "class=\"tab_red\""; }
+			
+			if($account['attivo'] == 1) { 
+				$colore = "b_green";  
+			} else if($account['attivo'] == 0) { 
+				$colore = "b_red"; 
+			} else { 
+				$colore = "b_orange"; 
+			}
+
 			$elimina = (defined('ELIMINA_ANAGRAFICA')) ? "<a href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a>" : '';
 		    (@$riga['data_scadenza'] < date('Y-m-d')) ? $note = "<span title=\"Documento Scaduto\" class=\"c-red\"><i class=\"fa fa-exclamation-triangle fa-lg\"></i></span>" : $note = "<i class=\"fa fa-exclamation-triangle fa-lg\"></i>";
 			$concessione = (defined('AFFILIAZIONI') && isset($riga['numero_concessione']))  ? " ".$riga['numero_concessione'] : '';
@@ -262,10 +267,9 @@ $(function() {
 					echo "<tr>"; 
 
 					$nominativo = ($riga['ragione_sociale'] != '') ? ucfirst($riga['ragione_sociale']) : ucfirst($riga['nome']).' '.ucfirst($riga['cognome']);		
-					echo "<td $colore><span class=\"Gletter\"></span></td>"; 
 					echo '<td style="text-align: center;">'.$sendButton.'</td> ';
 
-					if(ATTIVA_ACCOUNT_ANAGRAFICA == 1)  echo "<td  class=\"hideMobile\">$user_ball ".$user_check."</td>"; 		
+					if(ATTIVA_ACCOUNT_ANAGRAFICA == 1)  echo "<td class=\"desktop $colore\">$user_ball ".$user_check."</td>"; 		
 					echo "<td><span class=\"color\"><strong>".$riga['id']."</strong> $nominativo</span><br>P. iva ".$riga['partita_iva'].'<br>';
 					if(defined('MULTI_BRAND'))  echo "<span class=\"msg blue\">".$marchio[$riga['marchio']]."</span> ";
 					echo " <span class=\"msg orange\">".$tipo_profilo." $concessione </span></td>";

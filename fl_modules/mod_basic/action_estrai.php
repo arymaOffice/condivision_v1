@@ -91,7 +91,7 @@ if(isset($newid)) { $id = (is_numeric($newid)) ? check($newid) : exit; $where = 
 			if($chiave == "sezione" && $valore > 1){ $disabled = "disabled";  }
 			if($chiave == "categoria" && $rel == 0){ $disabled = "disabled";  }
 			if($chiave == "anagrafica") $anagrafica_id = $valore; 
-			if($chiave == "marchio") $marchio_id = $valore; 
+			if($chiave == "marchio") $valore = $_SESSION['marchio']; 
 			if($chiave == "tipo") $tipo_id = $valore; 
 			if(($chiave == "anno_fiscale" || $chiave == "anno") && $id == 1) $valore = date('Y');
 			if($chiave == "mese" && $id == 1) $valore = date('m');

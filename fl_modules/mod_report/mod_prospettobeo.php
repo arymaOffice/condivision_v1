@@ -21,6 +21,10 @@ $portateName = array('','Aperitivi','Antipasti','Primi','Secondi','Frutta','Dess
 $sumAdulti = 0;
 $sumBambini = 0;
 
+
+$counter_colspan = 0;
+
+
 ?>
 
 
@@ -29,43 +33,43 @@ $sumBambini = 0;
 
 	<div>
 				<h2 style="float:  right; font-size: 18px "><a href="javascript:window.print();" ><i class="fa fa-print"></i></a></h2>
-<form>
-			<input type="date" name="data">
-			<input type="submit" value="cerca" name="" style="border: solid thin #666;margin-left: 10px;">
+<form class="noprint" style="float: right;padding: 10px;">
+			<input type="date" name="data" class="noprint">
+			<input type="submit" value="cerca" name="" style="border: solid thin #666;margin-left: 10px;" class="noprint">
 		</form>
 
 
 	</div>
-<style type="text/css"> .dati td { border: 1px solid;  } </style>
+<style type="text/css"> .dati td { border: 1px solid; font-size:large;  } </style>
+<p style="text-align: left;">Prospetto portate del <?php echo date("d/m/Y", strtotime($data));  echo ' Stampa delle  '.date('H:i d/m/Y'); ?></p>
 	<table class="dati">
 		<tr>
+			<?php  while($row = mysql_fetch_assoc($queryIntestazione)){ $counter_colspan++; $rigaTemplate .='<td style="text-align: center;">{{'.$row['id'].'}}</td>'; array_push($idArray,'{{'.$row['id'].'}}'); $revisisone = GQD('fl_revisioni_hrc','DATE_FORMAT(data_creazione , "%H:%i %d/%m/%Y") as dataRevisione ',' evento_id =" '.$row['id'].'" ORDER BY data_creazione DESC'); $nomi_sposi = GQD('fl_ricorrenze_matrimonio','nomi_sposi_menu',' evento_id =" '.$row['id'].'"'); ?> 
 
-			<td ><h1>Prospetto portate <br> del <?php echo date("d/m/Y", strtotime($data)); ?></h1>
-				<p><?php echo 'Stampa delle  '.date('H:i d/m/Y'); ?></p></td> 
-
-			<?php  while($row = mysql_fetch_assoc($queryIntestazione)){ $rigaTemplate .='<td style="text-align: center;">{{'.$row['id'].'}}</td>'; array_push($idArray,'{{'.$row['id'].'}}')?> 
-
-				<td style="text-align: center;"> 
+				<th style="text-align: center;"> 
 					<span style=""> <?php echo $row['nome_ambiente']; ?> </span> <br> 
 					<span style="margin-left: 10px;"><strong> <?php echo $row['titolo_ricorrenza']; ?> </strong></span> <br> 
 					<span style="margin-left: 10px;font-size: 14px;">A  <?php echo $row['sum_adulti'] ?> </span> 
-					<span style="font-size: 14px;">B <?php echo $row['numero_bambini'] ?></span>
-				</td>  
+					<span style="font-size: 14px;">B <?php echo $row['numero_bambini'] ?></span><br>
+					<span style="font-size: 14px;"><?php echo $nomi_sposi['nomi_sposi_menu'] ?></span>
+					<?php if(isset( $revisisone['dataRevisione'])){ ?><span style="font-size: 14px;">Ult. Rev. <?php echo $revisisone['dataRevisione']; ?></span> <?php } ?>
+				</th>  
 			
-			<?php $sumAdulti += $row['sum_adulti']; $sumBambini += $row['numero_bambini'];  } $rigaTemplate .='<td style="color:orange; text-align: center;">{{tot}}</td>'; ?>
+			<?php $sumAdulti += $row['sum_adulti']; $sumBambini += $row['numero_bambini'];  } $rigaTemplate .='<td style="background-color:orange;text-align: center;">{{tot}}</td>'; ?>
 			
-			<td style="color:orange"><span style="margin-left: 10px;">Totale </span><br> 
+			<th style="background-color:orange;text-align:center;"><span style="margin-left: 10px;">Totale </span><br> 
 				<span style="margin-left: 10px;font-size: 14px;">A  <?php echo $sumAdulti ?> </span> 
 				<span style="font-size: 14px;">B <?php echo $sumBambini ?></span>
-			</td>
+			</th>
 		<tr>
 
 		<?php while($rowPortate = mysql_fetch_assoc($queryPortate)){ ?>
 			<?php if($portateName[$rowPortate['portata']] != 1){ ?>
 				<tr><th style="text-align: center;font-weight: bold" colspan="<?php echo count($idArray); ?>"><h1 style="text-align: left;"><?php echo $portateName[$rowPortate['portata']] ?></h1></th><tr>
 			<?php $portateName[$rowPortate['portata']] = 1;   } ?>
+			<tr><th style="border:none;" colspan="<?php echo  $counter_colspan; ?>"><?php echo $rowPortate['nome_tecnico'] ?></th> <!-- nome portata --></tr>
 			<tr>
-				<td><?php echo $rowPortate['nome_tecnico'] ?></td> <!-- nome portata -->
+				
 				<?php $newLine = $rigaTemplate; 
 					  $concatEsploso = explode(',', $rowPortate['portate']);
 					  foreach ($concatEsploso as $value) {

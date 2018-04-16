@@ -35,7 +35,7 @@ $counter_colspan = 0;
 				<h2 style="float:  right; font-size: 18px "><a href="javascript:window.print();" ><i class="fa fa-print"></i></a></h2>
 <form class="noprint" style="float: right;padding: 10px;">
 			<input type="date" name="data" class="noprint">
-			<input type="submit" value="cerca" name="" style="border: solid thin #666;margin-left: 10px;" class="noprint">
+			<input type="submit" value="crea" name="" style="border: solid thin #666;margin-left: 10px;" class="noprint">
 		</form>
 
 
@@ -55,11 +55,11 @@ $counter_colspan = 0;
 					<?php if(isset( $revisisone['dataRevisione'])){ ?><span style="font-size: 14px;">Ult. Rev. <?php echo $revisisone['dataRevisione']; ?></span> <?php } ?>
 				</th>  
 			
-			<?php $sumAdulti += $row['sum_adulti']; $sumBambini += $row['numero_bambini'];  } $rigaTemplate .='<td style="background-color:orange;text-align: center;">{{tot}}</td>'; ?>
+			<?php $sumAdulti += $row['sum_adulti']; $sumBambini += $row['numero_bambini'];  } $rigaTemplate .='<td style="color:orange;text-align: center;font-weight:bold;">{{tot}}</td>'; ?>
 			
-			<th style="background-color:orange;text-align:center;"><span style="margin-left: 10px;">Totale </span><br> 
-				<span style="margin-left: 10px;font-size: 14px;">A  <?php echo $sumAdulti ?> </span> 
-				<span style="font-size: 14px;">B <?php echo $sumBambini ?></span>
+			<th style="color:orange;text-align:center;font-weight:bold;"><h2 style="margin-left: 10px;">Totale </h2><br> 
+				<span style="margin-left: 10px;font-size: 14px;font-weight:bold;">A  <?php echo $sumAdulti ?> </span> 
+				<span style="font-size: 14px;font-weight:bold;">B <?php echo $sumBambini ?></span>
 			</th>
 		<tr>
 

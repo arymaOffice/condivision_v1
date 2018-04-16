@@ -211,10 +211,10 @@ input.button, .button input, .button, .button a, a.button, .salva, a.salva, a.cr
 
   }
 
-  const FINESTRE = [];
+
 
   function openLink(linkpassato,nome){
-    FINESTRE.push(window.open(linkpassato,'"'+nome+'"','directories=no,titlebar=no,toolbar=no,location=0,status=no,menubar=no,scrollbars=no'));
+   window.open('../mod_liveslider/mod_service.php?url='+linkpassato,'"'+nome+'"','directories=no,titlebar=no,toolbar=no,location=0,status=no,menubar=no,scrollbars=no');
     
   }
 

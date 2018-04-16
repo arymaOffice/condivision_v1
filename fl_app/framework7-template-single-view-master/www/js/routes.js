@@ -2,6 +2,7 @@ routes = [
   {
     path: '/',
     url: './index.html',
+  
   },
   {
     path: '/about/',

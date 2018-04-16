@@ -108,3 +108,9 @@ $$('#my-login-screen .login-button').on('click', function () {
   }
 
 });
+
+// In page events:
+$$(document).on('page:init', function (e) {
+  // Page Data contains all required information about loaded and initialized page
+  var page = e.detail;
+})

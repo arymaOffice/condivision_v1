@@ -309,7 +309,7 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
 
                     'id' => $riga['id'],
                     'oggetto' => $riga['oggetto'],
-                    'descrizione' => $riga['descrizione'],
+                    'descrizione' => strip_tags(html_entity_decode($riga['descrizione'])),
                     'scadenza_default_ore' => $riga['cognscadenza_default_oreo'],
                     'data_inizio' => $riga['data_inizio'],
                     'data_fine' => $riga['data_fine'],
@@ -327,6 +327,8 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
 
         $this->cnv_makedata();
     }
+
+   
 
     public function get_marche()
     { //torna le marche delle auto recuperate dal db , basato su quello di eurotax
@@ -360,7 +362,7 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
     }
 
     public function get_modelli()
-    { //torna tutte le macchine nel db, dal 2000 al 2018 
+    { //torna tutte le macchine nel db, dal 2000 al 2018
 
         $dati = array();
 

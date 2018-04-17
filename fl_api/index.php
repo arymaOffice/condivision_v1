@@ -65,6 +65,7 @@ if (isset($dataset['usr_login'])) {
     $webservice->token = check($dataset['token']);
     $webservice->do_login();
     foreach ($webservice->contenuto as $chiave => $valore) {$_SESSION[$chiave] = $valore;}
+    ;
     exit;
 }
 
@@ -150,6 +151,7 @@ if (isset($dataset['lost_password'])) {
     $webservice->send_login();
     exit;
 }
+
 
 if(isset($dataset['get_attivita'])){
     mandatory_fileds(array('token'));

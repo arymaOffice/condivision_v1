@@ -1,12 +1,9 @@
 <?php 
 
-
-date_default_timezone_set ('Europe/Rome');
-
 header("Access-Control-Allow-Origin: *");
 session_start();
 
-ini_set('display_errors',1); // Debug 1
+ini_set('display_errors',0); // Debug 1
 error_reporting(E_ALL);
 
 require_once 'restServices.php';
@@ -20,11 +17,11 @@ $_SESSION['accessToken'] = $restService->accessToken; // Salvo eventualmente acc
 
 
 /* Realizza le chiamate possibili con uno switch o come preferisci */
-if(isset($_GET['get_attivita'])) $esito = $restService->get_attivita($_GET); // POST del form o array di dati da inviare
+if(isset($_POST['get_attivita'])) $esito = $restService->get_attivita($_POST); // POST del form o array di dati da inviare
 
 if(isset($_POST['get_leads'])) $esito = $restService->get_leads($_POST); // POST del form o array di dati da inviare
 
-if(isset($_GET['insert_lead'])) $esito = $restService->insert_lead($_GET); // POST del form o array di dati da inviare
+if(isset($_POST['insert_lead'])) $esito = $restService->insert_lead($_POST); // POST del form o array di dati da inviare
 
 
 

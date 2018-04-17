@@ -61,8 +61,6 @@ $$('#my-login-screen .login-button').on('click', function () {
 
     app.request.json(endpoint + '?app_login', { client_id: 103, time: n, request_id: n, go: 1 }, function (data) {
 
-      console.log(data);
-
       if (data.esito == 1) {
 
         app.request({
@@ -80,18 +78,28 @@ $$('#my-login-screen .login-button').on('click', function () {
 
             if (response.esito == 1) {
               var usr_id = response.usr_id;
-              $$('#welkome').html("Benvenuto " + response.user);
+              $$('#nomeuser').html(response.user);
               window.GlobalToken = data.token;
               // Close login screen
               app.loginScreen.close('#my-login-screen');
 
               //fill selectAcivity
-              /*myApp.request.json(endpoint + '?get_attivita', { token: data.token }, function (data) {
+              activity = app.request.json(endpoint + '?get_attivita', { token: data.token });
 
-                  $$.each(data.leads, function (i, val) {
-                      $$('#selectAcivity').append('<option value="' + val.id + '">' + val.oggetto + '</option>');
-                  });
-              });*/
+              console.log(activity['response']);
+
+              response = activity.response;
+
+              console.log(repsponse);
+              
+
+              $$.each(response.leads , function(i,val){
+                  console.log(val);
+              })
+
+
+
+
 
             } else {
               app.dialog.alert('Esito: ' + response.info_txt);

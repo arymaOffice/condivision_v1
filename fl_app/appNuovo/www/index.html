@@ -75,7 +75,7 @@
               </a>
             </div>
             <div class="title sliding" style="width:80%;">Nuovo Lead
-              <span style="margin-left:80%;">Benvenuto</span>
+              <span style="margin-left:50%;">Benvenuto</span>
               <span id="nomeuser"></span>
             </div>
             <div class="right"></div>
@@ -83,184 +83,138 @@
         </div>
         <!-- Scrollable page content-->
         <div class="page-content">
-          <div class="block block-strong">
-            <div >
-              <a class="item-link smart-select smart-select-init">
-                <select name="marchio" id="selectAcivity">
-                  <option disabled>Non selezionato</option>
-                </select>
-                <div class="item-content">
-                  <div class="item-inner">
-                    <div class="item-title item-label">Attività</div>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
 
           <!-- form lead-->
+          <form id="form-lead" class="list form-store-data">
 
-          <form id="form-lead" class="list">
-            <ul>
-              <!-- riga inizio -->
-              <div class="row">
-                <li class="tablet-50">
-                  <div class="item-content item-input">
+            <div class="block block-strong">
+              <div>
+                <a class="item-link smart-select smart-select-init">
+                  <select name="campagna_id" id="selectAcivity">
+                    <option selected>Non selezionato</option>
+                  </select>
+                  <div class="item-content">
                     <div class="item-inner">
-                      <div class="item-title item-label">Nome</div>
-                      <div class="item-input-wrap">
-                        <input type="text" name="name" placeholder="nome">
-                      </div>
+                      <div class="item-title">Attività</div>
                     </div>
                   </div>
-                </li>
-                <li class="tablet-50">
-                  <div class="item-content item-input">
-                    <div class="item-inner">
-                      <div class="item-title item-label">Cognome</div>
-                      <div class="item-input-wrap">
-                        <input type="text" name="cognome" placeholder="cognome">
-                      </div>
-                    </div>
-                  </div>
-                </li>
+                </a>
               </div>
-              <!-- riga fine -->
-              <!-- riga inizio -->
-              <div class="row">
-                <li class="tablet-50">
-                  <div class="item-content item-input">
-                    <div class="item-inner">
-                      <div class="item-title item-label">Città</div>
-                      <div class="item-input-wrap">
-                        <input type="text" name="citta" placeholder="citta">
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li class="tablet-50">
-                  <div class="item-content item-input">
-                    <div class="item-inner">
-                      <div class="item-title item-label">E-mail</div>
-                      <div class="item-input-wrap">
-                        <input type="text" name="email" placeholder="email">
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </div>
-              <!-- riga fine -->
-              <!-- riga inizio -->
-              <div class="row">
-                <li class="tablet-50">
-                  <div class="item-content item-input">
-                    <div class="item-inner">
-                      <div class="item-title item-label">Telefono</div>
-                      <div class="item-input-wrap">
-                        <input type="text" name="telefono" placeholder="telefono">
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <div class="col-50" style="border:none;">
-                  <a href="#" style="width:70%;margin: 0 auto;" class="button button-raised button-fill popup-open" data-popup="#my-popup">Azienda</a>
-                </div>
-              </div>
-              <!-- riga fine -->
+            </div>
 
-              <!-- riga inizio -->
-              <div class="row">
-                <li class="tablet-100">
-                  <div class="item-content item-input">
-                    <div class="item-inner">
-                      <div class="item-title item-label">Interessato a </div>
-                      <div class="item-input-wrap">
+            <!-- form lead-->
 
-                        <p>
-                          Nuovo
-                          <label class="radio" style="padding: 10px;">
-                            <input type="radio" name="interesse">
-                            <i class="icon-radio"></i>
-                          </label>
-                          Usato
-                          <label class="radio" style="padding: 10px;">
-                            <input type="radio" name="interesse">
-                            <i class="icon-radio"></i>
-                          </label>
-                          Veic. Commerciali
-                          <label class="radio" style="padding: 10px;">
-                            <input type="radio" name="interesse">
-                            <i class="icon-radio"></i>
-                          </label>
-                          Fleet
-                          <label class="radio" style="padding: 10px;">
-                            <input type="radio" name="interesse">
-                            <i class="icon-radio"></i>
-                          </label>
-                        </p>
-
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </div>
-              <!-- riga fine -->
-              <!-- riga inizio -->
-              <div class="row">
-                <li class="tablet-50">
-                  <a class="item-link smart-select smart-select-init" data-open-in="popup" data-searchbar="true" data-searchbar-placeholder="Cerca veicolo">
-                    <select name="car">
-                      <optgroup label="Japanese">
-                        <option value="honda">Honda</option>
-                        <option value="lexus">Lexus</option>
-                        <option value="mazda">Mazda</option>
-                        <option value="nissan">Nissan</option>
-                        <option value="toyota">Toyota</option>
-                      </optgroup>
-                      <optgroup label="German">
-                        <option value="audi">Audi</option>
-                        <option value="bmw">BMW</option>
-                        <option value="mercedes">Mercedes</option>
-                        <option value="vw">Volkswagen</option>
-                        <option value="volvo">Volvo</option>
-                      </optgroup>
-                      <optgroup label="American">
-                        <option value="cadillac">Cadillac</option>
-                        <option value="chrysler">Chrysler</option>
-                        <option value="dodge">Dodge</option>
-                        <option value="ford">Ford</option>
-                      </optgroup>
-                    </select>
-                    <div class="item-content">
+            <form id="form-lead" class="list">
+              <ul>
+                <!-- riga inizio -->
+                <div class="row">
+                  <li class="tablet-50">
+                    <div class="item-content item-input">
                       <div class="item-inner">
-                        <div class="item-title" style="font-size:14px;">Seleziona Modello Gamma</div>
+                        <div class="item-title item-label">Nome</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="nome" placeholder="nome">
+                        </div>
                       </div>
                     </div>
-                  </a>
-                </li>
-                <li class="tablet-50">
+                  </li>
+                  <li class="tablet-50">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Cognome</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="cognome" placeholder="cognome">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+                <!-- riga fine -->
+                <!-- riga inizio -->
+                <div class="row">
+                  <li class="tablet-50">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Città</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="citta" placeholder="citta">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="tablet-50">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">E-mail</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="email" placeholder="email">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+                <!-- riga fine -->
+                <!-- riga inizio -->
+                <div class="row">
+                  <li class="tablet-50">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Telefono</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="telefono" placeholder="telefono">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <div class="col-50" style="border:none;">
+                    <a href="#" style="width:70%;margin: 0 auto;" class="button button-raised button-fill popup-open" data-popup="#my-popup">Azienda</a>
+                  </div>
+                </div>
+                <!-- riga fine -->
+
+                <!-- riga inizio -->
+                <div class="row">
+                  <li class="tablet-100">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Interessato a </div>
+                        <div class="item-input-wrap">
+
+                          <p>
+                            Nuovo
+                            <label class="radio" style="padding: 10px;">
+                              <input type="radio" name="tipo_interesse" value="91">
+                              <i class="icon-radio"></i>
+                            </label>
+                            Usato
+                            <label class="radio" style="padding: 10px;">
+                              <input type="radio" name="tipo_interesse" value="92">
+                              <i class="icon-radio"></i>
+                            </label>
+                            Veic. Commerciali
+                            <label class="radio" style="padding: 10px;">
+                              <input type="radio" name="tipo_interesse" value="93">
+                              <i class="icon-radio"></i>
+                            </label>
+                            Fleet
+                            <label class="radio" style="padding: 10px;">
+                              <input type="radio" name="tipo_interesse" value="133">
+                              <i class="icon-radio"></i>
+                            </label>
+                          </p>
+
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+                <!-- riga fine -->
+                <!-- riga inizio -->
+                <div class="row">
+                  <li class="tablet-50">
                     <a class="item-link smart-select smart-select-init" data-open-in="popup" data-searchbar="true" data-searchbar-placeholder="Cerca veicolo">
-                      <select name="car">
-                        <optgroup label="Japanese">
-                          <option value="honda">Honda</option>
-                          <option value="lexus">Lexus</option>
-                          <option value="mazda">Mazda</option>
-                          <option value="nissan">Nissan</option>
-                          <option value="toyota">Toyota</option>
-                        </optgroup>
-                        <optgroup label="German">
-                          <option value="audi">Audi</option>
-                          <option value="bmw">BMW</option>
-                          <option value="mercedes">Mercedes</option>
-                          <option value="vw">Volkswagen</option>
-                          <option value="volvo">Volvo</option>
-                        </optgroup>
-                        <optgroup label="American">
-                          <option value="cadillac">Cadillac</option>
-                          <option value="chrysler">Chrysler</option>
-                          <option value="dodge">Dodge</option>
-                          <option value="ford">Ford</option>
-                        </optgroup>
+                      <select name="car" id="gamma">
+                        <option selected>Non Selezionato</option>
                       </select>
                       <div class="item-content">
                         <div class="item-inner">
@@ -269,110 +223,120 @@
                       </div>
                     </a>
                   </li>
-              </div>
-              <!-- riga fine -->
-              <!-- riga inizio -->
-              <div class="row">
-                <li class="tablet-100">
-                  <div class="item-content item-input">
-                    <div class="item-inner">
-                      <div class="item-title item-label">Pagamento vettura </div>
-                      <div class="item-input-wrap">
-
-                        <p>
-                          Non selezionato
-                          <label class="radio" style="padding: 10px;">
-                            <input type="radio" name="pagamento">
-                            <i class="icon-radio"></i>
-                          </label>
-                          Contanti
-                          <label class="radio" style="padding: 10px;">
-                            <input type="radio" name="pagamento">
-                            <i class="icon-radio"></i>
-                          </label>
-                          Bonifico
-                          <label class="radio" style="padding: 10px;">
-                            <input type="radio" name="pagamento">
-                            <i class="icon-radio"></i>
-                          </label>
-                          Finanziamento
-                          <label class="radio" style="padding: 10px;">
-                            <input type="radio" name="pagamento">
-                            <i class="icon-radio"></i>
-                          </label>
-                        </p>
-
+                  <li class="tablet-50">
+                    <a class="item-link smart-select smart-select-init" data-open-in="popup" data-searchbar="true" data-searchbar-placeholder="Cerca veicolo">
+                      <select name="car2" id="gamma2">
+                        <option selected>Non Selezionato</option>
+                      </select>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title" style="font-size:14px;">Seleziona Modello Gamma</div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </li>
-              </div>
-              <!-- riga fine -->
-              <!-- riga inizio -->
-              <div class="row">
-                <div class="col-50" style="border:none;">
-                  <a href="#" style="width:70%;margin: 0 auto;" class="button button-outline button-raised popup-open" data-popup="#my-testd"
-                    data-view="#my-testd">Test drive</a>
+                    </a>
+                  </li>
                 </div>
-                <div class="col-50" style="border:none;">
-                  <a href="#" style="width:70%;margin: 0 auto;" class="button button-outline button-raised  popup-open" data-popup="#my-permuta">Permuta</a>
+                <!-- riga fine -->
+                <!-- riga inizio -->
+                <div class="row">
+                  <li class="tablet-100">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Pagamento vettura </div>
+                        <div class="item-input-wrap">
+
+                          <p>
+                            Non selezionato
+                            <label class="radio" style="padding: 10px;">
+                              <input type="radio" name="pagamento_vettura" value="1">
+                              <i class="icon-radio"></i>
+                            </label>
+                            Contanti
+                            <label class="radio" style="padding: 10px;">
+                              <input type="radio" name="pagamento_vettura" value="104">
+                              <i class="icon-radio"></i>
+                            </label>
+                            Bonifico
+                            <label class="radio" style="padding: 10px;">
+                              <input type="radio" name="pagamento_vettura" value="108">
+                              <i class="icon-radio"></i>
+                            </label>
+                            Finanziamento
+                            <label class="radio" style="padding: 10px;">
+                              <input type="radio" name="pagamento_vettura" value="106">
+                              <i class="icon-radio"></i>
+                            </label>
+                          </p>
+
+                        </div>
+                      </div>
+                    </div>
+                  </li>
                 </div>
-              </div>
-              <!-- riga fine -->
-              <!-- riga inizio -->
-              <div class="row">
-                <li class="tablet-50">
-                  <div class="item-content item-input">
-                    <div class="item-inner">
-                      <div class="item-title item-label">Note</div>
-                      <div class="item-input-wrap">
-                        <input type="text" name="note" placeholder="note">
+                <!-- riga fine -->
+                <!-- riga inizio -->
+                <div class="row">
+                  <div class="col-50" style="border:none;">
+                    <a href="#" style="width:70%;margin: 0 auto;" class="button button-outline button-raised popup-open" data-popup="#my-testd"
+                      data-view="#my-testd">Test drive</a>
+                  </div>
+                  <div class="col-50" style="border:none;">
+                    <a href="#" style="width:70%;margin: 0 auto;" class="button button-outline button-raised  popup-open" data-popup="#my-permuta">Permuta</a>
+                  </div>
+                </div>
+                <!-- riga fine -->
+                <!-- riga inizio -->
+                <div class="row">
+                  <li class="tablet-50">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Note</div>
+                        <div class="item-input-wrap">
+                          <input type="text" name="note" placeholder="note">
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </li>
-                <li class="tablet-50">
-                  <div class="item-content item-input">
-                    <div class="item-inner">
-                      <div class="item-title item-label">Priorità </div>
-                      <div class="item-input-wrap">
+                  </li>
+                  <li class="tablet-50">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label">Priorità </div>
+                        <div class="item-input-wrap">
 
-                        <p>
-                          Bassa
-                          <label class="radio" style="padding: 10px;">
-                            <input type="radio" name="priorita">
-                            <i class="icon-radio"></i>
-                          </label>
-                          Media
-                          <label class="radio" style="padding: 10px;">
-                            <input type="radio" name="priorita">
-                            <i class="icon-radio"></i>
-                          </label>
-                          Alta
-                          <label class="radio" style="padding: 10px;">
-                            <input type="radio" name="priorita">
-                            <i class="icon-radio"></i>
-                          </label>
-                        </p>
+                          <p>
+                            Bassa
+                            <label class="radio" style="padding: 10px;">
+                              <input type="radio" name="priorita" value="0">
+                              <i class="icon-radio"></i>
+                            </label>
+                            Media
+                            <label class="radio" style="padding: 10px;">
+                              <input type="radio" name="priorita" value="1">
+                              <i class="icon-radio"></i>
+                            </label>
+                            Alta
+                            <label class="radio" style="padding: 10px;" value="2">
+                              <input type="radio" name="priorita">
+                              <i class="icon-radio"></i>
+                            </label>
+                          </p>
 
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </li>
-              </div>
-              <!-- riga fine -->
-              <!-- riga inizio -->
-              <div class="row">
-                <li class="tablet-80" style="margin: 0 auto;">
+                  </li>
+                </div>
+                <!-- riga fine -->
 
-                  <input type="submit" value="invia" class="button  button-fill color-green ">
-
-                </li>
-              </div>
-              <!-- riga fine -->
+                <!-- campi di lavoro-->
+                <input name="source_potential" type="hidden" value="0" />
+                <!-- campi di lavoro-->
         </div>
       </div>
     </div>
+
+
+
 
 
     <!-- Popup azienda -->
@@ -396,7 +360,7 @@
                     <div class="item-inner">
                       <div class="item-title item-label">Società</div>
                       <div class="item-input-wrap">
-                        <input type="text" name="societa" style="width:100%" placeholder="societa">
+                        <input type="text" name="ragione_sociale" style="width:100%" placeholder="società">
                       </div>
                     </div>
                   </div>
@@ -410,7 +374,7 @@
                     <div class="item-inner">
                       <div class="item-title item-label">Partita Iva</div>
                       <div class="item-input-wrap">
-                        <input type="text" name="iva" style="width:100%" placeholder="partita iva">
+                        <input type="text" name="partita_iva" style="width:100%" placeholder="partita iva">
                       </div>
                     </div>
                   </div>
@@ -442,14 +406,8 @@
                 <li class="tablet-100" style="display: inline;">
                   <div style="width: 90%;margin: 0 auto;">
                     <a class="item-link smart-select smart-select-init">
-                      <select name="fruits">
-                        <option value="apple">Apple</option>
-                        <option value="pineapple">Pineapple</option>
-                        <option value="pear">Pear</option>
-                        <option value="orange">Orange</option>
-                        <option value="melon">Melon</option>
-                        <option value="peach">Peach</option>
-                        <option value="banana">Banana</option>
+                      <select name="veicolo" id="veicolo">
+                        <option selected>Seleziona ...</option>
                       </select>
                       <div class="item-content">
                         <div class="item-inner">
@@ -466,14 +424,8 @@
                 <li class="tablet-100" style="display: inline;">
                   <div style="width: 90%;margin: 0 auto;">
                     <a class="item-link smart-select smart-select-init">
-                      <select name="fruits">
-                        <option value="apple">Apple</option>
-                        <option value="pineapple">Pineapple</option>
-                        <option value="pear">Pear</option>
-                        <option value="orange">Orange</option>
-                        <option value="melon">Melon</option>
-                        <option value="peach">Peach</option>
-                        <option value="banana">Banana</option>
+                      <select name="location_testdrive" id="location_testdrive">
+                        <option selected>Seleziona ...</option>
                       </select>
                       <div class="item-content">
                         <div class="item-inner">
@@ -488,11 +440,11 @@
               <br>
               <div class="row">
                 <li class="tablet-50" style="display: inline;">
-                  <div class="item-content item-input" style="width: 90%;margin: 0 auto;">
+                  <div class="item-content item-input" style="width: 80%;margin: 0 auto;">
                     <div class="item-inner">
                       <div class="item-title item-label">Data</div>
                       <div class="item-input-wrap">
-                        <input type="date" name="">
+                        <input type="date" name="data_test_drive">
                       </div>
                     </div>
                   </div>
@@ -502,7 +454,7 @@
                     <div class="item-inner">
                       <div class="item-title item-label">Ora</div>
                       <div class="item-input-wrap">
-                        <input type="time" name="">
+                        <input type="time" name="ora_test_drive">
                       </div>
                     </div>
                   </div>
@@ -531,12 +483,13 @@
             <div class="block">
               <!-- riga inizio -->
               <div class="row">
-                <li class="tablet-50" style="display: inline;">
+                <li class="tablet-50 item-content item-input" style="display: inline;">
                   <div class="item-content item-input" style="width: 80%;margin: 0 auto;">
                     <div class="item-inner">
                       <div class="item-title item-label">Marca</div>
                       <div class="item-input-wrap">
-                        <input type="text" name="marca" style="width:100%" placeholder="marca">
+                        <input id="autocomplete-dropdown" type="text" name="marca" style="width:100%" placeholder="marca">
+                        <input id="hide-marca" type="hidden" name="id-marca" value="NULL">
                       </div>
                     </div>
                   </div>
@@ -546,7 +499,9 @@
                     <div class="item-inner">
                       <div class="item-title item-label">Modello</div>
                       <div class="item-input-wrap">
-                        <input type="text" name="modello" style="width:100%" placeholder="modello">
+                        <input id="autocomplete-dropdown-modelli" type="text" name="modello" style="width:100%" placeholder="modello">
+                        <input id="hide-modello" type="hidden" name="id-modello" value="NULL">
+
                       </div>
                     </div>
                   </div>
@@ -560,7 +515,7 @@
                     <div class="item-inner">
                       <div class="item-title item-label">Anno Immatricolazione</div>
                       <div class="item-input-wrap">
-                        <input type="text" name="anno" style="width:100%" placeholder="anno">
+                        <input type="text" name="anno_immatricolazione" style="width:100%" placeholder="anno">
                       </div>
                     </div>
                   </div>
@@ -570,7 +525,7 @@
                     <div class="item-inner">
                       <div class="item-title item-label">Km</div>
                       <div class="item-input-wrap">
-                        <input type="number" name="km" style="width:100%" placeholder="km">
+                        <input type="number" name="kilometraggio" style="width:100%" placeholder="km">
                       </div>
                     </div>
                   </div>
@@ -621,6 +576,14 @@
       </div>
     </div>
     <!-- Popup permuta fine-->
+
+    <!-- riga inizio -->
+    <div class="row">
+      <div class="tablet-80">
+        <input type="submit" style="position: absolute; bottom: 100px;z-index: 9999;width: 80%;margin: 0 10%;" value="invia" class="button  button-fill color-green invia">
+        </div>
+    </div>
+    <!-- riga fine -->
 
     </ul>
     </form>

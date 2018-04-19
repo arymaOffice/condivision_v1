@@ -7,21 +7,6 @@ var app = new Framework7({
   id: 'io.framework7.testapp', // App bundle ID
   name: 'Bluemotive', // App name
   theme: 'md', // Automatic theme detection
-  // App root data
-  data: function () {
-    return {
-      user: {
-        firstName: 'John',
-        lastName: 'Doe',
-      },
-    };
-  },
-  // App root methods
-  methods: {
-    helloWorld: function () {
-      app.dialog.alert('Hello World!');
-    },
-  },
   // App routes
   routes: routes,
 });
@@ -192,10 +177,32 @@ $$('.invia').on('click', function (e) {
   e.preventDefault();
   var nome = $$('input[name="nome"]').val();
   var telefono = $$('input[name="telefono"]').val();
+  var campagna_id = $$('select[name="campagna_id"]').val();
   var formData = app.form.convertToData('#form-lead');
+
+  
+  var ragione_sociale = $$('input[name="ragione_sociale"]').val();  formData['ragione_sociale'] = ragione_sociale;
+
+  var partita_iva = $$('input[name="partita_iva"]').val(); formData['partita_iva'] = partita_iva;
+
+  var id_marca = $$('input[name="id-marca"]').val(); formData['id_marca'] = id_marca;
+
+  var id_modello = $$('input[name="id-modello"]').val(); formData['id_modello'] = id_modello;
+
+  var anno_immatricolazione = $$('input[name="anno_immatricolazione"]').val(); formData['anno_immatricolazione'] = anno_immatricolazione;
+
+  var kilometraggio = $$('input[name="kilometraggio"]').val(); formData['kilometraggio'] = kilometraggio;
+
+  var alimentazione = $$('input[name="alimentazione"]').val(); formData['alimentazione'] = alimentazione;
+
+  var targa = $$('input[name="targa"]').val(); formData['targa'] = targa;
+
+  var descrizione = $$('input[name="descrizione"]').val(); formData['descrizione'] = descrizione;
+
+
   var storedData = JSON.stringify(formData);
 
-  if (nome != '' && telefono != '') {
+  if (nome != '' && telefono != '' && campagna_id != 'NULL' ) {
     app.request({
       url: endpoint + '?insert_lead&token=' + window.GlobalToken,
       method: 'POST',
@@ -216,12 +223,13 @@ $$('.invia').on('click', function (e) {
           app.dialog.alert('errore nell\'inserimento');          
         }
 
-        app.form.removeFormData('form-lead');
+        $$('#form-lead')[0].reset();
+       
       }
     });
 
   } else {
-    app.dialog.alert('Inserisci nome e telefono');
+    app.dialog.alert('Seleziona un\' attività, inserisci nome e telefono');
   }
 
 

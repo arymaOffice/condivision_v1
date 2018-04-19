@@ -90,8 +90,8 @@
             <div class="block block-strong">
               <div>
                 <a class="item-link smart-select smart-select-init">
-                  <select name="campagna_id" id="selectAcivity">
-                    <option selected>Non selezionato</option>
+                  <select name="campagna_id" id="selectAcivity" required>
+                    <option value="NULL" selected>Non selezionato</option>
                   </select>
                   <div class="item-content">
                     <div class="item-inner">
@@ -180,27 +180,26 @@
                         <div class="item-title item-label">Interessato a </div>
                         <div class="item-input-wrap">
 
-                          <p>
-                            Nuovo
-                            <label class="radio" style="padding: 10px;">
-                              <input type="radio" name="tipo_interesse" value="91">
-                              <i class="icon-radio"></i>
-                            </label>
-                            Usato
-                            <label class="radio" style="padding: 10px;">
+                          <p>                            
+                            <label class="radio" style="padding: 10px;display:inline-flex;">
+                              <input type="radio" name="tipo_interesse" value="91" checked>
+                              <i class="icon-radio" style="margin-right: 5px;"></i> Nuovo                             
+                            </label>                
+                            
+                            <label class="radio" style="padding: 10px;display:inline-flex;">
                               <input type="radio" name="tipo_interesse" value="92">
-                              <i class="icon-radio"></i>
-                            </label>
-                            Veic. Commerciali
-                            <label class="radio" style="padding: 10px;">
+                              <i class="icon-radio" style="margin-right: 5px;"></i> Usato
+                            </label>                            
+                            <label class="radio" style="padding: 10px;display:inline-flex;">
                               <input type="radio" name="tipo_interesse" value="93">
-                              <i class="icon-radio"></i>
+                              <i class="icon-radio" style="margin-right: 5px;"></i>Veic. Commerciali
                             </label>
-                            Fleet
-                            <label class="radio" style="padding: 10px;">
+                            
+                            <label class="radio" style="padding: 10px;display:inline-flex;">
                               <input type="radio" name="tipo_interesse" value="133">
-                              <i class="icon-radio"></i>
+                              <i class="icon-radio" style="margin-right: 5px;"></i> Fleet
                             </label>
+                           
                           </p>
 
                         </div>
@@ -246,25 +245,25 @@
                         <div class="item-input-wrap">
 
                           <p>
-                            Non selezionato
-                            <label class="radio" style="padding: 10px;">
-                              <input type="radio" name="pagamento_vettura" value="1">
-                              <i class="icon-radio"></i>
+                            
+                            <label class="radio" style="padding: 10px;display:inline-flex;">
+                              <input type="radio" name="pagamento_vettura" value="1" checked>
+                               <i class="icon-radio" style="margin-right: 5px;"></i>Non selezionato
                             </label>
-                            Contanti
-                            <label class="radio" style="padding: 10px;">
+                            
+                            <label class="radio" style="padding: 10px;display:inline-flex;">
                               <input type="radio" name="pagamento_vettura" value="104">
-                              <i class="icon-radio"></i>
+                               <i class="icon-radio" style="margin-right: 5px;"></i>Contanti
                             </label>
-                            Bonifico
-                            <label class="radio" style="padding: 10px;">
+                            
+                            <label class="radio" style="padding: 10px;display:inline-flex;">
                               <input type="radio" name="pagamento_vettura" value="108">
-                              <i class="icon-radio"></i>
+                               <i class="icon-radio" style="margin-right: 5px;"></i>Bonifico
                             </label>
-                            Finanziamento
-                            <label class="radio" style="padding: 10px;">
+                            
+                            <label class="radio" style="padding: 10px;display:inline-flex;">
                               <input type="radio" name="pagamento_vettura" value="106">
-                              <i class="icon-radio"></i>
+                               <i class="icon-radio" style="margin-right: 5px;"></i>Finanziamento
                             </label>
                           </p>
 
@@ -276,10 +275,37 @@
                 <!-- riga fine -->
                 <!-- riga inizio -->
                 <div class="row">
+
+                  <!--cancellato 
                   <div class="col-50" style="border:none;">
                     <a href="#" style="width:70%;margin: 0 auto;" class="button button-outline button-raised popup-open" data-popup="#my-testd"
                       data-view="#my-testd">Test drive</a>
                   </div>
+                  cancellato -->
+
+                  <li class="tablet-50">
+                      <div class="item-content item-input">
+                        <div class="item-inner">
+                          <div class="item-title item-label">Test Drive </div>
+                          <div class="item-input-wrap">
+                            <p>
+                              <label class="radio" style="padding: 10px;display:inline-flex;">
+                                <input type="radio" name="test_drive" value="1">
+                                 <i class="icon-radio" style="margin-right: 5px;"></i>Sì
+                              </label>
+                              
+                              <label class="radio" style="padding: 10px;display:inline-flex;">
+                                <input type="radio" name="test_drive" value="0" checked>
+                                 <i class="icon-radio" style="margin-right: 5px;"></i>No
+                              </label>
+                            </p>  
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  
+
+
                   <div class="col-50" style="border:none;">
                     <a href="#" style="width:70%;margin: 0 auto;" class="button button-outline button-raised  popup-open" data-popup="#my-permuta">Permuta</a>
                   </div>
@@ -304,20 +330,20 @@
                         <div class="item-input-wrap">
 
                           <p>
-                            Bassa
-                            <label class="radio" style="padding: 10px;">
+                            
+                            <label class="radio" style="padding: 10px;display:inline-flex;">
                               <input type="radio" name="priorita" value="0">
-                              <i class="icon-radio"></i>
+                               <i class="icon-radio" style="margin-right: 5px;"></i>Bassa
                             </label>
-                            Media
-                            <label class="radio" style="padding: 10px;">
+                            
+                            <label class="radio" style="padding: 10px;display:inline-flex;">
                               <input type="radio" name="priorita" value="1">
-                              <i class="icon-radio"></i>
+                               <i class="icon-radio" style="margin-right: 5px;"></i>Media
                             </label>
-                            Alta
-                            <label class="radio" style="padding: 10px;" value="2">
+                            
+                            <label class="radio" style="padding: 10px;display:inline-flex;" value="2">
                               <input type="radio" name="priorita">
-                              <i class="icon-radio"></i>
+                               <i class="icon-radio" style="margin-right: 5px;"></i>Alta
                             </label>
                           </p>
 
@@ -331,6 +357,17 @@
                 <!-- campi di lavoro-->
                 <input name="source_potential" type="hidden" value="0" />
                 <!-- campi di lavoro-->
+
+                <br>
+                <br>
+
+                <!-- riga inizio -->
+                <div class="row">
+                  <li class="tablet-100">
+                    <input type="submit" value="invia" class="button  button-fill color-green invia">
+                  </li>
+                </div>
+                <!-- riga fine -->
         </div>
       </div>
     </div>
@@ -577,13 +614,7 @@
     </div>
     <!-- Popup permuta fine-->
 
-    <!-- riga inizio -->
-    <div class="row">
-      <div class="tablet-80">
-        <input type="submit" style="position: absolute; bottom: 100px;z-index: 9999;width: 80%;margin: 0 10%;" value="invia" class="button  button-fill color-green invia">
-        </div>
-    </div>
-    <!-- riga fine -->
+
 
     </ul>
     </form>

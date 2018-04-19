@@ -375,6 +375,7 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
                 array_push($dati, array(
 
                     'id' => $riga['id'],
+                    'id_marca_eurotax' => $riga['id_marca_eurotax'],
                     'modello' => $riga['modello'],
                     'cilindrata' => $riga['cilindrata'],
                     'codice_alimentazione' => $riga['codice_alimentazione'],

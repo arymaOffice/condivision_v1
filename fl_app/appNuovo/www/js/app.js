@@ -79,28 +79,7 @@ function retrieve_data() {
   Framework7.request.json(endpoint, { get_marche: 1, token: window.GlobalToken }, function (response) {
     leads = response.leads;
     for (i = 0; i <= leads.length; i++) {
-      marche.push(leads[i].label);
-    }
-  });
-  /*rende il campo autocompletante*/
-  var autocompleteDropdownSimple = app.autocomplete.create({
-    inputEl: '#autocomplete-dropdown',
-    openIn: 'dropdown',
-    source: function (query, render) {
-      var results = [];
-      if (query.length === 0) {
-        render(results);
-        return;
-      }
-      // Find matched items
-      for (var i = 0; i < marche.length; i++) {
-        if (marche[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-          results.push(marche[i]);
-          $$('#hide-marca').val(leads[i].id);
-        }
-      }
-      // Render items by passing array with result items
-      render(results);
+      marche[leads[i].id] = leads[i].label;
     }
   });
   //recupera marche macchine -----------------------------------------
@@ -111,7 +90,7 @@ function retrieve_data() {
   Framework7.request.json(endpoint, { get_modelli: 1, token: window.GlobalToken }, function (response) {
     leads = response.leads;
     for (i = 0; i <= leads.length; i++) {
-      macchine.push(leads[i].modello + ' anno: ' + leads[i].anno + ' cc: ' + leads[i].cilindrata + ' al: ' + leads[i].codice_alimentazione);
+      macchine.push(marche[leads[i].id_marca_eurotax] +' '+leads[i].modello + ' , anno: ' + leads[i].anno + ' cc: ' + leads[i].cilindrata + ' al: ' + leads[i].codice_alimentazione);
     }
   });
   /*rende il campo autocompletante*/

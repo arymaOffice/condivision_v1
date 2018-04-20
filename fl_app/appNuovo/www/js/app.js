@@ -170,7 +170,7 @@ $$('.invia').on('click', function (e) {
 
   var anno_immatricolazione = $$('input[name="anno_immatricolazione"]').val(); formData['anno_immatricolazione'] = anno_immatricolazione;
 
-  var kilometraggio = $$('input[name="kilometraggio"]').val(); formData['kilometraggio'] = kilometraggio;
+  var chilometri_percorsi = $$('input[name="chilometri_percorsi"]').val(); formData['chilometri_percorsi'] = chilometri_percorsi;
 
   var alimentazione = $$('input[name="alimentazione"]').val(); formData['alimentazione'] = alimentazione;
 

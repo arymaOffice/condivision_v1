@@ -31,7 +31,7 @@
 	if(isset($_GET['ANiD']) && $_SESSION['usertype'] < 2) $_SESSION['anagrafica'] = check($_GET['ANiD']);
 
 
-	$new_button = '';  //Solo se la funzione new richiede un link diverso da quello standard  
+	$new_button = '<a href="../mod_dms/?c=NQ==&a=ads" style="color:gray;" ><i class="fa fa-plus-circle"></i></a>';  //Solo se la funzione new richiede un link diverso da quello standard  
     $module_menu = ''; //Menu del modulo
 
 
@@ -73,7 +73,6 @@
 	
 	$link_cat = $data_set->data_retriever('fl_link_cat','descrizione'); //Crea un array con i valori X2 della tabella X1
 	$cartelle_pubblicita = $data_set->data_retriever('fl_dms','label',' WHERE parent_id = \'5\' AND file = "" '); //Crea un array con i valori X2 della tabella X1
-	unset($cartelle_pubblicita[0]);
 	$tipologia_hd = $data_set->get_items_key("tipologia_hd");//Crea un array con gli elementi figli dell'elemento con tag X1	
 	$reparto_hd = $data_set->get_items_key("reparto_hd");
 	$stato_hd = array('Aperto','Attesa cliente','Chiuso'); // Valori manuali (sconsigliato)

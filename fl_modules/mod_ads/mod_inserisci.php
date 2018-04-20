@@ -4,10 +4,8 @@ require_once '../../fl_core/autentication.php';
 include 'fl_settings.php'; // Variabili Modulo
 include "../../fl_inc/headers.php";
 include "../../fl_inc/testata_mobile.php";
-
-
-
-
+$cat_id = filter_var($_GET['categoria_ads'],FILTER_SANITIZE_NUMBER_INT);
+$per_questa_categoria = $data_set->data_retriever('fl_ads','folder_number',' WHERE categoria_ads =  '.$cat_id ); //Crea un array con i valori X2 della tabella X1
 ?>
 
 <body style=" background: #FFFFFF;">
@@ -29,12 +27,14 @@ include "../../fl_inc/testata_mobile.php";
 <br>
 <br>
 
-<?php foreach($cartelle_pubblicita as $key => $value){ echo '<input type="checkbox" name="cartelle[]" id="folder'.$key.'" value="'.$key.'"><label for="folder'.$key.'" style="display:inline-block;margin:10px;">'.$value.'</label>';} ?>
+<?php foreach($cartelle_pubblicita as $key => $value){ 
+    $checked = ( array_search($key,$per_questa_categoria)) ? 'checked' : '';
+    echo '<input type="checkbox" name="cartelle[]" id="folder'.$key.'" value="'.$key.'" '.$checked.'><label for="folder'.$key.'" style="display:inline-block;margin:10px;">'.$value.'</label>';} ?>
 <br>
 <br>
 
 <input type="hidden" value="1" name="pubblicita">
-<input type="hidden" value="<?php echo filter_var($_GET['categoria_ads'],FILTER_SANITIZE_NUMBER_INT);?>" name="categoria_ads">
+<input type="hidden" value="<?php echo $cat_id ; ?>" name="categoria_ads">
 
 <input type="submit" value="Salva" class="button" style="width: 400px;">
 </div>

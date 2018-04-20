@@ -8,7 +8,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
     
 <?php
 	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,0);
-	$query = "SELECT $select,lcat.descrizione as catName, GROUP_CONCAT( `folder_number` ) as folders  FROM `$tabella` ads JOIN fl_link_cat lcat ON lcat.id = categoria_ads LEFT JOIN fl_dms dms ON dms.id = folder_number  GROUP BY categoria_ads ORDER BY lcat.$ordine LIMIT $start,$step;";
+	$query = "SELECT $select,lcat.descrizione as catName, GROUP_CONCAT( `label` ) as folders  FROM `$tabella` ads JOIN fl_link_cat lcat ON lcat.id = categoria_ads LEFT JOIN fl_dms dms ON dms.id = folder_number  GROUP BY categoria_ads ORDER BY lcat.$ordine LIMIT $start,$step;";
 	$risultato = mysql_query($query, CONNECT);
 ?>
 

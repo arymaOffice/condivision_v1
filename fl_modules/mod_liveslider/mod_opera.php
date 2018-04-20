@@ -31,26 +31,22 @@ if (isset($_GET['nome_slider'])) { //salva slider
 
 if (isset($_GET['give_ads'])) {
 
-    $files = array();
-    $numero = filter_var($_GET['give_ads'],FILTER_SANITIZE_NUMBER_INT);
+    $files = GQS('fl_dms d JOIN (
 
-    if ($handle = opendir(DMS_ROOT . '5/')) {
-        /* This is the correct way to loop over the directory. */
-        while (false !== ($entry = readdir($handle))) {
-            $files[] = $entry;
-        }
-        closedir($handle);
+        SELECT id, parent_id
+        FROM `fl_dms`
+        WHERE `parent_id`
+        IN (
 
-        //effettuare controllo sul file come numero da caricare
+        SELECT id
+        FROM `fl_dms`
+        WHERE `parent_id` =5
+        )
+        AND label = \'img\'
+        )u ON d.parent_id = u.id', '  CONCAT( d.parent_id ,"/",d.file ) path',' 1'); //Crea un array con i file
 
-        echo json_encode(array('esito' => 1, 'type' => 'img', 'src' => DMS_ROOT . '5/'.@$files[$numero]), JSON_UNESCAPED_SLASHES);
-
-    } else {
-        echo json_encode(array('esito' => 0));
-
-    }
-
-    exit;
+        echo json_encode(array('esito' => 1, 'type' => 'img', 'src' => DMS_ROOT,'files'=>$files), JSON_UNESCAPED_SLASHES);
+        exit;
 
 }
 

@@ -66,12 +66,34 @@
 	$proprietario['-1'] = "Tutti";
 	$periodo_evento = $data_set->get_items_key("tipo_interesse");
 	$tipo_servizio_evento = $data_set->get_items_key("tipo_servizio_evento");
-	$ambienti = $data_set->get_items_key("ambienti");
-	$stato_evento = array('Bozza','Attesa Contratto','Confermato','Archiviato','Annullato');
+	
+
+	//Ambienti 2.0
+	$ambienti =  $data_set->data_retriever('fl_ambienti','nome_ambiente',"WHERE id != 1",'priority ASC,tipo_ambiente ASC, id ASC');
 	unset($ambienti[0]);
-	unset($ambienti[1]);	
-	if(defined('MULTI_LOCATION')) $ambienti =  $data_set->data_retriever('fl_ambienti','nome_ambiente',"WHERE id != 1",'tipo_ambiente ASC');
+	unset($ambienti[1]);
+
+	//Multiambiente 3.0
+	if(defined('MULTI_AMBIENTE')) {
+	$ambiente_tutti =  $data_set->data_retriever('fl_ambienti','nome_ambiente',"WHERE id != 1",'priority ASC, id ASC');
+	$ambiente_principale =  $data_set->data_retriever('fl_ambienti','nome_ambiente',"WHERE id != 1 AND tipo_ambiente = 0 AND gestione_disponibilita = 1",'priority ASC, id ASC');
+	$ambiente_secondario =  $data_set->data_retriever('fl_ambienti','nome_ambiente',"WHERE id != 1 AND tipo_ambiente = 1 AND gestione_disponibilita = 1",'priority ASC, id ASC');
+	unset($ambiente_principale[0]);
+	unset($ambiente_principale[1]);	
+	unset($ambiente_secondario[0]);
+	unset($ambiente_secondario[1]);	
+
+	$ambiente_secondario_B = array();
+	$codici_ambiente = $data_set->data_retriever('fl_ambienti','codice_ambiente',"WHERE id != 1",'priority ASC,tipo_ambiente ASC, id ASC');
+	foreach($ambiente_secondario AS $chiave => $valore) { $ambiente_secondario_B[$chiave.'B'] = $ambiente_secondario[$chiave]; $codici_ambiente[$chiave.'B'] = $codici_ambiente[$chiave].' (T) '; }
+	$ambienti_disponibilta = $ambiente_principale+$ambiente_secondario+$ambiente_secondario_B;
+	$ambiente_principale = $cerimonia =  $notturno = $ambiente_1 = $ambiente_2 = $ambiente_tutti;
+	unset($ambienti_disponibilta[0]);
+	unset($ambienti_disponibilta[1]);	
+	}	
+
 	$stato_evento = array('Bozza','Attesa Contratto','Confermato','Archiviato','Annullato');
+
 		
 	$tipo_evento  = $data_set->data_retriever('fl_cg_res','codice,label','WHERE  attivo = 1 AND parent_id = 0 AND tipo_voce = 1','id ASC');
 	$centro_di_ricavo  = $data_set->data_retriever('fl_cg_res','codice,label','WHERE  attivo = 1 AND parent_id > 0 AND tipo_voce = 1','parent_id ASC, id ASC');

@@ -153,8 +153,10 @@ h1 { font-size: 18px; }
 
 	?>
 
-	<p style="text-align: center;">
-LISTA INTOLLERANZE ALLERGENI ALIMENTARI Reg. UE 1169/2011 <br>
+	
+<h2>LISTA INTOLLERANZE ALLERGENI ALIMENTARI Reg. UE 1169/2011 </h2>
+
+<p style="text-align: center;">
 Gli ospiti in questa lista hanno segnalato le allergie e/o intolleranze personali. Si prega tutto lo staff di prestare la massima attenzione al rispetto delle indicazioni che seguono.</p>
 
 
@@ -177,9 +179,10 @@ Gli ospiti in questa lista hanno segnalato le allergie e/o intolleranze personal
 			if(strpos( $nome_tavolo, 'sposa') !== false) $lato = 'SPOSA';
 			$numero = urldecode(str_replace('sposo','', $nome_tavolo));
 			$numero = urldecode(str_replace('sposa','', $numero));
-	
+		    $numero_tavolo_utente = ($riga['numero_tavolo_utente'] != 0 ) ? $riga['numero_tavolo_utente'] : '';
+
 			echo "<div style=\"border: 1px solid #e6e6e6; margin: 5px 0; padding: 4px; \">
-			<h2 style=\"margin: 2px;\">Tav. ".$numero." ".$lato.' '.$riga['numero_tavolo_utente']." ".$riga['nome_tavolo_utente']." - ".urldecode($riga['cognome'])." ".urldecode($riga['nome'])."</h2>"; 
+			<h2 style=\"margin: 2px;\">Tav. ".$numero." ".$lato.' '.$numero_tavolo_utente." ".$riga['nome_tavolo_utente']." - ".urldecode($riga['cognome'])." ".urldecode($riga['nome'])."</h2>"; 
 			echo "<p style=\"margin: 4px 2px; color: #CE2F0D;\">Note: ".$riga['note_intolleranze']."</p></div>";
 
 

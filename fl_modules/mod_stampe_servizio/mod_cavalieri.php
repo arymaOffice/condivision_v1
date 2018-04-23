@@ -127,7 +127,8 @@ if(!isset($_GET['backtop'])) {
 
 		$id_tavolo = $riga['id'];
 		$nomeTavolo = (isset($_GET['soloNumero'])) ? '' : urldecode(strtoupper($riga['nome_tavolo']));
-		$table_name = $nomeTavolo.$riga['numero_tavolo_utente']."<br>".$riga['nome_tavolo_utente'];
+	    $numero_tavolo_utente = ($riga['numero_tavolo_utente'] != 0 ) ? $riga['numero_tavolo_utente'] : '';
+		$table_name = $nomeTavolo.$numero_tavolo_utente."<br>".$riga['nome_tavolo_utente'];
 		$a = $b = $s = $h = 0;
 		$guests_list = '';
 		$total_guests = '';

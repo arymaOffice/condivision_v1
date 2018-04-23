@@ -102,7 +102,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 			echo "<td  class=\"strumenti\">";
 			echo "<a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Gestione Cliente \"> <i class=\"fa fa-search\"></i> </a>
 			$elimina </td>";
-			echo "<td><a href=\"../mod_tavoli/mod_tavoli_new.php?evento=0&ambiente_id=".$riga['id']."\" class=\"button fancybox fancybox-view\" data-fancybox-type=\"iframe\" title=\"Creazione Ambiente \"> Crea Template Tavoli</a>
+			echo "<td><a href=\"../mod_tavoli/mod_tavoli_new.php?evento=0&ambiente_id=".$riga['id']."\" class=\"button fancybox fancybox-view\" data-fancybox-type=\"iframe\" title=\" \"> Crea Template Tavoli</a><a href=\"mod_template_riepilogo.php?ambiente_id=".$riga['id']."\" class=\"button fancybox fancybox-view\" data-fancybox-type=\"iframe\" title=\"riepilogo ambienti \"> Visualizza templates </a>
 			 </td>";		
 		    echo "</tr>"; 
 			}

@@ -196,13 +196,13 @@ h1 { font-size: 18px; }
 			if(strpos( $nome_tavolo, 'sposa') !== false) $lato = 'SPOSA';
 			$numero = urldecode(str_replace('sposo','', $nome_tavolo));
 			$numero = urldecode(str_replace('sposa','', $numero));
-	        
+	        $numero_tavolo_utente = ($riga['numero_tavolo_utente'] != 0 ) ? $riga['numero_tavolo_utente'] : '';
 	        if($numero != 'sposi') {
 
 	        echo "<tr>"; 				
 			echo "<td width=\"420\"  vertical-align=\"middle\" style=\"border: 1px solid #e6e6e6;\"><strong>".urldecode($riga['cognome'])." ".urldecode($riga['nome'])."</strong></td>";
 			echo "<td vertical-align=\"middle\" style=\"border: 1px solid #e6e6e6; text-align: center;\">".$lato."</td>"; 
-			echo "<td vertical-align=\"middle\" style=\"border: 1px solid #e6e6e6; text-align: center;\">".$numero."  ".$riga['numero_tavolo_utente']." ".$riga['nome_tavolo_utente']."</td>"; 
+			echo "<td vertical-align=\"middle\" style=\"border: 1px solid #e6e6e6; text-align: center;\">".$numero."  ".$numero_tavolo_utente." ".$riga['nome_tavolo_utente']."</td>"; 
 			echo "<td vertical-align=\"middle\" style=\"border: 1px solid #e6e6e6; text-align: center;\">".$riga['adulti']."</td>"; 
 			echo "<td vertical-align=\"middle\" style=\"border: 1px solid #e6e6e6; text-align: center;\">".$riga['bambini']."</td>"; 
 			echo "<td vertical-align=\"middle\" style=\"border: 1px solid #e6e6e6; text-align: center;\">".$riga['sedie']."</td>"; 

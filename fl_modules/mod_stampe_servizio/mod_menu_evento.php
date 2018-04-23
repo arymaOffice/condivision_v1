@@ -6,7 +6,9 @@ $evento_id = check($_GET['evento_id']);
 
 
 
+
 if(!isset($_GET['backtop'])) {
+
 
 include("../../fl_inc/headers.php");
 
@@ -24,22 +26,19 @@ include("../../fl_inc/headers.php");
 <select name="font">
 <option value="freesans">freesans</option>
 <option value="freemono">freemono</option>
-
 <option value="freeserifbi">freeserifbi</option>
-
 <option value="dejavusans">dejavusans</option>
-
 <option value="dejavuserif">dejavuserif</option>
-
-
 <option value="dejavuserifcondensed">dejavuserifcondensed</option>
 <option value="dejavuserif">dejavuserif</option>
 <option value="Courier">Courier </option>
 <option value="calibri">calibri </option>
 
 </select>
-<br>
-<label><input type="checkbox" name="html" value="1" style="display: inline;"  > Crea solo testi</label>
+altezza riga: <input type="number" name="lineheight" value="<?php echo @MENU_TAVOLO_ALTEZZA_RIGA; ?>" /><br>
+Voce di Dessert: <input type="text" name="dessert" value="<?php echo @MENU_TAVOLO_NOME_SET; ?>" /><br>
+
+<label><input type="checkbox" name="html" value="1" style="display: inline;" <?php if(defined('MENU_TAVOLO_HTML_DEFAULT')) echo "checked"; ?> > Crea solo testi</label>
 
 <br>
 <input type="hidden" name="evento_id" value="<?php echo $evento_id; ?>">
@@ -65,6 +64,7 @@ $backtop = (isset($_GET['backtop'])) ? check($_GET['backtop']) : 5;
 $backright = (isset($_GET['backright'])) ? check($_GET['backright']) : 5;
 $backbottom = (isset($_GET['backbottom'])) ? check($_GET['backbottom']) : 5;
 $backleft = (isset($_GET['backleft'])) ? check($_GET['backleft']) : 5;
+$lineheight = (isset($_GET['lineheight'])) ? check($_GET['lineheight']) : 150;
 
 
 

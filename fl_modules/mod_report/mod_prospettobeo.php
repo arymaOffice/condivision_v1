@@ -67,6 +67,9 @@ $rigaTemplate .= '<td style="color:orange;text-align: center;font-weight:bold;">
 		</tr>
 
 		<?php while ($rowPortate = mysql_fetch_assoc($queryPortate)) {?>
+			<?php if($portateName[$rowPortate['portata']] != 1){ ?>
+				<tr><th style="text-align: center;font-weight: bold" colspan="<?php echo count($idArray); ?>"><h1 style="text-align: left;"><?php echo $portateName[$rowPortate['portata']] ?></h1></th><tr>
+			<?php $portateName[$rowPortate['portata']] = 1;   } ?>
 
 
 

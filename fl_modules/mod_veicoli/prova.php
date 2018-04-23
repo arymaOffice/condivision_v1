@@ -28,50 +28,59 @@ require_once '../../fl_core/autentication.php';
 include 'fl_settings.php'; // Variabili Modulo
 
 require_once '../../fl_set/librerie/eurotax/index.php'; //richiesta servizio
-$a = $et->getMarche('AUTO');
-//$a = $et->getModelli('AUTO','ALF',2015);
-//$a = $et->getVersioni('AUTO',"0040", 'ALF', 2015);
-$oggetto = json_decode($a, true);
-for ($i = 2017; $i < 2019; $i++) {
-    $anno = $i;
+$anno = 2000;
 
-    foreach ($oggetto['marche'] as $key => $value) {
+// $select = "SELECT id,codice FROm fl_marca_eurotax WHERE id IN(3,4,12,14,16,25,24,26,28,19,30,31,32,40,39,41,44,46,48,49,50,51,52,53,54,55,60,56,57,59,64,66,69,70,72,73,76,80,84,86,90,92,93,97,99,100,98,101,104,107,112) ";
+$select = "SELECT id,codice FROm fl_marca_eurotax WHERE id IN(40) ";
+$select = mysql_query($select, CONNECT);
+while ($value = mysql_fetch_assoc($select)) {
 
-        $a1 = $et->getModelli('AUTO', $value['acronimo'], $anno);
-        $oggetto1 = json_decode($a1, true);
+    $a1 = $et->getModelli('AUTO', $value['codice'], $anno);
+    $oggetto1 = json_decode($a1, true);
 
-        if (count($oggetto1['modelli']) > 0) {
+    //print_r($oggetto1); exit;
 
-            //echo $value['acronimo'];
 
-            foreach ($oggetto1['modelli'] as $key1 => $value1) {
-                $a2 = $et->getVersioni('AUTO', $value1['codice_modello'], $value['acronimo'], $anno);
-                $oggetto2 = json_decode($a2, true);
 
-                if (count($oggetto2['versioni']) > 0) {
+        //echo $value['acronimo'];
 
-                    foreach ($oggetto2['versioni'] as $key2 => $value2) {
+        foreach ($oggetto1['modelli'] as $key1 => $value1) {
 
-                        $a3 = $et->getDettaglioAuto($value2['CodiceMotornet'], $value2['CodiceEurotax']);
-                        $oggetto3 = json_decode($a3, true);
+            //function getVersioni($tipoVeicolo, $modello="", $marca="", $anno="", $codiceCostruttore="", $porte="", $passo="", $libro=""){
 
-                        $oggetto3 = $oggetto3['modello'];
 
-                        // print_r($oggetto3); exit;
+            print_r($value1); exit;
 
-                        $insert = "INSERT INTO `fl_modello_eurotax_new`(codice_modello,`id_marca_eurotax`, `id_segmento`, `modello`, `cilindrata`, `codice_alimentazione`,  `tipo_motore`, `desc_motore`, `hp`, `kw`, `cavalli_fiscali`, `euro`,codice_eurotax,codice_motornet,anno) VALUES ('".$value1['codice_modello']."',(SELECT id FROM fl_marca_eurotax WHERE codice = '" . $value['acronimo'] . "'),(SELECT id FROM fl_segmenti_eurotax WHERE segmento = '" . $oggetto3['segmento'] . "'),'" . $oggetto3['modello'] . "','" . $oggetto3['cilindrata'] . "','" . $oggetto3['codice_alimentazione'] . "','" . $oggetto3['tipo_motore'] . "','" . $oggetto3['desc_motore'] . "','" . $oggetto3['hp'] . "','" . $oggetto3['kw'] . "','" . $oggetto3['cavalli_fiscali'] . "','" . $oggetto3['euro'] . "','" . $value2['CodiceMotornet'] . "', '" . $value2['CodiceEurotax'] . "','" . $anno . "')";
-                        mysql_query($insert, CONNECT);
 
-                        if (mysql_insert_id(CONNECT) < 1) {
-                            print_r($oggetto3);
+            $a2 = $et->getVersioni('AUTO', $value1['codice_modello'], $value['codice'], $anno);
+            $oggetto2 = json_decode($a2, true);
 
-                        }
+            if (count($oggetto2['versioni']) > 0) {
+
+                foreach ($oggetto2['versioni'] as $key2 => $value2) {
+
+
+                    $a3 = $et->getDettaglioAuto($value2['CodiceMotornet'], $value2['CodiceEurotax']);
+                    $oggetto3 = json_decode($a3, true);
+
+    print_r($oggetto3); exit;
+
+
+                    $oggetto3 = $oggetto3['modello'];
+
+                    // print_r($oggetto3); exit;
+
+                    $insert = "INSERT INTO `fl_modello_eurotax_new`(codice_modello,`id_marca_eurotax`, `id_segmento`, `modello`, `cilindrata`, `codice_alimentazione`,  `tipo_motore`, `desc_motore`, `hp`, `kw`, `cavalli_fiscali`, `euro`,codice_eurotax,codice_motornet,anno) VALUES ('" . $value1['codice_modello'] . "','" . $value['id'] . "',(SELECT id FROM fl_segmenti_eurotax WHERE segmento = '" . $oggetto3['segmento'] . "'),'" . $oggetto3['modello'] . "','" . $oggetto3['cilindrata'] . "','" . $oggetto3['codice_alimentazione'] . "','" . $oggetto3['tipo_motore'] . "','" . $oggetto3['desc_motore'] . "','" . $oggetto3['hp'] . "','" . $oggetto3['kw'] . "','" . $oggetto3['cavalli_fiscali'] . "','" . $oggetto3['euro'] . "','" . $value2['CodiceMotornet'] . "', '" . $value2['CodiceEurotax'] . "','" . $anno . "')";
+                    mysql_query($insert, CONNECT);
+
+                    if (mysql_insert_id(CONNECT) < 1) {
+                        print_r($oggetto3);
+
                     }
                 }
-
             }
 
-        }
+        
 
     }
 }

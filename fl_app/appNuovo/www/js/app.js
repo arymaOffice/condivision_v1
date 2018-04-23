@@ -36,6 +36,23 @@ if (GlobalToken.leght == 26) {
   app.loginScreen.close('#my-login-screen');
 }
 
+old_modello = '';//variabile utilizzata per non mttere piu check a permuta
+
+$$('#my-permuta').on('popup:close', function (e, popup) {
+  modello_retrieve = $$('input[name="modello"]').val();
+  if(modello_retrieve != '' && old_modello != $$('input[name="modello"]').val()){
+    old_modello  =  $$('input[name="modello"]').val();
+    $$('#permuta-button').append(' <i class="f7-icons">check</i>');
+  }
+  if(modello_retrieve == ''){
+    $$('#permuta-button').html('Permuta');
+    
+  }
+
+});
+
+
+
 // Login Screen Demo
 $$('#my-login-screen .login-button').on('click', function () {
   var username = $$('#my-login-screen [name="username"]').val();

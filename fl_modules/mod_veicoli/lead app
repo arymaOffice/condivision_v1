@@ -1,0 +1,158 @@
+    public function insert_lead_app()
+    {
+
+        $this->contenuto['esito'] = false;
+
+        $mail_message = '';
+// Campi Obbligatori
+
+        foreach ($_REQUEST as $chiave => $valore) {
+
+            if ($chiave == 'telefono' || $chiave == 'telefono_alternativo') {
+                $valore = $this->cleanPhone($this->check($valore));
+            }
+
+            if (in_array($chiave, $this->obbligatorio)) {
+                if ($valore == "") {
+                    $chiave = ucfirst(check($chiave));
+                    $this->contenuto['esito'] = false;
+                    $this->contenuto['info_txt'] = "Compila il campo $chiave";
+                    $this->cnv_makedata();
+
+                }}
+
+            if (in_array($chiave, $this->numerici)) {
+                if (!is_numeric(trim($valore))) {
+                    $chiave = ucfirst(check($chiave));
+                    $this->contenuto['esito'] = false;
+                    $this->contenuto['info_txt'] = "Inserisci solo numeri in $chiave";
+                    $this->cnv_makedata();
+                }}
+
+            $$chiave = $this->check($valore);
+            if (in_array($chiave, $this->date)) {
+                $$chiave = $this->convert_data($this->check($valore), 1);
+            }
+
+            $mail_message .= '<p>' . $chiave . ' = ' . $$chiave . '</p>';
+        }
+
+
+        $status_potentials = array('Da Assegnare', 'Assegnato a BDC', 'Appuntamento', 'Non Interessato', 'Cliente', 'Valuta', 'Acquistato Concorrenza', 'Preventivo', 'Assegnato a Venditore', 'Eliminato');
+
+        $campi = array('professione', 'sms_send', 'id_cliente_fordpower', 'id_cliente_drakkar', 'campagna_id', 'source_potential', 'priorita_contatto', 'paese', 'company', 'job_title', 'nome', 'cognome', 'email', 'telefono', 'website', 'indirizzo', 'provincia', 'citta', 'cap', 'industry', 'ragione_sociale', 'partita_iva', 'fatturato_annuo', 'numero_dipendenti', 'messaggio', 'tipo_interesse', 'interessato_a', 'periodo_cambio_vettura', 'permuta', 'test_drive', 'data_test_drive', 'pagamento_vettura', 'note', 'operatore', 'tipologia_veicolo', 'data_acquisto', 'pagamento_veicolo', 'marca', 'modello', 'colore', 'descrizione', 'anno_immatricolazione', 'chilometri_percorsi', 'alimentazione', 'targa', 'quotazione_attuale', 'proprietario', 'venditore');
+
+        foreach ($campi as $chiave => $valore) {
+
+            if (!isset($$valore)) {
+                $$valore = '';
+            }
+
+        }
+
+        if (!isset($source_potential)) {
+            $source_potential = 1;
+        }
+
+        if (!isset($status_potential)) {
+            $status_potential = 0;
+        }
+
+        $industry = $job_title;
+
+        $telCheck = ($telefono != '' && $telefono != 0) ? " OR telefono LIKE '$telefono' " : '';
+        $isInDb = GQS('fl_potentials', 'id,email,telefono,telefono_alternativo,source_potential,status_potential', "(email  != '' AND email  != '@' AND email  != 0 AND email LIKE '$email') $telCheck ");
+
+        if (count($isInDb) > 0) {
+
+            $sql = "UPDATE `fl_potentials` SET
+id_cliente_fordpower = '$id_cliente_fordpower' ,
+id_cliente_drakkar = '$id_cliente_drakkar' ,
+status_potential = '$status_potential',
+source_potential = '$source_potential',
+data_aggiornamento = NOW(),
+nome = '$nome',
+cognome =  '$cognome',
+email = '$email',
+telefono = '$telefono',
+website = '$website',
+indirizzo = '$indirizzo',
+provincia = '$provincia',
+citta = '$citta',
+cap = '$cap',
+industry = '$industry',
+company = '$company',
+partita_iva = '$partita_iva',
+note = CONCAT('$note ',note),
+operatore = '$operatore',
+proprietario = '$proprietario',
+venditore = '$venditore',
+data_associazione_attivita = NOW()
+ WHERE id = " . $isInDb[0]['id'] . ";";
+
+            if (mysql_query($sql, CONNECT)) {
+
+                if ($isInDb[0]['source_potential'] != $source_potential) {
+                    $source_potentials = GRD('fl_campagne_attivita', $source_potential, 'oggetto');
+                    actionTracer(16, $isInDb[0]['id'], 10, 1, 'Passaggio a: ' . $source_potentials['oggetto']);
+                }
+                if ($isInDb[0]['status_potential'] != $status_potential) {actionTracer(16, $isInDb[0]['id'], 10, 1, 'Cambio di Status: ' . $status_potentials[$status_potential]);}
+
+                $this->contenuto['class'] = 'green';
+                $this->contenuto['url'] = '#';
+                $this->contenuto['esito'] = true;
+                $this->contenuto['insert_id'] = $isInDb[0]['id'];
+                $this->contenuto['info_txt'] = "Operazione eseguita correttamente! " . mysql_error();
+
+                $this->cnv_makedata();
+            }
+        }
+
+        $sql = "INSERT INTO `fl_potentials` (`id`, `in_use`, `id_cliente_fordpower` ,`id_cliente_drakkar` , `status_potential`, `sent_mail`, `marchio`, `campagna_id`, `source_potential`, `data_aggiornamento`, `is_customer`, `priorita_contatto`, `paese`, `company`, `job_title`, `nome`, `cognome`, `email`, `telefono`, `website`, `indirizzo`, `provincia`, `citta`, `cap`, `industry`, `ragione_sociale`, `partita_iva`, `fatturato_annuo`, `numero_dipendenti`, `messaggio`, `tipo_interesse`, `interessato_a`, `periodo_cambio_vettura`, `permuta`, `test_drive`, `data_test_drive`, `promo_pneumatici`,`pagamento_vettura`, `note`, `operatore`, `proprietario`, `venditore`, `data_creazione`, `data_assegnazione`,`data_scadenza`,`data_scadenza_venditore`,`data_associazione_attivita`)
+VALUES (NULL, '0', '$id_cliente_fordpower' ,'$id_cliente_drakkar' , '$status_potential', '0', '0', '$campagna_id', '$source_potential', NOW(), '0', '$priorita_contatto', '$paese', '$company', '$job_title', '$nome', '$cognome', '$email', '$telefono', '$website', '$indirizzo', '$provincia', '$citta', '$cap', '$industry', '$company', '$partita_iva', '$fatturato_annuo', '$numero_dipendenti', '$messaggio', '$tipo_interesse', '$interessato_a', '$periodo_cambio_vettura', '$permuta', '$test_drive', '$data_test_drive',0, '$pagamento_vettura', '$note','$operatore', '$proprietario',  '$venditore', NOW(),NOW(),'','',NOW());";
+
+        if (mysql_query($sql, CONNECT)) {
+
+            $lead_id = mysql_insert_id();
+            $mail_subject = "Nuovo Lead Inserito";
+
+            $source_potentials = GRD('fl_campagne_attivita', $source_potential, 'oggetto');
+            actionTracer(16, $lead_id, 10, 1, 'Prima attività: ' . $source_potentials['oggetto']);
+
+// INSERIMENTO VEICOLO
+            if (trim($marca . $modello) != '') {
+                $sql = "INSERT INTO `fl_veicoli` (`id`, `workflow_id`, `parent_id`, `tipologia_veicolo`, `data_acquisto`, `pagamento_veicolo`, `marca`, `modello`, `colore`, `descrizione`, `anno_immatricolazione`, `chilometri_percorsi`, `alimentazione`, `targa`, `quotazione_attuale`, `data_creazione`, `data_aggiornamento`, `operatore`)
+VALUES (NULL, '16', '$lead_id', '$tipologia_veicolo', '$data_acquisto', '$pagamento_veicolo', '$marca', '$modello', '$colore', '$descrizione', '$anno_immatricolazione', '$chilometri_percorsi', '$alimentazione', '$targa', '$quotazione_attuale', NOW(), NOW(), '$operatore');";
+                if (mysql_query($sql, CONNECT)) {$mail_message .= "<p>Veicolo Inserito!</p>";}
+            }
+
+
+
+//INSERIMENTO PRENOTAZIONE TEST DRIVE
+            if (isset($_POST['test_drive'])) {
+
+
+            }
+
+            $this->contenuto['class'] = 'green';
+            $this->contenuto['url'] = '#';
+            $this->contenuto['esito'] = true;
+            $this->contenuto['insert_id'] = $lead_id;
+            $this->contenuto['info_txt'] = "Operazione eseguita correttamente! " . mysql_error();
+
+            $mail_body2 = str_replace("[*CORPO*]", $mail_message, mail_template);
+
+        } else {
+
+            $this->contenuto['class'] = 'red';
+            $this->contenuto['esito'] = false;
+            $this->contenuto['info_txt'] = "Error 1101: Problema inserimento lead.";
+            $mail_message = "ERRORE DATABASE: " . mysql_error() . '<br>' . $mail_message;
+            $mail_body3 = str_replace("[*CORPO*]", $mail_message, mail_template);
+            mail('server@aryma.it', $this->contenuto['info_txt'], $sql . mysql_error());
+
+        }
+
+        $this->cnv_makedata();
+
+    } // Lead in

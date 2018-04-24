@@ -181,25 +181,34 @@ var totalChecked = 0;
 			$send =($riga['tipo_doc_vendita'] == 1) ? '' : "<a href=\"mod_send.php?send_id=".$riga['id']."\" data-fancybox-type=\"iframe\" title=\"Invia\" class=\"  fancybox_view_small\"  ><i class=\"fa fa-paper-plane-o\"></i></a>";
 
 			$colore = ($riga['pagato'] == 0 ) ? "class=\"tab_orange\"" : "class=\"tab_green\""; 
-			
+			if($riga['annullata'] == 1 ) $colore = "class=\"tab_red\"";
+
 			$imponibile = get_imponibile($riga['id']);
 			$imposta = get_imposta($riga['id']);
 			$totale_documento = $imponibile+$imposta;
-			
+
+			if(defined('importi_arrotondati')){ 
+			$coeffAliquota = 1.10;
+ 			$imponibile = round($totale_documento/$coeffAliquota,2,PHP_ROUND_HALF_DOWN);
+ 			$imposta = $totale_documento-$imponibile;
+			}		
 	
 
 			$tot_imponibile += $imponibile;
 			$tot_imposta += $imposta;
 			$totale_documenti += $totale_documento;
 			
-			if($riga['pagato'] == 1){
-			if($_SESSION['usertype'] != 0) $modifica = '';
+			if($riga['pagato'] == 1 && $riga['annullata'] == 0){
+			//if($_SESSION['usertype'] != 0) $modifica = '';
 			$delete  = '';
 			$pagato = '<span class="green msg">SALDATO</span>';
 			} else {
 			$pagato = '<a href="mod_opera.php?pagato='.$riga['id'].'" class="red msg">NON SALDATO</a>';
 			if($riga['tipo_doc_vendita'] > 2) $pagato = '<a href="mod_opera.php?converti='.$riga['id'].'" class="orange msg" onclick="return conferma(\'Convertire in Fattura?\');">CONVERTI IN FATTURA</a>';
-			$tot_imponibile_sospeso += $totale_documento;
+			if($riga['annullata'] == 0){ $tot_imponibile_sospeso += $totale_documento; } else {
+				$pagato = '<a href="#" class="red msg">ANNULLATO</a>';
+			}
+
 			}
 
 

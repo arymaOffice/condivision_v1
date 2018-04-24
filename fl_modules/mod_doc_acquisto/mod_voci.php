@@ -12,20 +12,20 @@ if(defined('documenti_vendita_descrittivi')) {
 $text_editor = 2;
 }
 
-$tab_id = 81;
-$fattura_id = check($_GET['DAiD']);
+$tab_id = 82;
+$doc_acquisto_id = check($_GET['DAiD']);
 include("../../fl_inc/headers.php");
  ?>
  
 <body style=" background: rgb(241, 241, 241) none repeat scroll 0% 0%; text-align: left; padding: 20px;">
 
-<?php if($fattura_id == 1) { echo "<h2>Salva i dettagli prima di inserire</h2>"; exit; } ?>
+<?php if($doc_acquisto_id == 1) { echo "<h2>Salva i dettagli prima di inserire</h2>"; exit; } ?>
 
 <div id="results"><?php if(isset($_GET['esito'])) echo '<h2 class="red">'.check($_GET['esito']).'</h2>'; ?></div>
 
 <form id="" action="./mod_opera.php" method="post" enctype="multipart/form-data">
 
-<input type="hidden" name="fattura_id" value="<?php echo $fattura_id; ?>" /> 
+<input type="hidden" name="doc_acquisto_id" value="<?php echo $doc_acquisto_id; ?>" /> 
 <input type="text" name="codice" placeholder="Codice" value="" style="width: 70px;" />
 <textarea name="descrizione" placeholder="Descrizione" value="" style="min-width: 200px;" class="mceEditor" ></textarea>
 <select name="valuta" id="valuta" style="width: 70px;">
@@ -49,14 +49,14 @@ include("../../fl_inc/headers.php");
 		 ?>
 </select>
 
-<input type="submit" value="Inserisci" />
+<input type="submit" value="Inserisci" class="button" />
 
 </form>
 <?php 
 
 	$aliquotaMaggiore = 0;
 
-	$query = "SELECT * FROM `fl_doc_vendita_voci` WHERE id > 1 AND `fattura_id` = $fattura_id ORDER BY id ASC";
+	$query = "SELECT * FROM `fl_doc_acquisto_voci` WHERE id > 1 AND `parent_id` = $doc_acquisto_id ORDER BY id ASC";
 	$risultato = mysql_query($query, CONNECT);
 	if(mysql_affected_rows() == 0){ echo "<p>Nessun Elemento</p>"; } else {
 	?>
@@ -67,6 +67,7 @@ include("../../fl_inc/headers.php");
    <th>Codice</th>
    <th>Descrizione</th>
    <th>Prezzo</th>
+   <th>UM</th>
    <th>Qtà</th>
    <th>Imponibile</th>
    <th>Aliquota</th>
@@ -117,7 +118,8 @@ include("../../fl_inc/headers.php");
 
       </td>
   <td><?php echo $valuta[$riga['valuta']]; ?> <?php echo numdec($importo,2); ?></td>
-  <td><?php echo $riga['quantita']; ?></td>
+  <td><?php echo $riga['unita_di_misura']; ?></td>
+  <td><?php echo numdec($riga['quantita'],3); ?></td>
   <td><?php echo $totaleImponibile; ?></td>
   <td><?php echo numdec($riga['aliquota'],2); ?> % </td>
   <td><?php echo $totaleImposta; ?></td>
@@ -148,10 +150,7 @@ include("../../fl_inc/headers.php");
 } //Chiudo la Connessione	?>
     
  </table> 
- <?php if(defined('scorporo_iva_su_totale')) { ?>
- <h2>Questa fattura verrà emessa con ALIQUOTA al: <?php echo numdec($aliquotaMaggiore,2); ?>%</h2> 
- <p class="c-red">L'iva viene calcolata sul totale lordo di tutte le voci. Le impostazioni attuali non permettono di gestire più aliquote IVA nella stessa fattura, pertanto il sistema ricalcola IVA in base all'aliquota più alta se si inseriscono diverse aliquote.</p>
- <?php  } ?> 
-  <a class="button" href="javascript:location.reload();">Ricarica Voci</a>
+ 
+ <a class="button" href="javascript:location.reload();">Ricarica Voci</a>
 
 </body></html>

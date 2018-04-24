@@ -177,10 +177,6 @@ $$('.invia').on('click', function (e) {
   var formData = app.form.convertToData('#form-lead');
 
   
-  var ragione_sociale = $$('input[name="ragione_sociale"]').val();  formData['ragione_sociale'] = ragione_sociale;
-
-  var partita_iva = $$('input[name="partita_iva"]').val(); formData['partita_iva'] = partita_iva;
-
   var id_marca = $$('input[name="id-marca"]').val(); formData['id_marca'] = id_marca;
 
   var id_modello = $$('input[name="id-modello"]').val(); formData['id_modello'] = id_modello;

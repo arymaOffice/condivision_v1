@@ -8,10 +8,9 @@ include("../../fl_inc/headers.php");
 
 
 
-	$anagrafica_id = check($_GET['anagrafica_id']);
-	if($anagrafica_id < 1) die('<br><h1 style=\"text-align:center\">Non c\'è un\'anagrafica collegata all\'evento. </h1><br><a class=\"button\" href=\"javascript:location.reload();\"></a>');
+	$id = check($_GET['id']);
 
-	$query = "SELECT $select FROM `$tabella` WHERE id > 1 AND anagrafica_id = $anagrafica_id;";
+	$query = "SELECT $select FROM `$tabella` WHERE id > 1 AND workflow_id = 6 AND ref_id = $id;";
 	$risultato = mysql_query($query, CONNECT);
 	?>
 
@@ -95,21 +94,27 @@ include("../../fl_inc/headers.php");
 			$totale_documento = $imponibile+$imposta;
 			
 	
-
+			if($riga['annullata'] == 0 ) {
 			$tot_imponibile += $imponibile;
 			$tot_imposta += $imposta;
 			$totale_documenti += $totale_documento;
-			
-			if($riga['pagato'] == 1){
+			}
+
+
+			if($riga['pagato'] == 1 && $riga['annullata'] == 0){
 			if($_SESSION['usertype'] != 0) $modifica = '';
 			$delete  = '';
 			$pagato = '<span class="green msg">SALDATO</span>';
 			} else {
 			$pagato = '<a href="mod_opera.php?pagato='.$riga['id'].'" class="red msg">NON SALDATO</a>';
 			if($riga['tipo_doc_vendita'] > 2) $pagato = '<a href="mod_opera.php?converti='.$riga['id'].'" class="orange msg" onclick="return conferma(\'Convertire in Fattura?\');">CONVERTI IN FATTURA</a>';
-			$tot_imponibile_sospeso += $totale_documento;
+		if($riga['annullata'] == 0){ $tot_imponibile_sospeso += $totale_documento; } else {
+				$pagato = '<a href="#" class="red msg">ANNULLATO</a>';
+			}
 			}
 
+			$colore = ($riga['pagato'] == 0 ) ? "class=\"tab_orange\"" : "class=\"tab_green\""; 
+			if($riga['annullata'] == 1 ) $colore = "class=\"tab_red\"";
 
 			echo "<tr>"; 
 				

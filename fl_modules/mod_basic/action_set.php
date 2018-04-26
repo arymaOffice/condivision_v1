@@ -1,9 +1,10 @@
 <?php
 // Controllo Login
 session_start(); 
-require_once('../../fl_core/core.php'); 
+require_once('../../fl_core/settings.php'); 
 
-$rcx = check($_SERVER['HTTP_REFERER']);
+
+$rcx = $_SERVER['HTTP_REFERER'];
 
 
 if (isset($_GET['step'])) 

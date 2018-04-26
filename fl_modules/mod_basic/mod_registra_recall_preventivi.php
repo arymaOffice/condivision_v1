@@ -22,26 +22,26 @@ if(isset($_POST['action']) && check($_POST['action']) == 'addQuestion') {
 
 		if(isset($_POST['question'.$chiave])){
 			$question = $chiave;
-			$answer =  '';
+			$answer =  trim(check($_POST['question'.$chiave]));
 			$value = trim(check($_POST['question'.$chiave]));
-			$totale += $value;
+			$totale += 0;
 
 			/*********doamnde della mail*******/
 			$domandeMail .= "<tr><th>".$questions[$question]."</th><th>".$value."</th></tr>";
 			/*********************************/
 
 
-			if($value > 0){
-				$query = "INSERT INTO `fl_questions` (`id`, `workflow_id`, `record_id`, `question`, `answer`, `value`, `data_creazione`, `data_aggiornamento`, `operatore`)
+		
+				echo $query = "INSERT INTO `fl_questions` (`id`, `workflow_id`, `record_id`, `question`, `answer`, `value`, `data_creazione`, `data_aggiornamento`, `operatore`)
 				VALUES (NULL, '$workflow_id', '$record_id', '$question', '$answer', '$value', NOW(), CURRENT_TIMESTAMP, ".$_SESSION['number'].");";
 				mysql_query($query,CONNECT);
 				$questionsLog .= "<p style=\"font-size:12px !important;text-align:left !important\">".$questions[$question].": ".$value.'</p>';
-				if($value == 1) $questionsAlert .= $questionsLog;
+				//if($value == 1) $questionsAlert .= $questionsLog;
 				$questionsDone++;
-			}}
+			}
 		}
 
-
+exit;
 		$totale = numdec($totale/$questionsDone,2);
 		$query = "INSERT INTO `fl_surveys` (`id`, `workflow_id`, `record_id`, `value`, `note`, `data_creazione`, `data_aggiornamento`, `operatore`) 
 		VALUES (NULL, '$workflow_id ', '$record_id', '$totale', '$note', NOW(), CURRENT_TIMESTAMP, ".$_SESSION['number'].");";
@@ -64,7 +64,7 @@ $img = '<img src="'.VALUTAZIONE_TOPBANNER.'" alt="Valutazione Cliente">';
 $messaggioInterno = "<p style='font-size:12px !important;text-align:left !important'>
 
 Buongiorno,<br>
-Bluemotive ha rilevato le seguenti valutazioni sull'attivit&agrave; \"RECALL\".<br>
+Bluemotive ha rilevato le seguenti valutazioni sull'attivit&agrave; \"RECALL PREVENTIVO\".<br>
 relative al cliente <strong>$nominativo</strong> assistito dal consulente ".$venditoreName."
 Recapiti del cliente: ".$potential['telefono']." ".$potential['telefono_alternativo']."
 </p>
@@ -81,7 +81,7 @@ $domandeMail
 <p style='font-size:12px !important;text-align:left !important'>
 Bluemotive vi ringrazia per l'attenzione.<br>
 Buon proseguimento di giornata <br>
-Bluemotive Recall - $data </p>
+Bluemotive Recall Preventivo- $data </p>
 ";
 /***************************************************************/
 
@@ -124,13 +124,13 @@ if($potential['venditore'] > 1 && isset($potential['venditore'])) {
 /*Email Alert*/
 if($questionsAlert != '' || isset($_POST['inviaAlert'])) {
 	smail(mail_admin,$oggetto.' Alert',$messaggioInterno); 
-	smail(mail_qos,$oggetto,$messaggioInterno); 
-	smail('support@aryma.it',$oggetto,$messaggioInterno);
+	//smail(mail_qos,$oggetto,$messaggioInterno); 
+	//smail('support@aryma.it',$oggetto,$messaggioInterno);
 }
 
 /* Email Cortesia */
 if(filter_var($potential['email'], FILTER_VALIDATE_EMAIL)) 
-smail($potential['email'],$oggetto2,$messaggioCliente); // Se mail cliente e corretta invia
+//smail($potential['email'],$oggetto2,$messaggioCliente); // Se mail cliente e corretta invia
 smail(mail_admin,$oggetto2,$messaggioCliente);
 //smail('supporto@aryma.it',$oggetto2,$messaggioCliente);
 }

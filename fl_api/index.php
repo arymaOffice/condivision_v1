@@ -97,6 +97,14 @@ if (isset($dataset['insert_lead'])) {
     $webservice->insert_lead();
 }
 
+if (isset($dataset['insert_lead_app'])) {
+    mandatory_fileds(array('token'));
+    session_cache_limiter('private_no_expire');
+    $webservice->token = check($dataset['token']);
+    $webservice->app_start();
+    $webservice->insert_lead_app();
+}
+
 if (isset($dataset['insert_veicolo'])) {
     mandatory_fileds(array('token'));
     session_cache_limiter('private_no_expire');

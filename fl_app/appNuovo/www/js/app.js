@@ -9,6 +9,9 @@ var app = new Framework7({
   theme: 'md', // Automatic theme detection
   // App routes
   routes: routes,
+  smartSelect: {
+    closeOnSelect:true,
+  },
 });
 
 // Init/Create main view
@@ -134,18 +137,21 @@ function retrieve_data() {
   //recupera modelli macchine -----------------------------------------
 
   //recupera modelli gamma -----------------------------------------
-  nonCommerciali = ['Ka', 'Fiesta', 'B-Max', 'Ecosport', 'Focus', 'C-Max', 'Kuga', 'Galaxy', 'S-Max', 'Mustang', 'Mondeo', 'Vignale'];
-
-  for (i = 1; i < nonCommerciali.length; i++) {
-    $$('#gamma').append('<option value="' + nonCommerciali[i] + '" >' + nonCommerciali[i] + '</option>');
-  }
+  Framework7.request.json(endpoint, { get_items: '1', item_rel: 161, token: window.GlobalToken }, function (response) {
+    leads = response.dati;
+    for (i = 0; i <= leads.length; i++) {
+      $$('#gamma').append('<option value="' + leads[i].id + '" >' + leads[i].label + '</option>');
+    }
+  });
   //recupera modelli gamma  -----------------------------------------
 
   // //recupera modelli gamma commerciale -----------------------------------------
-  commerciali = ['Fiesta Van', 'Tourneo Connect', 'Tourneo Custom', 'Tourneo Courier', 'Ranger', 'Transit Connect', 'Transit Custom', 'Transit Courier', 'Transit'];
-  for (i = 1; i < commerciali.length; i++) {
-    $$('#gamma2').append('<option value="' + commerciali[i] + '" >' + commerciali[i] + '</option>');
-  }
+  Framework7.request.json(endpoint, { get_items: '1', item_rel: 162, token: window.GlobalToken }, function (response) {
+    leads = response.dati;
+    for (i = 0; i <= leads.length; i++) {
+      $$('#gamma2').append('<option value="' + leads[i].id + '" >' + leads[i].label + '</option>');
+    }
+  });
   //recupera modelli gamma commerciale -----------------------------------------
 
 
@@ -173,13 +179,16 @@ $$('.invia').on('click', function (e) {
   e.preventDefault();
   var nome = $$('input[name="nome"]').val();
   var telefono = $$('input[name="telefono"]').val();
-  var campagna_id = $$('select[name="campagna_id"]').val();
   var formData = app.form.convertToData('#form-lead');
+
+  var source_potential = $$('select[name="source_potential"]').val(); formData['source_potential'] = source_potential;
 
   
   var id_marca = $$('input[name="id-marca"]').val(); formData['id_marca'] = id_marca;
 
   var id_modello = $$('input[name="id-modello"]').val(); formData['id_modello'] = id_modello;
+
+  var modello = $$('input[name="modello"]').val(); formData['modello'] = modello;
 
   var anno_immatricolazione = $$('input[name="anno_immatricolazione"]').val(); formData['anno_immatricolazione'] = anno_immatricolazione;
 
@@ -193,10 +202,11 @@ $$('.invia').on('click', function (e) {
 
 
   var storedData = JSON.stringify(formData);
+  
 
-  if (nome != '' && telefono != '' && campagna_id != 'NULL' ) {
+  if (nome != '' && telefono != '' && source_potential != 'NULL' ) {
     app.request({
-      url: endpoint + '?insert_lead&token=' + window.GlobalToken,
+      url: endpoint + '?insert_lead_app&token=' + window.GlobalToken,
       method: 'POST',
       dataType: 'json',
       //send "query" to server. Useful in case you generate response dynamically
@@ -216,6 +226,9 @@ $$('.invia').on('click', function (e) {
         }
 
         $$('#form-lead')[0].reset();
+        $$('#permuta-button').html('Permuta');
+        $$('option[value="NULL"]').prop('selected', true);
+        
        
       }
     });

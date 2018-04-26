@@ -309,7 +309,7 @@ if(isset($newid)) { $id = (is_numeric($newid)) ? check($newid) : exit; $where = 
 			echo "<p class=\"select_text $chiave\" ><label for=\"$chiave\">".record_label($chiave,CONNECT,1)."</label>\r\n
 			<select class=\"$obbligatorio\" name=\"$chiave\" id=\"$chiave\" $disabled>\r\n";
 			
-			if(is_array(@$$chiave)) {
+			if(is_array($$chiave)) {
 			foreach($$chiave as $valores => $label){ // Recursione Indici di Categoria
 			$selected = ($valore == $valores) ? " selected=\"selected\"" : "";
 			echo "<option value=\"$valores\"$selected>".ucfirst($label)."</option>\r\n";

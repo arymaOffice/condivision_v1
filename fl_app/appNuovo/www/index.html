@@ -90,7 +90,7 @@
             <div class="block block-strong" style="padding: 0px;margin-bottom: 0px;">
               <div>
                 <a class="item-link smart-select smart-select-init">
-                  <select name="campagna_id" id="selectAcivity" required>
+                  <select name="source_potential" id="selectAcivity" required>
                     <option value="NULL" selected>Non selezionato</option>
                   </select>
                   <div class="item-content">
@@ -113,7 +113,7 @@
                       <div class="item-inner">
                         <div class="item-title item-label">Nome</div>
                         <div class="item-input-wrap">
-                          <input type="text" name="nome" placeholder="nome">
+                          <input type="text" name="nome" placeholder="nome" required>
                         </div>
                       </div>
                     </div>
@@ -123,7 +123,7 @@
                       <div class="item-inner">
                         <div class="item-title item-label">Cognome</div>
                         <div class="item-input-wrap">
-                          <input type="text" name="cognome" placeholder="cognome">
+                          <input type="text" name="cognome" placeholder="cognome" required>
                         </div>
                       </div>
                     </div>
@@ -147,7 +147,7 @@
                       <div class="item-inner">
                         <div class="item-title item-label">E-mail</div>
                         <div class="item-input-wrap">
-                          <input type="text" name="email" placeholder="email">
+                          <input type="text" name="email" placeholder="email" >
                         </div>
                       </div>
                     </div>
@@ -161,7 +161,7 @@
                       <div class="item-inner">
                         <div class="item-title item-label">Telefono</div>
                         <div class="item-input-wrap">
-                          <input type="text" name="telefono" placeholder="telefono">
+                          <input type="text" name="telefono" required validate pattern="[0-9]*" data-error-message="SOLO NUMERI" placeholder="telefono">
                         </div>
                       </div>
                     </div>
@@ -171,7 +171,7 @@
                       <div class="item-inner">
                         <div class="item-title item-label">Telefono 2</div>
                         <div class="item-input-wrap">
-                          <input type="text" name="telefono2" placeholder="telefono">
+                          <input type="text" name="telefono_alternativo" validate pattern="[0-9]*" data-error-message="SOLO NUMERI"  placeholder="telefono">
                         </div>
                       </div>
                     </div>
@@ -392,7 +392,8 @@
                   <!-- riga fine -->
 
                   <!-- campi di lavoro-->
-                  <input name="source_potential" type="hidden" value="0" />
+                  <input name="campagna_id" type="hidden" value="0" />
+
                   <!-- campi di lavoro-->
 
                   <br>
@@ -648,7 +649,7 @@
       <!-- form lead-->
 
       <!-- Login Screen -->
-      <div class="login-screen mWodal-in " id="my-login-screen">
+      <div class="login-screen modal-in " id="my-login-screen">
         <div class="view">
           <div class="page">
             <div class="page-content login-screen-content">

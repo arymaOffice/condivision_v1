@@ -1,6 +1,5 @@
 <?php
 
-
 class webservice
 {
 
@@ -297,8 +296,6 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
 
             $array_json = json_decode($chiave1, true);
 
-          
-
             foreach ($array_json as $chiave => $valore) {
 
                 if ($chiave == 'telefono' || $chiave == 'telefono_alternativo') {
@@ -403,7 +400,7 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
 
         $sql = "INSERT INTO `fl_potentials` (`id`, `in_use`, `id_cliente_fordpower` ,`id_cliente_drakkar` , `status_potential`, `sent_mail`, `marchio`, `campagna_id`, `source_potential`, `data_aggiornamento`, `is_customer`, `priorita_contatto`, `paese`, `company`, `job_title`, `nome`, `cognome`, `email`, `telefono`, `website`, `indirizzo`, `provincia`, `citta`, `cap`, `industry`, `ragione_sociale`, `partita_iva`, `fatturato_annuo`, `numero_dipendenti`, `messaggio`, `tipo_interesse`, `interessato_a`, `periodo_cambio_vettura`, `permuta`, `test_drive`, `data_test_drive`, `promo_pneumatici`,`pagamento_vettura`, `note`, `operatore`, `proprietario`, `venditore`, `data_creazione`, `data_assegnazione`,`data_scadenza`,`data_scadenza_venditore`,`data_associazione_attivita`)
 VALUES (NULL, '0', '$id_cliente_fordpower' ,'$id_cliente_drakkar' , '$status_potential', '0', '0', '$campagna_id', '$source_potential', NOW(), '0', '$priorita_contatto', '$paese', '$company', '$job_title', '$nome', '$cognome', '$email', '$telefono', '$website', '$indirizzo', '$provincia', '$citta', '$cap', '$industry', '$company', '$partita_iva', '$fatturato_annuo', '$numero_dipendenti', '$messaggio', '$tipo_interesse', '$interessato_a', '$periodo_cambio_vettura', '$permuta', '$test_drive', '$data_test_drive',0, '$pagamento_vettura', '$note','$operatore', '$proprietario',  '$venditore', NOW(),NOW(),'','',NOW());";
-        
+
         if (mysql_query($sql, CONNECT)) {
 
             $lead_id = mysql_insert_id();
@@ -504,6 +501,21 @@ VALUES (NULL, '16', '$lead_id', '$tipologia_veicolo', '$data_acquisto', '$pagame
             $this->contenuto['esito'] = "Error 1102: Errore caricamento." . mysql_error();
         }
 
+        $this->cnv_makedata();
+    }
+
+    public function save_sign()
+    { //torna le marche delle auto recuperate dal db , basato su quello di eurotax
+
+        $img = $_REQUEST['img'];
+        $potential_id = $_REQUEST['potential_id'];
+
+        $query = "INSERT INTO `fl_firme` ( `potential_id`, `img_string`)  VALUES ('".$potential_id."','".$img."')";
+
+        mysql_query($query, CONNECT);
+
+        $this->contenuto['class'] = 'green';
+        $this->contenuto['esito'] = "OK";
         $this->cnv_makedata();
     }
 

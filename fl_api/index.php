@@ -186,5 +186,14 @@ if(isset($dataset['get_modelli'])){
     $webservice->get_modelli();
 }
 
+/* salva firma cliente */
+if(isset($dataset['save_sign'])){
+    mandatory_fileds(array('token'));
+    session_cache_limiter( 'private_no_expire' );
+    $webservice->token = check($dataset['token']);
+    $webservice->app_start();
+    $webservice->save_sign();
+}
+
 echo json_encode(array('esito' => 0, 'info_txt' => "Specifica un metodo o autentica client"));
 exit;

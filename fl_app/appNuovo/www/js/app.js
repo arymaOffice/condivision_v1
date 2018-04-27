@@ -10,7 +10,7 @@ var app = new Framework7({
   // App routes
   routes: routes,
   smartSelect: {
-    closeOnSelect:true,
+    closeOnSelect: true,
   },
 });
 
@@ -20,7 +20,7 @@ var mainView = app.views.create('.view-main', {
 });
 
 var endpoint = 'https://authos.bluemotive.it/fl_api/';
-
+var current_lead_id = '';
 // Show/hide preloader for remote ajax loaded pages
 $$(document).on('ajaxStart', function (e) {
   // Show Preloader
@@ -43,17 +43,16 @@ old_modello = '';//variabile utilizzata per non mttere piu check a permuta
 
 $$('#my-permuta').on('popup:close', function (e, popup) {
   modello_retrieve = $$('input[name="modello"]').val();
-  if(modello_retrieve != '' && old_modello != $$('input[name="modello"]').val()){
-    old_modello  =  $$('input[name="modello"]').val();
+  if (modello_retrieve != '' && old_modello != $$('input[name="modello"]').val()) {
+    old_modello = $$('input[name="modello"]').val();
     $$('#permuta-button').append(' <i class="f7-icons">check</i>');
   }
-  if(modello_retrieve == ''){
+  if (modello_retrieve == '') {
     $$('#permuta-button').html('Permuta');
-    
+
   }
 
 });
-
 
 
 // Login Screen Demo
@@ -66,9 +65,11 @@ $$('#my-login-screen .login-button').on('click', function () {
       if (data.esito == 1) {
         app.request.json(endpoint, { usr_login: 1, user: username, password: password, token: data.token }, function (response) {
           if (response.esito == 1) {
-            var usr_id = response.usr_id;
+            window.usr_id = response.usr_id;
             $$('#nomeuser').html(response.user);
+            $$('#form-lead')[0].reset();
             window.GlobalToken = data.token;
+            localStorage.setItem('token',window.GlobalToken);
             // Close login screen
             app.loginScreen.close('#my-login-screen');
             //retrieve data
@@ -108,9 +109,9 @@ function retrieve_data() {
   var macchine = [];
 
   Framework7.request.json(endpoint, { get_modelli: 1, token: window.GlobalToken }, function (response) {
-    leads = response.leads;
-    for (i = 0; i <= leads.length; i++) {
-      macchine.push(marche[leads[i].id_marca_eurotax] +' '+leads[i].modello + ' , anno: ' + leads[i].anno + ' cc: ' + leads[i].cilindrata + ' al: ' + leads[i].codice_alimentazione);
+    cars = response.leads;
+    for (i = 0; i <= cars.length; i++) {
+      macchine.push(marche[cars[i].id_marca_eurotax] + ' ' + cars[i].modello + ' , anno: ' + cars[i].anno + ' cc: ' + cars[i].cilindrata + ' al: ' + cars[i].codice_alimentazione);
     }
   });
   /*rende il campo autocompletante*/
@@ -127,7 +128,11 @@ function retrieve_data() {
       for (var i = 0; i < macchine.length; i++) {
         if (macchine[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) {
           results.push(macchine[i]);
-          $$('#hide-modello').val(leads[i].id);
+          $$('#hide-modello').val(cars[i].id);
+          $$('input[name="alimentazione"]').val(cars[i].codice_alimentazione);
+          $$('input[name="marca"]').val(marche[cars[i].id_marca_eurotax]);
+          $$('input[name="anno_immatricolazione"]').val(cars[i].anno);
+          $$('input[name="descrizione"]').val('cilindrata: '+cars[i].cilindrata);
         }
       }
       // Render items by passing array with result items
@@ -183,7 +188,7 @@ $$('.invia').on('click', function (e) {
 
   var source_potential = $$('select[name="source_potential"]').val(); formData['source_potential'] = source_potential;
 
-  
+
   var id_marca = $$('input[name="id-marca"]').val(); formData['id_marca'] = id_marca;
 
   var id_modello = $$('input[name="id-modello"]').val(); formData['id_modello'] = id_modello;
@@ -202,9 +207,9 @@ $$('.invia').on('click', function (e) {
 
 
   var storedData = JSON.stringify(formData);
-  
 
-  if (nome != '' && telefono != '' && source_potential != 'NULL' ) {
+
+  if (nome != '' && telefono != '' && source_potential != 'NULL') {
     app.request({
       url: endpoint + '?insert_lead_app&token=' + window.GlobalToken,
       method: 'POST',
@@ -220,16 +225,23 @@ $$('.invia').on('click', function (e) {
       success: function (data) {
 
         if (data.class == 'green') {
-          app.dialog.alert('Contatto inserito con successo');
-        }else{
-          app.dialog.alert('errore nell\'inserimento');          
+
+          localStorage.setItem('insert_id',data.insert_id);
+          app.dialog.alert('Contatto inserito con successo',function(){
+            //mainView.router.navigate('/firma/');
+            window.open('popover.html','_blank');
+          });
+          //notificationCallbackOnClose.open();
+
+        } else {
+          app.dialog.alert('errore nell\'inserimento');
         }
 
         $$('#form-lead')[0].reset();
         $$('#permuta-button').html('Permuta');
-        $$('option[value="NULL"]').prop('selected', true);
-        
-       
+        $$('option[value="' + source_potential + '"]').prop('selected', true);
+
+
       }
     });
 

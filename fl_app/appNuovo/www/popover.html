@@ -1,0 +1,53 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="stylesheet" href="firma/signature-pad.css">
+  <style>
+    button {
+      color: white;
+
+      background: #2196f3;
+
+      border-radius: 4px;
+
+      border: none;
+
+      padding: 10px 20px;
+
+      font-size: 30px;
+    }
+  </style>
+
+</head>
+
+<body onselectstart="return false">
+
+  <div id="signature-pad" class="signature-pad">
+    <div class="signature-pad--body">
+      <canvas></canvas>
+    </div>
+    <div class="signature-pad--footer">
+      <div class="description">Firma qui</div>
+
+      <div class="signature-pad--actions">
+        <div>
+          <button type="button" class="button clear" data-action="clear">Pulisci</button>
+          <button type="button" class="button save" data-action="save-png">Salva</button>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- firma -->
+  <script src="firma/signature_pad.umd.js"></script>
+  <script src="firma/app.js"></script>
+</body>
+
+
+</html>

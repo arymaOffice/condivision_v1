@@ -83,7 +83,7 @@ savePNGButton.addEventListener("click", function (event) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
-        alert('Firma Salvata');
+  
         window.open('popover.html','_self');
       }
     };

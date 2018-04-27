@@ -43,6 +43,8 @@ foreach ($ambienti as $ambiente) {
 
     $evento_info = GQD('fl_eventi_hrc  e JOIN fl_eventi_hrc e2 ON e.`data_evento` = e2.`data_evento` AND e.`ambienti` = e2.ambienti ', 'COUNT(*) as num_eventi ', 'e.id = ' . $evento_id . ' AND e.ambienti IN(' . $ambiente_id . ') ');
 
+    $text_button = $ambiente_info[0]['nome_ambiente'] ; //testo mostrato nel bottone quando c'è un solo evento nel giorno
+
     if ($evento_info['num_eventi'] < 2) {
 
         $options = '<option value="-1">Seleziona ...</option>';
@@ -53,27 +55,46 @@ foreach ($ambienti as $ambiente) {
         $html .= '<input value="' . $ambiente_id . '" name="ambiente_id" type="hidden"><div class="form_row" id="box_template_id"><p class="select_text template_id"><label for="template_id">Template Evento</label>
         <select  name="template_id" id="template_id">' . $options . '</select></div><input type="hidden" name="evento_id" value="' . $evento_id . '">';
         $html .= '<input type="submit" value="Crea da template" class="button impaginazione"></form></div>';
+        $text_button = 'Crea schema vuoto';
 
     }
 
-    
     $width = ($evento_info['num_eventi'] > 1) ? '100' : '30';
 
-    $html .= '   <div style="width:'.$width.'%;display: inline-block;float: left;"><h2 style="text-align:center;">' . $ambiente_info[0]['nome_ambiente'] . '</h2>';
-    $html .= ($evento_info['num_eventi'] > 1) ? 'Per la '.$ambiente_info[0]['nome_ambiente'].' in questa data sono presenti già '.$evento_info['num_eventi'].' eventi' : '';
+    $html .= '   <div style="width:' . $width . '%;display: inline-block;float: left;"><h2 style="text-align:center;">' . $ambiente_info[0]['nome_ambiente'] . '</h2>';
+    $html .= ($evento_info['num_eventi'] > 1) ? 'Per la ' . $ambiente_info[0]['nome_ambiente'] . ' in questa data sono presenti già ' . $evento_info['num_eventi'] . ' eventi' : '';
     $html .= '  <form method="GET" action="mod_opera.php"><input type="hidden" name="ambiente_id" value="' . $ambiente_id . '">
-        <input type="hidden" name="evento_id" value="' . $evento_id . '">
-        <div class="form_row" id="box_orientamento">
+        <input type="hidden" name="evento_id" value="' . $evento_id . '">';
+
+    $display = '';
+    $checked0 = '';
+    $checked1 = '';
+
+    if (isset($ambiente_layout[0]['orientamento'])) { //se c'è già un layout per questo ambiente in questa data
+        $display = 'display:none;';
+        if ($value['orientamento'] == 0) {
+            $checked0 = 'checked';
+        } else {
+            $checked1 = 'checked';
+        }
+    }else{
+        $text_button = 'Crea schema vuoto';
+    }
+
+    $html .= ' <div class="form_row" id="box_orientamento" style="' . $display . '">
         <p class="input_text" style="text-align:left !important;"><label for="orientamento">Orientamento</label>
-        <input name="orientamento" type="radio" id="orientamento' . $evento_id . $ambiente_id . '0" value="0" required>
-        <label for="orientamento' . $evento_id . $ambiente_id . '0" style="width: auto;">Verticale</label>
-        <input name="orientamento" type="radio" id="orientamento' . $evento_id . $ambiente_id . '1" value="1" required>
+        <input name="orientamento" type="radio" id="orientamento' . $evento_id . $ambiente_id . '0" value="0" required ' . $checked0 . '>
+        <label for="orientamento' . $evento_id . $ambiente_id . '0" style="width: auto;" >Verticale</label>
+
+        <input name="orientamento" type="radio" id="orientamento' . $evento_id . $ambiente_id . '1" value="1" required ' . $checked1 . '>
         <label for="orientamento' . $evento_id . $ambiente_id . '1" style="width: auto;">Orizzontale</label>
+
+
         </p>
         </div>
         <input type="hidden" value="1" name="layout">
             <input type="hidden" value="-2" name="template_id">
-        <input type="submit" value="Crea schema vuoto" class="button"></form>
+        <input type="submit" value="'.$text_button.'" class="button"></form>
         </form>
         </div><br><br><br>';
 

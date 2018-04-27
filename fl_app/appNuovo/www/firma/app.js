@@ -15,7 +15,7 @@ function resizeCanvas() {
   // When zoomed out to less than 100%, for some very strange reason,
   // some browsers report devicePixelRatio as less than 1
   // and only part of the canvas is cleared then.
-  var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+  var ratio = Math.max(window.devicePixelRatio || 1, 1);
 
   // This part causes the canvas to be cleared
   canvas.width = canvas.offsetWidth * ratio;
@@ -81,14 +81,14 @@ savePNGButton.addEventListener("click", function (event) {
     var dataURL = signaturePad.toDataURL();
 
     var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      alert('Firma Salvata');
-      window.close();
-    }
-  };
-    xhttp.open("POST", "https://authos.bluemotive.it/fl_api/?save_sign&img="+dataURL+"&potential_id="+localStorage.getItem('insert_id')+"&token="+localStorage.getItem('token'), true);
-    xhttp.send(); 
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        alert('Firma Salvata');
+        window.open('popover.html','_self');
+      }
+    };
+    xhttp.open("POST", "https://authos.bluemotive.it/fl_api/?save_sign&img=" + dataURL + "&potential_id=" + localStorage.getItem('insert_id') + "&token=" + localStorage.getItem('token'), true);
+    xhttp.send();
     //window.close();
   }
 });

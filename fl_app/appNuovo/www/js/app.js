@@ -31,9 +31,11 @@ $$(document).on('ajaxComplete', function (e) {
   app.preloader.hide();
 });
 
-var GlobalToken = "";
+var GlobalToken = localStorage.getItem('token');
 
-if (GlobalToken.leght == 26) {
+if (GlobalToken != null && GlobalToken != '') {
+  $$('#form-lead')[0].reset();
+  retrieve_data();
 
   // Close login screen
   app.loginScreen.close('#my-login-screen');
@@ -85,6 +87,8 @@ $$('#my-login-screen .login-button').on('click', function () {
 
 function retrieve_data() {
 
+  $$('#selectAcivity').empty();
+  $$('#selectAcivity').append('<option value="NULL" selected >Non selezionata</option>');
   //recupera attività -----------------------------------------
   Framework7.request.json(endpoint, { get_attivita: 1, token: window.GlobalToken }, function (response) {
     leads = response.leads;
@@ -142,6 +146,7 @@ function retrieve_data() {
   //recupera modelli macchine -----------------------------------------
 
   //recupera modelli gamma -----------------------------------------
+  $$('#gamma').empty();
   Framework7.request.json(endpoint, { get_items: '1', item_rel: 161, token: window.GlobalToken }, function (response) {
     leads = response.dati;
     for (i = 0; i <= leads.length; i++) {
@@ -151,6 +156,7 @@ function retrieve_data() {
   //recupera modelli gamma  -----------------------------------------
 
   // //recupera modelli gamma commerciale -----------------------------------------
+  $$('#gamma2').empty();
   Framework7.request.json(endpoint, { get_items: '1', item_rel: 162, token: window.GlobalToken }, function (response) {
     leads = response.dati;
     for (i = 0; i <= leads.length; i++) {
@@ -229,7 +235,7 @@ $$('.invia').on('click', function (e) {
           localStorage.setItem('insert_id',data.insert_id);
           app.dialog.alert('Contatto inserito con successo',function(){
             //mainView.router.navigate('/firma/');
-            window.open('popover.html','_blank');
+            window.open('popover.html','_self');
           });
           //notificationCallbackOnClose.open();
 

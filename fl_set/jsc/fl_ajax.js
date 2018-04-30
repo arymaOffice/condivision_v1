@@ -122,8 +122,13 @@ function load_cliente() {
 	
 	http.onreadystatechange = function() {
 	if(http.readyState == 2) {
-	(confirm("Caricare dati cliente?")) ? "" : http.abort() ;
-
+	
+	//(confirm("Caricare dati cliente?")) ? "" : http.abort() ;
+	 $('#ragione_sociale').attr('opacity','0.5');
+	 $('#indirizzo').attr('opacity','0.5');
+	 $('#partita_iva').attr('opacity','0.5');
+	 $('#codice_fiscale').attr('opacity','0.5');
+	 $('#paese').attr('opacity','0.5');
 	}
 	
 	if(http.readyState == 4 && http.status == 200) {
@@ -134,6 +139,12 @@ function load_cliente() {
 	 $('#partita_iva').val(obj.partita_iva);
 	 $('#codice_fiscale').val(obj.codice_fiscale_legale);
 	 $('#paese').val(100000100);
+
+	  $('#ragione_sociale').attr('opacity','1');
+	 $('#indirizzo').attr('opacity','1');
+	 $('#partita_iva').attr('opacity','1');
+	 $('#codice_fiscale').attr('opacity','1');
+	 $('#paese').attr('opacity','1');
 	
 	}
 	}

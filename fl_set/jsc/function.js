@@ -145,9 +145,10 @@ window.open(what,"","fullscreen");
 
 function OpenBrWindow(theURL,winName) 
 {
+
  params  = 'width='+screen.width;
  params += ', height='+screen.height;
- params += ', top=0, left=0'
+ params += ', top=0, left='+screen.width;
  params += ', fullscreen=yes';
 
  newwin=window.open(theURL,winName, params);
@@ -203,7 +204,7 @@ function OpenBrWindow(theURL,winName)
 
 function loadProvince(from,where,empty){ 
   var post = 'sel=provincia&filtro=regione&valore='+$(from).val();
-  var url = '/fl_modules/mod_basic/mod_selectLoader.php';
+  var url = '../mod_basic/mod_selectLoader.php';
   var posting = $.post(url,post); 
   posting.fail(function( data ) {     });
   posting.always(function( data ) {    });
@@ -220,7 +221,7 @@ function loadProvince(from,where,empty){
 
 function loadComuni(from,where,empty){ 
   var post = 'sel=comune&filtro=provincia&valore='+$(from).val();
-  var url = '/fl_modules/mod_basic/mod_selectLoader.php';
+  var url = '../mod_basic/mod_selectLoader.php';
   var posting = $.post(url,post); 
   posting.fail(function( data ) {     });
   posting.always(function( data ) {    });
@@ -237,7 +238,7 @@ function loadComuni(from,where,empty){
 
 function loadCap(from,where,empty){ 
   var post = 'sel=cap&filtro=comune&valore='+$(from).val();
-  var url = '/fl_modules/mod_basic/mod_selectLoader.php';
+  var url = '../mod_basic/mod_selectLoader.php';
   var posting = $.post(url,post); 
   posting.fail(function( data ) {     });
   posting.always(function( data ) {    });
@@ -257,7 +258,7 @@ function loadCap(from,where,empty){
 function loadSelect(gtx,from,where,filtro,sel,empty){ 
   $(where).attr('placeholder','Caricamento...'); 
   var post = 'gtx='+gtx+'&sel='+sel+'&filtro='+filtro+'&valore='+$(from).val();
-  var url = '/fl_modules/mod_basic/mod_selectLoader.php';
+  var url = '../mod_basic/mod_selectLoader.php';
   var posting = $.post(url,post); 
  
   posting.fail(function( data ) {   $(where).attr('placeholder','Errore caricamento!');    });

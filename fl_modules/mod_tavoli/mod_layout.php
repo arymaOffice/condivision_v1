@@ -130,10 +130,10 @@ $totalizzatore = GQD('`fl_tavoli_commensali` AS persone LEFT JOIN fl_tavoli AS t
 							<input name="nome" value="" style="width: 35%;padding: 10;" placeholder="Nome" type="text">
 
 							<span style="float: right; width: 25%; text-align: right;">
-								A <input style="width: 75%;" name="adulti" value="1" type="number"  min="0" max="12"><br>
-								B <input style="width: 75%; margin-top: 5px;" value="0" name="bambini" type="number" min="0" max="12"><br>
-								S <input style="width: 75%; margin-top: 5px;" value="0" name="sedie" type="number" min="0" max="12"><br>
-								H <input style="width: 75%; margin-top: 5px;" value="0" name="seggioloni" type="number" min="0" max="12"><br>
+								A <input style="width: 75%;" name="adulti" value="1" type="number"  min="0"><br>
+								B <input style="width: 75%; margin-top: 5px;" value="0" name="bambini" type="number" min="0"><br>
+								S <input style="width: 75%; margin-top: 5px;" value="0" name="sedie" type="number" min="0"><br>
+								H <input style="width: 75%; margin-top: 5px;" value="0" name="seggioloni" type="number" min="0"><br>
 							</span>
 								<input name="note_intolleranze"  value="" style="width: 70.8%; margin-top: 5px;" placeholder="Note intolleranze" type="text"><br><br>
 							Scegli la tipologia di ospite: <select name="tipo_commensale" style="margin-left: -2px;"><?php foreach ($tipo_commensale as $key => $value) {

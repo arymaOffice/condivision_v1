@@ -163,13 +163,12 @@ $(document).ready(function () {
 
 	var text = new fabric.Text('tavolo', { 								//testo di default sui tavoli
 		fontFamily: 'Calibri',											//famiglia del testo
-		fontSize: 13,													//grandezza del testo
-		textAlign: 'center',											//alignamento
-		originX: 'center',												//origine sull'asse x
-		originY: 'center',												//origine sull'asse y
+		fontSize: 12.3,													//grandezza del testo
 		fill: textColor,												//colore
-		left: 100,														//margine sinistro per il primo tavolo
-		top: textTop													//margine dall'alto per il primo tavolo
+		left: 0,														//margine sinistro per il primo tavolo
+		top: 0,													//margine dall'alto per il primo tavolo
+		textAlign: 'left',
+		originX: 'left',
 	});
 
 	fabric.Object.prototype.set({										// Do some initializing stuff
@@ -453,13 +452,14 @@ $(document).ready(function () {
 
 	canvas.on('object:modified', function (options) { //modifica coordinate dell'oggeto spostato
 
-
 		var tableId = options.target._objects[0].name;
 		var x = options.target.left;
 		var y = options.target.top;
 		var OLDangle = options.target._objects[0].OLDangle;
 		var angle = (options.target.get('angle') + OLDangle ) % 360;
 		options.target._objects[0].OLDangle = angle;
+		var zoomX = options.target.zoomX;
+		var zoomY = options.target.zoomY;
 
 		var eventoIf = evento_id;
 
@@ -467,7 +467,7 @@ $(document).ready(function () {
 			eventoIf = options.target._objects[0].diverso;
 		}
 
-		$.get('mod_opera.php', { updateTable: 1, TableId: tableId, evento_id: eventoIf, x: x, y: y, angle: angle, ambiente_id: ambiente_id });
+		$.get('mod_opera.php', { updateTable: 1, TableId: tableId, evento_id: eventoIf, x: x, y: y, angle: angle, ambiente_id: ambiente_id,zoomX : zoomX, zoomY:zoomY });
 		canvas.deactivateAll();
 		canvas.renderAll();
 	});
@@ -777,6 +777,7 @@ $(document).ready(function () {
 			angle = Number(parsed.angolare);
 
 			specialMargin = 0;
+			specialTop = 0;
 
 			switch (parsed.tipo_tavolo_id) {
 				case '2':
@@ -795,6 +796,9 @@ $(document).ready(function () {
 					newOne.set('width', (radius * 2) * 2);
 					specialMargin = (radius * 2) * 2 * 0.2;
 					newOne.set('angle', angle);
+					if (angle >= 0 && angle <= 90) {
+						specialMargin = 10;
+					}
 					break;
 				case '5':
 					var newOne = fabric.util.object.clone(tavoloBase2); //crea tavolo ovale clonando l'oggetto
@@ -803,19 +807,20 @@ $(document).ready(function () {
 					specialMargin = radius * 2 * 0.45;
 					newOne.set('angle', angle);
 					newOne.set('OLDangle', angle);
+					if (angle >= 0 && angle < 90) {
+						specialMargin = 30;
+					}
+					if (angle >= 90  && angle <= 180) {
+						specialMargin = - 70;
+					}
 					break;
 				default:
 					var newOne = fabric.util.object.clone(tavoloBase); //crea tavolo tondo clonando l'oggetto
 					newOne.set('angle', angle);
 			}
 
-			if (angle >= 30 && angle <= 80) {
-				specialMargin = -radius + 5;
-			}
 
-			if (angle > 80 && angle <= 180) {
-				specialMargin = -radius * 2;
-			}
+
 
 			a = (parsed.a != null && parsed.a != '0') ? parsed.a + 'A' : '';
 			b = (parsed.b != null && parsed.b != '0') ? parsed.b + 'B' : '';
@@ -824,47 +829,50 @@ $(document).ready(function () {
 			noteInt = (parsed.noteInt != null && parsed.noteInt != '0') ? '*' : '';
 			seraTot = (parsed.seraTot != null && parsed.seraTot != '0') ? parsed.seraTot + ' Serali' : '';
 
-			newOne.set("top", Number(marginTop));					//setto margine dall'alto (che cambia per ogni tavolo)
+			//newOne.set("top", Number(marginTop));					//setto margine dall'alto (che cambia per ogni tavolo)
 			newOne.set("name", name);									//ed il nome identificativo
 			newOne.set("numero", numInsert);								//numero inserito
 			newOne.set("categoria", textInsert);							//categoria inserita
 
 			/* testo intolleranze */
 			var into = fabric.util.object.clone(text);					//clona il testo base
-			into.set("top", Number(marginTop) + radius - 22);			//definisce il margine
+			into.set("top", newOne.top + 5 + specialTop );			//definisce il margine
 			into.setText(noteInt);										//definisco il testo
 			into.setColor('red');										//coloro il testo
 			into.set({ fontSize: 20 });									//setto dimensione del testo
 			/* testo titolo tavolo */
 			var tito = fabric.util.object.clone(text);					//clona il testo base
-			tito.set("top", Number(marginTop) + radius - 10);			//definisce il margine
+			tito.set("top", newOne.top + into.height);			//definisce il margine
 			tito.setText(textInsert + ' ' + numInsert);	//definisco il testo
 			/* testo personalizzato*/
 			var titoUser = fabric.util.object.clone(text);					//clona il testo base
-			titoUser.set("top", Number(marginTop) + radius + 2);			//definisce il margine
+			titoUser.set("top", newOne.top + into.height + tito.height);			//definisce il margine
 			titoUser.setText(textInsertUser);	//definisco il testo
 			/* testo commensali */
 			var comm = fabric.util.object.clone(text);					//clona il testo base
-			comm.set("top", Number(marginTop) + radius + 14);				//definisce il margine
+			 comm.set("top", newOne.top + into.height + tito.height +titoUser.height);				//definisce il margine
 			comm.setText(a + ' ' + b + ' ' + s + ' ' + h);				//definisco il testo
 			comm.setColor('red');										//coloro il testo
 			/* testo ospiti serali */
 			var sera = fabric.util.object.clone(text);					//clona il testo base
-			sera.set("top", Number(marginTop) + radius + 24);			//definisce il margine
+			sera.set("top", newOne.top + into.height + tito.height +titoUser.height + comm.height);			//definisce il margine
 			sera.setText(seraTot);										//definisco il testo
 
 			newOne.set('diverso', diverso);
 			newOne.set('left', Number(marginLeft));					//imposto un margine sinistro
 
-			into.set('left', Number(marginLeft) + radius + specialMargin);//imposto un margine sinistro
-			tito.set('left', Number(marginLeft) + radius + specialMargin);//imposto un margine sinistro
-			titoUser.set('left', Number(marginLeft) + radius + specialMargin);//imposto un margine sinistro
-			comm.set('left', Number(marginLeft) + radius + specialMargin);//imposto un margine sinistro
-			sera.set('left', Number(marginLeft) + radius + specialMargin);//imposto un margine sinistro
+			into.set('left', newOne.left + specialMargin);//imposto un margine sinistro
+			tito.set('left', newOne.left + specialMargin);//imposto un margine sinistro
+			titoUser.set('left', newOne.left + specialMargin);//imposto un margine sinistro
+			comm.set('left', newOne.left + specialMargin);//imposto un margine sinistro
+			sera.set('left', newOne.left + specialMargin);//imposto un margine sinistro
 
 
 			if (diverso != false) { newOne.set('stroke', '#666'); newOne.set('strokeDashArray', [5, 5]); tito.set('fill', '#666'); }
-			var GROUP = new fabric.Group([newOne, into, tito, titoUser, comm, sera], {}); //tavolo + testo fornamo un gruppo
+			var GROUP = new fabric.Group([newOne, into, tito, titoUser, comm, sera], {
+				left : Number(marginLeft),
+				top : Number(marginTop)
+			}); //tavolo + testo fornamo un gruppo
 			canvas.add(GROUP);											//gli aggiungo al canvas
 			canvas.renderAll();											//fa il render di tutti gli oggetti
 			return true;

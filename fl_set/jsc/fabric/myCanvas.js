@@ -452,11 +452,13 @@ $(document).ready(function () {
 
 	canvas.on('object:modified', function (options) { //modifica coordinate dell'oggeto spostato
 
+
+
 		var tableId = options.target._objects[0].name;
 		var x = options.target.left;
 		var y = options.target.top;
 		var OLDangle = options.target._objects[0].OLDangle;
-		var angle = (options.target.get('angle') + OLDangle ) % 360;
+		var angle = (options.target.get('angle') + OLDangle) % 360;
 		options.target._objects[0].OLDangle = angle;
 		var zoomX = options.target.zoomX;
 		var zoomY = options.target.zoomY;
@@ -467,7 +469,7 @@ $(document).ready(function () {
 			eventoIf = options.target._objects[0].diverso;
 		}
 
-		$.get('mod_opera.php', { updateTable: 1, TableId: tableId, evento_id: eventoIf, x: x, y: y, angle: angle, ambiente_id: ambiente_id,zoomX : zoomX, zoomY:zoomY });
+		$.get('mod_opera.php', { updateTable: 1, TableId: tableId, evento_id: eventoIf, x: x, y: y, angle: angle, ambiente_id: ambiente_id, zoomX: zoomX, zoomY: zoomY });
 		canvas.deactivateAll();
 		canvas.renderAll();
 	});
@@ -771,6 +773,8 @@ $(document).ready(function () {
 			marginTop = parsed.asse_y;
 			marginLeft = parsed.asse_x;
 			name = parsed.numero_tavolo;
+			zoomX = Number(parsed.zoomX);
+			zoomY = Number(parsed.zoomY);
 			textInsert = unescape(parsed.nome_tavolo);
 			numInsert = (unescape(parsed.numero_tavolo_utente) != 'null' && unescape(parsed.numero_tavolo_utente) != '0') ? unescape(parsed.numero_tavolo_utente) : '';
 			textInsertUser = unescape(parsed.nome_tavolo_utente);
@@ -779,22 +783,30 @@ $(document).ready(function () {
 			specialMargin = 0;
 			specialTop = 0;
 
+
 			switch (parsed.tipo_tavolo_id) {
 				case '2':
 					var newOne = fabric.util.object.clone(tavoloBase); //crea tavolo tondo clonando l'oggetto
 					newOne.set('angle', angle);
+					newOne.set('OLDangle', angle);
+					newOne.set('height', tavoloBase.height * zoomY);
+					newOne.set('width', tavoloBase.width * zoomX);
 					break;
 				case '3':
 					var newOne = fabric.util.object.clone(tavoloBase1); //crea tavolo quadrato clonando l'oggetto
-					newOne.set('height', radius * 2);
-					newOne.set('width', radius * 2);
+					newOne.set('height', radius * 2 * zoomY);
+					newOne.set('width', radius * 2 * zoomX);
+					newOne.set('OLDangle', angle);
+
 					newOne.set('angle', angle);
 					break;
 				case '4':
 					var newOne = fabric.util.object.clone(tavoloBase1); //crea tavolo rettangolare clonando l'oggetto
-					newOne.set('height', radius * 2);
-					newOne.set('width', (radius * 2) * 2);
+					newOne.set('height', radius * 2 * zoomY);
+					newOne.set('width', (radius * 2) * 2 * zoomX);
 					specialMargin = (radius * 2) * 2 * 0.2;
+					newOne.set('OLDangle', angle);
+
 					newOne.set('angle', angle);
 					if (angle >= 0 && angle <= 90) {
 						specialMargin = 10;
@@ -802,21 +814,23 @@ $(document).ready(function () {
 					break;
 				case '5':
 					var newOne = fabric.util.object.clone(tavoloBase2); //crea tavolo ovale clonando l'oggetto
-					newOne.set('ry', radius * 1.2);
-					newOne.set('rx', radius * 2);
+					newOne.set('ry', radius * 1.2 * zoomY);
+					newOne.set('rx', radius * 2 * zoomX);
 					specialMargin = radius * 2 * 0.45;
 					newOne.set('angle', angle);
 					newOne.set('OLDangle', angle);
 					if (angle >= 0 && angle < 90) {
 						specialMargin = 30;
 					}
-					if (angle >= 90  && angle <= 180) {
+					if (angle >= 90 && angle <= 180) {
 						specialMargin = - 70;
 					}
 					break;
 				default:
 					var newOne = fabric.util.object.clone(tavoloBase); //crea tavolo tondo clonando l'oggetto
 					newOne.set('angle', angle);
+					newOne.set('height', tavoloBase.height * zoomY);
+					newOne.set('width', tavoloBase.width * zoomX);
 			}
 
 
@@ -833,10 +847,11 @@ $(document).ready(function () {
 			newOne.set("name", name);									//ed il nome identificativo
 			newOne.set("numero", numInsert);								//numero inserito
 			newOne.set("categoria", textInsert);							//categoria inserita
+			newOne.set("stroke", parsed.color);						//colori bordi 
 
 			/* testo intolleranze */
 			var into = fabric.util.object.clone(text);					//clona il testo base
-			into.set("top", newOne.top + 5 + specialTop );			//definisce il margine
+			into.set("top", newOne.top + 5 + specialTop);			//definisce il margine
 			into.setText(noteInt);										//definisco il testo
 			into.setColor('red');										//coloro il testo
 			into.set({ fontSize: 20 });									//setto dimensione del testo
@@ -850,12 +865,12 @@ $(document).ready(function () {
 			titoUser.setText(textInsertUser);	//definisco il testo
 			/* testo commensali */
 			var comm = fabric.util.object.clone(text);					//clona il testo base
-			 comm.set("top", newOne.top + into.height + tito.height +titoUser.height);				//definisce il margine
+			comm.set("top", newOne.top + into.height + tito.height + titoUser.height);				//definisce il margine
 			comm.setText(a + ' ' + b + ' ' + s + ' ' + h);				//definisco il testo
 			comm.setColor('red');										//coloro il testo
 			/* testo ospiti serali */
 			var sera = fabric.util.object.clone(text);					//clona il testo base
-			sera.set("top", newOne.top + into.height + tito.height +titoUser.height + comm.height);			//definisce il margine
+			sera.set("top", newOne.top + into.height + tito.height + titoUser.height + comm.height);			//definisce il margine
 			sera.setText(seraTot);										//definisco il testo
 
 			newOne.set('diverso', diverso);
@@ -870,8 +885,8 @@ $(document).ready(function () {
 
 			if (diverso != false) { newOne.set('stroke', '#666'); newOne.set('strokeDashArray', [5, 5]); tito.set('fill', '#666'); }
 			var GROUP = new fabric.Group([newOne, into, tito, titoUser, comm, sera], {
-				left : Number(marginLeft),
-				top : Number(marginTop)
+				left: Number(marginLeft),
+				top: Number(marginTop)
 			}); //tavolo + testo fornamo un gruppo
 			canvas.add(GROUP);											//gli aggiungo al canvas
 			canvas.renderAll();											//fa il render di tutti gli oggetti

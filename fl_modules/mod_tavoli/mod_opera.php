@@ -112,10 +112,12 @@ if (isset($_GET['insertTableId'])) { //richiesta di inserire un tavolo
 	$layout_info = GQS('fl_tavoli_layout', '*', 'evento_id = '.$insertEventId.' AND ambiente_id = '.$ambiente_id); //mi ritorna info sul layout
 
 	if ($_GET['diverso'] != 'false') {$insertEventId = check($_GET['diverso']);}
+
 	//vedo se un tavolo è già stato inserito
 	$contoTavoli = "SELECT count(*) AS quanti FROM $tabella_su_cui_operare tv LEFT JOIN fl_tavoli_layout l ON l.id = tv.layout_id  WHERE numero_tavolo = $insertTableId AND l.evento_id = $insertEventId AND ambiente_id =".$ambiente_id;
 	$contoTavoli = mysql_query($contoTavoli, CONNECT);
 	$contoTavoli = mysql_fetch_array($contoTavoli);
+
 	if ($contoTavoli['quanti'] == 0) //se non ci sono tavoli con id ed vento uguale lo aggiungo
 	{//attenzione layout
 
@@ -359,7 +361,7 @@ if (isset($_GET['evento_id'])) { //in base all'ebento recupero il numero di tavo
 
 	if ($ciSonoGiaTavoli['ciSono'] != 0) {
 
-		$Tavoli = "SELECT numero_tavolo FROM  $tabella_su_cui_operare  WHERE evento_id = $evento_principale AND layout_id = ".$layout_info[0]['id']."  ORDER BY numero_tavolo DESC";
+		$Tavoli = "SELECT numero_tavolo FROM  $tabella_su_cui_operare  WHERE evento_id = $evento_principale AND layout_id = ".$layout_info[0]['id']."  ORDER BY numero_tavolo ASC";
 		$Tavoli = mysql_query($Tavoli, CONNECT);
 		$Tavoli = mysql_fetch_all_mia($Tavoli, MYSQL_NUM);
 	}

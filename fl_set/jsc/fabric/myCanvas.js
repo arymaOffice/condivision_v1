@@ -163,7 +163,7 @@ $(document).ready(function () {
 
 	var text = new fabric.Text('tavolo', { 								//testo di default sui tavoli
 		fontFamily: 'Calibri',											//famiglia del testo
-		fontSize: 12.3,													//grandezza del testo
+		fontSize: 13,													//grandezza del testo
 		fill: textColor,												//colore
 		left: 0,														//margine sinistro per il primo tavolo
 		top: 0,													//margine dall'alto per il primo tavolo
@@ -201,16 +201,20 @@ $(document).ready(function () {
 	canvas.on('mouse:dblclick', function (options) { 					//evento doppio click
 		var object = canvas.getActiveObject();							//mi ritorna l'oggetto corrente
 		if (object != null) {
-			if (object._objects[0].diverso != false) { return false; };
+			var valore_da_inviare = evento_id;
+			if (object._objects[0].diverso != false) { valore_da_inviare = object._objects[0].diverso; };
 			//se si è cliccato su un oggeto si apre il modale
 			dialog.dialog("open");									//open modale
 			$('#addCommesale input[name=cognome]').focus();				//seleziona il primo campo cognome
 			var tableId = object._objects[0].name;						//recupero id del tavolo
 			$('#tableId').val(tableId);
+			$('#evento_id').val(valore_da_inviare);
+			$('#color').attr('data-rel', object._objects[0].id);
 			$("#catTable option[value='" + object._objects[0].categoria + "']").attr('selected', 'selected');//seleziono l'opzione del tavolo
 			$('#numTable').val(object._objects[0].numero);				//numero selezionato
 			$('#U_name').val(object._objects[3].text);
-			setTimeout(chiedoOspiti(tableId, evento_id), 5000);
+			$('#color').val(object._objects[0].stroke);
+			setTimeout(chiedoOspiti(tableId, valore_da_inviare), 5000);
 			$('#dialog-form').on('dialogclose', function (e) {
 				canvas.deactivateAll();
 				canvas.renderAll();
@@ -223,28 +227,34 @@ $(document).ready(function () {
 	$('#U_name').keyup(function (e) {           						//azione nel modale riguardo il nome del tavolo
 		var retrievedtext = $('#U_name').val();							//recupero il testo
 		var object = canvas.getActiveObject();							//prendo l'oggeto selezionato
+		var valore_da_inviare = evento_id;
+			if (object._objects[0].diverso != false) { valore_da_inviare = object._objects[0].diverso; };
 		var tableId = object._objects[0].name;							//recupera id del tavolo nel canvas
-		$.get('mod_opera.php', { tableNameUser: escape(retrievedtext), tableId: tableId, evento_id: evento_id, ambiente_id: ambiente_id });	//inserisce il tavolo con il nome scritto
+		$.get('mod_opera.php', { tableNameUser: escape(retrievedtext), tableId: tableId, evento_id: valore_da_inviare, ambiente_id: ambiente_id });	//inserisce il tavolo con il nome scritto
 		object._objects[3].setText(retrievedtext);//setto il testo ricevuto nel tavolo
 	});
 
 	$('#catTable').change(function (e) {
 		var categoria = $("#catTable option:selected").text();        //recupero la categoria cambiata
 		var object = canvas.getActiveObject();							//prendo l'oggeto selezionato
+		var valore_da_inviare = evento_id;
+			if (object._objects[0].diverso != false) { valore_da_inviare = object._objects[0].diverso; };
 		var numero = object._objects[0].numero;								//recupero il numero
 		var tableId = object._objects[0].name;							//recupera id del tavolo nel canvas
 		object._objects[0].set('categoria', categoria);
-		$.get('mod_opera.php', { ambiente_id: ambiente_id, categoria: categoria, tableId: tableId, evento_id: evento_id });	//inserisce il tavolo con il nome della categoria
+		$.get('mod_opera.php', { ambiente_id: ambiente_id, categoria: categoria, tableId: tableId, evento_id: valore_da_inviare });	//inserisce il tavolo con il nome della categoria
 		object._objects[2].setText(categoria + ' ' + numero);//setto il testo ricevuto nel tavolo
 	});
 
 	$('#numTable').keyup(function (e) {
 		var object = canvas.getActiveObject();							//prendo l'oggeto selezionato
+		var valore_da_inviare = evento_id;
+			if (object._objects[0].diverso != false) { valore_da_inviare = object._objects[0].diverso; };
 		var categoria = object._objects[0].categoria;        			//recupero la categoria cambiata
 		var numero = $("#numTable").val();								//recupero il numero
 		var tableId = object._objects[0].name;							//recupera id del tavolo nel canvas
 		object._objects[0].set('numero', numero);
-		$.get('mod_opera.php', { ambiente_id: ambiente_id, numero: numero, tableId: tableId, evento_id: evento_id });	//inserisce il tavolo con il nome della categoria
+		$.get('mod_opera.php', { ambiente_id: ambiente_id, numero: numero, tableId: tableId, evento_id: valore_da_inviare });	//inserisce il tavolo con il nome della categoria
 		object._objects[2].setText(categoria + ' ' + numero);//setto il testo ricevuto nel tavolo
 	});
 
@@ -256,16 +266,16 @@ $(document).ready(function () {
 				var parsed = $.parseJSON(data);							//parsa i risultati
 				var template = '';										//variabile vuota del template
 				$.each(parsed.result, function (index, el) {				//crea per ogni commensale il suo template
-					template += '<div class="rigaOspite"><span style="float: left;">' + el.tipo_commensale + '</span><br><br><span style="float: right; width: 25%; text-align: right;">' +
-						'A <input id="' + el.tcId + '" class="readyTochange" style="width: 75%;" type="number" name="adulti" value="' + el.adulti + '"><br>' +
-						'B <input id="' + el.tcId + '" class="readyTochange" style="width: 75%; margin-top: 5px;" type="number" value="' + el.bambini + '" name="bambini"><br>' +
-						'S <input id="' + el.tcId + '" class="readyTochange"  style="width: 75%; margin-top: 5px;" type="number" value="' + el.sedie + '" name="sedie"><br>' +
-						'H <input id="' + el.tcId + '" class="readyTochange"  style="width: 75%; margin-top: 5px;" type="number" value="' + el.seggioloni + '" name="seggioloni"><br>' +
+					template += '<div class="rigaOspite"><span style="float: left;width:22%;">' + el.tipo_commensale + '</span><span style="float: right;width:60%;text-align:right;word-spacing:30px;margin-right:82px;">A B S H</span><br><br><span style="float: left;width: 60%;margin-top: -14px;">' +
+						'<input type="text" name="cognome" placeholder="Cognome*" id="' + el.tcId + '"  class="readyTochange updateField"  data-rel="' + el.tcId + '" data-gtx="128"  value="' + unescape(el.cognome) + '" style="width: 40%;padding: 10; margin-right: 5px;height: 10px;" required>' +
+						'<input type="text" name="nome" value="' + el.nome + '" id="' + el.tcId + '"  class="readyTochange updateField"  data-rel="' + el.tcId + '" data-gtx="128" style="height: 10px;width: 40%;padding: 10;" placeholder="Nome"><br><br>' +
+						'<input type="text" name="note_intolleranze" id="' + el.tcId + '"  class="readyTochange updateField"  data-rel="' + el.tcId + '" data-gtx="128" value="' + unescape(el.note_intolleranze) + '" style="width: 82%; margin-top: -5px;height: 10px;" placeholder="Note intolleranze"></span><span style="float: left;margin-top: -14px; width: 36%; text-align: right;">' +
+						'<input id="' + el.tcId + '" class="readyTochange updateField"  data-rel="' + el.tcId + '" data-gtx="128" style="width: 20%;height: 10px;	float: left;margin: 0px 5px 5px 0px;" type="number" name="adulti" value="' + el.adulti + '">' +
+						'<input id="' + el.tcId + '" class="readyTochange updateField"  data-rel="' + el.tcId + '" data-gtx="128" style="width: 20%;height: 10px;	float: left;margin: 0px 5px 5px 0px;" type="number" value="' + el.bambini + '" name="bambini">' +
+						' <input id="' + el.tcId + '" class="readyTochange updateField"  data-rel="' + el.tcId + '" data-gtx="128"  style="width: 20%;height: 10px;	float: left;margin: 0px 5px 5px 0px;" type="number" value="' + el.sedie + '" name="sedie">' +
+						' <input id="' + el.tcId + '" class="readyTochange updateField"  data-rel="' + el.tcId + '" data-gtx="128"  style="width: 20%;	height: 10px;float: left;margin: 0px 5px 5px 0px;" type="number" value="' + el.seggioloni + '" name="seggioloni">' +
 						'</span>' +
-						'<input type="text" name="cognome" placeholder="Cognome*" id="' + el.tcId + '"  class="readyTochange" value="' + unescape(el.cognome) + '" style="width: 35%;padding: 10; margin-right: 5px;" required>' +
-						'<input type="text" name="nome" value="' + el.nome + '" id="' + el.tcId + '"  class="readyTochange" style="width: 35%;padding: 10;" placeholder="Nome">' +
-						'<input type="text" name="note_intolleranze" id="' + el.tcId + '"  class="readyTochange" value="' + unescape(el.note_intolleranze) + '" style="width: 70.8%; margin-top: 5px;" placeholder="Note intolleranze">' +
-						'<button class="button" style="color:#cb2c2c; background: none; margin-top: 23px;margin-left:-6px" id="del" data-rel="' + el.tcId + '">Rimuovi questo ospite</button><button  class="button" style="color:black; background: none; margin-top: 23px;margin-left:51px">Aggiorna Dati</button></div>';
+						'<button class="button" style="color:#cb2c2c !important; background: none;" id="del" data-rel="' + el.tcId + '"><i class="fa fa-times fa-2x"></i></button></div>';
 
 				});
 				localStorage.adulti = (parsed.resultTOT != null) ? parsed.resultTOT['aTot'] : '0';
@@ -286,7 +296,7 @@ $(document).ready(function () {
 				coperti += (parsed.resultTOT != null && localStorage.seggioloni != '0') ? localStorage.seggioloni + 'H' : '';
 
 				var serali = (parsed.resultTOT != null && localStorage.sera != '0') ? localStorage.sera + ' Serali' : '';
-				var noteInt = (parsed.resultTOT['noteInt'] != null && parsed.resultTOT['noteInt'] != '0') ? '*' : '';
+				var noteInt = (parsed.resultTOT != null && parsed.resultTOT['noteInt'] != null && parsed.resultTOT['noteInt'] != '0') ? '*' : '';
 
 
 				myobject._objects[1].setText(noteInt);							//setto l'asterisco se ci sono intolleranze
@@ -304,10 +314,11 @@ $(document).ready(function () {
 		var formSerialize = $(this).serializeArray();							//torna tutti i valori del form
 		tipo_commensale = formSerialize[7]['value'];
 		idTavolo = formSerialize[8]['value'];
+		valore_da_inviare = $('#evento_id').val();
 
 		//aggiunge il commesale
-		$.get('mod_opera.php', { a: formSerialize[2]['value'], b: formSerialize[3]['value'], s: formSerialize[4]['value'], h: formSerialize[5]['value'], cognome: escape(formSerialize[0]['value']), nome: formSerialize[1]['value'], intolleranze: escape(formSerialize[6]['value']), tipo_commensale: tipo_commensale, tableId: idTavolo, evento_id: evento_id, ambiente_id: ambiente_id }, function (data) {
-			setTimeout(chiedoOspiti(idTavolo, evento_id), 5000); //aggiorna gli ospiti
+		$.get('mod_opera.php', { a: formSerialize[2]['value'], b: formSerialize[3]['value'], s: formSerialize[4]['value'], h: formSerialize[5]['value'], cognome: escape(formSerialize[0]['value']), nome: formSerialize[1]['value'], intolleranze: escape(formSerialize[6]['value']), tipo_commensale: tipo_commensale, tableId: idTavolo, evento_id: valore_da_inviare, ambiente_id: ambiente_id }, function (data) {
+			setTimeout(chiedoOspiti(idTavolo, valore_da_inviare), 5000); //aggiorna gli ospiti
 			$('#primoCampo').focus();
 		});
 		$(this)[0].reset();														//pulisce il form
@@ -315,12 +326,14 @@ $(document).ready(function () {
 
 	//-------------------------------------cambiamento dei dati per un commensale ------------------------------------------------
 	$(document).on('change', '.readyTochange', function () {
-		var idCommensale = $(this).prop('id');
-		var nomeCampo = $(this).prop('name');
-		var valoreCampo = $(this).val();
-		$.get('mod_opera.php', { idCommensale: idCommensale, nomeCampo: nomeCampo, valoreCampo: valoreCampo });
-		var tableId = $('#tableId').val();
-		setTimeout(chiedoOspiti(tableId, evento_id), 100000);
+		// var idCommensale = $(this).prop('id');
+		// var nomeCampo = $(this).prop('name');
+		// var valoreCampo = $(this).val();
+		 valore_da_inviare = $('#evento_id').val();
+		
+		// $.get('mod_opera.php', { idCommensale: idCommensale, nomeCampo: nomeCampo, valoreCampo: valoreCampo });
+		// var tableId = $('#tableId').val();
+		setTimeout(chiedoOspiti(tableId, valore_da_inviare), 100000);
 	});
 
 	//-------------------------------------crea tavolo----------------------------------------------------------------------------
@@ -349,7 +362,8 @@ $(document).ready(function () {
 			$.get('mod_opera.php', { delete: 1, commensaleId: commensaleId });
 		}
 		var tableId = $('#tableId').val();
-		setTimeout(chiedoOspiti(tableId, evento_id), 1000);
+		valore_da_inviare = $('#evento_id').val();
+		setTimeout(chiedoOspiti(tableId, valore_da_inviare), 1000);
 
 	});
 
@@ -358,15 +372,16 @@ $(document).ready(function () {
 		delTable = $('#tableId').val();
 		var activeObject = canvas.getActiveObject(),
 			activeGroup = canvas.getActiveGroup();
+			valore_da_inviare = $('#evento_id').val();
 		if (activeObject) {
 			if (window.confirm('Sei sicuro di voler eliminare il tavolo?')) {
-				$.get('mod_opera.php', { deleteTable: 1, delTable: delTable, evento_id: evento_id, ambiente_id: ambiente_id }); //cancella tavolo
+				$.get('mod_opera.php', { deleteTable: 1, delTable: delTable, evento_id: valore_da_inviare, ambiente_id: ambiente_id }); //cancella tavolo
 				canvas.remove(activeObject);
 			}
 		}
 		else if (activeGroup) {
 			if (confirm('Sei sicuro di voler eliminare il tavolo?')) {
-				$.get('mod_opera.php', { deleteTable: 1, delTable: delTable, evento_id: evento_id, ambiente_id: ambiente_id }); //cancella tavolo
+				$.get('mod_opera.php', { deleteTable: 1, delTable: delTable, evento_id: valore_da_inviare, ambiente_id: ambiente_id }); //cancella tavolo
 				var objectsInGroup = activeGroup.getObjects();
 				canvas.discardActiveGroup();
 				objectsInGroup.forEach(function (object) {
@@ -411,6 +426,10 @@ $(document).ready(function () {
 	//funzioni per far rimanere gli oggetti all'interno del canvas
 	canvas.observe('object:scaling', function (e) { //nel caso si scala
 		var obj = e.target;
+
+		console.log(obj);
+
+
 		if (obj.getHeight() > obj.canvas.height || obj.getWidth() > obj.canvas.width) {
 			obj.setScaleY(obj.originalState.scaleY);
 			obj.setScaleX(obj.originalState.scaleX);
@@ -848,6 +867,7 @@ $(document).ready(function () {
 			newOne.set("numero", numInsert);								//numero inserito
 			newOne.set("categoria", textInsert);							//categoria inserita
 			newOne.set("stroke", parsed.color);						//colori bordi 
+			newOne.set("id", parsed.id);						//id tavolo 
 
 			/* testo intolleranze */
 			var into = fabric.util.object.clone(text);					//clona il testo base
@@ -883,7 +903,7 @@ $(document).ready(function () {
 			sera.set('left', newOne.left + specialMargin);//imposto un margine sinistro
 
 
-			if (diverso != false) { newOne.set('stroke', '#666'); newOne.set('strokeDashArray', [5, 5]); tito.set('fill', '#666'); }
+			//if (diverso != false) { newOne.set('stroke', '#666'); newOne.set('strokeDashArray', [5, 5]); tito.set('fill', '#666'); }
 			var GROUP = new fabric.Group([newOne, into, tito, titoUser, comm, sera], {
 				left: Number(marginLeft),
 				top: Number(marginTop)

@@ -139,7 +139,10 @@ if (isset($_GET['insertTableId'])) { //richiesta di inserire un tavolo
 
 			$selezionoDatiTavolo = mysql_query($selezionoDatiTavolo, CONNECT);
 			$selezionoDatiTavolo = mysql_fetch_assoc($selezionoDatiTavolo);
-			$sommaCoperti = array();
+			//$sommaCoperti = array();
+			$sommaCoperti = "SELECT sum(IF(tipo_commensale != 5,adulti,0)) a, sum(IF(tipo_commensale != 6 && tipo_commensale != 5,bambini,0)) b, sum(IF(tipo_commensale != 6 && tipo_commensale != 5,sedie,0)) s, sum(IF(tipo_commensale != 6 && tipo_commensale != 5,seggioloni,0)) as h,SUM(if(note_intolleranze != '',1,0)) as noteInt,sum(IF(tipo_commensale = 5,adulti + bambini,0)) as seraTot FROM " . $tables[128] . " WHERE tavolo_id = " . $selezionoDatiTavolo['id'];
+			$sommaCoperti = mysql_query($sommaCoperti, CONNECT);
+			$sommaCoperti = mysql_fetch_assoc($sommaCoperti); 
 		}
 		
 		echo json_encode(array_merge($selezionoDatiTavolo, $sommaCoperti), true);
@@ -364,7 +367,7 @@ if (isset($_GET['evento_id'])) { //in base all'ebento recupero il numero di tavo
 
 	if ($ciSonoGiaTavoli['ciSono'] != 0) {
 
-		$Tavoli = "SELECT numero_tavolo FROM  $tabella_su_cui_operare  WHERE evento_id = $evento_principale AND layout_id = ".$layout_info[0]['id']."  ORDER BY numero_tavolo ASC";
+		$Tavoli = "SELECT id,numero_tavolo FROM  $tabella_su_cui_operare  WHERE evento_id = $evento_principale AND layout_id = ".$layout_info[0]['id']."  ORDER BY numero_tavolo ASC";
 		$Tavoli = mysql_query($Tavoli, CONNECT);
 		$Tavoli = mysql_fetch_all_mia($Tavoli, MYSQL_NUM);
 	}
@@ -378,7 +381,7 @@ if (isset($_GET['evento_id'])) { //in base all'ebento recupero il numero di tavo
 		//AND ambiente_id =2
 
 
-		$Tavoli_opachi = "SELECT l.evento_id,numero_tavolo FROM $tabella_su_cui_operare tv LEFT JOIN fl_tavoli_layout l ON l.id = tv.`layout_id`  WHERE l.evento_id IN($evento) AND ambiente_id = ".$ambiente_id."  ORDER BY numero_tavolo DESC";
+		$Tavoli_opachi = "SELECT l.evento_id,numero_tavolo,tv.id FROM $tabella_su_cui_operare tv LEFT JOIN fl_tavoli_layout l ON l.id = tv.`layout_id`  WHERE l.evento_id IN($evento) AND ambiente_id = ".$ambiente_id."  ORDER BY numero_tavolo DESC";
 		$Tavoli_opachi = mysql_query($Tavoli_opachi, CONNECT);
 		$Tavoli_opachi = mysql_fetch_all_mia($Tavoli_opachi, MYSQL_NUM);
 

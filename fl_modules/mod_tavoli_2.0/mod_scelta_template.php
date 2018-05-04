@@ -23,7 +23,6 @@ foreach ($schemi_presenti as $value) {
     array_push($ambienti_da_rimuovere, $value['ambiente_id']);
 
     $html .= '<a href="mod_layout.php?layout=1&evento_id=' . $evento_id . '&ambiente_id=' . $value['ambiente_id'] . '&orientamento=' . $value['orientamento'] . '" class="button impaginazione">' . $value['nome_ambiente'] . '</a><br>';
-    $html .= '<a href="../mod_tavoli_2.0/mod_layout.php?layout=1&evento_id=' . $evento_id . '&ambiente_id=' . $value['ambiente_id'] . '&orientamento=' . $value['orientamento'] . '" class="button impaginazione">' . $value['nome_ambiente'] . ' nuova versione</a><br>';
 }
 
 $html .= '<br><br><h1 style="text-align:center;margin: 30px;{{styleTitolo}}">Schema tavoli da creare per l\'evento </h1><br><br>';

@@ -43,6 +43,7 @@ $(document).ready(function () {
 	ambiente_id = getUrlParameter('ambiente_id');									//numero evento dall' url
 	localStorage.orientamento = getUrlParameter('orientamento');
 	tables = 0;
+	counter = 0;
 
 	$.get('mod_opera.php', { evento_id: evento_id, ambiente_id: ambiente_id, info: 1 }, function (data) {
 		var parsed = $.parseJSON(data);
@@ -55,27 +56,27 @@ $(document).ready(function () {
 		localStorage.idTavoliOpachi = $.makeArray(parsed.idTavoliOpachi);
 		localStorage.idTavoliOpachi2 = parsed.idTavoliOpachi;
 
+
 		if (parsed.idTavoliOpachi != null) { // se l'evento è gia settato recupero i tavoli
 
 			$.each(parsed.idTavoliOpachi, function (index, value) {
 				createTableOneP(value['numero_tavolo'], value['evento_id']); //funzione che accetta due parametri
+				counter++;
 			});
 
 		}//end if
 
 		if (localStorage.ciSono != '0') { // se l'evento è gia settato recupero i tavoli
 
+
+
 			$.each(parsed.idTavoli, function (index, value) {
 				createTableOneP(value['numero_tavolo']);
 				tables = value['numero_tavolo'];
+				counter++;
 			});
 
 		}//end if
-
-
-
-
-
 
 
 		//canvas non editabile se settato layout
@@ -160,15 +161,13 @@ $(document).ready(function () {
 
 	/*------------------------------------FINE TIPI DI TAVOLI --------------------------------------------------*/
 
-
 	var text = new fabric.Text('tavolo', { 								//testo di default sui tavoli
 		fontFamily: 'Calibri',											//famiglia del testo
 		fontSize: 13,													//grandezza del testo
 		fill: textColor,												//colore
 		left: 0,														//margine sinistro per il primo tavolo
-		top: 0,													//margine dall'alto per il primo tavolo
-		textAlign: 'left',
-		originX: 'left',
+		top: 0												//margine dall'alto per il primo tavolo
+
 	});
 
 	fabric.Object.prototype.set({										// Do some initializing stuff
@@ -182,8 +181,6 @@ $(document).ready(function () {
 	});
 
 	/*+++++++++++++++++++++++++++++++++++++++++ GESTIONE EVENTI ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-
 
 	/*--------------------------------------------MODALE-----------------------------------------------------------------------*/
 	dialog = $("#dialog-form").dialog({								//caratteristiche del modale
@@ -216,6 +213,7 @@ $(document).ready(function () {
 			$('#color').val(object._objects[0].stroke);
 			setTimeout(chiedoOspiti(tableId, valore_da_inviare), 5000);
 			$('#dialog-form').on('dialogclose', function (e) {
+				object._objects[0].stroke = $('#color').val();
 				canvas.deactivateAll();
 				canvas.renderAll();
 			});
@@ -228,7 +226,7 @@ $(document).ready(function () {
 		var retrievedtext = $('#U_name').val();							//recupero il testo
 		var object = canvas.getActiveObject();							//prendo l'oggeto selezionato
 		var valore_da_inviare = evento_id;
-			if (object._objects[0].diverso != false) { valore_da_inviare = object._objects[0].diverso; };
+		if (object._objects[0].diverso != false) { valore_da_inviare = object._objects[0].diverso; };
 		var tableId = object._objects[0].name;							//recupera id del tavolo nel canvas
 		$.get('mod_opera.php', { tableNameUser: escape(retrievedtext), tableId: tableId, evento_id: valore_da_inviare, ambiente_id: ambiente_id });	//inserisce il tavolo con il nome scritto
 		object._objects[3].setText(retrievedtext);//setto il testo ricevuto nel tavolo
@@ -238,7 +236,7 @@ $(document).ready(function () {
 		var categoria = $("#catTable option:selected").text();        //recupero la categoria cambiata
 		var object = canvas.getActiveObject();							//prendo l'oggeto selezionato
 		var valore_da_inviare = evento_id;
-			if (object._objects[0].diverso != false) { valore_da_inviare = object._objects[0].diverso; };
+		if (object._objects[0].diverso != false) { valore_da_inviare = object._objects[0].diverso; };
 		var numero = object._objects[0].numero;								//recupero il numero
 		var tableId = object._objects[0].name;							//recupera id del tavolo nel canvas
 		object._objects[0].set('categoria', categoria);
@@ -249,7 +247,7 @@ $(document).ready(function () {
 	$('#numTable').keyup(function (e) {
 		var object = canvas.getActiveObject();							//prendo l'oggeto selezionato
 		var valore_da_inviare = evento_id;
-			if (object._objects[0].diverso != false) { valore_da_inviare = object._objects[0].diverso; };
+		if (object._objects[0].diverso != false) { valore_da_inviare = object._objects[0].diverso; };
 		var categoria = object._objects[0].categoria;        			//recupero la categoria cambiata
 		var numero = $("#numTable").val();								//recupero il numero
 		var tableId = object._objects[0].name;							//recupera id del tavolo nel canvas
@@ -267,13 +265,13 @@ $(document).ready(function () {
 				var template = '';										//variabile vuota del template
 				$.each(parsed.result, function (index, el) {				//crea per ogni commensale il suo template
 					template += '<div class="rigaOspite"><span style="float: left;width:22%;">' + el.tipo_commensale + '</span><span style="float: right;width:60%;text-align:right;word-spacing:30px;margin-right:82px;">A B S H</span><br><br><span style="float: left;width: 60%;margin-top: -14px;">' +
-						'<input type="text" name="cognome" placeholder="Cognome*" id="' + el.tcId + '"  class="readyTochange updateField"  data-rel="' + el.tcId + '" data-gtx="128"  value="' + unescape(el.cognome) + '" style="width: 40%;padding: 10; margin-right: 5px;height: 10px;" required>' +
+						'<input type="text" name="cognome" placeholder="Cognome*" id="' + el.tcId + '"  class="readyTochange "  data-rel="' + el.tcId + '" data-gtx="128"  value="' + unescape(el.cognome) + '" style="width: 40%;padding: 10; margin-right: 5px;height: 10px;" required>' +
 						'<input type="text" name="nome" value="' + el.nome + '" id="' + el.tcId + '"  class="readyTochange updateField"  data-rel="' + el.tcId + '" data-gtx="128" style="height: 10px;width: 40%;padding: 10;" placeholder="Nome"><br><br>' +
-						'<input type="text" name="note_intolleranze" id="' + el.tcId + '"  class="readyTochange updateField"  data-rel="' + el.tcId + '" data-gtx="128" value="' + unescape(el.note_intolleranze) + '" style="width: 82%; margin-top: -5px;height: 10px;" placeholder="Note intolleranze"></span><span style="float: left;margin-top: -14px; width: 36%; text-align: right;">' +
-						'<input id="' + el.tcId + '" class="readyTochange updateField"  data-rel="' + el.tcId + '" data-gtx="128" style="width: 20%;height: 10px;	float: left;margin: 0px 5px 5px 0px;" type="number" name="adulti" value="' + el.adulti + '">' +
-						'<input id="' + el.tcId + '" class="readyTochange updateField"  data-rel="' + el.tcId + '" data-gtx="128" style="width: 20%;height: 10px;	float: left;margin: 0px 5px 5px 0px;" type="number" value="' + el.bambini + '" name="bambini">' +
-						' <input id="' + el.tcId + '" class="readyTochange updateField"  data-rel="' + el.tcId + '" data-gtx="128"  style="width: 20%;height: 10px;	float: left;margin: 0px 5px 5px 0px;" type="number" value="' + el.sedie + '" name="sedie">' +
-						' <input id="' + el.tcId + '" class="readyTochange updateField"  data-rel="' + el.tcId + '" data-gtx="128"  style="width: 20%;	height: 10px;float: left;margin: 0px 5px 5px 0px;" type="number" value="' + el.seggioloni + '" name="seggioloni">' +
+						'<input type="text" name="note_intolleranze" id="' + el.tcId + '"  class="readyTochange "  data-rel="' + el.tcId + '" data-gtx="128" value="' + unescape(el.note_intolleranze) + '" style="width: 82%; margin-top: -5px;height: 10px;" placeholder="Note intolleranze"></span><span style="float: left;margin-top: -14px; width: 36%; text-align: right;">' +
+						'<input id="' + el.tcId + '" class="readyTochange "  data-rel="' + el.tcId + '" data-gtx="128" style="width: 20%;height: 10px;	float: left;margin: 0px 5px 5px 0px;" type="number" name="adulti" value="' + el.adulti + '">' +
+						'<input id="' + el.tcId + '" class="readyTochange "  data-rel="' + el.tcId + '" data-gtx="128" style="width: 20%;height: 10px;	float: left;margin: 0px 5px 5px 0px;" type="number" value="' + el.bambini + '" name="bambini">' +
+						' <input id="' + el.tcId + '" class="readyTochange "  data-rel="' + el.tcId + '" data-gtx="128"  style="width: 20%;height: 10px;	float: left;margin: 0px 5px 5px 0px;" type="number" value="' + el.sedie + '" name="sedie">' +
+						' <input id="' + el.tcId + '" class="readyTochange "  data-rel="' + el.tcId + '" data-gtx="128"  style="width: 20%;	height: 10px;float: left;margin: 0px 5px 5px 0px;" type="number" value="' + el.seggioloni + '" name="seggioloni">' +
 						'</span>' +
 						'<button class="button" style="color:#cb2c2c !important; background: none;" id="del" data-rel="' + el.tcId + '"><i class="fa fa-times fa-2x"></i></button></div>';
 
@@ -323,16 +321,15 @@ $(document).ready(function () {
 		});
 		$(this)[0].reset();														//pulisce il form
 	});
-
 	//-------------------------------------cambiamento dei dati per un commensale ------------------------------------------------
 	$(document).on('change', '.readyTochange', function () {
-		// var idCommensale = $(this).prop('id');
-		// var nomeCampo = $(this).prop('name');
-		// var valoreCampo = $(this).val();
-		 valore_da_inviare = $('#evento_id').val();
-		
-		// $.get('mod_opera.php', { idCommensale: idCommensale, nomeCampo: nomeCampo, valoreCampo: valoreCampo });
-		// var tableId = $('#tableId').val();
+		var idCommensale = $(this).prop('id');
+		var nomeCampo = $(this).prop('name');
+		var valoreCampo = $(this).val();
+		valore_da_inviare = $('#evento_id').val();
+
+		$.get('mod_opera.php', { idCommensale: idCommensale, nomeCampo: nomeCampo, valoreCampo: valoreCampo });
+		var tableId = $('#tableId').val();
 		setTimeout(chiedoOspiti(tableId, valore_da_inviare), 100000);
 	});
 
@@ -342,7 +339,6 @@ $(document).ready(function () {
 	$('#createElement').on('click', function () {
 		tables++;
 		var formserialize = $('#Form').serializeArray();							//torna tutti i valori del form
-		console.log(formserialize);
 		var tipo = formserialize[0]['value'];										//tipo di tavolo scelto
 		var categoria = formserialize[1]['value']; 									//categoria del tavolo
 		var numero = (formserialize[2]['value'] != '') ? formserialize[2]['value'] : null;	//numero utente
@@ -372,7 +368,7 @@ $(document).ready(function () {
 		delTable = $('#tableId').val();
 		var activeObject = canvas.getActiveObject(),
 			activeGroup = canvas.getActiveGroup();
-			valore_da_inviare = $('#evento_id').val();
+		valore_da_inviare = $('#evento_id').val();
 		if (activeObject) {
 			if (window.confirm('Sei sicuro di voler eliminare il tavolo?')) {
 				$.get('mod_opera.php', { deleteTable: 1, delTable: delTable, evento_id: valore_da_inviare, ambiente_id: ambiente_id }); //cancella tavolo
@@ -419,268 +415,85 @@ $(document).ready(function () {
 
 	/*
 	*
-	* 		FUNZIONI CHE BLOCCANO SCALO E SOVRAPPOSIZIONE
+	* 		FUNZIONI PER MODIFICA SU CANVAS
 	*
 	*/
 
-	//funzioni per far rimanere gli oggetti all'interno del canvas
-	canvas.observe('object:scaling', function (e) { //nel caso si scala
-		var obj = e.target;
 
-		console.log(obj);
+	// //funzioni per far rimanere gli oggetti all'interno del canvas
+	// canvas.observe('object:scaling', function (e) { //nel caso si scala
+	// 	var obj = e.target;
 
-
-		if (obj.getHeight() > obj.canvas.height || obj.getWidth() > obj.canvas.width) {
-			obj.setScaleY(obj.originalState.scaleY);
-			obj.setScaleX(obj.originalState.scaleX);
-		}
-		obj.setCoords();
-		if (obj.getBoundingRect().top - (obj.cornerSize / 2) < 0 ||
-			obj.getBoundingRect().left - (obj.cornerSize / 2) < 0) {
-			obj.top = Math.max(obj.top, obj.top - obj.getBoundingRect().top + (obj.cornerSize / 2));
-			obj.left = Math.max(obj.left, obj.left - obj.getBoundingRect().left + (obj.cornerSize / 2));
-		}
-		if (obj.getBoundingRect().top + obj.getBoundingRect().height + obj.cornerSize > obj.canvas.height || obj.getBoundingRect().left + obj.getBoundingRect().width + obj.cornerSize > obj.canvas.width) {
-
-			obj.top = Math.min(obj.top, obj.canvas.height - obj.getBoundingRect().height + obj.top - obj.getBoundingRect().top - obj.cornerSize / 2);
-			obj.left = Math.min(obj.left, obj.canvas.width - obj.getBoundingRect().width + obj.left - obj.getBoundingRect().left - obj.cornerSize / 2);
-		}
-	});
-
-	//mi permette di non avere collisioni fra gli oggetti
-
-	function findNewPos(distX, distY, target, obj) {
-
-		// See whether to focus on X or Y axis
-		if (Math.abs(distX) > Math.abs(distY)) {
-			if (distX > 0) {
-				target.setLeft(obj.getLeft() - target.getWidth());
-			} else {
-				target.setLeft(obj.getLeft() + obj.getWidth() + 30);
-			}
-		} else {
-			if (distY > 0) {
-				target.setTop(obj.getTop() - target.getHeight());
-			} else {
-				target.setTop(obj.getTop() + obj.getHeight() + 30);
-			}
-		}
-	}
+	// 	var zoomX =obj.zoomX;
+	// 	var zoomY = obj.zoomY;
 
 
+	// 	var tableId = obj._objects[0].id;
+	// 	$.get('mod_opera.php', { updateTable: 1, TableId: tableId,zoomX : zoomX, zoomY : zoomY });
+	// 	canvas.deactivateAll();
+	// 	canvas.renderAll();
+	// });
 
-	canvas.on('object:modified', function (options) { //modifica coordinate dell'oggeto spostato
 
+	// canvas.on('object:modified', function (options) { //modifica coordinate dell'oggeto spostato
 
+	// 	var numero_canvas = options.target._objects[0].numero_canvas;
 
-		var tableId = options.target._objects[0].name;
-		var x = options.target.left;
-		var y = options.target.top;
-		var OLDangle = options.target._objects[0].OLDangle;
-		var angle = (options.target.get('angle') + OLDangle) % 360;
-		options.target._objects[0].OLDangle = angle;
-		var zoomX = options.target.zoomX;
-		var zoomY = options.target.zoomY;
+	// 	var zoomX = options.target.zoomX;
+	// 	var zoomY = options.target.zoomY;
 
-		var eventoIf = evento_id;
+	// 	console.log(zoomX);
+	// 	console.log(zoomY);
 
-		if (options.target._objects[0].diverso != false) {
-			eventoIf = options.target._objects[0].diverso;
-		}
+	// 	canvas.deactivateAll();
+	// 	canvas.renderAll();
 
-		$.get('mod_opera.php', { updateTable: 1, TableId: tableId, evento_id: eventoIf, x: x, y: y, angle: angle, ambiente_id: ambiente_id, zoomX: zoomX, zoomY: zoomY });
+	
+	// 	var object = canvas.item(numero_canvas);							//mi ritorna l'oggetto corrente
+		
+	// 	console.log(object);
+	// 	var zoomX = options.target.zoomX;
+	// 	var zoomY = options.target.zoomY;
+
+	// 	console.log(zoomX);
+	// 	console.log(zoomY);
+
+	// 	var tableId = options.target._objects[0].id;
+	// 	var x = options.target.left;
+	// 	var y = options.target.top;
+	// 	var OLDangle = options.target._objects[0].OLDangle;
+	// 	var angle = (options.target.get('angle') + OLDangle) % 360;
+	// 	options.target._objects[0].OLDangle = angle;
+	// 	$.get('mod_opera.php', { updateTable: 1, TableId: tableId, x: x, y: y, angle: angle });
+	// 	console.log(numero_canvas + ' after');
+
+	
+
+	// });
+
+	$(document).on('mouseup', function (e) { 
+		var options = canvas.getActiveObject();							//mi ritorna l'oggetto corrente
+		if (options != null) {
+		var zoomX = options.zoomX;
+		var zoomY = options.zoomY;
+		var tableId = options._objects[0].id;
+		var x = options.left;
+		var y = options.top;
+		var OLDangle = options._objects[0].OLDangle;
+		var angle = (options.get('angle') + OLDangle) % 360;
+		options._objects[0].OLDangle = angle;
+		$.get('mod_opera.php', { updateTable: 1, TableId: tableId, x: x, y: y, angle: angle,zoomX:zoomX,zoomY:zoomY });
+
 		canvas.deactivateAll();
 		canvas.renderAll();
+		}
+
+	
 	});
 
-	/*
-	
-	canvas.on('object:moving', function (options) {
-	
-	
-		// Sets corner position coordinates based on current angle, width and height
-		options.target.setCoords();
-	
-		// Don't allow objects off the canvas
-		if(options.target.getLeft() < snap) {
-			options.target.setLeft(0);
-		}
-	
-		if(options.target.getTop() < snap) {
-			options.target.setTop(0);
-		}
-	
-		if((options.target.getWidth() + options.target.getLeft()) > (canvasWidth - snap)) {
-			options.target.setLeft(canvasWidth - options.target.getWidth());
-		}
-	
-		if((options.target.getHeight() + options.target.getTop()) > (canvasHeight - snap)) {
-			options.target.setTop(canvasHeight - options.target.getHeight());
-		}
-	
-		// Loop through objects
-		canvas.forEachObject(function (obj) {
-			if (obj === options.target) return;
-	
-			obj.setOpacity(options.target.intersectsWithObject(obj) ? 0.5 : 1);
-	
-			// If objects intersect
-			if (options.target.isContainedWithinObject(obj) || options.target.intersectsWithObject(obj) || obj.isContainedWithinObject(options.target)) {
-	
-				var distX = ((obj.getLeft() + obj.getWidth()) / 2) - ((options.target.getLeft() + options.target.getWidth()) / 2);
-				var distY = ((obj.getTop() + obj.getHeight()) / 2) - ((options.target.getTop() + options.target.getHeight()) / 2);
-				// Set new position
-				findNewPos(distX, distY, options.target, obj);
-			}
-	
-			// Snap objects to each other horizontally
-	
-			// If bottom points are on same Y axis
-			if(Math.abs((options.target.getTop() + options.target.getHeight()) - (obj.getTop() + obj.getHeight())) < snap) {
-				// Snap target BL to object BR
-				if(Math.abs(options.target.getLeft() - (obj.getLeft() + obj.getWidth())) < snap) {
-					options.target.setLeft(obj.getLeft() + obj.getWidth());
-					options.target.setTop(obj.getTop() + obj.getHeight() - options.target.getHeight());
-				}
-	
-				// Snap target BR to object BL
-				if(Math.abs((options.target.getLeft() + options.target.getWidth()) - obj.getLeft()) < snap) {
-					options.target.setLeft(obj.getLeft() - options.target.getWidth());
-					options.target.setTop(obj.getTop() + obj.getHeight() - options.target.getHeight());
-				}
-			}
-	
-			// If top points are on same Y axis
-			if(Math.abs(options.target.getTop() - obj.getTop()) < snap) {
-				// Snap target TL to object TR
-				if(Math.abs(options.target.getLeft() - (obj.getLeft() + obj.getWidth())) < snap) {
-					options.target.setLeft(obj.getLeft() + obj.getWidth());
-					options.target.setTop(obj.getTop());
-				}
-	
-				// Snap target TR to object TL
-				if(Math.abs((options.target.getLeft() + options.target.getWidth()) - obj.getLeft()) < snap) {
-					options.target.setLeft(obj.getLeft() - options.target.getWidth());
-					options.target.setTop(obj.getTop());
-				}
-			}
-	
-			// Snap objects to each other vertically
-	
-			// If right points are on same X axis
-			if(Math.abs((options.target.getLeft() + options.target.getWidth()) - (obj.getLeft() + obj.getWidth())) < snap) {
-				// Snap target TR to object BR
-				if(Math.abs(options.target.getTop() - (obj.getTop() + obj.getHeight())) < snap) {
-					options.target.setLeft(obj.getLeft() + obj.getWidth() - options.target.getWidth());
-					options.target.setTop(obj.getTop() + obj.getHeight());
-				}
-	
-				// Snap target BR to object TR
-				if(Math.abs((options.target.getTop() + options.target.getHeight()) - obj.getTop()) < snap) {
-					options.target.setLeft(obj.getLeft() + obj.getWidth() - options.target.getWidth());
-					options.target.setTop(obj.getTop() - options.target.getHeight());
-				}
-			}
-	
-			// If left points are on same X axis
-			if(Math.abs(options.target.getLeft() - obj.getLeft()) < snap) {
-				// Snap target TL to object BL
-				if(Math.abs(options.target.getTop() - (obj.getTop() + obj.getHeight())) < snap) {
-					options.target.setLeft(obj.getLeft());
-					options.target.setTop(obj.getTop() + obj.getHeight());
-				}
-	
-				// Snap target BL to object TL
-				if(Math.abs((options.target.getTop() + options.target.getHeight()) - obj.getTop()) < snap) {
-					options.target.setLeft(obj.getLeft());
-					options.target.setTop(obj.getTop() - options.target.getHeight());
-				}
-			}
-		}); // end for each
-	
-		options.target.setCoords();
-	
-		// If objects still overlap
-	
-		var outerAreaLeft = null,
-		outerAreaTop = null,
-		outerAreaRight = null,
-		outerAreaBottom = null;
-	
-		canvas.forEachObject(function (obj) {
-			if (obj === options.target) return;
-	
-			if (options.target.isContainedWithinObject(obj) || options.target.intersectsWithObject(obj) || obj.isContainedWithinObject(options.target)) {
-	
-				var intersectLeft = null,
-				intersectTop = null,
-				intersectWidth = null,
-				intersectHeight = null,
-				intersectSize = null,
-				targetLeft = options.target.getLeft(),
-				targetRight = targetLeft + options.target.getWidth(),
-				targetTop = options.target.getTop(),
-				targetBottom = targetTop + options.target.getHeight(),
-				objectLeft = obj.getLeft(),
-				objectRight = objectLeft + obj.getWidth(),
-				objectTop = obj.getTop(),
-				objectBottom = objectTop + obj.getHeight();
-	
-				// Find intersect information for X axis
-				if(targetLeft >= objectLeft && targetLeft <= objectRight) {
-					intersectLeft = targetLeft;
-					intersectWidth = obj.getWidth() - (intersectLeft - objectLeft);
-	
-				} else if(objectLeft >= targetLeft && objectLeft <= targetRight) {
-					intersectLeft = objectLeft;
-					intersectWidth = options.target.getWidth() - (intersectLeft - targetLeft);
-				}
-	
-				// Find intersect information for Y axis
-				if(targetTop >= objectTop && targetTop <= objectBottom) {
-					intersectTop = targetTop;
-					intersectHeight = obj.getHeight() - (intersectTop - objectTop);
-	
-				} else if(objectTop >= targetTop && objectTop <= targetBottom) {
-					intersectTop = objectTop;
-					intersectHeight = options.target.getHeight() - (intersectTop - targetTop);
-				}
-	
-				// Find intersect size (this will be 0 if objects are touching but not overlapping)
-				if(intersectWidth > 0 && intersectHeight > 0) {
-					intersectSize = intersectWidth * intersectHeight;
-				}
-	
-				// Set outer snapping area
-				if(obj.getLeft() < outerAreaLeft || outerAreaLeft == null) {
-					outerAreaLeft = obj.getLeft();
-				}
-	
-				if(obj.getTop() < outerAreaTop || outerAreaTop == null) {
-					outerAreaTop = obj.getTop();
-				}
-	
-				if((obj.getLeft() + obj.getWidth()) > outerAreaRight || outerAreaRight == null) {
-					outerAreaRight = obj.getLeft() + obj.getWidth();
-				}
-	
-				if((obj.getTop() + obj.getHeight()) > outerAreaBottom || outerAreaBottom == null) {
-					outerAreaBottom = obj.getTop() + obj.getHeight();
-				}
-	
-				// If objects are intersecting, reposition outside all shapes which touch
-				if(intersectSize) {
-					var distX = (outerAreaRight / 2) - ((options.target.getLeft() + options.target.getWidth()) / 2);
-					var distY = (outerAreaBottom / 2) - ((options.target.getTop() + options.target.getHeight()) / 2);
-	
-					// Set new position
-					findNewPos(distX, distY, options.target, obj);
-				}
-			}
-		});
-	
-	});
-	*/
+
+
+
 	/*************************************************/
 	function createTable(marginTop, marginLeft, name, textInsert, fila, type, categoria, numero) {
 
@@ -773,6 +586,9 @@ $(document).ready(function () {
 				sera.set('left', Number(marginLeft) + radius + specialMargin);//imposto un margine sinistro
 			}
 
+			newOne.set("numero_canvas", counter++);						//numero nel canavas caricato ora 
+
+
 			var GROUP = new fabric.Group([newOne, into, tito, titoUser, comm, sera], {});//tavolo + testo fornamo un gruppo
 			canvas.add(GROUP);											//gli aggiungo al canvas
 			canvas.renderAll();											//fa il render di tutti gli oggetti\
@@ -788,7 +604,6 @@ $(document).ready(function () {
 		$.get('mod_opera.php', { ambiente_id: ambiente_id, insertTableId: name, evento_id: evento_id, diverso: diverso }, function (data) {
 
 			var parsed = $.parseJSON(data);
-
 			marginTop = parsed.asse_y;
 			marginLeft = parsed.asse_x;
 			name = parsed.numero_tavolo;
@@ -808,8 +623,8 @@ $(document).ready(function () {
 					var newOne = fabric.util.object.clone(tavoloBase); //crea tavolo tondo clonando l'oggetto
 					newOne.set('angle', angle);
 					newOne.set('OLDangle', angle);
-					newOne.set('height', tavoloBase.height * zoomY);
-					newOne.set('width', tavoloBase.width * zoomX);
+					newOne.set('radius', tavoloBase.radius * zoomY);
+
 					break;
 				case '3':
 					var newOne = fabric.util.object.clone(tavoloBase1); //crea tavolo quadrato clonando l'oggetto
@@ -848,8 +663,8 @@ $(document).ready(function () {
 				default:
 					var newOne = fabric.util.object.clone(tavoloBase); //crea tavolo tondo clonando l'oggetto
 					newOne.set('angle', angle);
-					newOne.set('height', tavoloBase.height * zoomY);
-					newOne.set('width', tavoloBase.width * zoomX);
+					newOne.set('radius', tavoloBase.radius * zoomY);
+
 			}
 
 
@@ -866,8 +681,11 @@ $(document).ready(function () {
 			newOne.set("name", name);									//ed il nome identificativo
 			newOne.set("numero", numInsert);								//numero inserito
 			newOne.set("categoria", textInsert);							//categoria inserita
+			isOk = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(parsed.color);
+			if (isOk) { newOne.set("stroke", parsed.color); } else { newOne.set("stroke", "#333"); }
 			newOne.set("stroke", parsed.color);						//colori bordi 
 			newOne.set("id", parsed.id);						//id tavolo 
+			newOne.set("numero_canvas", counter);						//numero nel canavas caricato ora 
 
 			/* testo intolleranze */
 			var into = fabric.util.object.clone(text);					//clona il testo base
@@ -906,7 +724,10 @@ $(document).ready(function () {
 			//if (diverso != false) { newOne.set('stroke', '#666'); newOne.set('strokeDashArray', [5, 5]); tito.set('fill', '#666'); }
 			var GROUP = new fabric.Group([newOne, into, tito, titoUser, comm, sera], {
 				left: Number(marginLeft),
-				top: Number(marginTop)
+				top: Number(marginTop),
+				originX: 'center',
+				originY: 'center'
+
 			}); //tavolo + testo fornamo un gruppo
 			canvas.add(GROUP);											//gli aggiungo al canvas
 			canvas.renderAll();											//fa il render di tutti gli oggetti

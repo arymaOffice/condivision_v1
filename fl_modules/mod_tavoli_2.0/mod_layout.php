@@ -64,6 +64,7 @@ body{
 
 
 
+				<h1 style="color:red;">VERSIONE NON FUNZIONANTE</h1>
 				<h1>SCHEMA TAVOLI <span id="sala"></span></h1>
 				<i style="font-size:20px;float:right;cursor:grab" id="print" class="fa fa-print"></i>
 

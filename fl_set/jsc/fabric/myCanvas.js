@@ -435,61 +435,57 @@ $(document).ready(function () {
 	// });
 
 
-	// canvas.on('object:modified', function (options) { //modifica coordinate dell'oggeto spostato
+	canvas.on('object:modified', function (options) { //modifica coordinate dell'oggeto spostato
 
-	// 	var numero_canvas = options.target._objects[0].numero_canvas;
+		var numero_canvas = options.target._objects[0].numero_canvas;
 
-	// 	var zoomX = options.target.zoomX;
-	// 	var zoomY = options.target.zoomY;
+		var zoomX = options.target.zoomX;
+		var zoomY = options.target.zoomY;
 
-	// 	console.log(zoomX);
-	// 	console.log(zoomY);
-
-	// 	canvas.deactivateAll();
-	// 	canvas.renderAll();
-
-	
-	// 	var object = canvas.item(numero_canvas);							//mi ritorna l'oggetto corrente
-		
-	// 	console.log(object);
-	// 	var zoomX = options.target.zoomX;
-	// 	var zoomY = options.target.zoomY;
-
-	// 	console.log(zoomX);
-	// 	console.log(zoomY);
-
-	// 	var tableId = options.target._objects[0].id;
-	// 	var x = options.target.left;
-	// 	var y = options.target.top;
-	// 	var OLDangle = options.target._objects[0].OLDangle;
-	// 	var angle = (options.target.get('angle') + OLDangle) % 360;
-	// 	options.target._objects[0].OLDangle = angle;
-	// 	$.get('mod_opera.php', { updateTable: 1, TableId: tableId, x: x, y: y, angle: angle });
-	// 	console.log(numero_canvas + ' after');
-
-	
-
-	// });
-
-	$(document).on('mouseup', function (e) { 
-		var options = canvas.getActiveObject();							//mi ritorna l'oggetto corrente
-		if (options != null) {
-		var zoomX = options.zoomX;
-		var zoomY = options.zoomY;
-		var tableId = options._objects[0].id;
-		var x = options.left;
-		var y = options.top;
-		var OLDangle = options._objects[0].OLDangle;
-		var angle = (options.get('angle') + OLDangle) % 360;
-		options._objects[0].OLDangle = angle;
-		$.get('mod_opera.php', { updateTable: 1, TableId: tableId, x: x, y: y, angle: angle,zoomX:zoomX,zoomY:zoomY });
 
 		canvas.deactivateAll();
 		canvas.renderAll();
-		}
 
 	
+		var object = canvas.item(numero_canvas);							//mi ritorna l'oggetto corrente
+		
+		console.log(object);
+		var zoomX = options.target.zoomX;
+		var zoomY = options.target.zoomY;
+
+
+		var tableId = options.target._objects[0].id;
+		var x = options.target.left;
+		var y = options.target.top;
+		var OLDangle = options.target._objects[0].OLDangle;
+		var angle = (options.target.get('angle') + OLDangle) % 360;
+		options.target._objects[0].OLDangle = angle;
+		$.get('mod_opera.php', { updateTable: 1, TableId: tableId, x: x, y: y, angle: angle });
+
+
+	
+
 	});
+
+	// $(document).on('mouseup', function (e) { 
+	// 	var options = canvas.getActiveObject();							//mi ritorna l'oggetto corrente
+	// 	if (options != null) {
+	// 	var zoomX = options.zoomX;
+	// 	var zoomY = options.zoomY;
+	// 	var tableId = options._objects[0].id;
+	// 	var x = options.left;
+	// 	var y = options.top;
+	// 	var OLDangle = options._objects[0].OLDangle;
+	// 	var angle = (options.get('angle') + OLDangle) % 360;
+	// 	options._objects[0].OLDangle = angle;
+	// 	$.get('mod_opera.php', { updateTable: 1, TableId: tableId, x: x, y: y, angle: angle,zoomX:zoomX,zoomY:zoomY });
+
+	// 	canvas.deactivateAll();
+	// 	canvas.renderAll();
+	// 	}
+
+	
+	// });
 
 
 
@@ -587,6 +583,10 @@ $(document).ready(function () {
 			}
 
 			newOne.set("numero_canvas", counter++);						//numero nel canavas caricato ora 
+			var parsed = $.parseJSON(data);
+			
+			newOne.set("id", parsed.id);						//id tavolo 
+
 
 
 			var GROUP = new fabric.Group([newOne, into, tito, titoUser, comm, sera], {});//tavolo + testo fornamo un gruppo
@@ -714,11 +714,11 @@ $(document).ready(function () {
 			newOne.set('diverso', diverso);
 			newOne.set('left', Number(marginLeft));					//imposto un margine sinistro
 
-			into.set('left', newOne.left + specialMargin);//imposto un margine sinistro
-			tito.set('left', newOne.left + specialMargin);//imposto un margine sinistro
-			titoUser.set('left', newOne.left + specialMargin);//imposto un margine sinistro
-			comm.set('left', newOne.left + specialMargin);//imposto un margine sinistro
-			sera.set('left', newOne.left + specialMargin);//imposto un margine sinistro
+			into.set('left', 10 +newOne.left + specialMargin);//imposto un margine sinistro
+			tito.set('left', 10 +newOne.left + specialMargin);//imposto un margine sinistro
+			titoUser.set('left', 10 +newOne.left + specialMargin);//imposto un margine sinistro
+			comm.set('left', 10 +newOne.left + specialMargin);//imposto un margine sinistro
+			sera.set('left', 10 +newOne.left + specialMargin);//imposto un margine sinistro
 
 
 			//if (diverso != false) { newOne.set('stroke', '#666'); newOne.set('strokeDashArray', [5, 5]); tito.set('fill', '#666'); }

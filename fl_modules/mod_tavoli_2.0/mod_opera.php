@@ -105,6 +105,8 @@ if (isset($_GET['insertTableId'])) { //richiesta di inserire un tavolo
 
         $inseriscoTavolo = "INSERT INTO $tabella_su_cui_operare (layout_id,evento_id,tipo_tavolo_id,numero_tavolo,nome_tavolo,numero_tavolo_utente,nome_tavolo_utente,data_creazione,asse_x,asse_y) VALUES(" . $layout_info[0]['id'] . ",$insertEventId,$type,$insertTableId,'$categoria','$numero','$text',NOW(),$x,$y)";
         $inseriscoTavolo = mysql_query($inseriscoTavolo, CONNECT);
+        echo json_econde(array('id' => mysql_insert_id(CONNECT)));
+        exit;
     } else { //sennò recupero i dati dello stesso
         if ($_GET['diverso'] == 'false') {
 

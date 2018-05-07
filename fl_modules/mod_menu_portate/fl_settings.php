@@ -38,8 +38,26 @@
 	//Filtri di base (da strutturare quelli avanzati)
 	$basic_filters = array('evento_id','descrizione_menu');
 	$ordine_mod = array("id DESC"); // Tipologie di ordinamento disponobili 
-  
- 
+ 	
+
+
+	// Periodo
+   if(isset($_GET['data_da']) && check($_GET['data_da']) != "" && check($_GET['data_a']) != "") { 
+   $data_da = convert_data($_GET['data_da'],1); $data_a = convert_data($_GET['data_a'],1); 
+   $data_da_t = check($_GET['data_da']); $data_a_t = check($_GET['data_a']); 
+   $_SESSION['data_da'] =  $data_da;
+   $_SESSION['data_a'] =  $data_a;
+   } else {
+   $data_da_t = date('d/m/Y'); 
+   $data_a_t = date('d/m/Y'); 
+   $data_da = date('Y-m-d'); 
+   $data_a =  date('Y-m-d'); 
+   }
+
+
+   $data_da = $_SESSION['data_da'];
+   $data_a = $_SESSION['data_a'];
+	
 	/* Filtri personalizzati */
 
 	// Filtro manuale da sessione
@@ -49,6 +67,7 @@
 	require('../../fl_core/dataset/array_statiche.php'); // Liste di valori statiche
 	require('../../fl_core/class/ARY_dataInterface.class.php'); //Classe di gestione dei dati 
 	$data_set = new ARY_dataInterface();
+    $fornitore =  $data_set->data_retriever('fl_anagrafica','ragione_sociale','WHERE tipo_profilo = 3',' ragione_sociale ASC'); //fornitori
     $evento_id = $data_set->data_retriever($tables[6],'titolo_ricorrenza'); //Crea un array con i valori X2 della tabella X1
 	$confermato = array('Attivo','Bozza');
 

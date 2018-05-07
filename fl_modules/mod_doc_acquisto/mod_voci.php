@@ -12,32 +12,43 @@ if(defined('documenti_vendita_descrittivi')) {
 $text_editor = 2;
 }
 
-$tab_id = 81;
-$fattura_id = check($_GET['DAiD']);
+$tab_id = 82;
+$doc_acquisto_id = check($_GET['DAiD']);
 include("../../fl_inc/headers.php");
  ?>
  
 <body style=" background: rgb(241, 241, 241) none repeat scroll 0% 0%; text-align: left; padding: 20px;">
 
-<?php if($fattura_id == 1) { echo "<h2>Salva i dettagli prima di inserire</h2>"; exit; } ?>
+<?php if($doc_acquisto_id == 1) { echo "<h2>Salva i dettagli prima di inserire</h2>"; exit; } ?>
 
 <div id="results"><?php if(isset($_GET['esito'])) echo '<h2 class="red">'.check($_GET['esito']).'</h2>'; ?></div>
-
+<h2>Voci Contabili</h2>
 <form id="" action="./mod_opera.php" method="post" enctype="multipart/form-data">
 
-<input type="hidden" name="fattura_id" value="<?php echo $fattura_id; ?>" /> 
+<input type="hidden" name="doc_acquisto_id" value="<?php echo $doc_acquisto_id; ?>" /> 
 <input type="text" name="codice" placeholder="Codice" value="" style="width: 70px;" />
 <textarea name="descrizione" placeholder="Descrizione" value="" style="min-width: 200px;" class="mceEditor" ></textarea>
-<select name="valuta" id="valuta" style="width: 70px;">
+
+
+<select name="unita_di_misura" id="unita_di_misura" style="width: 70px;">
  <?php 
               
-		     foreach($valuta as $valores => $label){ // Recursione Indici di Categoria
-			 echo "<option value=\"$valores\">".ucfirst($label)."</option>\r\n"; 
-			}
-		 ?>
+         foreach($unita_di_misura as $valores => $label){ // Recursione Indici di Categoria
+       echo "<option value=\"$label\">".ucfirst($label)."</option>\r\n"; 
+      }
+     ?>
 </select>
 
 <input type="number" name="quantita" placeholder="" value="1" style="width: 50px;"  />
+
+<select name="valuta" id="valuta" style="width: 70px;">
+ <?php 
+              
+         foreach($valuta as $valores => $label){ // Recursione Indici di Categoria
+       echo "<option value=\"$valores\">".ucfirst($label)."</option>\r\n"; 
+      }
+     ?>
+</select>
 <input type="text" name="importo" placeholder="0.00" value="" style="width: 80px;"  />
 <select name="aliquota" id="aliquota" style="width: 150px;">
  <?php 
@@ -49,24 +60,24 @@ include("../../fl_inc/headers.php");
 		 ?>
 </select>
 
-<input type="submit" value="Inserisci" />
+<input type="submit" value="Inserisci" class="button" />
 
 </form>
 <?php 
 
 	$aliquotaMaggiore = 0;
 
-	$query = "SELECT * FROM `fl_doc_vendita_voci` WHERE id > 1 AND `fattura_id` = $fattura_id ORDER BY id ASC";
+	$query = "SELECT * FROM `fl_doc_acquisto_voci` WHERE id > 1 AND `parent_id` = $doc_acquisto_id ORDER BY id ASC";
 	$risultato = mysql_query($query, CONNECT);
 	if(mysql_affected_rows() == 0){ echo "<p>Nessun Elemento</p>"; } else {
 	?>
     
     <table class="dati">
       <tr>
-   <th style="width: 1%;"></th>
    <th>Codice</th>
    <th>Descrizione</th>
    <th>Prezzo</th>
+   <th>UM</th>
    <th>Qtà</th>
    <th>Imponibile</th>
    <th>Aliquota</th>
@@ -89,8 +100,8 @@ include("../../fl_inc/headers.php");
 
 	$imponibile =  $riga['importo']*$riga['quantita'];
   $importo = $riga['importo'];
-  $totaleImponibile = $valuta[$riga['valuta']].' '.numdec($imponibile,2);
-  $totaleImposta = $valuta[$riga['valuta']].' '.numdec($riga['imposta'],2);
+  $totaleImponibile = $riga['valuta'].' '.numdec($imponibile,2);
+  $totaleImposta = $riga['valuta'].' '.numdec($riga['imposta'],2);
 
   if(defined('importi_lordi')) $imponibile = $riga['importo'];
   if(defined('importi_lordi')) $importo = $riga['subtotale']/$riga['quantita'];
@@ -105,23 +116,24 @@ include("../../fl_inc/headers.php");
     
      
       <tr>
-      <td><span class=\"Gletter\"></span></td>
        <td><?php echo $riga['codice']; ?></td>
      
       <td>
       <?php if(defined('documenti_vendita_descrittivi')) { ?>
       <?php echo  html_entity_decode(converti_txt($riga['descrizione'])); ?>
       <?php } else { ?>
-      <input type="text" value="<?php echo $riga['descrizione']; ?>" name="descrizione" class="updateField" data-rel="<?php echo $riga['id']; ?>" />
-      <?php } ?>
+      <input type="text" value="<?php echo $riga['descrizione']; ?>" name="descrizione" class="updateField" data-rel="<?php echo $riga['id']; ?>" placeholder="Descrizione" />
+      <input type="text" value="<?php echo $riga['note']; ?>" name="note" class="updateField" data-rel="<?php echo $riga['id']; ?>" placeholder="Note" />
+    <?php } ?>
 
       </td>
-  <td><?php echo $valuta[$riga['valuta']]; ?> <?php echo numdec($importo,2); ?></td>
-  <td><?php echo $riga['quantita']; ?></td>
+  <td><?php echo $riga['valuta']; ?> <?php echo numdec($importo,2); ?></td>
+  <td><?php echo $riga['unita_di_misura']; ?></td>
+  <td><?php echo numdec($riga['quantita'],3); ?></td>
   <td><?php echo $totaleImponibile; ?></td>
   <td><?php echo numdec($riga['aliquota'],2); ?> % </td>
   <td><?php echo $totaleImposta; ?></td>
-  <td><?php echo $valuta[$riga['valuta']]; ?> <?php echo numdec($riga['subtotale'],2); ?></td>
+  <td><?php echo $riga['valuta']; ?> <?php echo numdec($riga['subtotale'],2); ?></td>
   <td><a href="../mod_basic/action_elimina.php?gtx=<?php echo $tab_id; ?>&amp;unset=<?php echo $riga['id'];?>" title="Elimina"  onclick="return conferma_del();"><i class="fa fa-trash-o"></i></a></td>
 
 
@@ -137,7 +149,7 @@ include("../../fl_inc/headers.php");
   }
 
 
-  echo "<tr><td colspan=\"8\"></td></tr>";
+  echo "<tr><td colspan=\"6\"></td></tr>";
 	echo "<tr><td colspan=\"5\"></td>";
 	echo "<td>".$valuta[0]." ".numdec($tot_imponibile,2)."</td>";
 	echo "<td colspan=\"\"></td><td>".$valuta[0]." ".numdec($tot_imposta,2)."</td>";
@@ -148,10 +160,11 @@ include("../../fl_inc/headers.php");
 } //Chiudo la Connessione	?>
     
  </table> 
- <?php if(defined('scorporo_iva_su_totale')) { ?>
- <h2>Questa fattura verrà emessa con ALIQUOTA al: <?php echo numdec($aliquotaMaggiore,2); ?>%</h2> 
- <p class="c-red">L'iva viene calcolata sul totale lordo di tutte le voci. Le impostazioni attuali non permettono di gestire più aliquote IVA nella stessa fattura, pertanto il sistema ricalcola IVA in base all'aliquota più alta se si inseriscono diverse aliquote.</p>
- <?php  } ?> 
-  <a class="button" href="javascript:location.reload();">Ricarica Voci</a>
+ <p>Questa scheda permette di variare le voci del documento di acquisto/ordine</p>
+ <?php  if(defined('MAGAZZINO'))  { ?>
+ <p>Per inserire movimentazioni di magazzino associate a questo documento aprire il gestore movimentazioni da qui:
+  <a href="../mod_giacenze/mod_load.php?parent_id=<?php echo $doc_acquisto_id; ?>&external" title="Dettaglio Voci"> <i class="fa fa-cubes"></i></a></p>
+<?php } ?>
+ <a class="button" href="javascript:location.reload();">Ricarica Voci</a>
 
 </body></html>

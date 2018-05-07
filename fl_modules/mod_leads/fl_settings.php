@@ -128,10 +128,9 @@
 	$tag_sms = $data_set->get_items_key("tag_sms");
 	$rito_civile = $data_set->get_items_key("rito_civile");
     
-	$ambienti = $data_set->get_items_key("ambienti");
+	$ambienti =  $data_set->data_retriever('fl_ambienti','nome_ambiente',"WHERE id != 1",'priority ASC,tipo_ambiente ASC, id ASC');
 	unset($ambienti[0]);
-	unset($ambienti[1]);	
-	if(defined('MULTI_AMBIENTE')) $ambienti =  $data_set->data_retriever('fl_ambienti','nome_ambiente',"WHERE id != 1",'tipo_ambiente ASC');
+	unset($ambienti[1]);
 	$stato_evento = array('Bozza','Attesa Contratto','Confermato','Archiviato','Annullato');
 
     $anno_di_interesse = array(); for($i=date('Y');$i<date('Y')+10;$i++) $anno_di_interesse[$i] = $i;

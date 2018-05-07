@@ -154,7 +154,7 @@ float: left;}
 			echo "<td><h2 title=\"".$riga['valore_di_conversione']."\">&euro; ".$foodSell."</h2></td>";
 			echo "<td><input type=\"text\" class=\"updateField\" style=\"max-width: 100px;\" data-rel=\"".$riga['id']."\" name=\"priorita\"  value=\"".$riga['priorita']."\" /></td>";
 			echo "<td><a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Modifica\" > <i class=\"fa fa-search\"></i> </a>
-			<a href=\"mod_diba.php?record_id=".$riga['id']."\" title=\"Distinta Base\" data-fancybox-type=\"iframe\" class=\"fancybox_view\"><i class=\"fa fa-print\"></i></a>	
+			<a href=\"mod_diba_stampa.php?record_id=".$riga['id']."\" title=\"Distinta Base\" data-fancybox-type=\"iframe\" class=\"fancybox_view\"><i class=\"fa fa-print\"></i></a>	
 			<!--<a href=\"mod_inserisci.php?copy_record&amp;id=".$riga['id']."\" title=\"Copia\"><i class=\"fa fa-files-o\"></i></a>-->
 			<a  href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a></td>"; 
 		    echo "</tr>";
@@ -166,4 +166,4 @@ float: left;}
 ?>
 </table>
 
-<?php $start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,0); ?>
+<?php $start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,1); ?>

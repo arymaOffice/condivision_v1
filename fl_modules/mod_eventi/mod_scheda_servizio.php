@@ -36,12 +36,10 @@ $_SESSION['last_managed'] = array('id'=>$id,'name'=>$evento['titolo_ricorrenza']
 
 $tab_div_labels = array(
                         '../mod_menu_portate/mod_user.php?evento_id='.$evento_id.'&id=[*ID*]'=>"Menù",
-                        'id'=>'Dettagli Evento',
+                        'id'=>'Dettagli Evento','note_intolleranze'=>'Note Evento',
                         '../mod_linee_prodotti/mod_user.php?categoria_prodotto=30&evento_id='.$evento_id.'&id=[*ID*]'=>"Allestimenti della sala",
-                        '../mod_linee_prodotti/mod_user.php?categoria_prodotto=33&evento_id='.$evento_id.'&id=[*ID*]'=>"Servizi",
-                        'tema_evento'=>'Scheda Allestimenti',
-                        'mod_revisioni.php?evento_id='.$evento_id.'&id=[*ID*]'=>"Revisioni");
-
+                        '../mod_linee_prodotti/mod_user.php?categoria_prodotto=33&evento_id='.$evento_id.'&id=[*ID*]'=>"Servizi");
+ if(defined('TABLEAU_MANAGER')) $tab_div_labels['mod_revisioni.php?evento_id='.$evento_id.'&id=[*ID*]'] = "Revisioni";
 
 if($id == 1) { 
 $tab_div_labels = array('id'=>'Dettagli Evento');
@@ -82,17 +80,22 @@ if($_SERVER['HTTP_HOST'] == 'calderonimartini.condivision.cloud'){
 //}
 
 
- echo "<div class=\"module_icon\"><a data-fancybox-type=\"iframe\" class=\"fancybox_view \" href=\"$tableauManager\" title=\"Tableau Manager\" style=\"color:   $colorScheda\"><i class=\"fa fa-braille\" aria-hidden=\"true\"></i> TAVOLI E OSPITI</a></div>";
- echo "<div class=\"module_icon\"><a data-fancybox-type=\"iframe\" class=\"fancybox_view \" style=\"color:   $colorScheda\" href=\"../mod_stampe_servizio/mod_menu_evento.php?evento_id=".$evento_id."\" title=\"Lista ingresso\"><i class=\"fa fa-map\" aria-hidden=\"true\"></i> MENU TAVOLI</a></div>";         
+ echo "<div class=\"module_icon\"><a data-fancybox-type=\"iframe\" class=\"fancybox_view \" style=\"color:   $colorScheda\" href=\"../mod_stampe_servizio/mod_menu_evento.php?evento_id=".$evento_id."\" title=\"Lista ingresso\"><i class=\"fa fa-map\" aria-hidden=\"true\"></i> MENU OSPITI</a></div>";         
+
+ if(defined('TABLEAU_MANAGER')) {
+ echo "<div class=\"module_icon\"><a data-fancybox-type=\"iframe\" class=\"fancybox_view \" href=\"$tableauManager\" title=\"Tableau Manager\" style=\"color:   $colorScheda\"><i class=\"fa fa-braille\" aria-hidden=\"true\"></i> TABLEAU MANAGER</a></div>";
  echo "<div class=\"module_icon\"><a data-fancybox-type=\"iframe\" class=\"fancybox_view_small \"  href=\"../mod_stampe_servizio/mod_cavalieri.php?evento_id=".$evento_id."\" title=\"Stampa Cavalieri\" style=\"color:   $colorScheda\"><i class=\"fa fa-bookmark\" aria-hidden=\"true\"></i>  CAVALIERI</i></a></div>";
- echo "<div class=\"module_icon\"><a data-fancybox-type=\"iframe\" class=\"fancybox_view \" href=\"../mod_stampe_servizio/mod_lista_ingresso.php?evento_id=".$evento_id."\" title=\"Lista ingresso\" style=\"color:  $colorScheda\"><i class=\"fa fa-users\" aria-hidden=\"true\"></i></i>  LISTA INGRESSO</a></div>";
+ echo "<div class=\"module_icon\"><a data-fancybox-type=\"iframe\" class=\"fancybox_view \" href=\"../mod_stampe_servizio/mod_lista_ingresso.php?evento_id=".$evento_id."\" title=\"Lista ingresso\" style=\"color:  $colorScheda\"><i class=\"fa fa-users\" aria-hidden=\"true\"></i></i>  LISTA OSPITI</a></div>";
  echo "<div class=\"module_icon\"><a data-fancybox-type=\"iframe\" class=\"fancybox_view \" href=\"../mod_stampe_servizio/mod_lista_intolleranze.php?evento_id=".$evento_id."\" title=\"Lista intolleranze\" style=\"color:  $colorScheda\"><i class=\"fa fa-leaf\" aria-hidden=\"true\"></i>  LISTA INTOLLERANZE</a></div>";
+ }
+
  $GeneraAllegato =  "mod_allegato1.php?evento_id=".$evento_id;
  if($evento['tipo_evento'] != 9  && $evento['tipo_evento'] != 5) $GeneraAllegato =  "mod_allegato1.php?modello=2&evento_id=".$evento_id;
- echo "<div><a href=\"mod_inserisci.php?id=$evento_id\" class=\"button\">Vai a amministrazione</a>
- <a href=\"$GeneraAllegato\" data-fancybox-type=\"iframe\" class=\"fancybox_view button\" title=\"Visualizza/Stampa Allegato\"> Allegato Contratto</a> 
 
- ".$evento['titolo_ricorrenza']." ".mydatetime($evento['data_evento'])." (".$giorni_settimana[date("w", strtotime($evento['data_evento']))].")  | Coperti: ".($evento['numero_adulti']+$evento['numero_bambini']+$evento['numero_operatori'])." | Prezzo base: &euro; ".$evento['prezzo_base']." | Ultima Revisione: ".$dataRevisione." </div>";
+ echo "<div><a href=\"mod_inserisci.php?id=$evento_id\" class=\"button\">Vai a amministrazione</a> ";
+ if(defined('ALLEGATO_MENU_DEFINITIVO')) echo "<a href=\"$GeneraAllegato\" data-fancybox-type=\"iframe\" class=\"fancybox_view button\" title=\"Visualizza/Stampa\"> ".ALLEGATO_MENU_DEFINITIVO."</a> ";
+ if(defined('ALLEGATO_ALLESTIMENTI')) echo "<a href=\"mod_allegato2.php?evento_id=".$evento['id']."\" data-fancybox-type=\"iframe\" class=\"fancybox_view button\" title=\"Visualizza/Stampa\"> ".ALLEGATO_ALLESTIMENTI." </a> ";
+ echo " ".$evento['titolo_ricorrenza']." ".mydatetime($evento['data_evento'])." (".$giorni_settimana[date("w", strtotime($evento['data_evento']))].")  | Coperti: ".($evento['numero_adulti']+$evento['numero_bambini']+$evento['numero_operatori'])." | Prezzo base: &euro; ".$evento['prezzo_base']." | Ultima Revisione: ".$dataRevisione." </div>";
 ?>
 
 <form id="scheda" action="../mod_basic/action_modifica.php" method="post" enctype="multipart/form-data">

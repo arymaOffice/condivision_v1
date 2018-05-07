@@ -95,12 +95,14 @@ if(isset($_GET['crea'])) {
 
 		foreach ($extra as $chiave => $valore) { 
 
+			if($valore['importo'] != 0) {
 			$codice = $valore['rif_id'];
 			$descrizione = $valore['descrizione'];
 			$quantita = $valore['quantita'];
 			$importo = $valore['importo'];
 			$aliquota = 22;
 			$totaleExtra += $importo*$quantita;
+			}
 		}
 
 
@@ -142,7 +144,7 @@ if(isset($_GET['crea'])) {
 			inserisci_voci_vendita($fattura_id,$codice,$descrizione,$importo,$quantita);
 		}
 
-		if($evento['costi_siae'] > 0) {
+		if(isset($evento['costi_siae']) && $evento['costi_siae'] > 0) {
 			$codice = 4;
 			$descrizione = "Anticipo costo SIAE";
 			$quantita = 1;

@@ -55,7 +55,7 @@ include("../../fl_inc/headers.php");
 			echo "<tr>"; 				
 			echo "<td class=\"$attivo\"></td>";
 			echo "<td>".$riga['descrizione_menu']." $confermato<br>$statusMenu</td>";	
-			echo "<td>&euro; ".@$riga['food_cost']."</td>";	
+			echo "<td>&euro; ".@$riga['food_cost']." <a href=\"mod_opera.php?menuId=".$riga['id']."\"><i class=\"fa fa-refresh\" aria-hidden=\"true\"></i></a></td>";	
 			echo "<td>&euro; ".@$riga['prezzo_base']."</td>";	
 			echo "<td>".mydatetime($riga['data_aggiornamento'])."</td>";
 			echo "<td><a data-fancybox-type=\"iframe\" class=\"facyboxParent\" href=\"./mod_configura.php?preview&evento_id=".$riga['evento_id']."&menuId=".$riga['id']."\" title=\"Ripilogo e Configurazione\" > <i class=\"fa fa-clipboard\" aria-hidden=\"true\"></i></a>$bolla</td>";

@@ -26,9 +26,14 @@ include("../../fl_inc/headers.php");
  echo (!file_exists($folder.$ricettaInfo['id'].'.jpg')) ? '' : '<img src="'.$folder.$ricettaInfo['id'].'.jpg" class="" style="float: right; width: 250px;" /> ';
   
 ?>
-<h1><?php echo converti_txt($ricettaInfo['nome']); ?></h1>
-<?php echo "<a href=\"\" class=\"msg green\">".$portata[$ricettaInfo['portata']]."</a>$categoria_msg | CODICE: ".$ricettaInfo['codice_portata']." | Porzioni: ".$ricettaInfo['porzioni']; ?>
-<p><?php echo strip_tags(converti_txt($ricettaInfo['note'])); ?></p>
+
+
+<h1><?php echo converti_txt($ricettaInfo['nome_tecnico']); ?></h1>
+<?php echo strtoupper($portata[$ricettaInfo['portata']]." $categoria_msg")." | CODICE: ".$ricettaInfo['codice_portata']." | Porzioni: ".$ricettaInfo['porzioni']; ?>
+<p>Nome Gastronomico: <?php echo strip_tags(converti_txt($ricettaInfo['nome'])); ?></p>
+
+
+
 <h2 style="clear: both;">Elenco Ingredienti</h2>
 <!--
 <div class="box" style="float: left; width:  45%;">
@@ -52,13 +57,13 @@ Q.ta <input type="text" name="quantita" value="1.000" style="width: 60px;" />
 
 
 <?php 
-	
-	$foodCost = 0;
   
-	$query = "SELECT * FROM fl_ricettario_diba WHERE `ricetta_id` = $record_id ORDER BY id ASC";
-	$risultato = mysql_query($query, CONNECT);
-	if(mysql_affected_rows() == 0){ echo "<p>Nessun elemento</p>"; } else {
-	?>
+  $foodCost = 0;
+  
+  $query = "SELECT * FROM fl_ricettario_diba WHERE `ricetta_id` = $record_id ORDER BY id ASC";
+  $risultato = mysql_query($query, CONNECT);
+  if(mysql_affected_rows() == 0){ echo "<p>Nessun elemento</p>"; } else {
+  ?>
     
    <table class="dati">
    <tr>
@@ -73,10 +78,10 @@ Q.ta <input type="text" name="quantita" value="1.000" style="width: 60px;" />
    </tr>
           
  <?php
-	
+  
 
-	while ($riga = mysql_fetch_assoc($risultato)) 
-	{ 
+  while ($riga = mysql_fetch_assoc($risultato)) 
+  { 
 
   $materiaprima = ($riga['materiaprima_id'] > 0) ? GRD('fl_materieprime',$riga['materiaprima_id']) : GRD('fl_ricettario',$riga['semilavorato_id']);
   $descrizione = ($riga['materiaprima_id'] > 0) ? $materiaprima['descrizione'] : converti_txt($materiaprima['nome']);
@@ -87,7 +92,7 @@ Q.ta <input type="text" name="quantita" value="1.000" style="width: 60px;" />
   $costo =  ($materiaprima[$tipo_prezzo]*$riga['quantita'])/$materiaprima['valore_di_conversione'];
   $foodCost += $costo;
 
-	}
+  }
   
   $prezzo_grammo = round(($materiaprima[$tipo_prezzo]/$materiaprima['valore_di_conversione'])/1000,4); 
   ?> 
@@ -127,7 +132,7 @@ Q.ta <input type="text" name="quantita" value="1.000" style="width: 60px;" />
     if($ricettaInfo['porzioni'] < 0.1) die("Per favore specifica una quantità di porzioni di almeno 1 unità nella scheda Ricetta");
 
 
-} //Chiudo la Connessione	?>
+} //Chiudo la Connessione ?>
 
 
 <div class="no-print">
@@ -158,17 +163,17 @@ Q.ta <input type="text" name="quantita" value="1.000" style="width: 60px;" />
 </div>
 
 
-<h2  class="no-print">Costo della ricetta: &euro; <?php echo  numdec($foodCost,3); ?> <?php echo ($ricettaInfo['porzioni'] == 1) ? 'A Porzione' : ' per '.$ricettaInfo['porzioni'].' porzioni'; ?> </h2>
+<h2  class="no-print">Costo della ricetta: &euro; <?php echo  numdec($foodCost,3); ?> <?php echo ($ricettaInfo['porzioni'] == 1) ? 'a porzione' : ' per '.$ricettaInfo['porzioni'].' porzioni'; ?> </h2>
+
+<p>Note: <?php echo strip_tags(converti_txt($ricettaInfo['note'])); ?></p>
+
 
 
 <!--Calcola <a href="mod_diba.php?record_id=<?php echo $record_id; ?>&calcola=ultimo_prezzo" class="msg <?php echo ($tipo_prezzo == 'ultimo_prezzo') ? 'blue' : 'gray'; ?>">Ultimo prezzo</a>
 <a href="mod_diba.php?record_id=<?php echo $record_id; ?>&calcola=prezzo_medio" class="msg <?php echo ($tipo_prezzo == 'prezzo_medio') ? 'blue' : 'gray'; ?>">Costo medio</a>
 -->
 <a href="javascript:location.reload();" class="button no-print">Ricalcola costo</a>
-<a href="javascript:window.print();" class="button no-print"><i class="fa fa-print"></i> Stampa</a>
 <a href="mod_opera.php?rev=<?php echo $record_id; ?>" class="button green no-print">Approva Revisione </a>  Rev. <strong><?php echo $ricettaInfo['revisione']; ?></strong> | Aggiornamento ricetta: <strong><?php echo mydatetime($ricettaInfo['data_aggiornamento']); ?></strong> | Operatore: <strong><?php echo $proprietario[$ricettaInfo['operatore']]; ?></strong>
-
-<textarea style="width: 100%; height: auto;" placeholder="Note e copyright"></textarea>
 
 
 <div class="no-print">
@@ -265,7 +270,8 @@ Prezzo: <input type="text" name="ultimo_prezzo" value="<?php echo number_format(
     mysql_close();
 
       ?>
-
-<p style="font-style: oblique;">Stampato con Condivision in data: <strong><?php echo date('d/m/Y'); ?></strong> alle ore <strong><?php echo date('H:i'); ?></strong> da <?php echo $_SESSION['nome']; ?>.
-</p>
+<a href="mod_diba_stampa.php?record_id=<?php echo $record_id; ?>" class="button no-print facyboxParent" data-fancybox-type="iframe"><i class="fa fa-print"></i> Stampa Tecnica </a>
+<a  href="mod_diba_stampa.php?prezzi=1&record_id=<?php echo $record_id; ?>" class="button no-print facyboxParent" data-fancybox-type="iframe"><i class="fa fa-print"></i> Stampa Contabile </a>
+<p><?php echo $ricettaInfo['copyright']; ?></p>
+<p style="font-style: oblique;">Stampato da Condivision in data: <strong><?php echo date('d/m/Y'); ?></strong> alle ore <strong><?php echo date('H:i'); ?></strong> da <?php echo $_SESSION['nome']; ?>.</p>
 </body></html>

@@ -7,7 +7,7 @@
 		//$filtro .= ($proprietario_id > 1) ? " AND (proprietario = $proprietario_id OR callcenter = $proprietario_id) " : ' ';
 		$query = "SELECT *,`start_meeting` as `start`, COUNT('*') as `tot`  FROM `fl_appuntamenti` WHERE $filtro GROUP BY `start_meeting`,`end_meeting`,`meeting_location` ";
 	
-		$colors = array(122=>'#380fa8',123=>'#3DA042',124=>'#4c9ed9',125=>'#E3CC23');
+		$colors = array(122=>'#380fa8',123=>'#3DA042',124=>'#4c9ed9',125=>'#E3CC23',195=>'#B148B0');
 		unset($tipologia_appuntamento[0]);
 		
 		foreach ($colors as $key => $value) {

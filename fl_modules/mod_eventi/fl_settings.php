@@ -80,10 +80,10 @@
 	$tipo_servizio_evento = $data_set->get_items_key("tipo_servizio_evento");
 	
  	//Ambienti 1.0
-	$ambienti = $codici_ambiente = $data_set->get_items_key("ambienti");
+	//$ambienti = $codici_ambiente = $data_set->get_items_key("ambienti");
 
 	//Ambienti 2.0
-	if(defined('MULTI_AMBIENTE')) $ambienti =  $data_set->data_retriever('fl_ambienti','nome_ambiente',"WHERE id != 1",'priority ASC,tipo_ambiente ASC, id ASC');
+	$ambienti =  $data_set->data_retriever('fl_ambienti','nome_ambiente',"WHERE id != 1",'priority ASC,tipo_ambiente ASC, id ASC');
 	unset($ambienti[0]);
 	unset($ambienti[1]);
 
@@ -126,7 +126,7 @@
 
 	function select_type($who){
 	/* Gestione Oggetto Statica */	
-	$textareas = array('note_contratto','note_servizio','note_cucina','note_generali_allestitori'); 
+	$textareas = array('note_intolleranze','note_sala','note_aperitivo','note_torta','note_contratto','note_servizio','note_cucina'); 
 	$select = array('tema_evento','cerimonia','notturno','ambiente_principale','ambiente_1','ambiente_2','tipo_servizio_evento','centro_di_ricavo','preventivo_collegato','tipo_evento','periodo_evento','location_evento',"mansione","paese","proprietario");
 	$disabled = array();
 	$hidden = array('anagrafica_cliente','anagrafica_cliente2',"colore","descrizione",'altro','evento_id','customer_id',"data_creazione",'proprietario','marchio','contract_id',"data_arrived",'lead_id','is_customer',"data_aggiornamento","marchio","ip","operatore",'condizioni_aggiuntive','estremi_acconto','ricevuta_numero','importo_ricevuta','note');

@@ -62,7 +62,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 	{
 	
 	$attivo = ($riga['attivo'] == 0) ? 'tab_green' : 'tab_red';
-	//$quotazione = GQD('fl_listino_acquisto','valuta, prezzo_unitario, data_validita',' id_materia = '.$riga['id'].' ORDER BY data_validita DESC,data_creazione DESC LIMIT 1');
+	$quotazione = GQD('fl_listino_acquisto','valuta, prezzo_unitario, data_validita',' id_materia = '.$riga['id'].' ORDER BY data_validita DESC,data_creazione DESC LIMIT 1');
 	$valore = $riga['quantita']*$riga['prezzo_medio'];
 	$totale += $valore;
 

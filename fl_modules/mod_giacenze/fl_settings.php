@@ -31,8 +31,8 @@
 	$new_button = '';  //Solo se la funzione new richiede un link diverso da quello standard  
     $module_menu = '
     <li><a href="../mod_materieprime/">Anagrafica</a></li>
-    <li><a href="../mod_giacenze/">Giacenza</a></li>
-    <li><a href="../mod_giacenze/intro.php">Movimenti</a></li>'; //Menu del modulo
+    <li><a href="../mod_materieprime/?action=24">Giacenza</a></li>
+    <li><a href="../mod_giacenze/mod_movimenti.php">Movimenti</a></li>'; //Menu del modulo
 
 
 	if(isset($_GET['data_da']) && check($_GET['data_da']) != "" && check($_GET['data_a']) != "") { 
@@ -67,7 +67,7 @@
     $fornitore = $data_set->data_retriever('fl_anagrafica','ragione_sociale'); //Crea un array con i valori X2 della tabella X1
 	$tipo_materia = $data_set->get_items_key("tipo_materia");//Crea un array con gli elementi figli dell'elemento con tag X1	
 	$categoria_materia = $data_set->data_retriever('fl_categorie','label','WHERE id > 1 AND workflow_id = 115','id ASC');
-	$tipo_movimentazione = array('DDT - Entrata Merce','DDT - Uscita Merce','Reso cliente','Reso Fornitore','Inventario','Carico di Produzione');
+	$magazzino_id = $data_set->data_retriever('fl_magazzino_anagrafica','codice_magazzino,descrizione'); 
 
 	/*Funzione di merda per gestione dei campi da standardizzare in una classe e legare ad al DB o XML config*/	
 	function select_type($who){

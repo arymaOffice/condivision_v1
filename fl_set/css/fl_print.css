@@ -6,9 +6,8 @@ body {
 	font-family: Arial, sans-serif;
     color: #333333;
 	font-size: 14px !important;
-	background: url(../icons/bg_body.jpg) top repeat-x;
 	text-align: center; 
-	margin: 1mm;
+	margin: 0;
 	padding: 0px;
 }
 	
@@ -57,7 +56,6 @@ margin-left: 15px;
 }
 
 #container {
-	min-width: 994px;
 	width: auto;
 	height: auto;
 	margin: 0px auto 0px auto;
@@ -122,18 +120,18 @@ object { text-align: center; margin: auto;}
 	caption-side: top; 
 	width: 100%; 
 	height: auto; 
-	margin: 20px 0;
+	margin: 10px 0;
 	padding: 0px; 
 	vertical-align: middle; 
 	font-size: 14px;  
-	border: none;
+	border: 1px solid #F4F4F4;
 	}
 
-.dati th { text-align: left;    }
+.dati th { text-align: left;  	border: 1px solid #F4F4F4; padding: 4px;  }
 .dati td { 	border: 1px solid #F4F4F4;
- text-align: left; page-break-after: auto; page-break-before: auto;  vertical-align: middle;  margin: 0px; padding: 1px; min-height: 0px;  }
+ text-align: left; page-break-after: auto; page-break-before: auto;  vertical-align: middle;  margin: 0px; padding: 4px; min-height: 0px;  }
 .dati tr { line-height: auto; page-break-after: auto; page-break-before: auto; }
-.dati tr:nth-child(even) { background: #D7D7D7; }
+
 
 /* Commons */
 

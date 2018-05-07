@@ -84,7 +84,6 @@ echo '</tr>';
     <th><a href="mod_opera.php?menuId=<?php echo $menuId; ?>">Aggiorna Valore Menù</a></th>
     <th></th>
     <th></th>
-    <th></th>
     <th><h2>&euro; <?php echo numdec($totCosto,2); ?></h2></th>
     <th><h2>&euro; <?php echo numdec($totVendita,2); ?></h2></th>
     <th></th>

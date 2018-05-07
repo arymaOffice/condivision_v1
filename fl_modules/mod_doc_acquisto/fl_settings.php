@@ -13,9 +13,9 @@
 	$searchbox = 'Ricerca';
 	$calendar = 1;
 	$filtri = 1;
-
+    $folder = '';
 	$tabs_div = 0;
-	$tab_div_labels = array('id'=>"Dati Fattura",'imponibile'=>"Riepilogo",'pagato'=>"Pagamenti");
+	$tab_div_labels = array('id'=>"Dati Documento",'imponibile'=>"Riepilogo",'mod_voci.php?DAiD=[*ID*]'=>"Specifica",'pagato'=>"Pagamenti");
 
 	$anno = date('Y');
 	if(!isset($_SESSION['anno_fiscale'])) $_SESSION['anno_fiscale']  = $anno;
@@ -25,12 +25,11 @@
 
     $module_menu = '
 	
-  	   <li class=""><a href="./?tipo_doc_acquisto=0">Fatture <span class="subcolor">Acquisto </span></a>      </li>
-	      	   <li class=""><a href="./?tipo_doc_acquisto=1">Ricevute  <span class="subcolor">Fiscali </span></a>      </li>
-
-	   <li class=""><a href="./?tipo_doc_acquisto=2">Note di  <span class="subcolor">Credito </span></a>      </li>
-	     <li class=""><a href="./?tipo_doc_acquisto=3">DDT  <span class="subcolor">Acquisto </span></a>      </li>
-	      <li class=""><a href="./?tipo_doc_acquisto=4">Costi  <span class="subcolor">Generici </span></a>      </li>
+  	<li class=""><a href="./?tipo_doc_acquisto=0">Fatture <span class="subcolor">Acquisto </span></a>      </li>
+	<li class=""><a href="./?tipo_doc_acquisto=1">Ricevute  <span class="subcolor">Fiscali </span></a>      </li>
+	<li class=""><a href="./?tipo_doc_acquisto=2">Note di  <span class="subcolor">Credito </span></a>      </li>
+	<li class=""><a href="./?tipo_doc_acquisto=3">DDT  <span class="subcolor">Acquisto </span></a>      </li>
+	<li class=""><a href="./?tipo_doc_acquisto=4">Ordini  <span class="subcolor">a Fornitore </span></a>      </li>
 	   ';
 		
 	if(isset($_GET['proprietario']) && check(@$_GET['proprietario']) != -1 && check(@$_GET['proprietario']) != '') { $proprietario_id = check($_GET['proprietario']); } else {  $proprietario_id = -1; }
@@ -91,7 +90,7 @@
 	
 	function select_type($who){		
 	/* Gestione Oggetto Statica */	
-	$textareas = array('informazioni_cliente'); 
+	$textareas = array('note','informazioni_cliente'); 
 	$select = array('centro_di_costo','centro_di_costo_secondario','valuta','paese','metodo_di_pagamento','anagrafica_id');
 	$disabled = array();
 	$hidden = array('tipo_doc_acquisto','lingua_documento','categoria_doc_acquisto',"anno_di_competenza","contrassegnata",'template','valore_conversione','operatore','proprietario','marchio','anno_di_imposta',"data_creazione",'data_aggiornamento');
@@ -119,6 +118,6 @@
 	return $type;
 	}
 	
-	$module_title = '<span>'.$tipi_doc_acquisto[$tda_id].'</span> <span class="msg blue">'.$_SESSION['anno_fiscale'].'</span>';
+	if(!isset($_GET['id'])) $module_title = '<span>'.@$tipi_doc_acquisto[$tda_id].'</span> <span class="msg blue">'.$_SESSION['anno_fiscale'].'</span>';
 
 ?>

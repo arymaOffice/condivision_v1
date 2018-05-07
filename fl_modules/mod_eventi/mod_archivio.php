@@ -226,12 +226,10 @@ margin-right: 20px;
 		  $precontoEvento = 0;
 		  $precontoEvento += ($riga['prezzo_base']*$riga['numero_adulti']);
 		  $precontoEvento += ($riga['prezzo_bambini']*$riga['numero_bambini']);
-		  
+		  $precontoEvento += ($riga['prezzo_serali']*$riga['numero_serali']);
+		  $precontoEvento +=  ($riga['prezzo_operatori']*$riga['numero_operatori']);
 
-		  $prezzo_operatori += ($riga['prezzo_operatori'] > 0) ? $riga['prezzo_operatori'] : ($riga['prezzo_base']/2);
-		  $precontoEvento += $prezzo_operatori*$riga['numero_operatori'];
-		  if(isset($riga['costi_siae'])) $precontoEvento += $riga['costi_siae'];
-		  $precontoEvento;
+		  if(isset($riga['costi_siae']) && $riga['costi_siae'] > 0) $precontoEvento += $riga['costi_siae'];	
 
 
 		  $extra = GQS('fl_registro_cassa','*',' conto_id = '.$riga['id']);

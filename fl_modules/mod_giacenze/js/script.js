@@ -18,6 +18,23 @@ $(document).ready(function() {
   }
 
   const formEl = $(".ajaxForm");
+  // // Fetch events
+  // $.ajax({
+  //   type: "GET",
+  //   url: "load/mod_download.php",
+  //   success: function result(response) {
+  //     let events = JSON.parse(response);
+  //     $.each(events, function(index, event) {
+  //       $(`#${rowId} .evento-field`).append(`
+  //           <option value="${event}">${event}</option>
+  //         `);
+  //     });
+  //     console.log(events);
+  //   },
+  //   error: function(errorMessage) {
+  //     console.error(errorMessage);
+  //   }
+  // });
   // Fetch all ingredients
   $.ajax({
     type: "GET",
@@ -289,7 +306,7 @@ $(document).ready(function() {
                       ingredientSelected.unita_di_misura_formato
                     }"]`
                   ).prop("selected", true);
-                  umEl.prop("disabled", true);
+                  //umEl.prop("disabled", true);
                   importoEl.val(Number(importoResult).toFixed(2));
 
                   // ADD A ROW AND FOCUS ON LAST ROW CREATED CODICE
@@ -372,7 +389,7 @@ $(document).ready(function() {
                   ingredientSelected.unita_di_misura_formato
                 }"]`
               ).prop("selected", true);
-              umEl.prop("disabled", true);
+              //umEl.prop("disabled", true);
               importoEl.val(Number(importoResult).toFixed(2));
 
               // ADD A ROW AND FOCUS ON LAST ROW CREATED CODICE
@@ -437,13 +454,16 @@ $(document).ready(function() {
               type: "GET",
               url: "load/last_open_orders.php",
               success: function result(response) {
-                let lastOrders = JSON.parse(response);
-                $.each(lastOrders, function(index, order) {
-                  $(`#${rowId} .mult-field`).append(`
-                      <option value="${order}">${order}</option>
-                    `);
-                });
-                console.log(lastOrders);
+                console.log(response);
+                if (response != "0 risultati") {
+                  let lastOrders = JSON.parse(response);
+                  $.each(lastOrders, function(index, order) {
+                    $(`#${rowId} .mult-field`).append(`
+                        <option value="${order.id}">${order.titolo}</option>
+                      `);
+                  });
+                  console.log(lastOrders);
+                }
               },
               error: function(errorMessage) {
                 console.error(errorMessage);
@@ -454,12 +474,12 @@ $(document).ready(function() {
           eventi(rowId) {
             $.ajax({
               type: "GET",
-              url: "load/mod_download.php",
+              url: "load/last_open_orders.php",
               success: function result(response) {
                 let events = JSON.parse(response);
                 $.each(events, function(index, event) {
                   $(`#${rowId} .evento-field`).append(`
-                      <option value="${event}">${event}</option>
+                      <option value="${event.id}">${event.titolo}</option>
                     `);
                 });
                 console.log(events);

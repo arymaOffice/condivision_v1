@@ -316,7 +316,6 @@ if (isset($_POST['inviaEmail']))
   
   }
 
-smail(mail_admin,"Invio email a ".$send.' contatti ::. '.$oggetto, 'MESSAGGIO BASE INVIATO: '.$testo);
 smail(mail_user,"Invio email a ".$send.' contatti ::. '.$oggetto, 'MESSAGGIO BASE INVIATO: '.$testo); 
 if($sendM == 1) $sendM = '';
 

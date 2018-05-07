@@ -35,7 +35,7 @@ if (isset($_GET['id1'])) {
     } else {
         $query = "INSERT INTO `fl_synapsy` (`type1`, `id1`, `type2`, `id2`, `descrizione`, `valore`, `qty`, `note`) VALUES ('$type1', '$id1', '$type2', '$id2', '" . $prodotto['label'] . "', '$valore', '$qty', '$note')";
         mysql_query($query, CONNECT);
-		inserisci_addebito(0, $prodotto['label'] . ' ' . $note, $valore, $qty, $id1, $id2);
+		if($valore != 0) inserisci_addebito(0, $prodotto['label'] . ' ' . $note, $valore, $qty, $id1, $id2);
 	
 
 	}

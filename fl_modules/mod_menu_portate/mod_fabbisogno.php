@@ -42,8 +42,8 @@ include("../../fl_inc/headers.php");
    <tr>
    <th>Codice</th>
    <th>Descrizione</th>
-   <th>UM</th>
    <th>Fabbisogno</th>
+   <th>UM</th>   
    <th>Giacenza</th>
    <th></th>
    <th></th>
@@ -88,8 +88,9 @@ while ($ingrediente = @mysql_fetch_array($diba)) {
    <tr>
    <td><?php echo $ingrediente['codice_articolo']; ?></td>
    <td><?php echo $ingrediente['descrizione']; ?></td>
-   <td><?php echo $ingrediente['unita_di_misura']; ?></td>
    <td><?php echo numdec($fabbisogno,$arr).' '.$note; ?></td>
+   <td><?php echo $ingrediente['unita_di_misura']; ?></td>
+   
    <td>0</td>
    <td><?php echo ($ingrediente['anagrafica_id'] > 1) ? '<a href="mod_fabbisogno.php?evento_id='.$evento_id.'&menuId='.$menuId.'&fornitore='.$ingrediente['anagrafica_id'].'">'.$fornitore[$ingrediente['anagrafica_id']].'</a>' : ''; ?></td>
    <td><?php echo ($ingrediente['anagrafica_id2'] > 1) ? $fornitore[$ingrediente['anagrafica_id2']] : ''; ?></td>

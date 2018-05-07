@@ -11,7 +11,7 @@ $queryIntestazione = mysql_query($queryIntestazione, CONNECT);
 
 $rigaTemplate = '';
 
-$queryPortate = "SELECT e.id as evento, portata ,priority, nome,nome_tecnico , GROUP_CONCAT( CONCAT(e.id,'-',(SELECT (numero_adulti + numero_operatori) FROM fl_eventi_hrc WHERE id = evento )) ) as portate ,SUM((SELECT (numero_adulti + numero_operatori) FROM fl_eventi_hrc WHERE id = evento )) as totale FROM `fl_ricettario` r JOIN fl_synapsy s ON s.id2 = r.id AND s.type2 = 119 AND s.type1 = 123 JOIN fl_menu_portate m ON m.id = s.id1 AND s.type1 = 123 AND s.type2 = 119 JOIN fl_eventi_hrc e ON e.id = m.evento_id WHERE stato_evento != 4 AND DATE(e.data_evento) = '$data' GROUP BY r.id ORDER BY portata ASC, priority ASC";
+$queryPortate = "SELECT e.id as evento, portata ,priorita, nome,nome_tecnico, GROUP_CONCAT( CONCAT(e.id,'-',(SELECT (numero_adulti + numero_operatori) FROM fl_eventi_hrc WHERE id = evento )) ) as portate ,SUM((SELECT (numero_adulti + numero_operatori) FROM fl_eventi_hrc WHERE id = evento )) as totale FROM `fl_ricettario` r JOIN fl_synapsy s ON s.id2 = r.id AND s.type2 = 119 AND s.type1 = 123 JOIN fl_menu_portate m ON m.id = s.id1 AND s.type1 = 123 AND s.type2 = 119 JOIN fl_eventi_hrc e ON e.id = m.evento_id WHERE stato_evento != 4 AND DATE(e.data_evento) = '$data' GROUP BY r.id ORDER BY portata ASC, priorita ASC";
 
 $queryPortate = mysql_query($queryPortate, CONNECT);
 $idArray = array();
@@ -75,7 +75,7 @@ $rigaTemplate .= '<td style="color:orange;text-align: center;font-weight:bold;">
 
 
 			<tr>
-				<td style="font-size: small;"><?php echo $rowPortate['nome_tecnico'] ?></td> <!-- nome portata -->
+				<td style="font-size: small;" title="Priorita da Ricettario: <?php echo $rowPortate['priorita']; ?>"><?php echo $rowPortate['nome_tecnico']; ?></td> <!-- nome portata -->
 				<?php $newLine = $rigaTemplate;
     $concatEsploso = explode(',', $rowPortate['portate']);
     foreach ($concatEsploso as $value) {

@@ -782,7 +782,7 @@ a.black, .black a {
 #box_tipo_doc_vendita,#box_tipo_doc_acquisto,#box_tipo_profilo,#box_sesso,#box_forma_giuridica,#box_categoria_mnt ,#box_pagamenti_f24 ,#box_note,#box_identificato,#box_attivo { background: none; }
 */
 input, select, textarea {
-	background-color: #fff;
+	background-color: #f2f2f2;
 	border: 1px solid #F5F5F5;
 	font-size: 111%;
 	padding: 5px 5px;
@@ -831,7 +831,6 @@ input:focus, select:focus, textarea:focus {
 .input_text input {
 	width: 63%;
 	font-size: 0.9em;
-	background: #f9f9f9;
 }
 .pbox {
 	font-size: 14px;
@@ -2383,9 +2382,9 @@ font-weight: normal;
 
 
 .boxCat { display: inline-block; width: 25vw; height:32vh; margin: 3vh 2vw; background: 
-#DFDFDF; padding: 0; position: relative;  font-size: 1vw;   }
+#DFDFDF; padding: 0; position: relative;  font-size: 1vw;  overflow: hidden;  }
 
-.boxCat img {  position: absolute; top: 0; left: 0; bottom: 0; right: 0; height: 100%; width: 100%; z-index: 99; }
+.boxCat img {   height: 100%;  z-index: 99; }
 .boxCat h2 { margin-right: 20%; font-size: 0.9vw; }
 .boxCat h3 {
 z-index: 102;
@@ -2872,3 +2871,10 @@ background: #4b4848;
 padding: 10px 0 10px 0;
 color: white;
 }
+
+#rightTitle{
+
+	position: absolute !important;
+    top: 14px;
+    right: 20px;
+}  

@@ -21,12 +21,22 @@ include("../../fl_inc/testata_mobile.php");
 
 <div id="content_scheda">
 
-<form id="scheda" action="../mod_basic/action_modifica.php" method="post" enctype="multipart/form-data">
-<?php if(isset($_GET['esito'])) { $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p class="'.$class.'">'.check($_GET['esito']).'</p>'; }  ?>
-<h1>Scheda</h1>
-<?php   include('../mod_basic/action_estrai.php');  ?>
-<?php if(check($_GET['id']) == 1) { ?><input type="hidden" name="reload" value="../mod_materieprime/mod_inserisci.php?t=MQ==&id=" /><?php } ?>
+<form id="scheda" action="mod_opera.php" method="post" enctype="multipart/form-data">
 
+
+
+ <select id="mySelect" class="form-control" name="note[]" multiple="multiple">
+			<option selected="selected">Gluten Free</option>
+			<option selected="selected">Gluten Free</option>
+			<option selected="selected">Gluten Free</option>
+			<option selected="selected">Gluten Free</option>
+			<option selected="selected">Gluten Free</option>
+			</select>
+
+
+
+		
+<input type="submit" />
 </form>
 
 

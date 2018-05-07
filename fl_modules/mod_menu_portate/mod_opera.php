@@ -86,6 +86,27 @@ exit;
 }
 
 
+if(isset($_POST['creaFabbisogno'])) {
+
+foreach ($_POST['ricetta_id'] as $key => $value) {
+
+	$ricetta_id = $_POST['ricetta_id'][$key];
+	$evento_id = $_POST['evento_id'][$key];
+	$quantita = $_POST['quantita'][$key];
+
+	$query = "INSERT INTO `fl_ricettario_fabbisogno` (`id`, `ricetta_id`, `versione`, `evento_id`, `quantita`, `ordine_id`, `data_creazione`,`operatore`) 
+	VALUES (NULL, '$ricetta_id', '1', '$evento_id', '$quantita', '0', NOW(),'".$_SESSION['operatore']."'); ";
+
+	if($quantita != 0) mysql_query($query,CONNECT);
+
+}
+
+mysql_close(CONNECT);
+header("Location: mod_calcolo_fabbisogno.php"); 
+exit;
+}
+
+
 
 mysql_close(CONNECT);
 header("Location: ".$_SERVER['HTTP_REFERER'].'#p'.$newPiatto); 

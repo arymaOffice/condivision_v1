@@ -22,7 +22,9 @@ $items = '';
 
 foreach ($extra as $chiave => $valore) { 
 
-	if($valore['quantita'] < 1) $valore['quantita'] = 1;
+   if($valore['importo'] != 0) {
+
+   if($valore['quantita'] < 1) $valore['quantita'] = 1;
 
    $item = str_replace('{{totaleVoce}}', numdec($valore['importo']*$valore['quantita'],2), $riga);
    $item = str_replace('{{id}}', $valore['id'], $item);
@@ -31,7 +33,7 @@ foreach ($extra as $chiave => $valore) {
    $item = str_replace('{{descrizione}}', $valore['descrizione'], $item);
    $totale += $valore['importo']*$valore['quantita'];
    $items .= $item;
-
+}
 }
 /*
 $extra = GQS('fl_synapsy','*', "valore > 0 AND type2 = 23 AND type1 = 6 AND id1 = $evento_id");
@@ -84,7 +86,6 @@ if($evento['anagrafica_cliente'] > 1 || $evento['anagrafica_cliente2'] > 1 ){
 
 echo "<h3>".$evento['titolo_ricorrenza']." Evento del ".mydate($evento['data_evento'])." (".$giorni_settimana[date("w", strtotime($evento['data_evento']))].")  | Coperti: ".($evento['numero_adulti']+$evento['numero_bambini']+$evento['numero_operatori'])." </h3>";
 
-
 $prezzo_operatori = ($evento['prezzo_operatori'] > 0) ? $evento['prezzo_operatori'] : ($evento['prezzo_base']/2);
 ?>
 </div>
@@ -102,7 +103,7 @@ $prezzo_operatori = ($evento['prezzo_operatori'] > 0) ? $evento['prezzo_operator
 		?>
 	</select>
 	<input type="text" name="descrizione" placeholder="Descrizione" value=""> &euro; 
-	<input type="number" name="importo" value="0.00">
+	<input type="text" name="importo" value="0.00">
 	<input type="submit" value="Registra" class="button">
 </form>
 		<form>
@@ -152,7 +153,7 @@ $prezzo_operatori = ($evento['prezzo_operatori'] > 0) ? $evento['prezzo_operator
 				</tr>
 				<?php } ?>
 
-				<?php if($evento['costi_siae'] > 0) { ?>
+				<?php if(isset($evento['costi_siae']) && $evento['costi_siae'] > 0) { ?>
 				<tr>
 					<td>Anticipo costo SIAE</td>
 					<td>&euro; <?php echo $evento['costi_siae']; ?></td>
@@ -195,7 +196,7 @@ if(defined('GESTIONE_CAPARRA')) { $movimento_caparra = array('Versamento','Resti
 		?>
 	</select>
 	<input type="text" name="descrizione" placeholder="Descrizione" value="Caparra Confirmatoria"> &euro; 
-	<input type="number" name="importo" value="<?php echo GESTIONE_CAPARRA; ?>" >
+	<input type="number" name="importo" value="<?php echo GESTIONE_CAPARRA; ?>" step="any" >
 	<input type="submit" value="Registra" class="button">
 </form>
 

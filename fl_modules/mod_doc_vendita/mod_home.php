@@ -186,7 +186,12 @@ var totalChecked = 0;
 			$imponibile = get_imponibile($riga['id']);
 			$imposta = get_imposta($riga['id']);
 			$totale_documento = $imponibile+$imposta;
-			
+
+			if(defined('importi_arrotondati')){ 
+			$coeffAliquota = 1.10;
+ 			$imponibile = round($totale_documento/$coeffAliquota,2,PHP_ROUND_HALF_DOWN);
+ 			$imposta = $totale_documento-$imponibile;
+			}		
 	
 
 			$tot_imponibile += $imponibile;

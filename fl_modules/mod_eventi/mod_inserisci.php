@@ -168,10 +168,13 @@ $dataRevisione = (@$selectDataRevisione['data'] != '') ? @$selectDataRevisione['
 $schedaWedding = GQD('fl_ricorrenze_matrimonio','id,evento_id',' evento_id = '.$evento['id']);
 $schedaWeddingId = ($schedaWedding['id'] > 1) ? $schedaWedding['id'] : '1&auto';
 
-echo "<div><a href=\"mod_scheda_servizio.php?evento_id=".$evento['id']."&tipo_evento=".$evento['tipo_evento']."&id=$schedaWeddingId\" class=\"button\">Vai a gestione</a>
-<a href=\"".$GeneraAllegato."\" data-fancybox-type=\"iframe\" class=\"fancybox_view button\" title=\"Visualizza/Stampa Allegato\"> Allegato Contratto</a>
-".$preventivoCollegato."
- ".$evento['titolo_ricorrenza']." ".mydatetime($evento['data_evento'])." (".$giorni_settimana[date("w", strtotime($evento['data_evento']))].")  | Coperti: ".($evento['numero_adulti']+$evento['numero_bambini']+$evento['numero_operatori'])." | Prezzo base: &euro; ".$evento['prezzo_base']." | Ultima Revisione: ".$dataRevisione." </div>";
+
+ echo "<div><a href=\"mod_scheda_servizio.php?evento_id=".$evento['id']."&tipo_evento=".$evento['tipo_evento']."&id=$schedaWeddingId\" class=\"button\">Vai a gestione</a>";
+ if(defined('ALLEGATO_MENU_DEFINITIVO')) echo " <a href=\"$GeneraAllegato\" data-fancybox-type=\"iframe\" class=\"fancybox_view button\" title=\"Visualizza/Stampa\"> ".ALLEGATO_MENU_DEFINITIVO."</a>";
+ if(defined('ALLEGATO_ALLESTIMENTI')) echo " <a href=\"mod_allegato2.php?evento_id=".$evento['id']."\" data-fancybox-type=\"iframe\" class=\"fancybox_view button\" title=\"Visualizza/Stampa\"> ".ALLEGATO_ALLESTIMENTI." </a> ";
+ echo $preventivoCollegato." ".$evento['titolo_ricorrenza']." ".mydatetime($evento['data_evento'])." (".$giorni_settimana[date("w", strtotime($evento['data_evento']))].")  | Coperti: ".($evento['numero_adulti']+$evento['numero_bambini']+$evento['numero_operatori'])." | Prezzo base: &euro; ".$evento['prezzo_base']." | Ultima Revisione: ".$dataRevisione." </div>";
+
+
 
 
 } else { echo '<span class="msg green">Salva la scheda per procedere con inserimento anagrafica</span>'; } ?>
@@ -291,6 +294,7 @@ if($id > 1) {
 	echo "$('#numero_sedie').attr('disabled',true);";
 	echo "$('#numero_sedioloni').attr('disabled',true);";
 	echo "$('#numero_operatori').attr('disabled',true);";
+	echo "$('#numero_serali').attr('disabled',true);";
 	
 	}
 

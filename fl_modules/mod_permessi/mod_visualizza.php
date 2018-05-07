@@ -2,7 +2,6 @@
 
 require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
-
 $_SESSION['account_manage'] = check($_GET['account']);
 include("../../fl_inc/headers.php");
 
@@ -31,7 +30,6 @@ include("../../fl_inc/headers.php");
       <th>Account</th>
  	  <th>Modulo</th>
       <th>Livello Accesso</th>
-      <th></th>
       </tr>
 	  
 	<?php 
@@ -53,9 +51,7 @@ include("../../fl_inc/headers.php");
 			echo "<td>".$account_id[$riga['account_id']]."</td>"; 
 			echo "<td>".$modulo_id[$riga['modulo_id']]."</td>"; 
 			echo "<td>$accesso</td>"; 
-			echo "<td>
-			<a href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\">
-			<i class=\"fa fa-trash-o\"></i></a></td>"; 
+			
 				
 		    echo "</tr>";
 	}

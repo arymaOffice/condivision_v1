@@ -53,19 +53,9 @@
 	
 	
 	/* Inclusioni Oggetti Categorie */
-	include('../../fl_core/dataset/sezione.php');
-	include('../../fl_core/dataset/categoria.php');
 	include('../../fl_core/dataset/array_statiche.php');
 	include('../../fl_core/dataset/proprietario.php');
 	
-		$categories = '';
-	
-	  
-		foreach($sezione as $hj => $label){ // Recursione Indici di Categoria
-			$selected = ($sezione_id == $hj) ? 'class="selected"' : '';
-			$categories .=   '<li '.$selected.'><a href="?sezione='.$hj.'">'.ucfirst($label).'</a></li>';
-			}
-
 	
 	$module_menu = '';
 	

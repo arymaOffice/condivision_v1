@@ -14,17 +14,17 @@ $where = rtrim ($where,'OR')." ) ";
 
 $query = "SELECT * FROM $tabella $where LIMIT 0,5;";
 $risultato = mysql_query($query,CONNECT);
-echo "<h3>Seleziona elemento:</h3>";
+echo "<h3>Seleziona un nominativo:</h3>";
 $i = 1;
 while ($riga = mysql_fetch_array($risultato)) {
 $valore = '';
 foreach($_GET['w'] AS $chiave2 => $valore2) { $valore .= ' '.$riga[$valore2]; }
 
-echo "<div tabindex=\"$i\" class=\"rowSelection\"><a href=\"javascript:void(0);\" onclick=\"loadLead('".$riga['id']."','".$valore."','".$riga['email']."','".$riga['telefono']."','".$riga['source_potential']."');\">".$valore."</a></div>";
+echo "<div tabindex=\"$i\" class=\"rowSelection\"><a href=\"javascript:void(0);\" onclick=\"loadLead('".$riga['id']."','".$valore."','".$riga['email']."','".$riga['telefono']."');\">".$valore."</a></div>";
 $i++;
 }
 
 
-mysql_close(CONNECT);
+
 
 ?>

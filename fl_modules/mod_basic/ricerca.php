@@ -16,7 +16,7 @@ echo "<p tabindex=\"$i\"><a href=\"./?cerca=$valore\">".$valore."</a></p>";
 $i++;
 }
 
-
-
+//echo time();
+//echo "<br />".$_SERVER['HTTP_HOST'];
 
 ?>

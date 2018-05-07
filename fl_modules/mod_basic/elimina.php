@@ -7,14 +7,6 @@ require_once('action_check.php');
 
 
 
-if(isset($_GET['delFile'])) { 
-$file= check($_GET['delFile']);
-if(file_exists($file)){ @unlink($file); }
-@mysql_close(CONNECT);
-header("Location: ".$_SERVER['HTTP_REFERER']); 
-exit;
-}
-
 if(isset($_GET['unset'])) { 
 
 if(!is_numeric($_GET['unset']) || !is_numeric($_GET['gtx'])) exit;

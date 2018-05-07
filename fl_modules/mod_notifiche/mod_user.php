@@ -40,7 +40,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 
 			echo "<tr>"; 	
 			echo "<td class=\"\"><span class=\"Gletter\"></span></td>"; 
-			echo "<td><a href=\"mod_visualizza.php?external&action=1&amp;id=".$riga['id']."\" title=\"Visualizza\" >".ucfirst($riga['titolo'])."</a></td>";		
+			echo "<td><a href=\"mod_visualizza.php?id=".$riga['id']."\" title=\"Visualizza\" >".ucfirst($riga['titolo'])."</a></td>";		
 			echo "<td>".@$destinatario[$riga['destinatario']]."</td>";
 			echo "<td title=\"Aggiornato da: ". @$proprietario[$riga['proprietario']]."\">".mydate($riga['data_invio'])."</td>";
 		    echo "</tr>";

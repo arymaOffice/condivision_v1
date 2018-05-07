@@ -197,7 +197,7 @@ $(function() {
 
 <table class="dati" summary="Dati" style=" width: 100%;">
 <tr>
-  <th style="width: 1%;"></th>
+
  <th style="text-align: center;"><input onclick="checkAllFields(1);" id="checkAll"  name="checkAll" type="checkbox" checked /><label for="checkAll"><?php echo $checkRadioLabel; ?></label>
 <?php if(ATTIVA_ACCOUNT_ANAGRAFICA == 1) { ?><th class="noprint"><a href="./?ordine=2&<?php echo $_SERVER['QUERY_STRING']; ?>">Account</a></th><?php } ?>
   <th><a href="./?ordine=3&<?php echo $_SERVER['QUERY_STRING']; ?>">Ragione Sociale</a></th>
@@ -250,10 +250,15 @@ $(function() {
 			
 			
 			if($show==1) {
-			if($riga['status_anagrafica'] == 3) { 
-			$colore = "class=\"tab_green\"";  
-			} else if($riga['status_anagrafica'] != 4) { $colore = "class=\"tab_orange\""; 
-			} else { $colore = "class=\"tab_red\""; }
+			
+			if($account['attivo'] == 1) { 
+				$colore = "b_green";  
+			} else if($account['attivo'] == 0) { 
+				$colore = "b_red"; 
+			} else { 
+				$colore = "b_orange"; 
+			}
+
 			$elimina = (defined('ELIMINA_ANAGRAFICA')) ? "<a href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a>" : '';
 		    (@$riga['data_scadenza'] < date('Y-m-d')) ? $note = "<span title=\"Documento Scaduto\" class=\"c-red\"><i class=\"fa fa-exclamation-triangle fa-lg\"></i></span>" : $note = "<i class=\"fa fa-exclamation-triangle fa-lg\"></i>";
 			$concessione = (defined('AFFILIAZIONI') && isset($riga['numero_concessione']))  ? " ".$riga['numero_concessione'] : '';
@@ -262,10 +267,9 @@ $(function() {
 					echo "<tr>"; 
 
 					$nominativo = ($riga['ragione_sociale'] != '') ? ucfirst($riga['ragione_sociale']) : ucfirst($riga['nome']).' '.ucfirst($riga['cognome']);		
-					echo "<td $colore><span class=\"Gletter\"></span></td>"; 
 					echo '<td style="text-align: center;">'.$sendButton.'</td> ';
 
-					if(ATTIVA_ACCOUNT_ANAGRAFICA == 1)  echo "<td  class=\"hideMobile\">$user_ball ".$user_check."</td>"; 		
+					if(ATTIVA_ACCOUNT_ANAGRAFICA == 1)  echo "<td class=\"desktop $colore\">$user_ball ".$user_check."</td>"; 		
 					echo "<td><span class=\"color\"><strong>".$riga['id']."</strong> $nominativo</span><br>P. iva ".$riga['partita_iva'].'<br>';
 					if(defined('MULTI_BRAND'))  echo "<span class=\"msg blue\">".$marchio[$riga['marchio']]."</span> ";
 					echo " <span class=\"msg orange\">".$tipo_profilo." $concessione </span></td>";
@@ -274,12 +278,10 @@ $(function() {
 					echo "<td  class=\"strumenti\">";
 					if(@PROFILO_ANAGRAFICA == 1)  echo '<a href="mod_inserisci.php?external&action=1&tBiD='.base64_encode('39').'&id='.$riga['id'].'"><i class="fa fa-user"></i>'.get_scan($riga['id']).'</a>';
 					
-					if(@PANORAMICA_ANAGRAFICA == 1)  { 
-					echo '<a href="mod_panoramica_contatto.php?id='.$riga['id'].'"><i class="fa fa-television" aria-hidden="true"></i></a>'; 
-					} else {
+
 					echo "<a href=\"mod_inserisci.php?id=".$riga['id']."&nominativo=".$riga['ragione_sociale']."\" title=\"Gestione Cliente ".ucfirst($riga['ragione_sociale'])." Agg. ".$riga['data_aggiornamento']."\"> <i class=\"fa fa-search\"></i> </a>
 					<a data-fancybox-type=\"iframe\" class=\"fancybox_view\" href=\"mod_visualizza.php?external&action=1&amp;sezione=".@$riga['sezione']."&amp;id=".$riga['id']."&nominativo=".$riga['ragione_sociale']."\" title=\"Scheda di stampa ".ucfirst($riga['ragione_sociale'])."\"> <i class=\"fa fa-print\"></i> </a>"; 
-					}
+					
 					
 					echo "$notifica_icon  $elimina </td>";
 					echo "</tr>"; 

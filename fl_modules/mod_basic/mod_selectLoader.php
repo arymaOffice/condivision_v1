@@ -1,27 +1,33 @@
 <?php 
-
 require_once('../../fl_core/autentication.php');
 
-$tabella = (!isset($_POST['gtx'])) ? 'fl_istat_comuni' : $tables[check(@$_POST['gtx'])];
-$select = check($_POST['sel']);
-$filter = check($_POST['filtro']);
-$valore = check(@$_POST['valore']);
-$filtro = ($filter != '') ? " $filter = '$valore' " : 'id > 1';
+$tabella = (!isset($_REQUEST['gtx'])) ? 'fl_istat_comuni' : $tables[check(@$_REQUEST['gtx'])];
+$select = check($_REQUEST['sel']);
+$filter = check($_REQUEST['filtro']);
+$valore = check(@$_REQUEST['valore']);
 
-$query = "SELECT id,$select FROM $tabella WHERE $filtro GROUP BY $select";
+$query = "SELECT $select FROM $tabella WHERE $filter = '$valore' GROUP BY $select";
 
-if(!isset($_POST['valore'])) $query = "SELECT $select FROM $tabella WHERE 1 GROUP BY $select";
+if(!isset($_REQUEST['valore'])) $query = "SELECT $select FROM $tabella WHERE 1 GROUP BY $select";
 
 $risultato = mysql_query($query, CONNECT);
 
-$content = array(0=>'Seleziona...');
+$content = array();
+
+if(mysql_error()) { 
+
+$content[0] = 'Errore: '.mysql_error(); 
+
+} else {
 
 
 while($riga = mysql_fetch_assoc($risultato)) {
-$referenza = (isset($_POST['numeric'])) ? $riga['id'] : $riga[$select];
-$content[$referenza] = $riga[$select];
+$var = urlencode($riga[$select]);	
+$content[$var] = $var;
 }
 
+
+}
 
 echo json_encode($content);
 mysql_close(CONNECT);

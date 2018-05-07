@@ -3,7 +3,7 @@
 // Controllo Login
 session_start(); 
 if(!isset($_SESSION['user'])){ header("Location: ../../login.php"); exit; }
-require('../../fl_core/settings.php'); 
+require('../../fl_core/core.php'); 
 
 if(isset($_GET['new'])) {
 

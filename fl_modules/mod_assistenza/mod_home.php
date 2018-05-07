@@ -1,0 +1,116 @@
+<?php
+
+// Controlli di Sicurezza
+if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
+  ?>
+
+
+<form method="get" action="" id="sezione_select">
+   
+ <div style="position: relative; background:  #F4F4F4; padding: 5px;"> Operatore: 
+  
+  <span style="position: relative;">
+  <input type="text" id="operatore_text" name="operatore_text" value="<?php if(isset($_GET['operatore_text'])){ echo check($_GET['operatore_text']);} else { echo "Inserisci il Testo"; } ?>" onFocus="this.value=''; operatore.value=''" onkeydown=""  accesskey="a" tabindex="1"   onkeyup="return caricaProprietario(this.value,'contenuto-dinamico','operatore');" maxlength="200" class="txt_cerca" />
+   <div id="contenuto-dinamico"><?php if(isset($_GET['operatore'])){ echo '<input type="hidden" name="operatore" value="'.$_GET['operatore'].'" />'; } ?> </div></span>
+  
+
+      Stato: <select name="status_assistenza" id="status_assistenza">
+            <option value="0">Mostra Tutti</option>
+			<?php 
+              
+		     foreach($status_assistenza as $valores => $label){ // Recursione Indici di Categoria
+			$selected = ($status_assistenza_id == $valores) ? " selected=\"selected\"" : "";
+			if($valores != 0){ echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; }
+			}
+		 ?>
+       </select>
+       creato tra il <input type="text" name="data_da" onFocus="this.value='';" value="<?php  echo $data_da_t;  ?>" size="10" class="calendar" /> e il <input type="text" name="data_a" onFocus="this.value='';" value="<?php  echo $data_a_t;  ?>" size="10" class="calendar" /> 
+        
+       <input type="submit" value="Mostra" class="button" />
+
+       <?php if($_SESSION['usertype'] != 0) { ?> <a href="../mod_attivazioni/?new&amp;sezione=1" class="button">Inserisci Documentazione Utente</a><?php } ?>
+      </div>
+      
+       </form>
+
+<?php
+	
+
+	if(isset($_GET['ordine'])) { if(!is_numeric($_GET['ordine'])){ exit; } else { $ordine = $ordine_mod[$_GET['ordine']]; }}
+	
+	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,0);
+						
+	$query = "SELECT $select FROM `$tabella` $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
+	
+	$risultato = mysql_query($query,CONNECT);
+	//echo $query;
+		
+	?>
+       
+
+  
+<table class="dati" summary="Dati">
+      <tr>
+        <th>Oggetto | <a href="./?ordine=1">Operatore</a></th>
+        <th><a href="./?ordine=5">Status</a></th>
+        <th><a href="./?ordine=0">Data Apertura</a></th>
+        <th>Data ultima attivit&agrave;</th>
+       
+   
+ 
+      </tr>
+	  
+	<?php 
+	
+	$i = 1;
+	
+	if(mysql_affected_rows() == 0) { echo "<tr><td colspan=\"4\">Nessun Record Inserito</td></tr>";		}
+	
+	$entrate = 0;
+	$uscite = 0;
+	$saldo = 0;
+	$saldo_parziale = 0;
+	
+
+	
+	while ($riga = mysql_fetch_array($risultato)) 
+	{
+			
+		
+ 			$manute = "SELECT * FROM `$tabella` WHERE jorel = ".$riga['id']." AND operatore != ".$_SESSION['number']." AND letto = 0;";
+			mysql_query($manute,CONNECT);
+			$new_mail = (mysql_affected_rows() > 0) ? "not_read" : "read";
+		
+ 			echo "<tr >";
+			
+			echo "<td><a href=\"?action=8&amp;proprietario=".$riga['proprietario']."&amp;jorel=$jorel&amp;id=".$riga['id']."\" title=\"".$riga['descrizione']."\">".$riga['oggetto']."</a><br />".$proprietario[$riga['proprietario']]."</td>";
+		    echo "<td>".$status_assistenza[$riga['status_assistenza']]."</td>";
+			echo "<td style=\"font-size: 8px;\" title=\"Creato da: ". @$proprietario[$riga['proprietario']]."\">".date("d/m/y H:i",$riga['data_creazione'])."</td>";
+			echo "<td  class=\"$new_mail\" style=\"font-size: 8px;\" title=\"Aggiornato da: ". @$proprietario[$riga['operatore']]."\"><a href=\"?action=8&amp;jorel=$jorel&amp;id=".$riga['id']."\" title=\"".$riga['descrizione']."\">".date("d/m/y H:i",$riga['data_aggiornamento'])."</a></td>";
+	
+			
+			
+			//echo "<td><a href=\"?action=1&amp;jorel=$jorel&amp;id=".$riga['id']."\" title=\"Modifica\" class=\"button\"> Modifica </a></td>";
+			echo "<td><a href=\"#\" title=\"Elimina\" class=\"button\" onclick=\"elimina('".$riga['id']."','$tab_id','');\">X</a></td>";
+		    
+		
+		    echo "</tr>";
+	}
+	
+
+	echo "<tr></tr>";
+	
+		if($i==1){ $i=0; echo "<tr>"; } else { $i=1; echo "<tr class=\"alternate\">"; }		
+			
+			
+			echo "<td class=\"codice\" colspan=\"6\">Elementi in lista: ".mysql_affected_rows()."</td>";
+			
+		
+				
+		    echo "</tr>";
+	
+
+	
+
+?>
+</table>

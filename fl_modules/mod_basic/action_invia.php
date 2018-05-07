@@ -1,6 +1,6 @@
 <?php 
 
-require_once('../../fl_core/autentication.php');
+require_once('action_check.php');
 
 //Inserisci Aggiorna
 if(isset($_POST['nome']) || isset($_POST['invio'])) {
@@ -10,38 +10,37 @@ $obbligatorio = array('nome','messaggio','email');
 
 $messaggio = "";
 
-
-
-foreach($_POST as $chiave => $valore){
+	foreach($_POST as $chiave => $valore){
 		
 		
 		if(in_array($chiave,$obbligatorio)) {
 		if($valore == ""){
 		$chiave = ucfirst($chiave);
-		header("Location: $rct?$val&action=9&esito=Inserire valore cer il campo $chiave");
+		Header("Location: $rct?$val&action=9&esito=Inserire valore cer il campo $chiave");
 		exit;}}
+		
 		$messaggio .= "<p>$chiave =  $valore</p>";
+	
 		}
 		
-		
-		
-		$mail_to = mail_admin;
-		$mail_subject = "..:: Richiesta di assistenza per: ".$_SERVER['HTTP_HOST'];
-		if(isset($_POST['oggetto'])) { $mail_subject = "..:: ".check($_POST['oggetto'])." su: ".$_SERVER['HTTP_HOST'];}
-		
-		$data = date("d:m:Y - g:i");
-		$ip = getenv("remote_addr");
-		$messaggio .= "<p>Inviato in data: $data con IP: $ip</p>";
-		$mail_body = str_replace("[*CORPO*]",'<h1>Richiesta di Assistenza</h1><p>&nbsp;</p><div style="text-align: left;">'.$messaggio.'</div>',mail_template); 
-		
-		if(smail($mail_to,$mail_subject,$mail_body,'')) {
-		header("Location: ".getenv("HTTP_REFERER")."?action=9&esito=Messaggio Inviato!"); 
-		} else {
-		header("Location: ".$_SERVER['HTTP_REFERER']."?action=9&esito=Errore invio messaggio!");
-		}
-		exit; 
+					
+					  $data = date("d:m:Y - g:i");
+					  $ip = getenv("remote_addr");
+					  
+						  
+					  $messaggio .= "<p>Inviato in data: $data con IP: $ip</p>";
+										  
+					  $posta = "michelefazio@aryma.it";
+					  $subject = "ASSISTENZA su: ".$_SERVER['HTTP_HOST'];
+					  mail($posta,$subject,"<html><head></head><body style=\"font-family: Arial; font-size: 12px; margin: 0px; \"><h1>Richiesta di Assistenza</h1><p>&nbsp;</p><p>&nbsp;</p>
+					  $messaggio<br /></body></html>","From: Admin<info@aryma.it>\nContent-Type: text/html; charset=iso-8859-1");
+			
 
-} 
+
+
+Header("Location: ./?action=9&esito=Messaggio Inviato!"); 
+exit; 
+} //endif		
 
 
 ?>  

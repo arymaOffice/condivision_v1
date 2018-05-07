@@ -35,7 +35,8 @@
 	if(isset($_GET['tipo_profilo']) && check(@$_GET['tipo_profilo']) != 0) { $tipo_profilo_id = check($_GET['tipo_profilo']);  } else {    $tipo_profilo_id = 0; }
 	$stato_account_id = (isset($_GET['status_account'])) ? check(@$_GET['status_account']) : 1;
 	$tipo_account_id = (isset($_GET['tipo_account']) && check(@$_GET['tipo_account']) != -1) ? check(@$_GET['tipo_account']) : -1;
-	
+	$status_saldi_id = (isset($_GET['status_saldi']) && check(@$_GET['status_saldi']) != -1) ? check(@$_GET['status_saldi']) : -1;
+
   	 if(isset($_GET['data_da']) && check($_GET['data_da']) != "" && check($_GET['data_a']) != "") { 
 	
 	 $data_da = convert_data($_GET['data_da'],1); $data_a = convert_data($_GET['data_a'],1); 
@@ -48,12 +49,12 @@
 	 }
 	 
 	$campi = "SHOW COLUMNS FROM `$tabella`";
-	$risultato = mysql_query($campi, CONNECT);
+	$risultato = @mysql_query($campi,CONNECT);
 	$x = 0;
 	$campi = array();
 	if(ATTIVA_ACCOUNT_ANAGRAFICA == 1){	$campi = array('tipo_account','account_attivo');	 }	
 
-	while ($riga = mysql_fetch_assoc($risultato)) 
+	while ($riga = @mysql_fetch_assoc($risultato)) 
 	{			
 		
 	if(select_type($riga['Field']) != 5 ) { 
@@ -83,7 +84,8 @@
 			  if(select_type($chiave) == 19 && $chiave != 'id' && $valore > -1) $tipologia_main .=  " AND $chiave = '$valore' ";
 			}
 	}
-
+	if(isset($_GET['id_sc'])) {  $tipologia_main .= " AND data_scadenza <= NOW() ";	 }
+	if(isset($_GET['cn_sc'])) {  $tipologia_main .= " AND data_scadenza_contratto <= NOW() ";	 }
 	if(isset($data_da) && !isset($_GET['cerca']) && @check($_GET['action'] != 12) ) 	$tipologia_main .= " AND `data_creazione`  BETWEEN '$data_da' AND '$data_a' ";
 
 	
@@ -101,7 +103,7 @@
 	
 		
 	/* Inclusioni Oggetti Categorie */	
-	include('../../fl_core/dataset/array_statiche.php');
+	include('../../fl_core/data_manager/array_statiche.php');
 	include('../../fl_core/dataset/proprietario.php');
 	include('../../fl_core/dataset/provincia.php');
 	$account_id = $proprietario;
@@ -109,17 +111,18 @@
 	$data_set = new ARY_dataInterface();
 	$tipologia_attivita = $data_set->get_items_key("punto_vendita");	
 	$stato_nascita = $stato_sede = $stato_residenza = $stato_punto = $stato = $paese = $data_set->data_retriever('fl_stati','descrizione',"WHERE id != 1",'descrizione ASC');
-	
+	$profilo_genitore = $account_id = $proprietario;
+	$profilo_commissione = array("Nessuno","Profilo1","Profilo2","Profilo3","Profilo4","Profilo5");
 	$mandatory = array("id");
 
 	function select_type($who){		
 	/* Gestione Oggetto Statica */	
 	$textareas = array('pie_pagina_catalogo','widget','informazioni_disabili','numeri_utili',"bio","note",'info_aggiuntive'); 
-	$select = array('provincia_nascita','scheda_apertura','emesso_da','sesso','forma_giuridica','concessione_fido','marchio','tipo_profilo_scheda','tipologia_attivita','stato_nascita','stato_punto','stato_sede','regione_residenza','stato_residenza','account_id',"tipo_documento","punto_vendita","regione_sede","regione_punto","status_anagrafica","proprietario","status","regione","nazione");
+	$select = array('garanzia_fido','profilo_commissione','profilo_genitore','provincia_nascita','scheda_apertura','emesso_da','sesso','forma_giuridica','marchio','tipo_profilo_scheda','tipologia_attivita','stato_nascita','stato_punto','stato_sede','regione_residenza','stato_residenza','account_id',"provincia","tipo_documento","punto_vendita","regione_sede","regione_punto","status_anagrafica","proprietario","status","regione","nazione");
 	$select_text = array('comune_punto','comune_sede','comune_residenza','provincia_residenza',"provincia_sede","provincia_punto");
 	$disabled = array("visite");
 	$hidden = array('status_anagrafica','data_creazione','data_aggiornamento','account_id','tipo_utente','operatore','ip','proprietario',"relation");
-	$radio = array('garanzia_fido','catalogo_apri_chiudi','attivo',"fotogallery","videogallery","ecommerce","prenotazioni","catalogo",'commenti');
+	$radio = array('concessione_fido','catalogo_apri_chiudi','attivo',"fotogallery","videogallery","ecommerce","prenotazioni","catalogo",'commenti');
 	$text = array();
 	$multi_selection = array("servizi");	
 	if($_SESSION['usertype'] > 0)array_push($hidden,"proprietario","attivo","status_anagrafica","marchio","account_affiliato",'logo','audio');

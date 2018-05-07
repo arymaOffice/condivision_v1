@@ -46,6 +46,7 @@ if (isset($_POST['destinatario']))
 	$obbligatorio = (isset($_POST['obbligatorio'])) ? check(@$_POST['obbligatorio']) : 0;
 	$invia_email = (isset($_POST['invia_email'])) ? check(@$_POST['invia_email']) : 0;
 	$invia_sms = (isset($_POST['invia_sms'])) ? check(@$_POST['invia_sms']) : 0;
+	$invia_push = (isset($_POST['invia_push'])) ? check(@$_POST['invia_push']) : 0;
 	
 	if(trim($titolo) == ''){  $titolo = 'Notifica del '.date('d/m/Y H:i');
 
@@ -53,7 +54,7 @@ if (isset($_POST['destinatario']))
 	$send = '';
 	
     foreach($_POST['destinatario'] as $destinatario){ 
-	$send .= notifica($modulo,$_SESSION['number'],$destinatario,$titolo,$messaggio,$alert,$obbligatorio,$invia_email,$invia_sms);
+	$send .= notifica($modulo,$_SESSION['number'],$destinatario,$titolo,$messaggio,$alert,$obbligatorio,$invia_email,$invia_sms,$invia_push);
 	}
 	
 	

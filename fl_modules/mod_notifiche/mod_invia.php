@@ -74,16 +74,19 @@ if($quanti > 10) echo ' <span class=""> + altri '.($quanti-10).'</span>';  ?></p
 <p class="input_text" style="text-align: center;">
 			
             <input id="alert1" name="alert" value="1" type="checkbox">
-			<label for="alert1" style="width: 22%; margin: 5px 1% 5px 0; padding: 5px;">Mostra alert</label>
+			<label for="alert1" style="width: 13%; margin: 5px 0 5px 0; padding: 5px;">Mostra alert</label>
            
             <input id="obbligatorio1" name="obbligatorio" value="1"  type="checkbox">
-			<label for="obbligatorio1" style="width: 22%; margin: 5px 1% 5px 0; padding: 5px;">Obbliga alla lettura</label>
+			<label for="obbligatorio1" style="width: 13%; margin: 5px 0 5px 0; padding: 5px;">Obbliga alla lettura</label>
 
 			<input id="invia_email1" name="invia_email" value="1" checked="checked" type="checkbox">
-			<label for="invia_email1" style="width: 22%; margin: 5px 1% 5px 0; padding: 5px;">Invia email</label>
+			<label for="invia_email1" style="width: 13%; margin: 5px 0 5px 0; padding: 5px;">Invia email</label>
             
             <input id="invia_sms" name="invia_sms" value="1"  type="checkbox">
-			<label for="invia_sms" style="width: 22%; margin: 5px 1% 5px 0; padding: 5px;">Invia SMS</label>
+			<label for="invia_sms" style="width: 13%; margin: 5px 0 5px 0; padding: 5px;">Invia SMS</label>
+
+             <input id="invia_push" name="invia_push" value="1"  type="checkbox" checked="checked">
+            <label for="invia_push" style="width: 13%; margin: 5px 0 5px 0; padding: 5px;">Invia Push</label>
 
 </p>
 <input type="submit" value="Invia " class="button salva" style=" max-width: 350px; margin: 0 auto; "  onClick="$('#results').html('Invio in corso'); $(this).hide();" />

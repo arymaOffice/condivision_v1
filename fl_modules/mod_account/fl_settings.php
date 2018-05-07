@@ -78,9 +78,9 @@
 	if($_SESSION['usertype'] > 0 && check(@$_GET['action'] > 0)) { unset($tipo[0]);  unset($tipo[1]); }
 	$anagrafica = $data_set->data_retriever('fl_anagrafica','ragione_sociale',"WHERE id != 1",'ragione_sociale ASC ');
 	if(defined('AFFILIAZIONE')) $anagrafica = $data_set->data_retriever('fl_anagrafica','ragione_sociale',"WHERE id != 1",'ragione_sociale ASC ');
-	$persona_id = $data_set->data_retriever('fl_persone','nome,cognome',"WHERE id != 1",'nome ASC');
+	/*$persona_id = $data_set->data_retriever('fl_persone','nome,cognome',"WHERE id != 1",'nome ASC');
 	$processo_id = $data_set->data_retriever('fl_processi','processo',"WHERE id != 1",'processo ASC');
-	$profilo_funzione = $data_set->data_retriever('fl_profili_funzione','funzione',"WHERE id != 1 ",'funzione ASC');
+	$profilo_funzione = $data_set->data_retriever('fl_profili_funzione','funzione',"WHERE id != 1 ",'funzione ASC');*/
 
 	$attivo = array('1'=>'Attivo','0'=>'Sospeso');
 	

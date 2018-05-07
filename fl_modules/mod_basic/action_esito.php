@@ -6,8 +6,9 @@ $rct = $baseref[0];
 $val = (count($baseref) > 1) ? $baseref[1] : "";
 $valb = explode('#',$val);
 $vars = $valb[0];
+$color = (!isset($_GET['error'])) ? 'green' : 'red';
 
- echo "<div  class=\"esito red \" style=\"color: white;\">".check($_GET['esito']); ?></div><br /><br />
+ echo "<div  class=\"esito $color \" style=\"color: white;\">".check($_GET['esito']); ?></div><br /><br />
 <?php if(isset($documentazione_auto) && $_SESSION['usertype'] > 0 && $_SESSION['usertype'] != 4 && !isset($_GET['error'])){?>
 
 <a class="button" title="Documenti" href="../mod_documentazione/?modulo=0&amp;cat=<?php echo $documentazione_auto; ?>&amp;contenuto=<?php echo check($_GET['id']); ?>">CARICA DOCUMENTI</a>

@@ -24,7 +24,7 @@ include("../../fl_inc/testata_mobile.php");
 $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p class="esito '.$class.'">'.check($_GET['esito']).'</p><p style="text-align: center;"><a title="Torna Indietro" href="javascript:history.back();">&lt;&lt;Indietro</a></p>'; }  else { ?>
 <div id="results"></div>
 
-<form  method="post" class="ajaxForm" action="mod_opera.php" enctype="multipart/form-data">
+<form  method="post"  action="mod_opera.php" enctype="multipart/form-data">
 
 
 <h1><span class="intestazione">Crea nuovo Account</span></h1>
@@ -42,9 +42,7 @@ $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p class="esito '.$c
 
 
 
-<?php if(defined('MULTI_MARCHIO')) { ?>
-
-<div class="form_row">
+<!--<div class="form_row">
 <div class="select_text">
 <label for="account">Marchio</label>
 
@@ -56,9 +54,14 @@ foreach($marchio as $valores => $label){ // Recursione Indici di Categoria
 			} ?>
 
 </select>
-</div></div><?php } else { echo '<input name="marchio" id="marchio" value="1" type="hidden">'; } ?>
+</div></div>-->
+<input name="marchio" id="marchio" value="1" type="hidden">
 
-
+<?php if(isset($_GET['anagrafica_id'])) { ?>
+<p>Account con accesso: Affiliato <input name="account" id="account" value="2" type="hidden">
+<input name="account" id="account" value="<?php echo check(@$_GET['anagrafica_id']); ?>" type="hidden">
+<input name="persona_id" id="persona_id" value="0" type="hidden">
+<?php } else { ?>
 
 <div class="form_row">
 <p class="select_text">
@@ -107,18 +110,13 @@ foreach($persona_id as $valores => $label){ // Recursione Indici di Categoria
 </select>
 </p></div>
 
+<?php } ?>
 
 <div class="form_row"><p class="input_text"><label for="nominativo">Nickname</label>
 <input  type="text" name="nominativo" id="nominativo"  value="<?php if(isset($_GET['nominativo'])) echo check($_GET['nominativo']); ?>"  />
 </p>
 </div>
 
-<div class="form_row">
-<p class="input_text">
-<label for="ip_accesso">Ip accesso</label>
-<input  type="text" name="ip_accesso" id="ip_accesso"  value=""  />
-</p>
-</div>
 
 
 

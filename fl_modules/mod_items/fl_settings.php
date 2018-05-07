@@ -19,10 +19,8 @@
 	if(isset($_GET['item_rel']) && is_numeric($_GET['item_rel'])) { $sezione_id = check($_GET['item_rel']); $rel = $sezione;  } else {  $sezione_id = 0;}
 
 	$module_title = 'Liste Parametri ';
-    $module_menu = ' <li class=""><a href="'.ROOT.$cp_admin.'fl_modules/mod_items/">Liste Parametri </a></li>
-    <li class=""><a href="'.ROOT.$cp_admin.'fl_modules/mod_campagne/">Canali CRM</a></li>
-    <li class=""><a href="'.ROOT.$cp_admin.'fl_modules/mod_campagne_attivita/">Attività CRM</a></li>';
-
+    $module_menu = ' <li class=""><a href="'.ROOT.$cp_admin.'fl_modules/mod_items/">Liste</a></li>';
+	
         if(isset($sezione_id) && $sezione_id != 0) {  
 		$new_button = '<a class="" style="color: gray" href="'.ROOT.$cp_admin.'fl_modules/mod_items/mod_inserisci.php?id=1&item_rel='.$sezione_id.'" ><i class="fa fa-plus-circle"></i></a>';
 		$item = GRD($tabella, $sezione_id);
@@ -32,6 +30,10 @@
 		}
 	
 	 
+	$tabella = $tables[$tab_id];
+	$select = "*";
+	$step = 20; 
+	
 	/* Tipologie di ordinamento disponobili */
    	$ordine_mod = array("label ASC","relation ASC","id ASC");
 	$ordine = $ordine_mod[2];	

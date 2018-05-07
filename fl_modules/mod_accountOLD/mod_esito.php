@@ -1,0 +1,2 @@
+<div class="esito" style="margin-top: 50px;"><?php echo check($_GET['esito']); ?><br /><br /><a class="button" title="Torna Indietro" href="javascript:history.back();">&lt;&lt;Indietro</a><a class="button" title="Ok" href="./"> Ok </a>
+</div>

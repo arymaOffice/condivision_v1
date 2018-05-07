@@ -41,7 +41,26 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 			
 		 ?>
     </select>
+   
+
     </div>
+
+     <div class="filter_box">  
+
+      Saldi  <select name="status_saldi" id="status_saldi">
+      <option value="-1">Tutti </option>
+      <?php 
+            $selected = (@$status_saldi_id == 1) ? " selected=\"selected\"" : "";
+		    echo "<option value=\"1\" $selected>Positivi</option>\r\n"; 
+			$selected = (@$status_saldi_id == 0) ? " selected=\"selected\"" : "";
+			echo "<option value=\"0\" $selected>Negativi</option>\r\n"; 
+			
+		 ?>
+    </select> 
+
+    </div>
+
+
     
 <div class="filter_box">  
 <label>  Account:</label>
@@ -163,8 +182,9 @@ $(".sede_operativa").css('font-weight','normal');
 			}*/
 				
 				
+			// Condivision 2015
 			if(ATTIVA_ACCOUNT_ANAGRAFICA == 1 && @ $account['id'] > 0 && $show == 1)  { 
-			$user_check = '<a data-fancybox-type="iframe" title="Modifica Account" class="fancybox" href="../mod_account/mod_visualizza.php?external&id='.$account['id'].'">'.$account['user'].'</a><br>'.$account['motivo_sospensione'];
+			$user_check = '<a  title="Modifica Account" href="../mod_account/mod_visualizza.php?id='.$account['id'].'">'.$account['user'].'</a><br>'.$account['motivo_sospensione'];
 			$user_ball = ($account['attivo'] == 1)  ? "<span class=\"c-green\"><i class=\"fa fa-user\"></i></span>" : "<span class=\"c-red\"><i class=\"fa fa-user\"></i></span>"; 
 			$saldo = balance($account['id']);
 			$saldo = '<a data-fancybox-type="iframe" class="fancybox_view"  href="../mod_depositi/mod_user.php?operatore_text='.$account['nominativo'].'&operatore='.$account['id'].'"> &euro; '.numdec($saldo,2).'</a>';
@@ -172,12 +192,34 @@ $(".sede_operativa").css('font-weight','normal');
 			if(isset($riga['account']) && @ $riga['account'] != $account['user']) mysql_query("UPDATE $tabella SET account = '".$account['user']."' WHERE id = ".$riga['id']." LIMIT 1");
 			$notifica_icon = '<a data-fancybox-type="iframe" title="Invia Notifica Account" class="fancybox_view_small" href="../mod_notifiche/mod_invia.php?destinatario[]='.$account['id'].'"><i class="fa fa-bell" aria-hidden="true"></i></a>';
 			} else {
-			$user_check = "<a href=\"../mod_account/mod_inserisci.php?external&anagrafica_id=".$riga['id']."&email=".$riga['email']."&nominativo=".$riga['ragione_sociale']."\">Crea account</a>";
+			$user_check = "<a href=\"../mod_account/mod_inserisci.php?anagrafica_id=".$riga['id']."&email=".$riga['email']."&nominativo=".$riga['ragione_sociale']."\">Crea account</a>";
 			$user_ball = '';
 			$saldo = 0;
 			$tipo_profilo_label = '';
 			$notifica_icon = '';
 			}
+			
+			// Goservizi 2014
+			$oggi = '';
+			if($account['id'] > 0)  { 
+			$oggi = '<br>Oggi: &euro; '.numdec(ricariche_oggi($account['id']),2);
+			if($riga['user'] == '') mysql_query("UPDATE fl_anagrafica SET user = '".$account['user']."', nominativo = '".$account['nominativo']."' WHERE id = ".$riga['id'],CONNECT);
+			$user_check = '<a title="Modifica Account" href="../mod_account/mod_visualizza.php?id='.$account['id'].'&user='.$account['user'].'">'.$account['user'].'</a><br>'.$account['motivo_sospensione'];
+			$user_ball = ($account['attivo'] == 1)  ? "<span class=\"c-green\"><i class=\"fa fa-user\"></i></span>" : "<span class=\"c-red\"><i class=\"fa fa-user\"></i></span>"; 
+			$saldo = get_saldo($account['id']);
+			$green = ($saldo >= 0) ?  'c-green' :  'c-red';	
+			$saldo_txt = '<a data-fancybox-type="iframe" class="fancybox_view '.$green.'"  href="../mod_depositi/mod_estrattoconto.php?operatore_text='.$account['nominativo'].'&proprietario='.$account['id'].'"> &euro; '.numdec($saldo,2).'</a>';
+			$data_scadenza = 'Scad.'.mydate(@$account['data_scadenza']).'<br>';
+			} else {
+			$user_check = "<a  href=\"../mod_account/mod_inserisci.php?anagrafica_id=".$riga['id']."&email=".$riga['email']."&nominativo=".$riga['ragione_sociale']."\">Attiva account</a>";
+			$user_ball = '';
+			$saldo = 0;
+			$saldo_txt = 0;
+			$data_scadenza = '';
+			}
+
+
+
 			if(!defined('TIPO_DA_ACCOUNT') || TIPO_DA_ACCOUNT == 0) $tipo_profilo_label = $tipo_profilo[$riga['tipo_profilo']];
 			
 			
@@ -197,13 +239,22 @@ $(".sede_operativa").css('font-weight','normal');
 			$concessione = (defined('AFFILIAZIONI') && isset($riga['numero_concessione']))  ? $riga['id'].".".$riga['numero_concessione'] : '';
 			$tot_res++;
 					
-						
+			
+			if($stato_account_id != -1 && @$account['attivo'] != $stato_account_id) { 
+			$tot_res--; 
+			} else {
+				
+				if($status_saldi_id != -1 && ( ($status_saldi_id == 1 && $saldo < 0) || ($status_saldi_id == 0 && $saldo >= 0) ) ) { 
+				$tot_res--; 
+				} else {
+
+
 					$nominativo = ($riga['ragione_sociale'] != '') ? ucfirst(checkValue($riga['ragione_sociale'])) : ucfirst(checkValue($riga['nome'])).' '.ucfirst(checkValue($riga['cognome']));		
 					$sede_punto = (!isset($riga['comune_punto'])) ? '' : $riga['comune_punto']." (".@$riga['provincia_punto'].") ".$riga['cap_punto']."<br>".$riga['indirizzo_punto'];
 					echo '<tr>';
 					
 					if(ATTIVA_ACCOUNT_ANAGRAFICA == 1)  echo "<td class=\"desktop $colore\">$user_ball ".$user_check."</td>"; 		
-					echo "<td><a href=\"mod_panoramica_contatto.php?id=".$riga['id']."\"><span class=\"color\"><strong>".$riga['id']."</strong> $nominativo</span><br>P. iva ".$riga['partita_iva'].'<br>';
+					echo "<td><span class=\"color\"><strong>".$riga['id']."</strong> $nominativo</span><br>P. iva ".$riga['partita_iva'].'<br>';
 					if(defined('MULTI_BRAND'))  echo "<span class=\"msg blue\">".$marchio[$riga['marchio']]."</span> ";
 					echo " <span class=\"msg orange\">".$tipo_profilo_label." $concessione </span></a></td>";
 					echo "
@@ -211,22 +262,20 @@ $(".sede_operativa").css('font-weight','normal');
 					<td class=\"desktop info_sede_operativa\" >".$sede_punto."</td>"; 
 					echo "<td class=\"desktop\"><i class=\"fa fa-envelope-o\"></i> <a href=\"mailto:".checkEmail($riga['email'])."\">".checkEmail($riga['email'])."</a>
 					<br><i class=\"fa fa-phone\" style=\"padding: 5px 10px;\"></i>".phone_format($riga['telefono'])." - ".phone_format($riga['cellulare'])."</td>"; 
-					if(ESTRATTO_CONTO_IN_ANAGRAFICA == 1)   echo "<td  class=\"hideMobile\">".$saldo."</td>";
+					if(ESTRATTO_CONTO_IN_ANAGRAFICA == 1)   echo "<td class=\"hideMobile\">".$saldo_txt." $oggi</td>";
 					if(ALERT_DOCUMENTO_SCADUTO == 1)  echo "<td  class=\"hideMobile\">$note</td>";
 					echo "<td  class=\"strumenti\">";
 					if(@PROFILO_ANAGRAFICA == 1)  echo '<a href="mod_inserisci.php?external&action=1&tBiD='.base64_encode('39').'&id='.$riga['id'].'"><i class="fa fa-user"></i>'.get_scan($riga['id']).'</a>';
 					
-					if(@PANORAMICA_ANAGRAFICA == 1)  { 
-					echo '<a href="mod_panoramica_contatto.php?id='.$riga['id'].'"><i class="fa fa-television" aria-hidden="true"></i></a>'; 
-					} else {
+
 					echo "<a href=\"mod_inserisci.php?id=".$riga['id']."&nominativo=".$riga['ragione_sociale']."\" title=\"Gestione Cliente ".ucfirst($riga['ragione_sociale'])." Agg. ".$riga['data_aggiornamento']."\"> <i class=\"fa fa-search\"></i> </a>
 					<a data-fancybox-type=\"iframe\" class=\"fancybox_view\" href=\"mod_visualizza.php?external&action=1&amp;sezione=".@$riga['sezione']."&amp;id=".$riga['id']."&nominativo=".$riga['ragione_sociale']."\" title=\"Scheda di stampa ".ucfirst($riga['ragione_sociale'])."\"> <i class=\"fa fa-print\"></i> </a>"; 
-					}
+					
 					
 					echo "$notifica_icon  $elimina </td>";
 					echo "</tr>"; 
 				
-				}
+				}}}
 
 	}
 

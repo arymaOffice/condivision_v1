@@ -1,11 +1,8 @@
 <?php 
 
-if(isset($_GET['id'])) { $id = (is_numeric($_GET['id'])) ? check($_GET['id']) : exit;  } 
-if(isset($force_id)){ $id = check($force_id); } 
-if(isset($_GET['n'])) $id = 1;
-
-$id = (isset($id)) ? $id : 1;
-
+if(isset($_GET['id']) && !isset($didi) ) { $id = (is_numeric($_GET['id'])) ? check($_GET['id']) : exit;  } 
+else if(isset($didi)){ $id = check($didi); } 
+else { $id = 1; }
 
 
 $where = "WHERE id = '$id' ";
@@ -41,13 +38,13 @@ if(isset($tab_div_labels)) {
 	
 	
 	$risultato = mysql_query($query, CONNECT);
-	echo '<div style="background: white; padding: 10px;">';
+	
 	while ($riga = mysql_fetch_array($risultato)) 
 	{
 	
 	
 		if(isset($riga['destinatario'])) { 
-		if($_SESSION['usertype'] > 0 && $riga['destinatario'] != $_SESSION['number'] && $riga['mittente'] != $_SESSION['number']) {echo "Contenuto non trovato."; exit;  }
+		if(($riga['destinatario'] != $_SESSION['number'] && $riga['destinatario'] != 0) && $riga['mittente'] != $_SESSION['number']) {echo "Contenuto non trovato."; exit;  }
 		}
 		
 		foreach($riga as $chiave => $valore){
@@ -69,16 +66,17 @@ if(isset($tab_div_labels)) {
 				
 			
 			case 1:		// Input Text	
-			echo "<p class=\"print_p\" id=\"txt_$chiave\"><label>".record_label($chiave,CONNECT,1).":</label> <span>$valore</span></p>\r\n";
+			if(is_numeric( $valore))  $valore = numdec( $valore,2);
+			echo "<p class=\"print_p\" id=\"txt_$chiave\"><label>".record_label($chiave,CONNECT,1).":</label> $valore</p>\r\n";
 			break;
 			
 			
 			case 2:		 // Select Box	
-			echo "<p class=\"print_p\" id=\"txt_$chiave\"><label>".record_label($chiave,CONNECT,1).":</label><span>";			
+			echo "<p class=\"print_p\" id=\"txt_$chiave\"><label>".record_label($chiave,CONNECT,1).":</label>";			
 			foreach($$chiave as $valores => $label){ // Recursione Indici di Categoria
 			if($valore == $valores) {echo "".ucfirst($label)."\r\n";}
 			}
-			echo "</span></p>\r\n";
+			echo "</p>\r\n";
 			break;
 			
 					
@@ -106,8 +104,8 @@ if(isset($tab_div_labels)) {
 			break;
 
 			case 20:		// Input Text
-			$valore = ($valore != '0000-00-00 00:00:00') ? mydate($valore) : '-';	
-			echo "<p class=\"print_p\" id=\"txt_$chiave\"><label>".record_label($chiave,CONNECT,1).":</label> <span>$valore</span></p>\r\n";
+			$valore = mydate($valore);	
+			echo "<p class=\"print_p\" id=\"txt_$chiave\"><label>".record_label($chiave,CONNECT,1).":</label> $valore</p>\r\n";
 			break;
 
 									
@@ -117,7 +115,7 @@ if(isset($tab_div_labels)) {
 			break;
 			
 			case 26:      // Text Area
-			echo "<p class=\"date\"><label>".record_label($chiave,CONNECT,1).":</label> <span>".date("d/m/Y - H:i",$valore)."</span></p>";
+			echo "<p class=\"date\">".record_label($chiave,CONNECT,1).": ".date("d/m/Y - H:i",$valore)."</p>";
 	      
 			break;
 			
@@ -127,6 +125,5 @@ if(isset($tab_div_labels)) {
 			
 			
 		}	
-	}
-	echo '</div>';
+	} 
 ?>

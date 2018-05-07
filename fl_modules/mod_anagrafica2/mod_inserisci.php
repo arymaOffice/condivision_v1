@@ -34,7 +34,7 @@ if(!isset($_GET['view'])) include("../../fl_inc/testata_mobile.php");
 <?php if($id > 1) { 
 $telefono = phone_format($profilo['telefono'],'39');
 echo '<h1><strong>'.$profilo['ragione_sociale'].'</strong> ('.$profilo['nome'].' '.$profilo['cognome'].')</h1>';
-if(ALERT_DOCUMENTO_SCADUTO == 1)  echo '<h2>Tipo Delega: <span class="msg gray">'.@$pagamenti_f24[@$profilo['pagamenti_f24']].'</span></h2>';
+//if(ALERT_DOCUMENTO_SCADUTO == 1)  echo '<h2>Tipo Delega: <span class="msg gray">'.@$pagamenti_f24[@$profilo['pagamenti_f24']].'</span></h2>';
 echo '<p>Telefono: <a href="tel:'.@$telefono.'">'.@$telefono.'</a> mail: <a href="mailto:'.@$profilo['email'].'" >'.@$profilo['email'].'</a></h2>';
 } else { echo '<h1>Nuovo '.$tipo_profilo[ $tipo_profilo_id].'</h1>'; }
 
@@ -63,9 +63,12 @@ if(isset($_GET['associa_evento'])) {
 }
 
 
-?>
-<input type="hidden" name="dir_upfile" value="icone_articoli" />
 
+if($id == 1) {
+echo '<input type="hidden" name="reload" value="../mod_anagrafica2/mod_inserisci.php?id=" />';
+} else {
+echo '<input type="hidden" name="info" value="1" />';
+} ?>
 
 </form>
 

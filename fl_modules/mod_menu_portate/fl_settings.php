@@ -68,6 +68,7 @@
 	require('../../fl_core/class/ARY_dataInterface.class.php'); //Classe di gestione dei dati 
 	$data_set = new ARY_dataInterface();
     $fornitore =  $data_set->data_retriever('fl_anagrafica','ragione_sociale','WHERE tipo_profilo = 3',' ragione_sociale ASC'); //fornitori
+	
     $evento_id = $data_set->data_retriever($tables[6],'titolo_ricorrenza'); //Crea un array con i valori X2 della tabella X1
 	$confermato = array('Attivo','Bozza');
 

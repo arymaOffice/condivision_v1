@@ -52,20 +52,20 @@ if(isset($_GET['data_da']) && check($_GET['data_da']) != "") { ?>
 
 $sediCoinvolte = ' AND location_evento = 31'; // da abilitare
 
-$eventiCoinvolti = GQS('fl_eventi_hrc','id,titolo_ricorrenza,numero_adulti,numero_bambini,numero_operatori,data_evento',"id > 1  AND DATE(`data_evento`) BETWEEN '$data_da' AND '$data_a' AND stato_evento != 4 ORDER BY data_evento ASC");
+$eventiCoinvolti = GQS('fl_eventi_hrc','id,titolo_ricorrenza,numero_adulti,numero_bambini,numero_operatori,numero_serali,data_evento',"id > 1  AND DATE(`data_evento`) BETWEEN '$data_da' AND '$data_a' AND stato_evento != 4 ORDER BY data_evento ASC");
 
 
 foreach ($eventiCoinvolti as $key => $evento) {
 
 $coperti = $evento['numero_adulti']+$evento['numero_operatori'];
-echo '<h1>'.$evento['titolo_ricorrenza'].' '.mydatetime($evento['data_evento']).'</h1>';
+echo '<h1>'.$evento['id'].' '.$evento['titolo_ricorrenza'].' '.mydatetime($evento['data_evento']).'</h1>';
 $menuEvento = GQS('fl_menu_portate','id,descrizione_menu,confermato',"id > 1  AND evento_id = ".$evento['id']);
 
 // Per ogni menu evento
 foreach ($menuEvento as $key => $menu) { 
 
 $confermato = ($menu['confermato'] == 0) ? '<span class="msg orange">NON CONFERMATO</span>' : '<span class="msg green">CONFERMATO</span>';
-echo '<p><strong>'.$menu['descrizione_menu'].'</strong> | '.$confermato.' '.$coperti.' PAX</p>';
+echo '<p><strong>'.$menu['descrizione_menu'].'</strong> | '.$confermato.'</p>';
 $menuId = $menu['id'];
 
 
@@ -82,6 +82,7 @@ $menuId = $menu['id'];
    <th>Adulti</th>
    <th>Bambini</th>
    <th>Operatori</th>
+   <th>Serali</th>
    <th>Definita</th>
    <th>Preparazione</th>
    </tr>";
@@ -90,7 +91,7 @@ $menuId = $menu['id'];
 
    $isAlreadyIn = GQD('fl_ricettario_fabbisogno','id,SUM(quantita) AS quantitaTot','evento_id = '.$evento['id'].' AND ricetta_id = '.$row['id']);
    $definita = (isset($isAlreadyIn['quantitaTot'])) ? $isAlreadyIn['quantitaTot'] : 0;
-   $quantita = $evento['numero_adulti'];
+   $quantita = ($definita == 0) ? $evento['numero_adulti'] +$evento['numero_operatori'] : 0;
    
    echo "<tr>
    <td>".$row['id']."<input type=\"hidden\" name=\"ricetta_id[]\" value=\"".$row['id']."\"><input type=\"hidden\" name=\"evento_id[]\" value=\"".$evento['id']."\"></td>
@@ -98,6 +99,7 @@ $menuId = $menu['id'];
    <td>".$evento['numero_adulti']."</td>
    <td>".$evento['numero_bambini']."</td>
    <td>".$evento['numero_operatori']."</td>
+   <td>".$evento['numero_serali']."</td>
    <td>".$definita."</td>
    <td><input class=\"sc-field\" type=\"number\" step=\"1\" name=\"quantita[]\" value=\"$quantita\"></td>
    </tr>";

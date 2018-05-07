@@ -2,7 +2,7 @@
 include_once('config.php');//inclusione fiel configurazione
 
 //query seleziona gallery
-$queryGallery="SELECT id,label,descrizione,file FROM $dms WHERE parent_id = 3 AND resource_type = 0 AND account_id = $account_id";
+$queryGallery="SELECT id,label,descrizione,file FROM $dms WHERE parent_id = 2 AND resource_type = 0 AND account_id = $account_id";
 $queryGallery=$mysqli->query($queryGallery);
 
 $templateSingolaGallery = '<!-- GALLERY --><figure class="isg-portfolio-item" data-filter="{{id}}"><a id="gallery{{id}}" href="#"></a>

@@ -1,6 +1,6 @@
 <?php
 include_once('config.php');//inclusione file configurazione
-$queryWishlist = "SELECT SUBSTRING(nome,1,60) as nome,SUBSTRING(descrizione,1,60) as descrizione,img,url FROM $fl_wishlist w LEFT JOIN $fl_wishlist_immagini ON w.id = wishlist_id WHERE account_id = $account_id";
+$queryWishlist = "SELECT SUBSTRING(nome,1,60) as nome,SUBSTRING(descrizione,1,60) as descrizione,img,url FROM $fl_wishlist w LEFT JOIN $fl_wishlist_immagini ON w.id = wishlist_id WHERE w.workflow_id = 130 AND w.record_id = ".$_SESSION['matrimonio_id'];
 $queryWishlist = $mysqli->query($queryWishlist);
 
 $pDamostrare = '<br>';

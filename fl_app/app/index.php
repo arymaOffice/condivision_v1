@@ -127,10 +127,10 @@
       <ul class="isg-menu">
         <!--<li class="current"><a href="#portfolio" data-hover="<?php echo $mod_1_title; ?>"><?php echo $mod_1_title; ?></a></li>-->
         <li><a href="condividi.php" data-hover="Condividi">Condividi</a></li>
-        <li><a href="#rsvp" data-hover="Accedi">Accedi</a></li>
+        <li><a href="../condivision/" data-hover="Accedi">Accedi</a></li>
       </ul>
     </nav>
-    
+
 
        <!-- HEADER -->
        <header id="isg-header">
@@ -299,12 +299,12 @@
 
   <!-- PANELS PAGES -->
   <div id="isg-panels">
-    <?php include './parts/noi.php'?>
-    <?php include './parts/resume.php'?>
-    <?php include './parts/gallery.php'?>
-    <?php include './parts/contacts.php'?>
-    <?php include './parts/rsvp.php'?>
-    <?php include './parts/wishlist.php'?>
+    <?php include './parts/noi.php';?>
+    <?php include './parts/resume.php';?>
+    <?php include './parts/gallery.php';?>
+    <?php include './parts/contacts.php';?>
+    <?php include './parts/rsvp.php';?>
+    <?php include './parts/wishlist.php';?>
 
 
   </div>
@@ -352,21 +352,31 @@
 
   <!-- GOOGLE MAP -->
   <script type="text/javascript" src="js/markerwithlabel.js"></script>
-  <?php include './js/dvmap.php'?>
+  <?php include './js/dvmap.php';?>
 
   <script type="text/javascript">
+
+  function strpos (haystack, needle, offset) {
+  var i = (haystack+'').indexOf(needle, (offset || 0));
+  return i === -1 ? false : i;
+}
 
   var bottoneClose = $(".isg-panel-close");
   /*Controllo del back button */
   window.onload = function () {
+
     if (typeof history.pushState === "function") {
       history.pushState("jibberish", null, null);
-      window.onpopstate = function () {
-        history.pushState('newjibberish', null, null);
+      window.onpopstate = function (e) {
         // Handle the back (or forward) buttons here
         // Will NOT handle refresh, use onbeforeunload for this.
         //if(confirm('Vuoi uscire dalla app?') ) window.close();
-        bottoneClose.click();
+        console.log(window.location.hash);
+        console.log(strpos(window.location.hash, "slide"));
+        if(strpos(window.location.hash, "slide") !== false && strpos(window.location.hash, "portfolio") !== false  ){
+          history.pushState('newjibberish', null, null);
+          bottoneClose.click();
+        }
       };
     }
     else {
@@ -419,7 +429,7 @@
 
   $(document).ready(function(){
     $("#countdown").countdown({
-      date: "10 july 2019 00:00:00",
+      date: "<?php echo $data_counter; ?>",
       format: "on"
     },
 

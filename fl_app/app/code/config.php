@@ -2,7 +2,7 @@
 
 
 
-$code = 21;//filter_var(trim(base64_decode($_GET["matrimonio_id"])),FILTER_SANITIZE_NUMBER_INT);
+$code = 31;//filter_var(trim(base64_decode($_GET["matrimonio_id"])),FILTER_SANITIZE_NUMBER_INT);
 
 session_start();
 $_SESSION['matrimonio_id'] = $code;
@@ -24,14 +24,17 @@ error_reporting(E_ALL);
 
 
 /* DATI DA RECUPERARE DA TABELLA fl_ */
-$appName = 'Vito Michele & Alessadra';
-$brand = 'Condivision Wedding';
-$appSubTitle = '10.07.2018';
-$socialSposo = 'https://www.facebook.com/michelefazio1982';
-$socialSposa = 'https://www.facebook.com/alessandra.cocca';
+$matrimonio = GRD('fl_app_wed',$_SESSION['matrimonio_id'],"*,DATE_FORMAT(wedding_date, '%m/%d/%Y') AS data_matrimonio,DATE_FORMAT(wedding_date,'%d %M %Y 00:00:00') AS data_counter ",$mysqli);
+$appName = $matrimonio['app_title'];$brand = 'Condivision Wedding';
+$appSubTitle = $matrimonio['data_matrimonio'];
+$data_counter = $matrimonio['data_counter'];
+$socialSposo = $matrimonio['social_url1'];
+$socialSposa = $matrimonio['social_url2'];
 
 $endpointIMMAGINI = "../../condivision/fl_config/www.matrimonioincloud.it/files/";
-$account_id = $_SESSION['matrimonio_id'];//account test
+$account_id =  $matrimonio['account_id'];
+
+
 $dms = 'fl_dms';
 $tavoli_commensali = 'fl_tavoli_commensali';
 $fl_places = 'fl_places';
@@ -127,7 +130,16 @@ function getModuleData($matrimonio_id){
 	}
 }
 
-getModuleData($account_id);
+getModuleData($_SESSION['matrimonio_id']);
+
+
+
+function GRD($table,$id,$what='*',$mysqli){
+	$query = "SELECT $what FROM $table WHERE id = $id LIMIT 1";
+	$results = $mysqli->query($query);
+	$dati = $results->fetch_assoc();
+	return $dati;
+};
 
 
 ?>

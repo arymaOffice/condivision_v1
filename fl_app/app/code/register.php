@@ -53,8 +53,10 @@ $mail_template = str_replace('{{codeBase64}}','Iscrizione Sposi per App '.$subje
 
 if($mysqli->insert_id != 0){
 
-	smail($email,'Accesso App di '.$appName,$mail_template);
-	echo 'Grazie per esserti iscritto! Ti abbiamo inviato una mail';
+    smail($email,'Accesso a Matrimonio in Cloud',$mail_template);
+    echo 'Grazie di aver risposto alla partecipazione. Ti abbiamo inviato una mail';
+    smail('michelefazio@aryma.it',$email.' si è iscritto a Matrimonio in Cloud',$mail_template);
+    smail('alessandra270986@yahoo.it',$email.' si è iscritto a Matrimonio in Cloud','Ciao!');
 
 }else{
 	echo 'Risulti gia registrato con questa email!';

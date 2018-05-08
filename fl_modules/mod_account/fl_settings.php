@@ -25,7 +25,7 @@
 	} 
 
 
-	$ordine_mod = array("id ASC","marchio DESC","tipo ASC","attivo DESC","gruppo ASC","user DESC");
+	$ordine_mod = array("id ASC","tipo ASC","attivo DESC","gruppo ASC","user DESC");
 	$ordine = $ordine_mod[0];
 	
   
@@ -86,7 +86,7 @@
 	
 	function select_type($who){
 	$textareas = array("descrizione","note"); 
-	$select = array("marchio",'persona_id','tipo',"modulo");
+	$select = array('persona_id','tipo',"modulo");
 	$checkbox = array();
 	$disabled = array("total_scooring");
 	$hidden = array('processo_id',"uid","cuid","anagrafica","sede","data_creazione","aggiornamento_password","proprietario","foto","data","password","id","codice","type","ip","continente","operatore","data_aggiornamento","visite");
@@ -94,7 +94,7 @@
 	$radio = array("alert");	
 	$multi_selection = array("giorni_lavorativi");	
 	$calendario = array('data_scadenza','data_emissione','data_nascita');	
-	if(!defined('MULTI_MARCHIO')) $hidden[] = "marchio";
+
 	$type = 1;
 
 	

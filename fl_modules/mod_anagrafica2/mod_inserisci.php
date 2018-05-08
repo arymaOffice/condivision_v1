@@ -5,12 +5,12 @@ $loadSelectComuni = 1;
 
 $id = ($_SESSION['usertype'] > 1) ? $_SESSION['anagrafica'] : check($_GET['id']);
 
+
 if ($id > 1) {
     $profilo = @GRD('fl_anagrafica', @$id);
 }
 
 include 'fl_settings.php'; // Variabili Modulo
-
 include "../../fl_inc/headers.php";
 
 if (!isset($_GET['view'])) {
@@ -20,23 +20,14 @@ if (!isset($_GET['view'])) {
 
 $tab_div_labels = array('marchio' => 'Profilo', 'tipo_documento' => "Dati Documento", 'forma_giuridica' => "Dati Fiscali", 'lat' => $etichette_anagrafica['tipologia_attivita'], 'telefono' => "Contatti");
 
-print_r($marchio);
-
-
 ?>
 
 
 
 
 <body style=" background: rgb(241, 241, 241) none repeat scroll 0% 0%;">
-
-
 <div id="container" >
-
-
-
 <div id="content_scheda">
-
 <div class="info_dati">
 <?php if ($id > 1) {
     $telefono = phone_format($profilo['telefono'], '39');
@@ -49,65 +40,44 @@ print_r($marchio);
 } else {echo '<h1>Nuovo ' . $tipo_profilo[$tipo_profilo_id] . '</h1>';}
 
 ?>
-
-
-
-
 </div>
-
 <?php if (isset($_GET['esito'])) {$class = (isset($_GET['success'])) ? 'green' : 'red';
     echo '<p class="esito ' . $class . '">' . check($_GET['esito']) . '</p>';}?>
-
 <div id="map-canvas"></div>
 <form id="scheda" action="../mod_basic/action_modifica.php" method="post" enctype="multipart/form-data">
-
-
-
 <?php include '../mod_basic/action_estrai.php';?>
-
 <?php 
 if(!isset($_GET['error']) && isset($_GET['first']) && $_GET['id'] > 1){
     echo '<input type="hidden" name="goto" value="../mod_account/mod_inserisci.php?id=1&&anagrafica_id='.$id.'" />';
 }
+if($_SESSION['usertype'] > 1){
+   echo "<script> $( '#marchio' ).css('display','none); </script>";
+}
 ?>
 </form>
-
 <script>
-
 $('#invio').attr('id','nosend');
 $('#nosend').click(function(event){
     event.preventDefault();
-
         //validate fields
         var fail = false;
         var fail_log = '';
         $( '#scheda' ).find( 'select, textarea, input' ).each(function(){
             if( ! $( this ).prop( 'required' )){
-
             } else {
                 if ( ! $( this ).val() ) {
                     fail = true;
                     name = $( this ).attr( 'name' );
                     fail_log += name + " is required \n";
                 }
-
             }
         });
-
-
         //submit if fail never got set to true
         if ( ! fail ) {
-
         $('#scheda').submit();
-
         } else {
-
             alert( fail_log );
-
         }
 });
-
 </script>
-
-
 </div></div></body></html>

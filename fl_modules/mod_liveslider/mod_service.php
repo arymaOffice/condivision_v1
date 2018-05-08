@@ -6,7 +6,7 @@ $url = filter_var($_GET['url'], FILTER_SANITIZE_URL);
 <html>
     <head>  <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> </head>
     <body style="margin:0;padding:0;">
-    <iframe src="<?php echo $url; ?>"  style="width: 100%;height: 100%;border: none;"></iframe>
+    <iframe src="<?php echo $url; ?>" webkitAllowFullScreen mozAllowFullScreen allowFullScreen style="width: 100%;height: 100%;border: none;"></iframe>
     <div id="ads" style="width: 80%;height: 20%;display: none;position: absolute;top: 40%;border: none;	margin: 0 10%;"></div>
 
     <script>

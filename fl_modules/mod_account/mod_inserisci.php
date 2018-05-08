@@ -42,21 +42,7 @@ $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p class="esito '.$c
 
 
 
-<?php if(defined('MULTI_MARCHIO')) { ?>
 
-<div class="form_row">
-<div class="select_text">
-<label for="account">Marchio</label>
-
-<select name="marchio" id="marchio" class="selectred" >
-<?php
-foreach($marchio as $valores => $label){ // Recursione Indici di Categoria
-			$selected = (isset($_GET['anagrafica_id']) && $valores == 1) ? 'selected="selected" ' : '' ;
-			echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n";
-			} ?>
-
-</select>
-</div></div><?php } else { echo '<input name="marchio" id="marchio" value="1" type="hidden">'; } ?>
 
 
 

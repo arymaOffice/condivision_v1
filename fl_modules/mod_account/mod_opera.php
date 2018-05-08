@@ -14,12 +14,12 @@ $rct = check($_SERVER['HTTP_REFERER']);
 if (isset($_GET['new'])) {
 
     $relid = check($_GET['reild']);
-    $marchio = check($_GET['marchio']);
+
     $tipo_account = check($_GET['tipo']);
     $now = do_date(0, 2);
 
-    $query = "INSERT INTO `fl_anagrafica` (`id`, `status_anagrafica`, `marchio`, `tipo_profilo`, `nome`, `cognome`, `data_nascita`, `luogo_di_nascita`, `codice_fiscale`, `regione`, `provincia`, `comune`, `frazione`, `indirizzo`, `cap`, `telefono`, `cellulare`, `fax`, `email`, `forma_giuridica`, `ragione_sociale`, `partita_iva`, `codice_fiscale_legale`, `regione_sede`, `provincia_sede`, `comune_sede`, `frazione_sede`, `sede_legale`, `cap_sede`, `punto_vendita`, `regione_punto`, `provincia_punto`, `comune_punto`, `frazione_punto`, `indirizzo_punto`, `cap_punto`, `lat`, `lon`, `telefono_punto`, `email_punto`, `sito_web`, `tipo_documento`, `emesso_da`, `data_emissione`, `data_scadenza`, `numero_documento`, `comune_rilascio`, `account_affiliato`, `note`, `data_creazione`, `data_aggiornamento`, `operatore`, `proprietario`, `ip`)
-VALUES (NULL, '', '$marchio', '$tipo_account', '', '', '', '', '', '', '', '', '', NULL, NULL, '', '', '', '', '', '', '', '', '', '', '', '', NULL, NULL, '', '', '', '', '', NULL, NULL, '', '', '', '', 'http://', '', '', '', '', '', '', '', '', '$now', '$now', '', '', '');";
+    $query = "INSERT INTO `fl_anagrafica` (`id`, `status_anagrafica`, `tipo_profilo`, `nome`, `cognome`, `data_nascita`, `luogo_di_nascita`, `codice_fiscale`, `regione`, `provincia`, `comune`, `frazione`, `indirizzo`, `cap`, `telefono`, `cellulare`, `fax`, `email`, `forma_giuridica`, `ragione_sociale`, `partita_iva`, `codice_fiscale_legale`, `regione_sede`, `provincia_sede`, `comune_sede`, `frazione_sede`, `sede_legale`, `cap_sede`, `punto_vendita`, `regione_punto`, `provincia_punto`, `comune_punto`, `frazione_punto`, `indirizzo_punto`, `cap_punto`, `lat`, `lon`, `telefono_punto`, `email_punto`, `sito_web`, `tipo_documento`, `emesso_da`, `data_emissione`, `data_scadenza`, `numero_documento`, `comune_rilascio`, `account_affiliato`, `note`, `data_creazione`, `data_aggiornamento`, `operatore`, `proprietario`, `ip`)
+VALUES (NULL, '',  '$tipo_account', '', '', '', '', '', '', '', '', '', NULL, NULL, '', '', '', '', '', '', '', '', '', '', '', '', NULL, NULL, '', '', '', '', '', NULL, NULL, '', '', '', '', 'http://', '', '', '', '', '', '', '', '', '$now', '$now', '', '', '');";
     if (!mysql_query($query, CONNECT)) {echo "<h1>Impossibile associare anagrafica</h1>";exit;}
 
     $lastid = mysql_insert_id(CONNECT);
@@ -209,7 +209,6 @@ if (isset($_POST['account'])) {
     $tipo = check($_POST['account']);
     $attivo = check($_POST['attivo']);
     $sede = 0;
-    $marchio = check($_POST['marchio']);
     $foto = "";
     $giorno = check(@$_POST['giorno']);
     $mese = check(@$_POST['mese']);
@@ -293,8 +292,8 @@ if (isset($_POST['account'])) {
 		$creaAnagrafica = mysql_query($creaAnagrafica,CONNECT);
 		$creaAnagrafica = mysql_insert_id();
 
-        $sql = "INSERT INTO `fl_account` (`id` ,`motivo_sospensione`,`attivo` ,`marchio` ,`tipo` ,`email` ,`user` ,`password` ,`foto` ,`visite` ,`ip` ,`data_creazione`,`data_scadenza`,`data_aggiornamento`,`operatore`, `aggiornamento_password`,anagrafica,nominativo)
-					 VALUES ( NULL ,'','$attivo',  '$marchio', '$tipo','$email', '$user', '$pass','$foto', '0', '$ip', NOW(), '2050-12-31', NOW(), '" . $_SESSION['number'] . "',  NOW() , '.$creaAnagrafica.','".$user."');";
+        $sql = "INSERT INTO `fl_account` (`id` ,`motivo_sospensione`,`attivo` ,`tipo` ,`email` ,`user` ,`password` ,`foto` ,`visite` ,`ip` ,`data_creazione`,`data_scadenza`,`data_aggiornamento`,`operatore`, `aggiornamento_password`,anagrafica,nominativo)
+					 VALUES ( NULL ,'','$attivo',  '$tipo','$email', '$user', '$pass','$foto', '0', '$ip', NOW(), '2050-12-31', NOW(), '" . $_SESSION['number'] . "',  NOW() , '.$creaAnagrafica.','".$user."');";
 
         if (mysql_query($sql, CONNECT)) {
 //Inserita

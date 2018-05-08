@@ -174,14 +174,14 @@ $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p class="esito '.$c
 	
 	$date = strtotime($riga['aggiornamento_password']."+90 day"); 
 	$password_update = giorni(date('Y-m-d',$date));	
-	$marchio_msg = (defined('MULTI_MARCHIO')) ? '<span class="msg blue">'.$marchio[$riga['marchio']].'</span>' : '';
+
 	?>
   <tr>
     <td class="center" <?php echo $colore; ?>></td>
         <td style="text-align: center;"><?php echo $input; ?></td>
 
       <td><?php echo ucfirst($riga['nominativo']); ?></td>
-      <td><span class="msg " <?php echo $colore; ?>><?php echo $alert; ?></span><?php echo $marchio_msg; ?><span class="msg blue"><?php echo $tipo[$riga['tipo']]; ?><?php echo $gest_persona; ?></span><br>
+      <td><span class="msg " <?php echo $colore; ?>><?php echo $alert; ?></span><span class="msg blue"><?php echo $tipo[$riga['tipo']]; ?><?php echo $gest_persona; ?></span><br>
       <?php echo $riga['motivo_sospensione']; ?></td>
  
   

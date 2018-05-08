@@ -65,6 +65,7 @@ include "../../fl_inc/headers.php";
 <th>Desc</th>
 <th>Upa</th>
 <th>Qtà</th>
+<th>Tot</th>
 <th>Um</th>
 <th>Note</th>
 <th class="noprint">Fornitore</th>
@@ -115,18 +116,21 @@ if (isset($_GET['categoria_materia'])) {
     $cerca = check($_GET['categoria_materia']);
     $filtriQuery .= ' AND selectSpecific.categoria_materia LIKE "%'.$cerca.'%" ';
 }
-
-$megasuperQueryFighissima = "SELECT fb.id as fabbId,selectSpecific.categoria_materia,selectSpecific.materiaprima_id,selectSpecific.codice_articolo,selectSpecific.ultimo_prezzo,selectSpecific.anagrafica_id,selectSpecific.descrizione, SUM( selectSpecific.quantita * fb.quantita ) AS totale, selectSpecific.unita_di_misura FROM `fl_ricettario_fabbisogno` fb JOIN ( SELECT materiaprima_id, m.descrizione, m.unita_di_misura, rf.quantita, ricetta_id,m.codice_articolo,m.ultimo_prezzo,m.anagrafica_id,m.categoria_materia FROM fl_ricettario_diba rf JOIN fl_materieprime m ON m.id = materiaprima_id WHERE ricetta_id IN ( ( SELECT ricetta_id FROM `fl_ricettario_fabbisogno` WHERE evento_id IN ( " . $eventiIN . " ) ) ) ) AS selectSpecific ON fb.ricetta_id = selectSpecific.ricetta_id WHERE evento_id IN ( " . $eventiIN . " ) AND fb.ordine_id = 0 ".$filtriQuery." GROUP BY materiaprima_id ORDER BY selectSpecific.anagrafica_id DESC , selectSpecific.codice_articolo ASC ";
+$TOTALE = 0;
+$megasuperQueryFighissima = "SELECT fb.id as fabbId,selectSpecific.categoria_materia,selectSpecific.materiaprima_id,selectSpecific.codice_articolo,selectSpecific.ultimo_prezzo,selectSpecific.anagrafica_id,selectSpecific.descrizione,selectSpecific.valore_di_conversione, SUM( selectSpecific.quantita * fb.quantita ) AS totale, selectSpecific.unita_di_misura FROM `fl_ricettario_fabbisogno` fb JOIN ( SELECT materiaprima_id, m.descrizione, m.unita_di_misura, rf.quantita, ricetta_id,m.codice_articolo,m.ultimo_prezzo,m.anagrafica_id,m.categoria_materia,m.valore_di_conversione FROM fl_ricettario_diba rf JOIN fl_materieprime m ON m.id = materiaprima_id WHERE ricetta_id IN ( ( SELECT ricetta_id FROM `fl_ricettario_fabbisogno` WHERE evento_id IN ( " . $eventiIN . " ) ) ) ) AS selectSpecific ON fb.ricetta_id = selectSpecific.ricetta_id WHERE evento_id IN ( " . $eventiIN . " ) AND fb.ordine_id = 0 ".$filtriQuery." GROUP BY materiaprima_id ORDER BY selectSpecific.anagrafica_id DESC , selectSpecific.codice_articolo ASC ";
 
 $risultato = mysql_query($megasuperQueryFighissima, CONNECT);
 
 while ($robaDaOrdinare = mysql_fetch_array($risultato)) {
+    $single_tot = (numdec($robaDaOrdinare['ultimo_prezzo'], 2)/$robaDaOrdinare['valore_di_conversione']) * $robaDaOrdinare['totale'];
+    $TOTALE += $single_tot ;
     echo '<input type="hidden" name="fabb' . $robaDaOrdinare['materiaprima_id'] . '" value="' . $robaDaOrdinare['fabbId'] . '" >';
 
     echo "<tr><td>" . $robaDaOrdinare['codice_articolo'] . "</td>
     <td>" . $robaDaOrdinare['descrizione'] . "</td>
     <td> € " . numdec($robaDaOrdinare['ultimo_prezzo'], 2) . "</td>
     <td><input type='text' style='width:100%;' placeholder='quantità da ordinare' name='qta" . $robaDaOrdinare['materiaprima_id'] . "' value='" . $robaDaOrdinare['totale'] . "'></td>
+    <td>€ " .  numdec($single_tot,2) . " </td>
     <td>" . $robaDaOrdinare['unita_di_misura'] . "</td>
     <td><input type='text' placeholder='Nota per il fornitore' name='note" . $robaDaOrdinare['materiaprima_id'] . "' maxlength=\"100\"></td>
     <td class=\"noprint\"><select name='fornitore" . $robaDaOrdinare['materiaprima_id'] . "' style='width: 100%;'><option value='" . $robaDaOrdinare['anagrafica_id'] . "'>" . $fornitore[@$robaDaOrdinare['anagrafica_id']] . "</option></select> </td>
@@ -135,10 +139,20 @@ while ($robaDaOrdinare = mysql_fetch_array($risultato)) {
 }
 
 ?>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th>€ <?php echo numdec($TOTALE,2); ?> </th>
+<th></th>
+<th></th>
+<th class="noprint"></th>
+<th class="noprint"></th></tr>
 </table>
 <input type="hidden" value="1" name="creaOrdiniFornitore">
 <div style="margin:0 auto;text-align: center;">
-<input type="submit" value="Crea Ordini Fornitore" class="button noprint">
+<?php if(defined('MAGAZZINO')) echo '<input type="submit" value="Crea Ordini Fornitore" class="button noprint">'; ?>
 <a href="javascript:window.print();" class="button noprint">Stampa</a>
 </form>
 </div>

@@ -58,7 +58,7 @@ $eventiCoinvolti = GQS('fl_eventi_hrc','id,titolo_ricorrenza,numero_adulti,numer
 foreach ($eventiCoinvolti as $key => $evento) {
 
 $coperti = $evento['numero_adulti']+$evento['numero_operatori'];
-echo '<h1>'.$evento['id'].' '.$evento['titolo_ricorrenza'].' '.mydatetime($evento['data_evento']).'</h1>';
+echo '<h1><a href="../mod_eventi/mod_inserisci.php?id='.$evento['id'].'&external" data-fancybox-type="iframe" class="fancybox_view" title="Apri Scheda Gestione">'.$evento['id'].'</a> '.$evento['titolo_ricorrenza'].' '.mydatetime($evento['data_evento']).'</h1>';
 $menuEvento = GQS('fl_menu_portate','id,descrizione_menu,confermato',"id > 1  AND evento_id = ".$evento['id']);
 
 // Per ogni menu evento

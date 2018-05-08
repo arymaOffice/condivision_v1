@@ -22,18 +22,7 @@ include("../../fl_inc/testata_mobile.php");
 
 <form id="scheda" action="../mod_basic/save_data.php" method="post" enctype="multipart/form-data">
 
-<?php 
-if($_SESSION['usertype'] > 1) {
-
-
-echo "<h2>Non hai i permessi per modificare contenuti!</h2>";  
-} else {
-
-include('../mod_basic/action_estrai.php');  
-
-} 
-
-?>
+<?php include('../mod_basic/action_estrai.php');  ?>
 <input type="hidden" name="info" value="1" />
 <input type="hidden" name="dir_upfile" value="../../../set/files/" />
 </form>
@@ -41,6 +30,4 @@ include('../mod_basic/action_estrai.php');
 
 
 </div></div></body></html>
-<?php mysql_close(CONNECT); ?>
-
 

@@ -3,7 +3,26 @@
 // Controllo Login
 session_start(); 
 if(!isset($_SESSION['user'])){ header("Location: ../../login.php"); exit; }
-require('../../fl_core/core.php'); 
+require($_SERVER['DOCUMENT_ROOT'].'/fl_core/core.php'); 
+
+
+if(isset($_GET['updateStato'])){ //aggiorna stato anagrafica
+    $_SESSION['anagrafica_attiva'] = 1;
+    $update = "UPDATE  `fl_anagrafica` set attivo = 1 WHERE id = ".$_SESSION['anagrafica'];
+    $update = mysql_query($update,CONNECT);
+
+    $_SESSION['scelta_abbonamento'] = 1;
+    //redirect scelta abbonamento
+}
+
+if(isset($_GET['kill'])){ //chiude la sessione
+
+    $email = check($_GET['mail']);
+    mysql_query('UPDATE fl_one_session SET attivo = 0 WHERE utente ="'.$email.'"' , CONNECT);
+    mysql_query('DELETE  FROM fl_token  WHERE account_id = (SELECT id FROM fl_account WHERE email = "'.$email.'" )' , CONNECT);
+    mysql_close(CONNECT);    
+
+}
 
 if(isset($_GET['new'])) {
 

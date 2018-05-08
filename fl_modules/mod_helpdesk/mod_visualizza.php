@@ -18,13 +18,13 @@ $ticket = GRD($tabella,$id);
 
 if($ticket['account_id'] > 0) {
 	
-$account = GRD($tables[8],$ticket['account_id']);
+$account = GRD('fl_account',$ticket['account_id']);
 $anagrafica = GRD('fl_anagrafica',@$account['anagrafica']);
 $user_check = '<a data-fancybox-type="iframe" title="Modifica Account" class="fancybox" href="../mod_account/mod_visualizza.php?external&id='.$account['id'].'">'.$account['user'].'</a><br>'.$account['motivo_sospensione'];
 $user_ball = ($account['attivo'] == 1)  ? "<span class=\"c-green\"><i class=\"fa fa-user\"></i></span>" : "<span class=\"c-red\"><i class=\"fa fa-user\"></i></span>"; 
-$concessione = (defined('AFFILIAZIONI'))  ? @$anagrafica['numero_concessione'] : '';
-echo "<p><strong>".@$anagrafica['ragione_sociale']."</strong> - P. iva ".@$anagrafica['partita_iva']."<br>".ucfirst(@$anagrafica['sede_legale'])." ".@$anagrafica['cap_sede']. " ".ucfirst($anagrafica['comune_sede']). " (".@$anagrafica['provincia_sede'].")<br><span class=\"msg gray\">".@$marchio[$anagrafica['marchio']]."</span></p>";
-if($_SESSION['usertype'] < 2 && defined('ATTIVA_ACCOUNT_ANAGRAFICA')) { echo "<p>".$user_ball." ".$user_check."</p>"; }
+$concessione = (AFFILIAZIONI == 1)  ? " ".@$anagrafica['numero_concessione'] : '';
+echo "<p><strong>".@$anagrafica['ragione_sociale']."</strong> - P. iva ".@$anagrafica['partita_iva']."<br>".ucfirst(@$anagrafica['sede_legale'])." ".@$anagrafica['cap_sede']. " ".ucfirst($anagrafica['comune_sede']). " (".@$anagrafica['provincia_sede'].")<br><span class=\"msg blue\">".@$marchio[$anagrafica['marchio']]."</span><span class=\"msg orange\">".@$tipo_profilo[$anagrafica['tipo_profilo']]." $concessione </span></p>";
+if($_SESSION['usertype'] < 2 && ATTIVA_ACCOUNT_ANAGRAFICA == 1) { echo "<p>".$user_ball." ".$user_check."</p>"; }
 } else { echo "<h4>".$ticket['nominativo']." ".$ticket['email_contatto']." ".$ticket['telefono_contatto']."</h4>";
 }
 

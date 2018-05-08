@@ -87,9 +87,9 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 			echo "<td class=\"$color\"></td>";
 			echo "<td>#".$riga['id']."</td>";
 			echo "<td><h2><a href=\"mod_visualizza.php?id=".$riga['id']."\" title=\"".strip_tags(html_entity_decode(converti_txt($riga['messaggio'])))."\" >".$riga['oggetto']."</a></h2>
-			$operatore  <span class=\"msg purple\">".@$tipologia_hd[$riga['tipologia_hd']]."</span><span class=\"msg orange\">".@$priorita[$riga['priorita']]."</span></td>";	
+			$operatore  <span class=\"msg blue\">".@$tipologia_hd[$riga['tipologia_hd']]."</span><span class=\"msg orange\">".@$priorita[$riga['priorita']]."</span></td>";	
 			
-				echo "<td>".ucfirst($riga['nominativo'])." (".$riga['email_contatto'].") / (".$riga['telefono_contatto'].")"."</td>";		
+				echo "<td>".ucfirst($riga['nominativo'])." (".$riga['email_contatto'].") / (".$riga['telefono_contatto'].")<br /><span style=\"color: #cc0000;\">Username: ".ucfirst($riga['username'])."</span>"."</td>";		
 echo "<td>".mydatetime($riga['data_creazione'])."</td>";
 			echo "<td><a href=\"mod_visualizza.php?id=".$riga['id']."\" title=\"Modifica\" > <i class=\"fa fa-search\"></i> </a></td>"; 
 		    echo "</tr>";

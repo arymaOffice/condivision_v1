@@ -8,7 +8,6 @@ unset($chat);
 
 $tab_id = 56;
 $parent_id = check($_GET['reQiD']);
-$evento_id = (isset($_GET['evento_id'])) ?  check($_GET['evento_id']) : 0;
 include("../../fl_inc/headers.php");
  ?>
 
@@ -20,7 +19,7 @@ include("../../fl_inc/headers.php");
 <h1>Log Attivit&agrave;</h1>   
  
 <?php if($parent_id < 2 && $parent_id != 0) { echo '<h2>Puoi impostare un\'attivit&agrave; dopo aver salvato le schede.'; mysql_close(CONNECT); exit; } 
-	  if($parent_id == 0) { echo '<h2>Nessun contatto associato a questo elemento!</h2> <br><p><a href="./mod_opera.php?creaLeadVuoto&workflow_id=6&parent_id='.$evento_id.'" class="button">Crea un contatto</a></p><br>'; } else { ?>
+	  if($parent_id == 0) { echo '<h2>Nessun contatto associato a questo elemento!</h2> <br><p>Crea un contatto</p> (Funzione non disponibile)<br>'; } else { ?>
 
 
 <div id="" >
@@ -98,17 +97,9 @@ include("../../fl_inc/headers.php");
     
  </table>
 
- <?php } ?>
+ <?php } mysql_close(CONNECT); ?>
 
-<p><a href="#" onclick="location.reload();"><i class="fa fa-refresh" aria-hidden="true"></i> Aggiorna lista </a> 
-<?php
+<p><a href="#" onclick="location.reload();"><i class="fa fa-refresh" aria-hidden="true"></i> Aggiorna lista </a></p>
 
-$potential = GRD($tables[106],$parent_id); 
 
-if($potential['id'] > 1){ 
-if($parent_id > 1) echo '| <a href="../mod_leads/mod_inserisci.php?id='.$parent_id.'" target="_parent"><i class="fa fa-user" aria-hidden="true"></i> Vai a scheda contatto </a>'; 
-} ?>
-</p>
-
-<?php  mysql_close(CONNECT); ?>
 </body></html>

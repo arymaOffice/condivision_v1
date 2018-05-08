@@ -149,13 +149,13 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 		    
 		    if($riga['stato_hd'] == 0) $operatore = "Chiuso alle ".mydatetime($riga['data_chiusura']);
 	
-			$account = GRD($tables[8],$riga['account_id']);
+			$account = GRD('fl_account',$riga['account_id']);
 			$anagrafica = GRD('fl_anagrafica',@$account['anagrafica']);
 
 			$user_check = ($account['id'] < 2) ? '' : '<a data-fancybox-type="iframe" title="Modifica Account" class="fancybox" href="../mod_account/mod_visualizza.php?external&id='.$account['id'].'">'.$account['user'].'</a><br>'.$account['motivo_sospensione'];
 			$user_ball = (isset($account['attivo']) && $account['attivo'] == 1)  ? "<span class=\"c-green\"><i class=\"fa fa-user\"></i></span>" : "<span class=\"c-red\"><i class=\"fa fa-user\"></i></span>"; 
 			if($account['id'] < 2) $user_ball = '';
-			$concessione = (defined('AFFILIAZIONI') && AFFILIAZIONI == 1)  ? " ".@$anagrafica['numero_concessione'] : '';
+			$concessione = (AFFILIAZIONI == 1)  ? " ".@$anagrafica['numero_concessione'] : '';
 			$dettaglio_anagrafica = ($anagrafica['id'] < 2) ? '' : @$anagrafica['ragione_sociale']." - P. iva ".@$anagrafica['partita_iva']."<br>".ucfirst(@$anagrafica['sede_legale'])." ".@$anagrafica['cap_sede']. " ".ucfirst($anagrafica['comune_sede']). " (".@$anagrafica['provincia_sede'].")<br><span class=\"msg blue\">".@$marchio[$anagrafica['marchio']]."</span><span class=\"msg orange\">".@$tipo_profilo[$anagrafica['tipo_profilo']]." $concessione </span>";
 			
 			//$sel = GQD('fl_account','id',' email = \''.$riga['email_contatto'].'\'');

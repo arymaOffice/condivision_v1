@@ -1,7 +1,5 @@
 <?php 
 require_once('../../fl_core/autentication.php');
-
-if(!isset($_SESSION['POST_BACK_PAGE'])) $_SESSION['POST_BACK_PAGE'] = '../../';
 include('fl_settings.php'); // Variabili Modulo 
 
 include("../../fl_inc/headers.php"); 

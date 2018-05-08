@@ -4,7 +4,7 @@ require_once('../../fl_core/autentication.php');
 include('../../fl_core/dataset/array_statiche.php');
 
 // Campi
-$obbligatorio = array('condizioni_meteo','tipologia_hd','importo','estremi_del_pagamento','titolo','fornitore','entrate','nome_e_cognome','oggetto','rfq');
+$obbligatorio = array('tipo_preventivo','anno_di_interesse','condizioni_meteo','tipologia_hd','importo','estremi_del_pagamento','titolo','fornitore','entrate','nome_e_cognome','oggetto','rfq');
 $etichette = array('ambienti','famiglia_ricetta','produttore','mesi_di_interesse','gruppo','giorni_lavorativi','sedi_id','servizi');
 $campi_date = array('data_scadenza_smartcard','data_validita','data_preventivo','data_pubblicazione','data_visita','from_date','to_date','invoice_date','data_prenotazione','data_rinnovo','data_sottoscrizione','data_creazione_asset','data_richiesta','data_scadenza_pec','scadenza_obiettivo','data_revisione','data_evento','meeting_date','data_arrived','data_fattura','data_corrispettivo','data_versamento','data_preventivo','data_intervento','data_pagamento','data_rielaborazione','data_scadenza_contratto','data_avvio','data_conclusione','data_documento','data_operazione','data_emissione','data_scadenza','data_nascita','data_apertura','data_chiusura','data_inizio','data_fine','periodo_inizio','periodo_fine');
 $campi_datetime = array('data_fine_evento','data_evento','start_meeting','end_meeting');
@@ -23,7 +23,7 @@ if(isset($_POST['mode']))  $sezione .= "&mode=".check($_POST['mode']);
 //Aggiorna
 
 function not_doing($who){
-$not_in = array('function','reload','copy_record','base_price',"info","gtx","id","old_file","del_file","dir_upfile","mandatory","mode","external","data_creazione",'goto');
+$not_in = array('anagrafica_cliente','anagrafica_cliente2','realoadParent','function','reload','copy_record','base_price',"info","gtx","id","old_file","del_file","dir_upfile","mandatory","mode","external","data_creazione",'goto');
 if(!is_numeric($who) && !in_array($who,$not_in)) return true;	
 }
 
@@ -83,7 +83,7 @@ exit;
 
 if (isset($_POST['user']) && $tabella == 'fl_account') {
 $exist = check_record($tabella,'user',$id,check($_POST['user']));
-if($exist == TRUE || strlen(check($_POST['user'])) < 8){	
+if($exist == TRUE || strlen(check($_POST['user'])) < 3){	
 echo json_encode(array('action'=>'info','class'=>'red','url'=>'','esito'=>"Username esistente o non valido"));
 exit;
 }}
@@ -110,7 +110,7 @@ echo json_encode(array('action'=>'info','class'=>'red','url'=>'','esito'=>"Inser
 exit;
 }}
 
-if((isset($_POST['telefono']) || isset($_POST['cellulare']) ) && ( in_array($_POST['telefono'],$campi_obbligatori) || in_array(@$_POST['cellulare'],$campi_obbligatori) ) && $tabella != 'fl_leads_hrc') {
+if((isset($_POST['telefono']) || isset($_POST['cellulare']) ) && ( in_array($_POST['telefono'],$campi_obbligatori) || in_array($_POST['cellulare'],$campi_obbligatori) ) && $tabella != 'fl_leads_hrc') {
 if(strlen(check(@$_POST['telefono']).check(@$_POST['cellulare'])) < 6){
 echo json_encode(array('action'=>'info','class'=>'red','url'=>'','esito'=>"Inserire almeno un numero di telefono"));
 exit;
@@ -248,23 +248,24 @@ exit;
 
 $ext = strtolower($info["extension"]);
 $formati = array('php','php3','exe','src','piff','dll','inc','sql');
+
+
 if(in_array($ext,$formati)){
 echo json_encode(array('action'=>'info','class'=>'red','url'=>'','esito'=>'Formato non valido')); 
 exit;
 } 
 $file_name = $dir_upfile.$_FILES["upfile"]["name"];
 
-//Salvataggio in locale
 if(is_uploaded_file($_FILES["upfile"]["tmp_name"])) {
-	if(move_uploaded_file($_FILES["upfile"]["tmp_name"],$file_name )) {	
-	$query_p =  "UPDATE `$tabella` SET `upfile` = '$file_name' WHERE `id` = $id LIMIT 1;";
-	mysql_query($query_p,CONNECT);
-	}	
-}
 
+if(move_uploaded_file($_FILES["upfile"]["tmp_name"],$file_name )) {	
+$query_p =  "UPDATE `$tabella` SET `upfile` = '$file_name' WHERE `id` = $id LIMIT 1;";
+mysql_query($query_p,CONNECT);
+}
+}
+/*
 //Salvataggio su CDN
 $target_url = DMS_ROOT.'file_receive.php';
-$target_url = 'http://cdn.goservizi.it/file_receive.php';
 $file_name_with_full_path = $_FILES['upfile']['tmp_name'];
 $file_name =  $info['basename']."_".time().".".$ext;
 $post = array('basename' => $file_name,'file_contents'=>'@'.$file_name_with_full_path);
@@ -275,11 +276,10 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
 $result=curl_exec ($ch);
 curl_close ($ch);
-	if($result == false) { echo json_encode(array('action'=>'info','class'=>'red','url'=>'','esito'=>$result));   exit; } else {
-	$query_p =  "UPDATE `$tabella` SET `upfile` = '$file_name' WHERE `id` = $id LIMIT 1;";;
-	mysql_query($query_p,CONNECT);
-	}
-//Fine Salvataggio
+if($result == false) { echo json_encode(array('action'=>'info','class'=>'red','url'=>'','esito'=>$result));   exit; } else {
+$query_p =  "UPDATE `$tabella` SET `upfile` = '$file_name' WHERE `id` = $id LIMIT 1;";;
+mysql_query($query_p,CONNECT);
+}*/
 
 } 
 

@@ -87,9 +87,9 @@
 	
 	/* Inclusione classi e dati */	
 	require('../../fl_core/dataset/array_statiche.php'); // Liste di valori statiche
-	require('../../fl_core/dataset/proprietario.php'); // Liste di valori statiche
 	require('../../fl_core/class/ARY_dataInterface.class.php'); //Classe di gestione dei dati 
 	$data_set = new ARY_dataInterface();
+    $proprietario = $data_set->data_retriever('fl_account','nominativo'); //Crea un array con i valori X2 della tabella X1
 	$categoria_faq = $data_set->get_items_key("tipologia_hd");//Crea un array con gli elementi figli dell'elemento con tag X1	
 	$tipo_faq = array('Interna','Pubblica'); // Valori manuali (sconsigliato)
 	$categoria_faq[1] = "Generica";

@@ -12,7 +12,7 @@
 	$filtri = 1;
 	$searchbox = 'Cerca...';
     if($_SESSION['usertype'] < 2) 	$tab_div_labels = array('id'=>"Richiesta",'note'=>"Note Interne",'../mod_faq/mod_faq.php?nochat&categoria_faq=0&id=[*ID*]'=>"Faq");
-    $new_buttonYes = 1;
+
 	
 	$workflow_id = (isset($_GET['workflow_id'])) ? check(@$_GET['workflow_id']) : 0;
 	$parent_id   = (isset($_GET['parent_id']))   ? check(@$_GET['parent_id'])   : 0;

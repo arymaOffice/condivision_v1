@@ -78,35 +78,36 @@
 	if($_SESSION['usertype'] > 0 && check(@$_GET['action'] > 0)) { unset($tipo[0]);  unset($tipo[1]); }
 	$anagrafica = $data_set->data_retriever('fl_anagrafica','ragione_sociale',"WHERE id != 1",'ragione_sociale ASC ');
 	if(defined('AFFILIAZIONE')) $anagrafica = $data_set->data_retriever('fl_anagrafica','ragione_sociale',"WHERE id != 1",'ragione_sociale ASC ');
-	/*$persona_id = $data_set->data_retriever('fl_persone','nome,cognome',"WHERE id != 1",'nome ASC');
+	$persona_id = $data_set->data_retriever('fl_persone','nome,cognome',"WHERE id != 1",'nome ASC');
 	$processo_id = $data_set->data_retriever('fl_processi','processo',"WHERE id != 1",'processo ASC');
-	$profilo_funzione = $data_set->data_retriever('fl_profili_funzione','funzione',"WHERE id != 1 ",'funzione ASC');*/
+	$profilo_funzione = $data_set->data_retriever('fl_profili_funzione','funzione',"WHERE id != 1 ",'funzione ASC');
 
 	$attivo = array('1'=>'Attivo','0'=>'Sospeso');
 	
 	function select_type($who){
 	$textareas = array("descrizione","note"); 
-	$select = array('persona_id','tipo',"modulo");
+	$select = array("marchio",'persona_id','tipo',"modulo");
 	$checkbox = array();
 	$disabled = array("total_scooring");
-	$hidden = array('processo_id',"uid","cuid","anagrafica","sede","data_creazione","aggiornamento_password","proprietario","marchio","foto","data","password","id","codice","type","ip","continente","operatore","data_aggiornamento","visite");
+	$hidden = array('processo_id',"uid","cuid","anagrafica","sede","data_creazione","aggiornamento_password","proprietario","foto","data","password","id","codice","type","ip","continente","operatore","data_aggiornamento","visite");
 	$selectbtn = array('attivo');	
 	$radio = array("alert");	
 	$multi_selection = array("giorni_lavorativi");	
 	$calendario = array('data_scadenza','data_emissione','data_nascita');	
+	if(!defined('MULTI_MARCHIO')) $hidden[] = "marchio";
 	$type = 1;
 
 	
 	if(in_array($who,$select)) { $type = 2; }
 	if(in_array($who,$textareas)){ $type = 3; }
 	if(in_array($who,$disabled)){ $type = 4; }
-	if(in_array($who,$hidden)){ $type = 5; }
 	if(in_array($who,$checkbox)){ $type = 6; }
 	if(in_array($who,$calendario)){ $type = 20; }
 	if(in_array($who,$radio)){ $type = 8; }
 	if(in_array($who,$selectbtn)){ $type = 9; }
 	if(in_array($who,$multi_selection)){ $type = 23; }
-		
+	if(in_array($who,$hidden)){ $type = 5; }
+
 	return $type;
 	}
 	

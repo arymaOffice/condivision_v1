@@ -17,7 +17,7 @@ include("../../fl_inc/headers.php");?>
 
 <?php /* Inclusione Pagina */ if(isset($_GET['action'])) { include($pagine[$_GET['action']]); } else { 
 
-if($_SESSION['usertype'] > 0 || @$_SESSION['aggiornamento_password'] < -90){
+if($_SESSION['usertype'] > 0 || @$_SESSION['aggiornamento_password'] < -90 || $_SESSION['marchio'] > 0){
 include("mod_user.php"); 
 }else{
 include("mod_home.php"); 

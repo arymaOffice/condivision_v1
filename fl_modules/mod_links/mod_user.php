@@ -86,14 +86,15 @@
       
       
 
-      <td><input type="text" name="codice" data-rel="<?php echo $riga['id']; ?>" value="<?php echo $riga['codice']; ?>" class="updateField" /></td>
-      <td><input type="text" name="descrizione" data-rel="<?php echo $riga['id']; ?>" value="<?php echo $riga['descrizione']; ?>" class="updateField" /></td>
-      <td><input type="text" name="link" data-rel="<?php echo $riga['id']; ?>" value="<?php echo $riga['link']; ?>" class="updateField" /></td>
-      <td><a href="<?php echo $riga['link']; ?>" title="Apri Link" onclick="javascript:window.open(this.href);return false;"><i class="fa fa-tv"></i></a></td>
-      <?php if ($_SESSION['usertype'] == 0) {?><td><a href="../mod_basic/action_elimina.php?gtx=<?php echo $tab_id; ?>&amp;unset=<?php echo $riga['id']; ?>" title="Elimina"  onclick="return conferma_del();"><i class="fa fa-trash-o"></i></a></td><?php }?>
-      
-      
-      
+
+
+
+<td><?php echo $riga['descrizione']; ?></td>
+
+
+<td><a href="<?php echo $riga['link']; ?>" title="Apri Link" onclick="javascript:window.open(this.href);return false;"><i class="fa fa-tv"></i></a></td>
+
+
       
       </tr>
       

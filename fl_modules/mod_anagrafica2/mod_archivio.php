@@ -127,7 +127,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 				
 				
 			if($account['id'] > 0)  { 
-			$user_check = '<a title="Modifica Account"  href="../mod_account/mod_visualizza.php?id='.$account['id'].'">'.$account['user'].'</a><br>'.$account['motivo_sospensione'];
+			$user_check = '<a title="Modifica Account"  href="../mod_account2/mod_visualizza.php?id='.$account['id'].'">'.$account['user'].'</a><br>'.$account['motivo_sospensione'];
 			$user_ball = ($account['attivo'] == 1)  ? "<span class=\"c-green\"><i class=\"fa fa-user\"></i></span>" : "<span class=\"c-red\"><i class=\"fa fa-user\"></i></span>"; 
 			$saldo = balance($account['id']);
 			$saldo = '<a data-fancybox-type="iframe" class="fancybox_view"  href="../mod_depositi/mod_user.php?operatore_text='.$account['nominativo'].'&operatore='.$account['id'].'"> &euro; '.numdec($saldo,2).'</a>';
@@ -135,7 +135,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 			
 			if($riga['account'] == "") mysql_query("UPDATE $tabella SET account = '".$account['user']."' WHERE id = ".$riga['id']." LIMIT 1");
 			} else {
-			$user_check = "<a href=\"../mod_account/mod_inserisci.php?anagrafica_id=".$riga['id']."&email=".$riga['email']."&nominativo=".$riga['ragione_sociale']."\">Crea account</a>";
+			$user_check = "<a href=\"../mod_account2/mod_inserisci.php?anagrafica_id=".$riga['id']."&email=".$riga['email']."&nominativo=".$riga['ragione_sociale']."\">Crea account</a>";
 			$user_ball = '';
 			$saldo = 0;
 			$tipo_profilo = '';
@@ -164,6 +164,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 					if(ALERT_DOCUMENTO_SCADUTO == 1)  echo "<td  class=\"hideMobile\">$note</td>";
 					echo "<td  class=\"strumenti\">";
 					if(@PROFILO_ANAGRAFICA == 1)  echo '<a href="mod_inserisci.php?external&action=1&tBiD='.base64_encode('39').'&id='.$riga['id'].'"><i class="fa fa-user"></i>'.get_scan($riga['id']).'</a>';
+					if(@PANORAMICA_ANAGRAFICA == 1)  echo '<a href="mod_panoramica_contatto.php?id='.$riga['id'].'"><i class="fa fa-television" aria-hidden="true"></i></a>';
 					echo "<a href=\"mod_inserisci.php?id=".$riga['id']."&nominativo=".$riga['ragione_sociale']."\" title=\"Gestione Cliente ".ucfirst($riga['ragione_sociale'])." Agg. ".$riga['data_aggiornamento']."\"> <i class=\"fa fa-search\"></i> </a>
 					<a data-fancybox-type=\"iframe\" class=\"fancybox_view\" href=\"mod_visualizza.php?external&action=1&amp;sezione=".@$riga['sezione']."&amp;id=".$riga['id']."&nominativo=".$riga['ragione_sociale']."\" title=\"Scheda di stampa ".ucfirst($riga['ragione_sociale'])."\"> <i class=\"fa fa-print\"></i> </a> $elimina </td>";
 					echo "</tr>"; 

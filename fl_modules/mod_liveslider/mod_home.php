@@ -6,18 +6,20 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 ?>
 
 <?php
-$start = paginazione(CONNECT, $tabella, $step, $ordine, $tipologia_main);
+$start = paginazione(CONNECT, $tabella, $step, $ordine, $tipologia_main,0);
 $query = "SELECT $select, s.titolo as sliderTitle , s.id as sliderId , lr.pollici, lr.risoluzione , s.numero_monitor , ls.titolo as linkTitle,lc.descrizione, ls.link_id FROM `$tabella` s LEFT JOIN fl_link_slider ls ON ls.id = s.link LEFT JOIN fl_link_cat lc ON lc.id = ls.categoria_link LEFT JOIN fl_link_resolution lr ON lr.id = s.risoluzione  WHERE s.id != 1 AND s.account_id = ".$_SESSION['number']." ORDER BY s.$ordine LIMIT $start,$step;";
 $risultato = mysql_query($query, CONNECT);
 
 if (mysql_affected_rows() == 0) {echo "Nessun Elemento";}
+
+
 
 while ($riga = mysql_fetch_array($risultato)) {
 
     $slider_info = GQS($tabella . ' s LEFT JOIN fl_link_resolution ls ON ls.id = s.risoluzione ', 'titolo,numero_monitor,pollici,ls.risoluzione,link', 's.id = ' . $riga['sliderId']);
 
     $token = GQD('fl_token', 'token', 'account_id = ' . $_SESSION['number']);
-    $token = $token['token'];
+    $token = urlencode($token['token']);
 
     $external = $slider_info[0]['risoluzione'];
 
@@ -27,9 +29,12 @@ while ($riga = mysql_fetch_array($risultato)) {
 
     for ($i = 1; $i <= $slider_info[0]['numero_monitor']; $i++) {
 
-        $link = 'http://livescore.gcsoft.it/index' . $external . '.html?id=' . $riga['link_id'] . '&monitor_id=' . $i . '&monitor_count=' . $slider_info[0]['numero_monitor'] . '&token=' . $token;
+        $link = 'http://service.1x2live.it/index' . $external . '.html?id=' . $riga['link_id'] . '&monitor_id=' . $i . '&monitor_count=' . $slider_info[0]['numero_monitor'] . '&token=' . $token;
+        $time = rand();
 
-        $monitor_links .= '<a href="#" onclick="window.open(\'' .$link . '\',\'1x2\',\'directories=no,titlebar=no,toolbar=no,location=0,status=no,menubar=no,scrollbars=no\')"><div style="float:left;margin: 6px;"><i class="fa fa-tv fa-4x"></i></div></a>';
+        $string = "window.open('../mod_liveslider/mod_service.php?url=".$link."','".$time."','directories=no,titlebar=no,toolbar=no,location=0,status=no,menubar=no,scrollbars=no')"; 
+
+        $monitor_links .= '<a href="#" onclick="'.$string.'"><div style="float:left;margin: 6px;"><i class="fa fa-tv fa-4x"></i></div></a>';
 
     }
 

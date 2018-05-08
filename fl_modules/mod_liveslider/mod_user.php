@@ -1,6 +1,7 @@
 <?php
 // Controlli di Sicurezza
-if (!@$thispage) {echo "Accesso Non Autorizzato";exit;}
+require_once('../../fl_core/autentication.php');
+include('fl_settings.php'); // Variabili Modulo 
 $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 
 ?>
@@ -21,7 +22,8 @@ while ($riga = mysql_fetch_array($risultato)) {
     $slider_info = GQS($tabella . ' s LEFT JOIN fl_link_resolution ls ON ls.id = s.risoluzione ', 'titolo,numero_monitor,pollici,ls.risoluzione,link', 's.id = ' . $riga['sliderId']);
 
     $token = GQD('fl_token', 'token', 'account_id = ' . $_SESSION['number']);
-    $token = $token['token'];
+    $token = urlencode($token['token']);
+
 
     $external = $slider_info[0]['risoluzione'];
 
@@ -29,7 +31,7 @@ while ($riga = mysql_fetch_array($risultato)) {
 
     for ($i = 1; $i <= $slider_info[0]['numero_monitor']; $i++) {
 
-        $link = 'http://livescore.gcsoft.it/index' . $external . '.html?id=' . $riga['link_id'] . '&monitor_id=' . $i . '&monitor_count=' . $slider_info[0]['numero_monitor'] . '&token=' . $token;
+        $link = 'http://service.1x2live.it/index' . $external . '.html?id=' . $riga['link_id'] . '&monitor_id=' . $i . '&monitor_count=' . $slider_info[0]['numero_monitor'] . '&token=' . $token;
 
         $monitor_links .= '<a href="' . $link . '" target="_blank"><div style="float:left;margin: 6px;"><i class="fa fa-tv fa-4x"></i></div></a>';
 

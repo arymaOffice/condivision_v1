@@ -1,10 +1,10 @@
 <?php 
 
 require_once('action_check.php');
-include('../../fl_core/data_manager/array_statiche.php');
+include('../../fl_core/dataset/array_statiche.php');
 
 // Campi Obbligatori
-$obbligatorio = array('importo','estremi_del_pagamento','titolo','fornitore','entrate','nome','codice_fiscale','nome_e_cognome','oggetto','email','numero_documento');
+$obbligatorio = array('importo','estremi_del_pagamento','titolo','fornitore','entrate','nome','nome_e_cognome','oggetto','email');
 
 $dir_upfile = $dir_testate;
 
@@ -50,10 +50,11 @@ if ($id != 1 && isset($_POST['codice_fiscale']) && @!ereg($patterncod,check(@$_P
 header("Location: $rct?$val&error=1&action=9&esito=Inserire un codice fiscale corretto!$sezione");
 exit;
 }*/
+/*
+include_once ("../../fl_core/class/CodiceFiscale.class.php");
 
-include_once ("../../fl_core/data_manager/CodiceFiscale.class.php");
-
-$cf = new CodiceFiscale();
+$cf = new CodiceFiscale();*/
+/*
 $cf ->SetCF(check(@$_POST['codice_fiscale'])); 
 if ($cf->GetCodiceValido()) {
  /*echo  "Codice VALIDO - Data di nascita:" . 
@@ -66,11 +67,11 @@ if ($cf->GetCodiceValido()) {
   $cf->GetSesso() . 
   " Comune di nascita:". 
   $cf->GetComuneNascita();
-  exit;*/
+  exit;
 } else {
 header("Location: $rct?$val&error=1&action=9&esito=".$cf->GetErrore()."$sezione");
 exit;
-}
+}*/
 
 }
 
@@ -140,14 +141,6 @@ if(@mysql_query($query,CONNECT)){
 action_record('modify',$tabella,$id,base64_encode($query));
 if(trim(check(@$_POST['old_file'])) != "") $old_file = check(@$_POST['old_file']);
 
-
-/* Syncronizzazione mail account con anagrafica */
-if(check($_POST['gtx']) == 8 && isset($_POST['email']) && isset($_POST['anagrafica']) && check(@$_POST['anagrafica']) > 1 ) {
-$syncoEmail = 'UPDATE fl_anagrafica SET email = \''.check($_POST['email']) .'\' WHERE id = '.check(@$_POST['anagrafica']);
-mysql_query($syncoEmail,CONNECT); 
-}
-
-
 // Cancella il file attuale se impostato
 if(isset($_POST['del_file'])) {
 $query_a =  "UPDATE `$tabella` SET `upfile` = '' WHERE `id` = $id LIMIT 1;";;
@@ -179,7 +172,7 @@ exit;
 
 
 //Salvataggio su CDN
-$target_url = 'http://cdn.goservizi.it/file_receive.php';
+$target_url = 'http://www.condivision.org/file_receive.php';
 $file_name_with_full_path = $_FILES['upfile']['tmp_name'];
 $file_name =  $info['basename']."_".time().".".$ext;
 $post = array('basename' => $file_name,'file_contents'=>'@'.$file_name_with_full_path);

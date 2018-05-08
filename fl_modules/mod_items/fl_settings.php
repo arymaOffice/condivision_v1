@@ -30,10 +30,6 @@
 		}
 	
 	 
-	$tabella = $tables[$tab_id];
-	$select = "*";
-	$step = 20; 
-	
 	/* Tipologie di ordinamento disponobili */
    	$ordine_mod = array("label ASC","relation ASC","id ASC");
 	$ordine = $ordine_mod[2];	

@@ -13,11 +13,7 @@ include("../../fl_inc/headers.php");
 
 <?php
 	
-if($_SESSION['usertype'] > 1) {
 
-echo "<h2>Non hai i permessi per modificare contenuti!</h2>";  
-
-} else {
 
 						
 	$query = "SELECT * FROM `fl_conferme` WHERE modulo = 1 AND contenuto = $id ORDER BY data_apertura DESC;";
@@ -53,11 +49,10 @@ echo "<h2>Non hai i permessi per modificare contenuti!</h2>";
 			
 	}
 
-	}
+	
 
 ?>	
 
 </table>
 
 
-<?php mysql_close(CONNECT); ?>

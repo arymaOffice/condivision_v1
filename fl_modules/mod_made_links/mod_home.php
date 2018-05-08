@@ -6,23 +6,6 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 ?>
 
 
-<div class="filtri" id="filtri">
-<form method="get" action="" id="fm_filtri">
-<h2> Filtri</h2>
-
-<?php if(isset($_GET['action'])) echo '<input type="hidden" value="'.check($_GET['action']).'" name="action" />'; ?>
-<?php if(isset($_GET['start'])) echo '<input type="hidden" value="'.check($_GET['start']).'" name="start" />'; ?>
-
-<label> Periodo da</label>
-<input type="text" name="data_da" onFocus="this.value='';" value="<?php  echo $data_da_t;  ?>" class="calendar" size="10" />
-<label> al </label>
-<input type="text" name="data_a" onFocus="this.value='';" value="<?php  echo $data_a_t;  ?>" class="calendar" size="10" />
-
-<input type="submit" value="Mostra" class="salva" id="filter_set" />
-
-</form>
-</div>
-
 <style>
 @media screen and (max-width: 400px) {
   .hide-mobile{
@@ -34,11 +17,23 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 <?php 
     if($_SESSION['usertype'] != 0) echo '<style> .fa.fa-plus-circle{ display:none; } </style>';
 
+$tipologia_main .= (isset($_GET['cat'])) ? ' AND categoria_link='.filter_var($_GET['cat'],FILTER_SANITIZE_NUMBER_INT) : '';
 $start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main);
 $query = "SELECT $select FROM `$tabella` $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
 $risultato = mysql_query($query, CONNECT);
 
 ?>
+
+<p> <br>
+<select onchange=" window.location = '?a=configuratore&cat=' + $(this).val();">
+<?php 
+  foreach($categoria_link as $key => $value ){
+    $selected = ($_GET['cat'] == $key || (!isset($_GET['cat']) && $key == 0)) ? 'selected' : '';
+    echo '<option value="'.$key.'" '.$selected.'>'.$value.'</option>';
+  }
+?>
+</select>
+</p>
 
 <table class="dati" summary="Dati">
 

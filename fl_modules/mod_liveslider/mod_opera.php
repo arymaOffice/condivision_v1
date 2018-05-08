@@ -31,6 +31,10 @@ if (isset($_GET['nome_slider'])) { //salva slider
 
 if (isset($_GET['give_ads'])) {
 
+    $categoria_link = GQS('fl_link_slider','categoria_link',' link_id = '.check($_GET['link_id']));
+    $categoria_link = $categoria_link[0]['categoria_link'];
+
+
     $files = GQS('fl_dms d JOIN (
 
         SELECT id, parent_id
@@ -43,7 +47,7 @@ if (isset($_GET['give_ads'])) {
         WHERE `parent_id` =5
         )
         AND label = \'img\'
-        )u ON d.parent_id = u.id', '  CONCAT( d.parent_id ,"/",d.file ) path',' 1'); //Crea un array con i file
+        )u ON d.parent_id = u.id JOIN fl_ads a ON a.folder_number = u.parent_id  ', '  CONCAT( d.parent_id ,"/",d.file ) path,','  a.categoria_ads = '.$categoria_link); //Crea un array con i file
 
         echo json_encode(array('esito' => 1, 'type' => 'img', 'src' => DMS_ROOT,'files'=>$files), JSON_UNESCAPED_SLASHES);
         exit;

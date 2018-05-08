@@ -200,7 +200,7 @@ $risultato = mysql_query($query, CONNECT);
 			
 			echo "<td>";			
 			if($_SESSION['usertype'] == 0 || $_SESSION['usertype'] >= 0 && $_SESSION['number'] == $riga['account_id']) {
-			if($riga['id'] > 5)  echo "<a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Gestisci\" > <i class=\"fa fa-pencil-square-o\"></i> Gestisci proprietà </a><br>
+			if($riga['id'] > 5)  echo "<a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Gestisci\" > <i class=\"fa fa-pencil-square-o\"></i> Gestisci proprieta' </a><br>
 			"; 
 			}
 			echo "</td>"; 

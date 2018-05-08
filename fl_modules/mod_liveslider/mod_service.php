@@ -1,6 +1,12 @@
 <?php
 //mostra l'iframe con il servizio e gestisce le pubblicità in basso
 $url = filter_var($_GET['url'], FILTER_SANITIZE_URL);
+
+$output = array();
+
+$output = parse_url($url);
+
+$id = str_replace ('id=','',$output['query']);
 ?>
 
 <html>
@@ -29,7 +35,7 @@ $url = filter_var($_GET['url'], FILTER_SANITIZE_URL);
             var src = '';//src delle immagini
 
             //chiamata ajax
-            httpGetAsync('mod_opera.php?give_ads',function(data){
+            httpGetAsync('mod_opera.php?give_ads&link_id=<?php echo $id; ?>',function(data){
                 parsed = JSON.parse(data);
                 if(parsed.esito == 1){
 

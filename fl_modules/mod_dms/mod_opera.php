@@ -122,8 +122,8 @@ if(isset($_POST['NAme'])) $file_name = base64_decode(check($_POST['NAme'])).'.'.
 
 
 /*Check Dir*/
-if(!@is_dir(DMS_ROOT.$folder.'/')) {  if(!@mkdir(DMS_ROOT.$folder.'/',0777)) { return $esiti[7]; mysql_close(CONNECT);  break; } }
-if(!is_writable(DMS_ROOT.$folder.'/')) {  return $esiti[9]; mysql_close(CONNECT); break; }
+if(!@is_dir(DMS_ROOT.$folder.'/')) {  if(!@mkdir(DMS_ROOT.$folder.'/',0777)) {  mysql_close(CONNECT); return $esiti[7];   } }
+if(!is_writable(DMS_ROOT.$folder.'/')) { mysql_close(CONNECT); return $esiti[9];   }
 if(file_exists(DMS_ROOT.$folder.'/'.$file_name)) {  $file_name = time().$file_name; }
 
 

@@ -66,6 +66,7 @@
 	require('../../fl_core/class/ARY_dataInterface.class.php');
 	$data_set = new ARY_dataInterface();
 	$modulo = $data_set->data_retriever('fl_moduli','label','','label ASC');
+	$tags = $data_set->data_retriever('fl_posizioni_ads','label','','label ASC');
 
 	
 	$account_id = $destinatario;
@@ -73,7 +74,7 @@
 	
 	function select_type($who){
 	$textareas = array(); 
-	$select = array("marchio");
+	$select = array("marchio",'tags');
 	$disabled = array("visite");
 	$hidden = array("data_creazione",'record_id','parent_id','resource_type','lang','file',"id","workflow_id","proprietario","account_id","operatore","data_aggiornamento");
 	$radio  = array();	

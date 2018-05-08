@@ -1,9 +1,13 @@
 <?php 
 
 require_once('../../fl_core/autentication.php');
-include('fl_settings.php'); // Variabili Modulo 
 
- 
+if((@$_SESSION['anagrafica_attiva'] == 0 && $_SESSION['usertype'] != 0) || ($_SESSION['scelta_abbonamento'] == 1 && $_SESSION['usertype'] != 0)){
+    header('Location: ../../index.php');
+}
+
+
+include('fl_settings.php'); // Variabili Modulo 
 include("../../fl_inc/headers.php");?>
 
 

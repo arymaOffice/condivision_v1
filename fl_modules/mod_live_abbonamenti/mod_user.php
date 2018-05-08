@@ -15,6 +15,7 @@ include 'fl_settings.php';
 ?>
 <br>
 <br>
+<h1>Per utilizzare il servizio &egrave necessario selezionare un abbonamento </h1>
 <br>
 <table class="dati" summary="Dati">
   <tr>

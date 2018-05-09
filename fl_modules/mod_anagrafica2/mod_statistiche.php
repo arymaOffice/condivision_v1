@@ -16,14 +16,14 @@ include '../../fl_inc/module_menu.php';
  <div style="font-size: 100%; text-align: left; padding: 10px; color: gray;">
   <?php
 
-$query = "SELECT * FROM `fl_one_session` os JOIN fl_account ac ON ac.user = os.utente LEFT JOIN fl_monitor_action ma ON ma.account_id = ac.id WHERE os.attivo = 1 ORDER BY os.id DESC;";
+$query = "SELECT *,DATE_FORMAT(data_azione,'%d/%m/%Y %H:%i:%s ') as data_format FROM `fl_one_session` os JOIN fl_account ac ON ac.user = os.utente LEFT JOIN fl_monitor_action ma ON ma.account_id = ac.id WHERE os.attivo = 1  ORDER BY data_format DESC  ;";
 $risultato = mysql_query($query, CONNECT);
 if (mysql_affected_rows() == 0) {echo "<h2>Nessun cliente connesso!</h2>";} else {
 
     echo '<p style="font-weight:bold;">Clienti con sessione aperta  <span style="color:green;" >' . mysql_num_rows($risultato) . '</span></p>';
     echo '<table>';
     while ($riga = mysql_fetch_array($risultato)) {
-        echo '<tr><td><p>' . $riga['utente'] . ' </p></td><td><a style="margin-right:10px;" href="mod_opera.php?kill&mail='. $riga['utente'].'" class="button">Termina sessione</a>  <span class="msg blue"> Ultima azione riguardo i monitor '.$riga['data_azione'] .' </span></td>';
+        echo '<tr><td><p>' . $riga['utente'] . ' </p></td><td><a style="margin-right:10px;" href="mod_opera.php?kill&mail='. $riga['utente'].'" class="button">Termina sessione</a>  <span class="msg blue"> Ultima azione riguardo i monitor '.$riga['data_format'] .' </span></td>';
     }
     echo '</table>';
     

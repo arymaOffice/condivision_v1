@@ -53,7 +53,23 @@ $id = str_replace ('id=','',$output['query']);
 
 
                 document.getElementById("ads").innerHTML = "";
-                document.getElementById("ads").style.display = "block";
+                document.getElementById("ads").style.height = files[number]['height'] + '%';
+                document.getElementById("ads").style.width = files[number]['width' + '%'];
+                document.getElementById("ads").style.top = '0';
+                document.getElementById("ads").style.left = '0';
+
+                if(files[number]['tags'] > 1){
+                    document.getElementById("ads").style.top = '0';
+                    document.getElementById("ads").style.left = '60%';
+                }else if(files[number]['tags'] > 2){
+                    document.getElementById("ads").style.top = '0';
+                    document.getElementById("ads").style.left = '0';
+                    document.getElementById("ads").style.bottm = '60%';
+                }else if(files[number]['tags'] > 3){
+                    document.getElementById("ads").style.top = '60%';
+                    document.getElementById("ads").style.left = '0';
+                }
+
                 document.getElementById("ads").innerHTML = "<img style='width:100%;height: 100%;' src='"+src+files[number]['path']+"'>";
                 //console.log('add');
                 setTimeout(function(){ document.getElementById("ads").style.display = "none"; /*console.log('rm');*/ number++;  },30000);

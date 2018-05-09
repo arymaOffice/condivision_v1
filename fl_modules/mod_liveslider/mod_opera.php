@@ -47,7 +47,7 @@ if (isset($_GET['give_ads'])) {
         WHERE `parent_id` =5
         )
         AND label = \'img\'
-        )u ON d.parent_id = u.id JOIN fl_ads a ON a.folder_number = u.parent_id  ', '  CONCAT( d.parent_id ,"/",d.file ) path,','  a.categoria_ads = '.$categoria_link); //Crea un array con i file
+        )u ON d.parent_id = u.id JOIN fl_ads a ON a.folder_number = u.parent_id  LEFT JOIN fl_posizioni_ads ps ON ps.id =  d.tags  ', '  CONCAT( d.parent_id ,"/",d.file ) path, height,width,tags ','  a.categoria_ads = '.$categoria_link); //Crea un array con i file
 
         echo json_encode(array('esito' => 1, 'type' => 'img', 'src' => DMS_ROOT,'files'=>$files), JSON_UNESCAPED_SLASHES);
         exit;

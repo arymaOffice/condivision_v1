@@ -4,13 +4,13 @@
 if (!@$thispage) {echo "Accesso Non Autorizzato";exit;}
 
 
-$new_button = '';
+
 
 if (isset($_GET['ordine'])) {if (!is_numeric($_GET['ordine'])) {exit;} else { $ordine = $ordine_mod[$_GET['ordine']];}}
 
 $start = paginazione(CONNECT, $tabella, $step, $ordine, '', 0);
 
-$query = "SELECT $select ,an.marchio as anaMarchio, an.id as anid,ac.attivo as accountAttivo, (SELECT count(*) FROM `fl_one_session` WHERE attivo = 1 and utente = ac.email ) sessionActive  FROM `$tabella` an LEFT JOIN fl_account ac ON ac.anagrafica = an.id WHERE ac.id > 1 ORDER BY $ordine LIMIT $start,$step;";
+$query = "SELECT $select,ac.id as acid ,an.marchio as anaMarchio, an.id as anid,ac.attivo as accountAttivo, (SELECT count(*) FROM `fl_one_session` WHERE attivo = 1 and utente = ac.email ) sessionActive  FROM `$tabella` an LEFT JOIN fl_account ac ON ac.anagrafica = an.id WHERE ac.id > 1 ORDER BY $ordine LIMIT $start,$step;";
 
 $risultato = mysql_query($query, CONNECT);
 echo mysql_error();
@@ -53,7 +53,7 @@ while ($riga = mysql_fetch_array($risultato)) {
 
 
 
-        $user_check = '<a data-fancybox-type="iframe" title="Modifica Account" class="fancybox" href="../mod_account/mod_visualizza.php?external&id=' . $riga['anid'] . '">' . $riga['user'] . '</a> <br>' . $riga['motivo_sospensione'];
+        $user_check = '<a data-fancybox-type="iframe" title="Modifica Account" class="fancybox" href="../mod_account/mod_visualizza.php?external&id=' . $riga['acid'] . '">' . $riga['user'] . '</a> <br>' . $riga['motivo_sospensione'];
         $user_ball = ($riga['accountAttivo'] == 1) ? "<span class=\"c-green\"><i class=\"fa fa-user\"></i></span>" : "<span class=\"c-red\"><i class=\"fa fa-user\"></i></span>";
         $status_anagrafica = ($riga['status_anagrafica'] == 1) ? "" : "<span class=\"msg red\">Anagrafica non attiva</span>";
 

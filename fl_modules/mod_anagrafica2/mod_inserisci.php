@@ -18,7 +18,7 @@ if (!isset($_GET['view'])) {
 }
 
 
-$tab_div_labels = array('marchio' => 'Profilo', 'tipo_documento' => "Dati Documento", 'forma_giuridica' => "Dati Fiscali", 'lat' => $etichette_anagrafica['tipologia_attivita'], 'telefono' => "Contatti");
+$tab_div_labels = array('marchio' => 'Profilo', 'nome' => 'Dati Anagrafici', 'tipo_documento' => "Dati Documento", 'forma_giuridica' => "Dati Fiscali Sede", 'tipologia_attivita' => 'Dati Punto', 'lat' => $etichette_anagrafica['tipologia_attivita'], 'telefono' => "Contatti");
 
 ?>
 
@@ -36,7 +36,7 @@ $tab_div_labels = array('marchio' => 'Profilo', 'tipo_documento' => "Dati Docume
         echo '<h2>Tipo Delega: <span class="msg gray">' . @$pagamenti_f24[@$profilo['pagamenti_f24']] . '</span></h2>';
     }
 
-    echo '<p>Telefono: <a href="tel:' . @$telefono . '">' . @$telefono . '</a> mail: <a href="mailto:' . @$profilo['email'] . '" >' . @$profilo['email'] . '</a></h2>';
+    echo '<p>Telefono: <a href="tel:' . @$telefono . '">' . @$telefono . '</a></h2>';
 } else {echo '<h1>Nuovo ' . $tipo_profilo[$tipo_profilo_id] . '</h1>';}
 
 ?>
@@ -56,6 +56,11 @@ if($_SESSION['usertype'] > 1){
 ?>
 </form>
 <script>
+$('label[for="status_anagrafica1"]').text('attiva');
+$('label[for="status_anagrafica2"]').text('disattiva');
+$( '#marchio' ).val('<?php echo $profilo['marchio']; ?>');
+
+
 $('#invio').attr('id','nosend');
 $('#nosend').click(function(event){
     event.preventDefault();

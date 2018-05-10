@@ -40,7 +40,7 @@ include "../../fl_inc/headers.php";
 			echo "<td>".$riga['data_format_start']."</td>";	
 			echo "<td>".$riga['data_format_end']."</td>";	
 			echo "<td>".$riga['nome']."</td>";	
-            echo "<td><a href=''>Gestisci Abbonamento</a></td>";
+            echo "<td><a href='mod_gestione_abbonamento.php?id=".$riga['id_user']."'>Gestisci Abbonamento</a></td>";
 		    echo "</tr>";
 	}
 

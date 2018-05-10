@@ -66,8 +66,12 @@
 	
 	/* Inclusione classi e dati */	
 	require('../../fl_core/dataset/array_statiche.php'); // Liste di valori statiche
-	if(!isset($data_set)) require('../../fl_core/class/ARY_dataInterface.class.php'); //Classe di gestione dei dati 
+	if(isset($data_set) != 1) require('../../fl_core/class/ARY_dataInterface.class.php'); //Classe di gestione dei dati
 
+	if (!class_exists('ARY_dataInterface')) {
+		require('../../fl_core/class/ARY_dataInterface.class.php');
+	}
+	
 	$data_set = new ARY_dataInterface();
 	$periodo = $data_set->data_retriever('fl_periodi','label',' WHERE id != 1 '); //Crea un array con i valori X2 della tabella X1
 	unset($periodo[0]);

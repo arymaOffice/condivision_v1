@@ -18,7 +18,7 @@ if (!isset($_GET['view'])) {
 }
 
 
-$tab_div_labels = array('marchio' => 'Profilo', 'nome' => 'Dati Anagrafici', 'tipo_documento' => "Dati Documento", 'forma_giuridica' => "Dati Fiscali Sede", 'tipologia_attivita' => 'Dati Punto', 'lat' => $etichette_anagrafica['tipologia_attivita'], 'telefono' => "Contatti");
+$tab_div_labels = array('marchio' => 'Profilo', 'nome' => 'Dati Anagrafici', 'tipo_documento' => "Dati Documento", 'forma_giuridica' => "Dati Fiscali", 'tipologia_attivita' => 'Dati Sede Operativa', 'lat' => $etichette_anagrafica['tipologia_attivita'], 'telefono' => "Contatti");
 
 ?>
 

@@ -17,7 +17,7 @@ include "../../fl_inc/headers.php";
     
 <?php
 	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main);
-	$query = "SELECT *,DATE_FORMAT(data_avvio,'%d/%m/%Y %H:%i:%s ') as data_format_start,DATE_FORMAT(data_fine,'%d/%m/%Y %H:%i:%s ') as data_format_end  FROM fl_abb_user  abb_us JOIN fl_abbonamenti abb ON abb.id = abb_us.id_abb RIGHT JOIN fl_account acc ON acc.id = abb_us.id_user  LIMIT $start,$step;";
+	$query = "SELECT *,acc.id as acid,DATE_FORMAT(data_avvio,'%d/%m/%Y %H:%i:%s ') as data_format_start,DATE_FORMAT(data_fine,'%d/%m/%Y %H:%i:%s ') as data_format_end  FROM fl_abb_user  abb_us JOIN fl_abbonamenti abb ON abb.id = abb_us.id_abb RIGHT JOIN fl_account acc ON acc.id = abb_us.id_user  LIMIT $start,$step;";
 	$risultato = mysql_query($query, CONNECT);
 ?>
 <table class="dati" summary="Dati">
@@ -40,7 +40,7 @@ include "../../fl_inc/headers.php";
 			echo "<td>".$riga['data_format_start']."</td>";	
 			echo "<td>".$riga['data_format_end']."</td>";	
 			echo "<td>".$riga['nome']."</td>";	
-            echo "<td><a href='mod_gestione_abbonamento.php?id=".$riga['id_user']."'>Gestisci Abbonamento</a></td>";
+            echo "<td><a href='mod_gestione_abbonamento.php?id=".$riga['acid']."'>Gestisci Abbonamento</a></td>";
 		    echo "</tr>";
 	}
 

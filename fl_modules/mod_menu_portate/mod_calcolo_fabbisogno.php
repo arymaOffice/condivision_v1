@@ -117,7 +117,7 @@ if (isset($_GET['categoria_materia'])) {
     $filtriQuery .= ' AND selectSpecific.categoria_materia LIKE "%'.$cerca.'%" ';
 }
 $TOTALE = 0;
-$megasuperQueryFighissima = "SELECT fb.id as fabbId,selectSpecific.categoria_materia,selectSpecific.materiaprima_id,selectSpecific.codice_articolo,selectSpecific.ultimo_prezzo,selectSpecific.anagrafica_id,selectSpecific.descrizione,selectSpecific.valore_di_conversione, SUM( selectSpecific.quantita * fb.quantita ) AS totale, selectSpecific.unita_di_misura FROM `fl_ricettario_fabbisogno` fb JOIN ( SELECT materiaprima_id, m.descrizione, m.unita_di_misura, rf.quantita, ricetta_id,m.codice_articolo,m.ultimo_prezzo,m.anagrafica_id,m.categoria_materia,m.valore_di_conversione FROM fl_ricettario_diba rf JOIN fl_materieprime m ON m.id = materiaprima_id WHERE ricetta_id IN ( ( SELECT ricetta_id FROM `fl_ricettario_fabbisogno` WHERE evento_id IN ( " . $eventiIN . " ) ) ) ) AS selectSpecific ON fb.ricetta_id = selectSpecific.ricetta_id WHERE evento_id IN ( " . $eventiIN . " ) AND fb.ordine_id = 0 ".$filtriQuery." GROUP BY materiaprima_id ORDER BY selectSpecific.anagrafica_id DESC , selectSpecific.codice_articolo ASC ";
+ $megasuperQueryFighissima = "SELECT  GROUP_CONCAT(DISTINCT fb.id  SEPARATOR ',') as fabbisogni,fb.id as fabbId,selectSpecific.categoria_materia,selectSpecific.materiaprima_id,selectSpecific.codice_articolo,selectSpecific.ultimo_prezzo,selectSpecific.anagrafica_id,selectSpecific.descrizione,selectSpecific.valore_di_conversione, SUM( selectSpecific.quantita * fb.quantita ) AS totale, selectSpecific.unita_di_misura FROM `fl_ricettario_fabbisogno` fb JOIN ( SELECT materiaprima_id, m.descrizione, m.unita_di_misura, rf.quantita, ricetta_id,m.codice_articolo,m.ultimo_prezzo,m.anagrafica_id,m.categoria_materia,m.valore_di_conversione FROM fl_ricettario_diba rf JOIN fl_materieprime m ON m.id = materiaprima_id WHERE ricetta_id IN ( ( SELECT ricetta_id FROM `fl_ricettario_fabbisogno` WHERE evento_id IN ( " . $eventiIN . " ) ) ) ) AS selectSpecific ON fb.ricetta_id = selectSpecific.ricetta_id WHERE evento_id IN ( " . $eventiIN . " ) AND fb.ordine_id = 0 ".$filtriQuery." GROUP BY materiaprima_id ORDER BY selectSpecific.anagrafica_id DESC , selectSpecific.codice_articolo ASC "; 
 
 $risultato = mysql_query($megasuperQueryFighissima, CONNECT);
 
@@ -125,6 +125,7 @@ while ($robaDaOrdinare = mysql_fetch_array($risultato)) {
     $single_tot = (numdec($robaDaOrdinare['ultimo_prezzo'], 2)/$robaDaOrdinare['valore_di_conversione']) * $robaDaOrdinare['totale'];
     $TOTALE += $single_tot ;
     echo '<input type="hidden" name="fabb' . $robaDaOrdinare['materiaprima_id'] . '" value="' . $robaDaOrdinare['fabbId'] . '" >';
+    echo '<input type="hidden" name="fabbisogni' . $robaDaOrdinare['materiaprima_id'] . '" value="' . $robaDaOrdinare['fabbisogni'] . '" >';
 
     echo "<tr><td>" . $robaDaOrdinare['codice_articolo'] . "</td>
     <td>" . $robaDaOrdinare['descrizione'] . "</td>

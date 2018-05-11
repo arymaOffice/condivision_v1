@@ -71,12 +71,14 @@ if(isset($_POST['creaOrdiniFornitore'])){
 			} else { $ordini++; }
 		}
 
-		$info_materia = GQD('fl_materieprime','`codice_articolo`, `descrizione`, `unita_di_misura`,ultimo_prezzo ','id = "'.$key.'"');
+		$info_materia = GQD('fl_materieprime','`codice_articolo`, `descrizione`, `unita_di_misura`,ultimo_prezzo,valore_di_conversione','id = "'.$key.'"');
 
 		$quantita = filter_var($_POST['qta'.$key],FILTER_SANITIZE_STRING);
 		$note = filter_var($_POST['note'.$key],FILTER_SANITIZE_STRING);
+		$costoPezzo = ($info_materia['ultimo_prezzo']/$info_materia['valore_di_conversione']);
+		$importo = ($costoPezzo*$quantita);
 
-		$insert_doc_voci = "INSERT INTO `fl_doc_acquisto_voci`( `parent_id`,  `codice`, `descrizione`,`note`, `unita_di_misura`, `quantita`, `valuta`, `importo`,`subtotale`, `data_creazione`, `operatore`) VALUES ('".$parent_id."','".$info_materia['codice_articolo']."','".$info_materia['descrizione']."','".$note."','".$info_materia['unita_di_misura']."','".$quantita."','EUR','".$info_materia['ultimo_prezzo']."','".($info_materia['ultimo_prezzo']*$quantita)."',NOW(),'".$_SESSION['number']."')";
+		$insert_doc_voci = "INSERT INTO `fl_doc_acquisto_voci`( `parent_id`,  `codice`, `descrizione`,`note`, `unita_di_misura`, `quantita`, `valuta`, `importo`,`subtotale`, `data_creazione`, `operatore`) VALUES ('".$parent_id."','".$info_materia['codice_articolo']."','".$info_materia['descrizione']."','".$note."','".$info_materia['unita_di_misura']."','".$quantita."','EUR','".$costoPezzo."','".$importo."',NOW(),'".$_SESSION['number']."')";
 
 		$insert_doc_voci = mysql_query($insert_doc_voci,CONNECT);
 		
@@ -87,6 +89,7 @@ if(isset($_POST['creaOrdiniFornitore'])){
 		
 		
 	}//fine foreach
+
 	header("location: ./?tipo_doc_acquisto=4&ordiniCreati=".$ordini);
 	mysql_close(CONNECT);
 	exit;

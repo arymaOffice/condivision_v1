@@ -28,7 +28,7 @@ include("../../fl_inc/headers.php");
 ?>
 
 
-<h1><?php echo converti_txt($ricettaInfo['nome_tecnico']); ?></h1>
+<h1><?php echo $ricettaInfo['id'].' '.converti_txt($ricettaInfo['nome_tecnico']); ?></h1>
 <?php echo strtoupper($portata[$ricettaInfo['portata']]." $categoria_msg")." | CODICE: ".$ricettaInfo['codice_portata']." | Porzioni: ".$ricettaInfo['porzioni']; ?>
 <p>Nome Gastronomico: <?php echo strip_tags(converti_txt($ricettaInfo['nome'])); ?></p>
 

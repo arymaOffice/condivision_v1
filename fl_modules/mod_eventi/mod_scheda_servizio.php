@@ -4,6 +4,7 @@ require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
 $id = check($_GET['id']);
 $evento_id = check($_GET['evento_id']);
+$text_editor = 2;
 
 $evento = GRD($tabella,$evento_id); 
 
@@ -94,7 +95,7 @@ if($_SERVER['HTTP_HOST'] == 'calderonimartini.condivision.cloud'){
 
  echo "<div><a href=\"mod_inserisci.php?id=$evento_id\" class=\"button\">Vai a amministrazione</a> ";
  if(defined('ALLEGATO_MENU_DEFINITIVO')) echo "<a href=\"$GeneraAllegato\" data-fancybox-type=\"iframe\" class=\"fancybox_view button\" title=\"Visualizza/Stampa\"> ".ALLEGATO_MENU_DEFINITIVO."</a> ";
- if(defined('ALLEGATO_ALLESTIMENTI')) echo "<a href=\"mod_allegato2.php?evento_id=".$evento['id']."\" data-fancybox-type=\"iframe\" class=\"fancybox_view button\" title=\"Visualizza/Stampa\"> ".ALLEGATO_ALLESTIMENTI." </a> ";
+ if(defined('ALLEGATO_ALLESTIMENTI')) echo "<a href=\"mod_allegato2.php?evento_id=".$evento['id']."\" data-fancybox-type=\"iframe\" class=\"fancybox_view button\" title=\"Visualizza/Stampa\"> ".ALLEGATO_ALLESTIMENTI." </a> <a href=\"mod_allegato3.php?evento_id=".$evento['id']."\" data-fancybox-type=\"iframe\" class=\"fancybox_view button\" title=\"Visualizza/Stampa\"> Scheda Wedding </a> ";
  echo " ".$evento['titolo_ricorrenza']." ".mydatetime($evento['data_evento'])." (".$giorni_settimana[date("w", strtotime($evento['data_evento']))].")  | Coperti: ".($evento['numero_adulti']+$evento['numero_bambini']+$evento['numero_operatori'])." | Prezzo base: &euro; ".$evento['prezzo_base']." | Ultima Revisione: ".$dataRevisione." </div>";
 ?>
 

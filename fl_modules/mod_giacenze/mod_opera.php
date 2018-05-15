@@ -7,7 +7,7 @@ include('fl_settings.php'); // Variabili Modulo
 
 if(isset($_POST['doc_vendita'])) {
 
-$$doc_vendita_id = (isset($_POST['doc_vendita'])) ? check($_POST['doc_vendita']) : 0; 
+$doc_vendita_id = (isset($_POST['doc_vendita'])) ? check($_POST['doc_vendita']) : 0; 
 $ordine_id = (isset($_POST['ordine_id'])) ? check($_POST['ordine_id']) : 0; 
 $magazzino_id_id = (isset($_POST['magazzino_id'])) ? check($_POST['magazzino_id']) : 0; 
 $causale_movimentazione_id = (isset($_POST['causale_movimentazione'])) ? check($_POST['causale_movimentazione']) : 0; 
@@ -34,6 +34,7 @@ foreach($_POST['codice'] as $item => $val) {
     $sc = str_replace(',','.',check($_POST['sc'][$item]));
     $prezzo = str_replace(',','.',check($_POST['prezzo'][$item]));
     $iva = str_replace(',','.',check($_POST['iva'][$item]));
+    $evento_id = check($_POST['evento_id'][$item]);
     $lotto = $note = ''; // TO ADD ON FORM
     $imposta = (($prezzo*$qty)*$iva)/100;
     $subtotale = ($prezzo*$qty)+$imposta;
@@ -49,8 +50,8 @@ foreach($_POST['codice'] as $item => $val) {
     }
 
     //Inserisco movimentazione di magazzino
-    $insertMovimentoMag = "INSERT INTO `fl_magazzino_movimentazioni` (`id`, `status_movimentazione`, `ordine_id`, `doc_vendita_id`, `causale_movimentazione`, `workflow_id`, `parent_id`, `codice_fornitore`, `codice_ean`, `descrizione`, `unita_di_misura`, `valuta`, `prezzo_unitario`, `aliquota`, `lotto`, `note`, `quantita`, `magazzino_id`, `settore_id`, `cella_id`, `data_creazione`, `data_aggiornamento`, `operatore`) 
-    VALUES (NULL, '0', '$ordine_id', '$doc_vendita_id', '$causale_movimentazione_id', '116', '$id', '$codice_fornitore', '', '$descrizione', '$unita_di_misura', 'EUR', '$prezzo', '$iva', '$lotto', '$note', '$qty', '$magazzino_id_id', '0', '0', NOW(), NOW(), '".$_SESSION['number']."');";
+    $insertMovimentoMag = "INSERT INTO `fl_magazzino_movimentazioni` (`id`, `status_movimentazione`, `evento_id`, `ordine_id`, `doc_vendita_id`, `causale_movimentazione`, `workflow_id`, `parent_id`, `codice_fornitore`, `codice_ean`, `descrizione`, `unita_di_misura`, `valuta`, `prezzo_unitario`, `aliquota`, `lotto`, `note`, `quantita`, `magazzino_id`, `settore_id`, `cella_id`, `data_creazione`, `data_aggiornamento`, `operatore`) 
+    VALUES (NULL, '0', '$evento_id', '$ordine_id', '$doc_vendita_id', '$causale_movimentazione_id', '116', '$id', '$codice_fornitore', '', '$descrizione', '$unita_di_misura', 'EUR', '$prezzo', '$iva', '$lotto', '$note', '$qty', '$magazzino_id_id', '0', '0', NOW(), NOW(), '".$_SESSION['number']."');";
     if(mysql_query($insertMovimentoMag,CONNECT)) //echo " e movimentazione di magazzino acquisita per ".$descrizione;
      
     if($id > 1) {  //AGGIORNO GIACENZA

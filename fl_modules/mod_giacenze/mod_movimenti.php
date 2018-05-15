@@ -34,7 +34,7 @@ require_once("../../fl_inc/headers.php");
 <table class="dati">
 <?php 
 
-$caricamenti = GQS('fl_magazzino_movimentazioni','`id`,`magazzino_id`, `ordine_id`, `doc_vendita_id`, `causale_movimentazione`, `codice_fornitore`, `codice_ean`, `lotto`,`descrizione`, `unita_di_misura`, `quantita`,  `data_creazione`','1');
+$caricamenti = GQS('fl_magazzino_movimentazioni','`id`,`magazzino_id`, `evento_id`,`ordine_id`, `doc_vendita_id`, `causale_movimentazione`, `codice_fornitore`, `codice_ean`, `lotto`,`descrizione`, `unita_di_misura`, `quantita`,  `data_creazione`','1');
 $s = 0;
 foreach($caricamenti as $key => $val){
 
@@ -59,4 +59,6 @@ foreach($caricamenti as $key => $val){
   $s = 1;
 }
 echo '</table>';
+
+
 include_once("../../fl_inc/footer.php"); ?>

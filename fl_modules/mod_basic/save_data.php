@@ -5,8 +5,8 @@ include('../../fl_core/dataset/array_statiche.php');
 
 // Campi
 $obbligatorio = array('tipo_preventivo','anno_di_interesse','condizioni_meteo','tipologia_hd','importo','estremi_del_pagamento','titolo','fornitore','entrate','nome_e_cognome','oggetto','rfq');
-$etichette = array('ambienti','famiglia_ricetta','produttore','mesi_di_interesse','gruppo','giorni_lavorativi','sedi_id','servizi');
-$campi_date = array('data_scadenza_smartcard','data_validita','data_preventivo','data_pubblicazione','data_visita','from_date','to_date','invoice_date','data_prenotazione','data_rinnovo','data_sottoscrizione','data_creazione_asset','data_richiesta','data_scadenza_pec','scadenza_obiettivo','data_revisione','data_evento','meeting_date','data_arrived','data_fattura','data_corrispettivo','data_versamento','data_preventivo','data_intervento','data_pagamento','data_rielaborazione','data_scadenza_contratto','data_avvio','data_conclusione','data_documento','data_operazione','data_emissione','data_scadenza','data_nascita','data_apertura','data_chiusura','data_inizio','data_fine','periodo_inizio','periodo_fine');
+$etichette = array('ambienti','famiglia_ricetta','mesi_di_interesse','gruppo','giorni_lavorativi','sedi_id','servizi');
+$campi_date = array('data_contratto','data_scadenza_smartcard','data_validita','data_preventivo','data_pubblicazione','data_visita','from_date','to_date','invoice_date','data_prenotazione','data_rinnovo','data_sottoscrizione','data_creazione_asset','data_richiesta','data_scadenza_pec','scadenza_obiettivo','data_revisione','data_evento','meeting_date','data_arrived','data_fattura','data_corrispettivo','data_versamento','data_preventivo','data_intervento','data_pagamento','data_rielaborazione','data_scadenza_contratto','data_avvio','data_conclusione','data_documento','data_operazione','data_emissione','data_scadenza','data_nascita','data_apertura','data_chiusura','data_inizio','data_fine','periodo_inizio','periodo_fine');
 $campi_datetime = array('data_fine_evento','data_evento','start_meeting','end_meeting');
 $moneta = array('dare','avere','importo');
 
@@ -83,7 +83,7 @@ exit;
 
 if (isset($_POST['user']) && $tabella == 'fl_account') {
 $exist = check_record($tabella,'user',$id,check($_POST['user']));
-if($exist == TRUE || strlen(check($_POST['user'])) < 3){	
+if($exist == TRUE || strlen(check($_POST['user'])) < 8){	
 echo json_encode(array('action'=>'info','class'=>'red','url'=>'','esito'=>"Username esistente o non valido"));
 exit;
 }}
@@ -287,7 +287,7 @@ mysql_query($query_p,CONNECT);
 
 @mysql_close(CONNECT);
 if(isset($_SESSION['POST_BACK_PAGE']) && !isset($_POST['goto'])  && !isset($_POST['info']) && !isset($_POST['reload'])) {
-echo json_encode(array('action'=>'goto','class'=>'green','url'=>$_SESSION['POST_BACK_PAGE'],'esito'=>"Salvato Correttamente!")); 
+echo json_encode(array('action'=>'goto','class'=>'green','url'=>$_SESSION['POST_BACK_PAGE'].'#'.$id,'esito'=>"Salvato Correttamente!")); 
 } else if(isset($_POST['goto'])){
 echo json_encode(array('action'=>'goto','class'=>'green','url'=>check($_POST['goto'],1),'esito'=>"Salvato Correttamente!")); 
 } else if(isset($_POST['reload'])){

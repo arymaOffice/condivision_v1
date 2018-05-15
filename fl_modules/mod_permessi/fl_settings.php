@@ -6,7 +6,7 @@
 	$jorel = 0;
 	$tabella = $tables[$tab_id];
 	$select = "*";
-	$step = 20; 
+	$step = 2000; 
 
 
   	 $module_menu = '

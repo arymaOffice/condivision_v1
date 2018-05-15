@@ -122,7 +122,7 @@
 
 
 			echo "<tr ><td $colore><span class=\"Gletter\"></span></td>"; 
-			echo "<td><h2>".mydatetime($riga['data_evento'])."</h2> <span class=\"msg\" style=\"background: $coloreEvento\">".@$tipo_evento[$riga['tipo_evento']]." ".@$centro_di_ricavo[$riga['centro_di_ricavo']]."</span><span class=\"msg gray\">".$periodo_evento[$riga['periodo_evento']]."</span></td>"; 
+			echo "<td><h2><span class=\"c-green\">".$riga['id']."</span> ".mydatetime($riga['data_evento'])."</h2> <span class=\"msg\" style=\"background: $coloreEvento\">".@$tipo_evento[$riga['tipo_evento']]." ".@$centro_di_ricavo[$riga['centro_di_ricavo']]."</span><span class=\"msg gray\">".$periodo_evento[$riga['periodo_evento']]."</span></td>"; 
 			echo "<td><h2><a href=\"../mod_eventi/mod_scheda_servizio.php?evento_id=".$riga['id']."&tipo_evento=".$riga['tipo_evento']."&id=$schedaWeddingId\">$titolo_ricorrenza</a></h2>".@$location_evento[$riga['location_evento']]." ".$ambiente."</td>"; 
 			echo "<td><h2>".$riga['numero_adulti']."</h2></td>"; 
 			echo "<td><h2>".$riga['numero_bambini']."</h2></td>"; 

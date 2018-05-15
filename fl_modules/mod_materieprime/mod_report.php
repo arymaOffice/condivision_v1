@@ -58,9 +58,9 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 	//Filtri di base (da strutturare quelli avanzati)
 
 	/*Impostazione automatica da tabella */
-	$campi = gcolums($tabella); //Ritorna i campi della tabella
+	$campi = gcolums('fl_materieprime'); //Ritorna i campi della tabella
 
-	$tipologia_main = gwhere($campi,'WHERE a.id != 1 ');//Imposta i filtri della query prendendo i dati GET e se sono tra i filtri li applica
+	$tipologia_main = gwhere($campi,'WHERE a.id != 1 ','b.');//Imposta i filtri della query prendendo i dati GET e se sono tra i filtri li applica
 	//$start = paginazione(CONNECT,$tabella,$step,id DESC,$tipologia_main,0);
 	$query = "SELECT *,a.id AS aid, b.id AS bid,a.formato as formato FROM $tabella $tipologia_main ORDER BY id_materia DESC;";
 	$risultato = mysql_query($query, CONNECT);
@@ -75,11 +75,12 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 	$attivo = ($riga['attivo'] == 1) ? 'tab_green' : 'tab_red';
 	$valore = $riga['giacenza']*$riga['prezzo_unitario'];
 	$totale += $valore;
+	$codice_tag = ($riga['codice_articolo'] != '') ? "<span class=\"msg blue\">".$riga['codice_articolo']."</span>" : '';
 
 			 $righe .= "<tr>"; 				
 			 $righe .= "<td class=\"$attivo\"></td>";
 			 $righe .= "<td>".@$magazzino_base[$riga['magazzino_base']]."</td>";
-			 $righe .= "<td><a href=\"\" class=\"msg blue\">".$riga['codice_articolo']."<a/> ".$riga['descrizione']."<br>".$riga['formato']."<br></td>";	
+			 $righe .= "<td>$codice_tag".$riga['descrizione']."<br>".$riga['formato']."<br></td>";	
 			 $righe .= "<td>".$fornitore[$riga['fornitore']]."<br>COD: ".$riga['codice_fornitore']." - EAN: ".$riga['codice_ean']."</td>";
 			 $righe .= "<td>".@$riga['categoria_materia']."</td>";
 			 $righe .= "<td><input class=\"updateField\" value=\"".$riga['giacenza']."\" name=\"giacenza\" data-rel=\"".$riga['aid']."\" data-gtx=\"116\"  /></td>";		

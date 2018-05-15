@@ -62,7 +62,7 @@ if (($key = array_search('Pagamenti', $tab_div_labels)) !== false) {
 
 
 include("../../fl_inc/headers.php");
-if(!isset($_GET['goto'])) include("../../fl_inc/testata_mobile.php");
+if(!isset($_GET['goto']) && !isset($_GET['external'])) include("../../fl_inc/testata_mobile.php");
 
  ?>
 
@@ -171,7 +171,7 @@ $schedaWeddingId = ($schedaWedding['id'] > 1) ? $schedaWedding['id'] : '1&auto';
 
  echo "<div><a href=\"mod_scheda_servizio.php?evento_id=".$evento['id']."&tipo_evento=".$evento['tipo_evento']."&id=$schedaWeddingId\" class=\"button\">Vai a gestione</a>";
  if(defined('ALLEGATO_MENU_DEFINITIVO')) echo " <a href=\"$GeneraAllegato\" data-fancybox-type=\"iframe\" class=\"fancybox_view button\" title=\"Visualizza/Stampa\"> ".ALLEGATO_MENU_DEFINITIVO."</a>";
- if(defined('ALLEGATO_ALLESTIMENTI')) echo " <a href=\"mod_allegato2.php?evento_id=".$evento['id']."\" data-fancybox-type=\"iframe\" class=\"fancybox_view button\" title=\"Visualizza/Stampa\"> ".ALLEGATO_ALLESTIMENTI." </a> ";
+ if(defined('ALLEGATO_ALLESTIMENTI')) echo " <a href=\"mod_allegato2.php?evento_id=".$evento['id']."\" data-fancybox-type=\"iframe\" class=\"fancybox_view button\" title=\"Visualizza/Stampa\"> ".ALLEGATO_ALLESTIMENTI." </a> <a href=\"mod_allegato3.php?evento_id=".$evento['id']."\" data-fancybox-type=\"iframe\" class=\"fancybox_view button\" title=\"Visualizza/Stampa\"> Scheda Wedding </a> ";
  echo $preventivoCollegato." ".$evento['titolo_ricorrenza']." ".mydatetime($evento['data_evento'])." (".$giorni_settimana[date("w", strtotime($evento['data_evento']))].")  | Coperti: ".($evento['numero_adulti']+$evento['numero_bambini']+$evento['numero_operatori'])." | Prezzo base: &euro; ".$evento['prezzo_base']." | Ultima Revisione: ".$dataRevisione." </div>";
 
 

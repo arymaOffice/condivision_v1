@@ -12,7 +12,6 @@
 	$searchbox = 'Cerca..';
 	//$tab_div_labels = array('id'=>"Proprietà");//,'#tab2'=>"Commenti",'#tab3'=>"Permessi",'#tab4'=>"Versioni");
     $module_title = 'DMS';
-	$vistaMarchio = ($_SESSION['marchio'] > 0) ? ' AND (marchio = 0 OR marchio = '.$_SESSION['marchio'].')' : '';
 
 	
 
@@ -58,7 +57,7 @@
 	if($workflow_id > 1) { $tipologia_main .= " AND ( workflow_id = 0 OR workflow_id = ".$workflow_id.')'; }
 	if($contenuto_id > 1) { $tipologia_main .= " AND  record_id = '".$contenuto_id."' "; }
 	if($_SESSION['usertype'] > 2) { $tipologia_main .= " AND  id != 5 AND  parent_id != 5 "; }
-	$tipologia_main .= $vistaMarchio;
+
 	
 	/* Inclusioni Oggetti Modulo */	
 	include('../../fl_core/dataset/array_statiche.php');
@@ -73,18 +72,19 @@
 	
 	function select_type($who){
 	$textareas = array(); 
-	$select = array("marchio");
+	$select = array("");
 	$disabled = array("visite");
 	$hidden = array("data_creazione",'record_id','parent_id','resource_type','lang','file',"id","workflow_id","proprietario","account_id","operatore","data_aggiornamento");
 	$radio  = array();	
-	if($_SESSION['usertype'] > 0) $hidden[] = 'marchio';
+	
 	$type = 1;
 	
 	if(in_array($who,$select)) { $type = 2; }
 	if(in_array($who,$textareas)){ $type = 3; }
 	if(in_array($who,$disabled)){ $type = 4; }
-	if(in_array($who,$radio)){ $type = 8; }
 	if(in_array($who,$hidden)){ $type = 5; }
+	if(in_array($who,$radio)){ $type = 8; }
+		
 	return $type;
 	}
 	

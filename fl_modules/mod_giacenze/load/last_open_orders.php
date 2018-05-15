@@ -19,11 +19,11 @@ error_reporting(E_ALL);
   $sql = "SELECT id,titolo_ricorrenza,data_evento
   FROM fl_eventi_hrc
   WHERE data_evento
-  BETWEEN CURDATE( )
+  BETWEEN (CURDATE( ) - INTERVAL 3 DAY)
   AND (
   NOW( ) + INTERVAL 15
   DAY
-  )";
+  ) ORDER BY data_evento ASC";
 
   $result = mysqli_query($conn, $sql);
  

@@ -9,6 +9,7 @@
 <div style="width: 50%;">
 <p>Utilizza questo modulo per comunicare con il responsabile tecnico del sistema, segnalare messaggi di errore o inviare suggerimenti.</p>
 
+<p>Scarica qui il software per assistenza remota: <a href="https://download.anydesk.com/AnyDesk.exe?_ga=2.219701337.1385108571.1518432411-1364973123.1518432411">Any Desk</a></p>
     
 <form id="Contatta" method="post" action="action_invia.php" style="" >  
 

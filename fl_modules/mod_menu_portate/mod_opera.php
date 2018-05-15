@@ -6,6 +6,20 @@ include('fl_settings.php'); // Variabili Modulo
 $newPiatto = '';
 
 
+if(isset($_GET['cMp'])) {
+
+
+		$evento_id = check($_GET['cMp']); 
+		$query = "DELETE FROM `fl_ricettario_fabbisogno` WHERE evento_id = ".base64_decode($evento_id);
+		mysql_query($query,CONNECT);
+
+		mysql_close(CONNECT);
+		header("Location: ".$_SERVER['HTTP_REFERER'].'#cMp'.$evento_id); 
+		exit;
+}
+
+
+
 // Modifica Stato se è settata $stato	
 if(isset($_GET['stato_menu_portata'])) { 
 $stato_menu_portata = check($_GET['stato_menu_portata']);
@@ -86,6 +100,8 @@ exit;
 }
 
 
+
+
 if(isset($_POST['creaFabbisogno'])) {
 
 foreach ($_POST['ricetta_id'] as $key => $value) {
@@ -102,7 +118,7 @@ foreach ($_POST['ricetta_id'] as $key => $value) {
 }
 
 mysql_close(CONNECT);
-header("Location: mod_calcolo_fabbisogno.php"); 
+header("Location: mod_revisione_fabbisogno.php"); 
 exit;
 }
 

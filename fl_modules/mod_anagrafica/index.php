@@ -14,20 +14,10 @@ include("../../fl_inc/headers.php");?>
 
 
 
-<?php /* Inclusione Pagina */ 
+<?php /* Inclusione Pagina */ if(isset($_GET['action'])) { include($pagine[$_GET['action']]); } else {
+	$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 
-
-if(isset($_GET['action'])) { 
-
-include($pagine[$_GET['action']]);
-
- } else {
-
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
-
-($_SESSION['usertype'] < 2) ? include("mod_home.php") : include("mod_visualizza.php") ; 
-
-} ?>
+ include("mod_home.php"); } ?>
 
 
 <?php if(!isset($_GET['external'])) include("../../fl_inc/footer.php"); ?>

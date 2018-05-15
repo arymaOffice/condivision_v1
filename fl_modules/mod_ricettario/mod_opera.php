@@ -3,10 +3,6 @@
 require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
 
-	ini_set('display_startup_errors',1);
-	error_reporting(E_ALL);
-
-
 
 if(isset($_POST['ricetta_id'])) {
 
@@ -41,7 +37,7 @@ if(isset($_GET['rev'])) {
 
 $rev = check($_GET['rev']);
 
-echo $sql = "UPDATE $tabella SET `revisione` = revisione+1, data_aggiornamento = NOW(), operatore = ".$_SESSION['number']." WHERE id = $rev LIMIT 1";
+$sql = "UPDATE $tabella SET `revisione` = revisione+1, data_aggiornamento = NOW(), operatore = ".$_SESSION['number']." WHERE id = $rev LIMIT 1";
 mysql_query($sql);
 mysql_close(CONNECT);
 header("Location: ".$_SERVER['HTTP_REFERER']); 

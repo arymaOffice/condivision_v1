@@ -61,7 +61,7 @@ if(isset($newid)) { $id = (is_numeric($newid)) ? check($newid) : exit; $where = 
 	$campi = array();
 	$campi_anno = array('anno_di_imposta','anno');
 	$campi_today_time = array('start_meeting','end_meeting','data_fine_evento','data_evento','data_pubblicazione','data_prenotazione','data_pagamento','data_richiesta','data_fattura','data_apertura','data_avvio','data_corrispettivo','data_scadenza_pec','data_sottoscrizione','data_inizio','data_fine','data_rinnovo','data_operazione');
-	$campi_today = array('data_documento','data_preventivo','data_scadenza');
+	$campi_today = array('data_visita','data_documento','data_preventivo','data_scadenza');
 	$preselezionaPrimaOption = array('preventivo_collegato');
 
 
@@ -91,7 +91,7 @@ if(isset($newid)) { $id = (is_numeric($newid)) ? check($newid) : exit; $where = 
 			if($chiave == "sezione" && $valore > 1){ $disabled = "disabled";  }
 			if($chiave == "categoria" && $rel == 0){ $disabled = "disabled";  }
 			if($chiave == "anagrafica") $anagrafica_id = $valore; 
-			if($chiave == "marchio") $valore = $_SESSION['marchio']; 
+			if($chiave == "marchio") $marchio_id = $valore; 
 			if($chiave == "tipo") $tipo_id = $valore; 
 			if(($chiave == "anno_fiscale" || $chiave == "anno") && $id == 1) $valore = date('Y');
 			if($chiave == "mese" && $id == 1) $valore = date('m');

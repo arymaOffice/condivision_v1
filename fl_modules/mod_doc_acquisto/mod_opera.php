@@ -84,7 +84,7 @@ if(isset($_POST['creaOrdiniFornitore'])){
 		
 		$fabbisogno_id = filter_var($_POST['fabbisogni'.$key],FILTER_SANITIZE_NUMBER_INT);
 
-		$update = "UPDATE fl_ricettario_fabbisogno set ordine_id = ".$parent_id." WHERE id IN ( ".$fabbisogno_id.")30";
+		$update = "UPDATE fl_ricettario_fabbisogno set ordine_id = ".$parent_id." WHERE id IN ( ".$fabbisogno_id.")";
 		$update = mysql_query($update,CONNECT);
 		
 		

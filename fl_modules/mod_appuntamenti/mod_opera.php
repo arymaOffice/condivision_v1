@@ -110,7 +110,7 @@ if(isset($_GET['issue'])){
 
 	if($issue == 7) { $status_p = 1;
 	actionTracer(16,$profile_rel,8,'','Visita per appuntamento');
-	echo $update = "UPDATE `".$tables[106]."` SET data_visita = NOW(), `status_potential`= '$status_p' , data_aggiornamento = '".date('Y-m-d H:i:00')."' WHERE id = $profile_rel LIMIT 1";
+	$update = "UPDATE `".$tables[106]."` SET data_visita = NOW(), `status_potential`= '$status_p' , data_aggiornamento = '".date('Y-m-d H:i:00')."' WHERE id = $profile_rel LIMIT 1";
 	mysql_query($update,CONNECT);
 	$query = "INSERT INTO `fl_richieste` (`id`, `marchio`,`workflow_id`,`parent_id`, `anagrafica_rel`, `tipo_richiesta`, `data_apertura`, `data_chiusura`, `data_scadenza`, `note`, `operatore`, `data_creazione`, `data_aggiornamento`) 
 	VALUES (NULL, '0','106', '$profile_rel', '0', '10', NOW(), '0000-00-00', '0000-00-00', 'Visita per appuntamento', '".$_SESSION['number']."', NOW(), NOW());";

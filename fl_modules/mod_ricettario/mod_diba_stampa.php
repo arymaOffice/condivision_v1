@@ -81,8 +81,7 @@ p { font-size: 12px; color: #7A7A7A; margin: 5px 0;  }
 <div style=" font-style:  serif; font-size: 9px; color: #666; margin: 0 20px;">   
 
 <p style="margin: 0px; padding: 0;><?php echo $ricettaInfo['copyright']; ?><br>
-Stampato da Condivision in data: <strong><?php echo date('d/m/Y'); ?></strong> alle ore <strong><?php echo date('H:i'); ?></strong> 
-da <?php echo $_SESSION['nome']; ?>.</p>
+Stampato con Condivision in data: <strong><?php echo date('d/m/Y'); ?></strong> alle ore <strong><?php echo date('H:i'); ?></strong>.</p>
   <br>   <br>    <br><br>   
 </div>
 
@@ -107,11 +106,11 @@ da <?php echo $_SESSION['nome']; ?>.</p>
 
 <?php
 
- echo (!file_exists($folder.$ricettaInfo['id'].'.jpg')) ? '' : '<img src="'.$folder.$ricettaInfo['id'].'.jpg" class="" style="float: right; width: 250px; max-height: 250px;" /> ';
+ echo (!file_exists($folder.$ricettaInfo['id'].'.jpg')) ? '' : '<img src="'.$folder.$ricettaInfo['id'].'.jpg" class="" style="float: right; width: auto; height: 150px;" /> ';
   
 ?>
 
-<h1><?php echo converti_txt($ricettaInfo['nome_tecnico']); ?></h1>
+<h1><?php echo $ricettaInfo['id'].' '.converti_txt($ricettaInfo['nome_tecnico']); ?></h1>
 <?php echo strtoupper($portata[$ricettaInfo['portata']]." $categoria_msg")." | CODICE: ".$ricettaInfo['codice_portata']." | Porzioni: ".$ricettaInfo['porzioni']; ?>
 <p>Nome Gastronomico: <?php echo strip_tags(converti_txt($ricettaInfo['nome'])); ?></p>
 <br><br><br>
@@ -157,7 +156,7 @@ da <?php echo $_SESSION['nome']; ?>.</p>
   ?> 
  
   <tr>
-  <td style="width: 120px;"><?php echo $codice_articolo; ?></td>
+  <td style="width: 120px; font-size: 9px;"><span style="font-size: 10px;"><?php echo $codice_articolo; ?></span></td>
   <td style="width: 380px;"><?php echo $descrizione; ?></td>
       <td style="width: 50px;" ><?php  echo $materiaprima['unita_di_misura'];  ?> </td>
       <td style="width: 60px;"><?php echo $riga['quantita']; ?></td>

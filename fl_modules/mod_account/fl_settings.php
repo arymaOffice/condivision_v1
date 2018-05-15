@@ -86,28 +86,27 @@
 	
 	function select_type($who){
 	$textareas = array("descrizione","note"); 
-	$select = array("marchio",'persona_id','tipo',"modulo");
+	$select = array('persona_id','tipo',"modulo");
 	$checkbox = array();
 	$disabled = array("total_scooring");
-	$hidden = array('processo_id',"uid","cuid","anagrafica","sede","data_creazione","aggiornamento_password","proprietario","foto","data","password","id","codice","type","ip","continente","operatore","data_aggiornamento","visite");
+	$hidden = array('processo_id',"uid","cuid","anagrafica","sede","data_creazione","aggiornamento_password","proprietario","marchio","foto","data","password","id","codice","type","ip","continente","operatore","data_aggiornamento","visite");
 	$selectbtn = array('attivo');	
 	$radio = array("alert");	
 	$multi_selection = array("giorni_lavorativi");	
 	$calendario = array('data_scadenza','data_emissione','data_nascita');	
-	if(!defined('MULTI_MARCHIO')) $hidden[] = "marchio";
 	$type = 1;
 
 	
 	if(in_array($who,$select)) { $type = 2; }
 	if(in_array($who,$textareas)){ $type = 3; }
 	if(in_array($who,$disabled)){ $type = 4; }
+	if(in_array($who,$hidden)){ $type = 5; }
 	if(in_array($who,$checkbox)){ $type = 6; }
 	if(in_array($who,$calendario)){ $type = 20; }
 	if(in_array($who,$radio)){ $type = 8; }
 	if(in_array($who,$selectbtn)){ $type = 9; }
 	if(in_array($who,$multi_selection)){ $type = 23; }
-	if(in_array($who,$hidden)){ $type = 5; }
-
+		
 	return $type;
 	}
 	

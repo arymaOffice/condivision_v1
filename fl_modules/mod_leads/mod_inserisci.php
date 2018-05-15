@@ -44,8 +44,12 @@ if($potential['in_use'] > 0 && $potential['in_use'] != $_SESSION['number']) {
 
 
 <?php 
-if($id != 1){
+if($id != 1 && !isset($_GET['new'])){
 $changestatus = ($potential['status_potential'] < 2) ? 'status_potential = 1 , `in_use` = '.$_SESSION['number'].' ,' : '' ;
+
+$tipologia_appuntamentoInfo = ($potential['status_potential'] == 0) ? '&tipologia_appuntamento=122' : ''; 
+$tipologia_appuntamentoInfo = ($potential['status_potential'] == 1) ? '&tipologia_appuntamento=123' : $tipologia_appuntamentoInfo; 
+$tipologia_appuntamentoInfo = ($potential['status_potential'] > 1) ? '&tipologia_appuntamento=124' : $tipologia_appuntamentoInfo; 
 
 
 $telefono = phone_format($potential['telefono'],'39');
@@ -73,7 +77,8 @@ echo $status.$social;
 <a href="mod_opera.php?id=<?php echo $potential['id']; ?>&notanswered=1" class="touch orange_push setAction" data-gtx="<?php echo base64_encode($tab_id); ?>" data-id="<?php echo base64_encode($potential['id']); ?>" data-azione="2"  data-esito="3" data-note="Non Risponde"><i class="fa fa-hand-o-left"></i> <br>Non Risponde</a>
 <a href="mod_opera.php?id=<?php echo $potential['id']; ?>&status_potential=3" class="touch red_push setAction" data-gtx="<?php echo base64_encode($tab_id); ?>" data-id="<?php echo base64_encode($potential['id']); ?>" data-azione="2"  data-esito="4" data-note="CAMPAGNA ID"><i class="fa fa-thumbs-down"></i> <br>Non Interessato</a>
 -->
-<a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_appuntamenti/?action=23&meeting_location=0&a=crm&b=crm&potential_rel=<?php echo $potential['id']; ?>" class="touch blue_push setAction" data-gtx="<?php echo base64_encode($tab_id); ?>" data-id="<?php echo base64_encode($potential['id']); ?>" data-azione="5"  data-esito="1"  data-note="Appuntamento"><i class="fa fa-calendar"></i> <br>Crea Appuntamento</a>
+
+<a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_appuntamenti/?action=23&a=crm&b=crm&potential_rel=<?php echo $potential['id'].$tipologia_appuntamentoInfo; ?>" class="touch blue_push setAction" data-gtx="<?php echo base64_encode($tab_id); ?>" data-id="<?php echo base64_encode($potential['id']); ?>" data-azione="5"  data-esito="1"  data-note="Appuntamento"><i class="fa fa-calendar"></i> <br>Crea Appuntamento</a>
 <a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_modelli/mod_catalogo.php?tipo_modello=1&POiD=<?php echo base64_encode($potential['id']); ?>&id=1" class="touch orange_push setAction" data-gtx="<?php echo base64_encode($tab_id); ?>" data-id="<?php echo base64_encode($potential['id']); ?>" data-azione="7"  data-esito="1"  data-note="Preventivo"><i class="fa fa-pencil-square-o"></i> <br>Crea Offerta</a>
 <a href="<?php echo ROOT.$cp_admin; ?>fl_modules/mod_eventi/?lead_id=<?php echo $potential['id']; ?>" class="touch green_push setAction" data-gtx="<?php echo base64_encode($tab_id); ?>" data-id="<?php echo base64_encode($potential['id']); ?>" data-azione="5"  data-esito="1"  data-note="Creato Evento"><i class="fa fa-calendar"></i> <br>Crea Evento</a>
 <!--<a href="mod_richiesta.php?tipo_richiesta=0&parent_id=<?php echo $potential['id']; ?>" title="Registra Chiamata" data-fancybox-type="iframe" class="fancybox_small touch blue_push"><i class="fa fa-phone"></i> <br>Call</a>
@@ -84,7 +89,7 @@ echo $status.$social;
 <?php 
 
 $evento = GQD('fl_eventi_hrc','*',' lead_id = '.$id.' ORDER BY data_evento DESC LIMIT 1 '); 
-$selectDataRevisione = "SELECT DATE_FORMAT(data_creazione,'%d/%m/%Y %H:%i') as data FROM fl_revisioni_hrc WHERE evento_id = $evento_id ORDER BY id DESC  LIMIT 1";
+$selectDataRevisione = "SELECT DATE_FORMAT(data_creazione,'%d/%m/%Y %H:%i') as data FROM fl_revisioni_hrc WHERE evento_id = ".$evento['id']." ORDER BY id DESC  LIMIT 1";
 $selectDataRevisione = mysql_query($selectDataRevisione,CONNECT);
 $selectDataRevisione = mysql_fetch_assoc($selectDataRevisione);
 $dataRevisione = (@$selectDataRevisione['data'] != '') ? @$selectDataRevisione['data'] : 'Nessuna Revisione' ;

@@ -82,7 +82,8 @@ $eventi = array();
 
 $oggetto_per_doc_acquisto = 'ORDINE PER EVENTO/I N° ';
 
-echo "<p><a href='javascript:history.back();' class='button'><i class=\"fa fa-angle-left \"></i> Indietro</a></p><h2>" . $_SESSION['nome'] . " stai elaborando un approvvigonamento per questi eventi:</h2>
+echo "<p><a href='javascript:history.back();' class='button'><i class=\"fa fa-angle-left \"></i> Indietro</a></p>
+<h2>" . $_SESSION['nome'] . " stai elaborando un approvvigionamento per questi eventi:</h2>
 ";
 foreach ($eventiCoinvolti as $key => $evento) {
 

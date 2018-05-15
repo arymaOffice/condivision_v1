@@ -117,7 +117,7 @@
 		  $titolo_ricorrenza = $tipo_evento[$riga['tipo_evento']].' '.str_replace('Matrimonio',' ', $riga['titolo_ricorrenza']);
 
 			echo "<tr ><td $colore><span class=\"Gletter\"></span></td>"; 
-			echo "<td><h2>".mydatetime($riga['data_evento'])."</h2> <span class=\"msg\" style=\"background: $coloreEvento\">".@$tipo_evento[$riga['tipo_evento']]."</span><span class=\"msg gray\">".$periodo_evento[$riga['periodo_evento']]."</span></td>"; 
+			echo "<td><h2>".$riga['id']."".mydatetime($riga['data_evento'])."</h2> <span class=\"msg\" style=\"background: $coloreEvento\">".@$tipo_evento[$riga['tipo_evento']]."</span><span class=\"msg gray\">".$periodo_evento[$riga['periodo_evento']]."</span></td>"; 
 			echo "<td><h2><a href=\"../mod_eventi/mod_scheda_servizio.php?evento_id=".$riga['id']."&tipo_evento=".$riga['tipo_evento']."&id=$schedaWeddingId\">$titolo_ricorrenza</a></h2>".@$location_evento[$riga['location_evento']]." ".$ambiente."</td>"; 
 			echo "<td>";
 			if($riga['multievento'] == 1) echo "<a data-fancybox-type=\"iframe\" class=\"fancybox_view \" href=\"mod_report/mod_prospettobeo.php?data=".substr(0,10,$riga['data_evento'])."\" title=\"Prospetto\" style=\"color:   $colorMenu\"><i class=\"fa fa-map\" aria-hidden=\"true\"></i> PROSPETTO</a>";			

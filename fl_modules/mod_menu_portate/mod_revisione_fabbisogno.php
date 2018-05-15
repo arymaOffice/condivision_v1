@@ -61,30 +61,27 @@ include "../../fl_inc/headers.php";
 
 <table class="dati">
 <tr>
-<th>Ricetta ID</th>
 <th>Cod</th>
 <th>Desc</th>
 <th>Upa</th>
+<th>Um</th>
 <th>Qtà</th>
 <th>Tot</th>
-<th>Um</th>
-<th>Note</th>
-<th class="noprint">Fornitore</th>
-<th class="noprint">Ordina</th>
+
 </tr>
 
 <?php
 
 //per test
-$data_da = '2018-05-20';
-$data_a = '2018-05-31';
+// $data_da = '2018-05-08';
+// $data_a = '2018-05-08';
 
 // Periodo
 $sediCoinvolte = ' AND location_evento = 31'; // da abilitare
 
 $eventiCoinvolti = GQS('fl_eventi_hrc', 'id,titolo_ricorrenza,numero_adulti,numero_bambini,numero_operatori,data_evento', "id > 1  AND DATE(`data_evento`) BETWEEN '$data_da' AND '$data_a' AND stato_evento != 4 ORDER BY data_evento ASC");
 
-echo "<p><a href='javascript:history.back();' class='button'><i class=\"fa fa-angle-left \"></i> Indietro</a></p><h2>" . $_SESSION['nome'] . " stai elaborando un approvvigonamento per questi eventi:</h2>
+echo "<p><a href='javascript:history.back();' class='button'><i class=\"fa fa-angle-left \"></i> Indietro</a></p><h2>" . $_SESSION['nome'] . " verifica le quantità di preparazione delle ricette:</h2>
 ";
 
 $eventi = array();
@@ -110,13 +107,23 @@ $eventiImplode = implode(',',$eventi);
 
 
 
-$query = "SELECT fb.ricetta_id,selectSpecific.valore_di_conversione,selectSpecific.materiaprima_id,selectSpecific.codice_articolo,selectSpecific.ultimo_prezzo,selectSpecific.anagrafica_id,selectSpecific.descrizione, SUM( selectSpecific.quantita * fb.quantita ) AS totale, selectSpecific.unita_di_misura FROM `fl_ricettario_fabbisogno` fb JOIN ( SELECT m.valore_di_conversione,materiaprima_id, m.descrizione, m.unita_di_misura, rf.quantita, ricetta_id,m.codice_articolo,m.ultimo_prezzo,m.anagrafica_id FROM fl_ricettario_diba rf JOIN fl_materieprime m ON m.id = materiaprima_id WHERE ricetta_id IN ( ( SELECT ricetta_id FROM `fl_ricettario_fabbisogno` WHERE evento_id IN ( " . $eventiImplode . ") ) ) ) AS selectSpecific ON fb.ricetta_id = selectSpecific.ricetta_id WHERE evento_id IN ( " . $eventiImplode . " ) GROUP BY materiaprima_id ORDER BY fb.ricetta_id ASC";
+$query = "SELECT SUM(fb.quantita) as quantita,fb.ricetta_id,selectSpecific.valore_di_conversione,selectSpecific.materiaprima_id,selectSpecific.codice_articolo,selectSpecific.ultimo_prezzo,selectSpecific.anagrafica_id,selectSpecific.descrizione, SUM( selectSpecific.quantita * fb.quantita ) AS totale, selectSpecific.unita_di_misura,GROUP_CONCAT(fb.evento_id SEPARATOR ',') as eventi FROM `fl_ricettario_fabbisogno` fb JOIN ( SELECT m.valore_di_conversione,materiaprima_id, m.descrizione, m.unita_di_misura, rf.quantita, ricetta_id,m.codice_articolo,m.ultimo_prezzo,m.anagrafica_id FROM fl_ricettario_diba rf JOIN fl_materieprime m ON m.id = materiaprima_id WHERE ricetta_id IN ( ( SELECT ricetta_id FROM `fl_ricettario_fabbisogno` WHERE evento_id IN ( " . $eventiImplode . ") ) ) ) AS selectSpecific ON fb.ricetta_id = selectSpecific.ricetta_id WHERE evento_id IN ( " . $eventiImplode . " ) GROUP BY fb.ricetta_id, materiaprima_id ORDER BY fb.ricetta_id ASC";
 
 $result = mysql_query($query, CONNECT);
+$ricetta_id = NULL;
 
 while ($ingredienti = mysql_fetch_assoc($result)) {
+    if($ricetta_id != $ingredienti['ricetta_id']){
+        $ricetta_info = GQS('fl_ricettario','nome_tecnico,porzioni','id = '.$ingredienti['ricetta_id']);
+        $eventi_name = GQS('fl_eventi_hrc',' GROUP_CONCAT(DISTINCT CONCAT(\'<span class="msg green">\', titolo_ricorrenza,\'</span>\') SEPARATOR " ") as eventiname ','id in( '.$ingredienti['eventi'].')');
+  
+
+        echo '<tr style="background: #ecefcc;"><td colspan="2">'.$ingredienti['ricetta_id'].' | <a href="../mod_ricettario/mod_diba.php?record_id='.$ingredienti['ricetta_id'].'" data-fancybox-type="iframe" class="fancybox_view">'.$ricetta_info[0]['nome_tecnico'].'</a></td><td><h3>'.$ingredienti['quantita'].' Porzioni</h3></td><td colspan="3"> '.$eventi_name[0]['eventiname'].'</td></tr>';
+        $ricetta_id = $ingredienti['ricetta_id'];
+    }//fine if 
+    $ingredienti['totale'] = ($ricetta_info[0]['porzioni'] > 1) ?  $ingredienti['totale']/$ricetta_info[0]['porzioni'] : $ingredienti['totale'];
     $single_tot = ($ingredienti['ultimo_prezzo'] / $ingredienti['valore_di_conversione']) * $ingredienti['totale'];
-    echo '<tr><td>'.$ingredienti['ricetta_id'].'</td><td>'.$ingredienti['codice_articolo'].'</td><td>'.$ingredienti['descrizione'].'</td><td>'.numdec($ingredienti['ultimo_prezzo'],2).'</td><td>'.$ingredienti['totale'].'</td><td>'.numdec($single_tot,2).'</td></tr>';
+    echo '<tr><td>'.$ingredienti['codice_articolo'].'</td><td>'.$ingredienti['descrizione'].'</td><td> € '.numdec($ingredienti['ultimo_prezzo'],2).'</td><td>'.$ingredienti['unita_di_misura'].'</td><td>'.$ingredienti['totale'].'</td><td> € '.numdec($single_tot,2).'</td></tr>';
 
 
 }
@@ -125,63 +132,13 @@ while ($ingredienti = mysql_fetch_assoc($result)) {
 
 // query esempio SELECT selectSpecific.materiaprima_id,selectSpecific.codice_articolo,selectSpecific.ultimo_prezzo,selectSpecific.anagrafica_id,selectSpecific.descrizione, SUM( selectSpecific.quantita * fb.quantita ) AS totale, selectSpecific.unita_di_misura FROM `fl_ricettario_fabbisogno` fb JOIN ( SELECT materiaprima_id, m.descrizione, m.unita_di_misura, rf.quantita, ricetta_id,m.codice_articolo,m.ultimo_prezzo,m.anagrafica_id FROM fl_ricettario_diba rf JOIN fl_materieprime m ON m.id = materiaprima_id WHERE ricetta_id IN ( ( SELECT ricetta_id FROM `fl_ricettario_fabbisogno` WHERE evento_id IN ( 191,207,456,1100,1123,1465,1703,1722 ) ) ) ) AS selectSpecific ON fb.ricetta_id = selectSpecific.ricetta_id WHERE evento_id IN ( 191,207,456,1100,1123,1465,1703,1722 ) GROUP BY materiaprima_id
 
-$filtriQuery = '';
-
-if (isset($_GET['cerca'])) {
-    $cerca = check($_GET['cerca']);
-    $filtriQuery .= ' AND (selectSpecific.codice_articolo LIKE "%' . $cerca . '%"  OR selectSpecific.descrizione LIKE "%' . $cerca . '%" )';
-}
-if (isset($_GET['anagrafica_id'])) {
-    $cerca = check($_GET['anagrafica_id']);
-    $filtriQuery .= ' AND selectSpecific.anagrafica_id = "' . $cerca . '"';
-}
-if (isset($_GET['categoria_materia'])) {
-    $cerca = check($_GET['categoria_materia']);
-    $filtriQuery .= ' AND selectSpecific.categoria_materia LIKE "%' . $cerca . '%" ';
-}
-$TOTALE = 0;
-$megasuperQueryFighissima = "SELECT  GROUP_CONCAT(DISTINCT fb.id  SEPARATOR ',') as fabbisogni,fb.id as fabbId,selectSpecific.categoria_materia,selectSpecific.materiaprima_id,selectSpecific.codice_articolo,selectSpecific.ultimo_prezzo,selectSpecific.anagrafica_id,selectSpecific.descrizione,selectSpecific.valore_di_conversione, SUM( selectSpecific.quantita * fb.quantita ) AS totale, selectSpecific.unita_di_misura FROM `fl_ricettario_fabbisogno` fb JOIN ( SELECT materiaprima_id, m.descrizione, m.unita_di_misura, rf.quantita, ricetta_id,m.codice_articolo,m.ultimo_prezzo,m.anagrafica_id,m.categoria_materia,m.valore_di_conversione FROM fl_ricettario_diba rf JOIN fl_materieprime m ON m.id = materiaprima_id WHERE ricetta_id IN ( ( SELECT ricetta_id FROM `fl_ricettario_fabbisogno` WHERE evento_id IN ( " . $eventiIN . " ) ) ) ) AS selectSpecific ON fb.ricetta_id = selectSpecific.ricetta_id WHERE evento_id IN ( " . $eventiIN . " ) AND fb.ordine_id = 0 " . $filtriQuery . " GROUP BY materiaprima_id ORDER BY selectSpecific.anagrafica_id DESC , selectSpecific.codice_articolo ASC ";
-
-$risultato = mysql_query($megasuperQueryFighissima, CONNECT);
-
-while ($robaDaOrdinare = mysql_fetch_assoc($risultato)) {
-    $single_tot = (numdec($robaDaOrdinare['ultimo_prezzo'], 2) / $robaDaOrdinare['valore_di_conversione']) * $robaDaOrdinare['totale'];
-    $TOTALE += $single_tot;
-    echo '<input type="hidden" name="fabb' . $robaDaOrdinare['materiaprima_id'] . '" value="' . $robaDaOrdinare['fabbId'] . '" >';
-    echo '<input type="hidden" name="fabbisogni' . $robaDaOrdinare['materiaprima_id'] . '" value="' . $robaDaOrdinare['fabbisogni'] . '" >';
-
-    echo "<tr><td>" . $robaDaOrdinare['codice_articolo'] . "</td>
-    <td>" . $robaDaOrdinare['descrizione'] . "</td>
-    <td> € " . numdec($robaDaOrdinare['ultimo_prezzo'], 2) . "</td>
-    <td><input type='text' style='width:100%;' placeholder='quantità da ordinare' name='qta" . $robaDaOrdinare['materiaprima_id'] . "' value='" . $robaDaOrdinare['totale'] . "'></td>
-    <td>€ " . numdec($single_tot, 2) . " </td>
-    <td>" . $robaDaOrdinare['unita_di_misura'] . "</td>
-    <td><input type='text' placeholder='Nota per il fornitore' name='note" . $robaDaOrdinare['materiaprima_id'] . "' maxlength=\"100\"></td>
-    <td class=\"noprint\"><select name='fornitore" . $robaDaOrdinare['materiaprima_id'] . "' style='width: 100%;'><option value='" . $robaDaOrdinare['anagrafica_id'] . "'>" . $fornitore[@$robaDaOrdinare['anagrafica_id']] . "</option></select> </td>
-    <td class=\"noprint\"><input type='checkbox' name='id[]' value='" . $robaDaOrdinare['materiaprima_id'] . "' id='" . $robaDaOrdinare['materiaprima_id'] . "' checked><label for='" . $robaDaOrdinare['materiaprima_id'] . "'  ><i class=\"fa fa-check \"></i></label></td></tr>";
-
-}
-
 ?>
-<tr>
-<th></th>
-<th></th>
-<th></th>
-<th></th>
-<th>€ <?php echo numdec($TOTALE, 2); ?> </th>
-<th></th>
-<th></th>
-<th class="noprint"></th>
-<th class="noprint"></th></tr>
+
 </table>
-<input type="hidden" value="1" name="creaOrdiniFornitore">
-<div style="margin:0 auto;text-align: center;">
-<?php if (defined('MAGAZZINO')) {
-    echo '<input type="submit" value="Crea Ordini Fornitore" class="button noprint">';
-}
-?>
+
+<?php echo '<a href="mod_calcolo_fabbisogno.php" class="button noprint">Produci Market List</a>'; ?>
 <a href="javascript:window.print();" class="button noprint">Stampa</a>
-</form>
+
 </div>
 
 <?php include "../../fl_inc/footer.php";?>

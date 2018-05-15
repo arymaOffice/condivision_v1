@@ -108,10 +108,12 @@ foreach ($_POST['ricetta_id'] as $key => $value) {
 
 	$ricetta_id = $_POST['ricetta_id'][$key];
 	$evento_id = $_POST['evento_id'][$key];
+	$evento_info = GQD('fl_eventi_hrc','DATE(data_evento) as data_evento','id='.$evento_id);
+
 	$quantita = $_POST['quantita'][$key];
 
-	$query = "INSERT INTO `fl_ricettario_fabbisogno` (`id`, `ricetta_id`, `versione`, `evento_id`, `quantita`, `ordine_id`, `data_creazione`,`operatore`) 
-	VALUES (NULL, '$ricetta_id', '1', '$evento_id', '$quantita', '0', NOW(),'".$_SESSION['operatore']."'); ";
+	 $query = "INSERT INTO `fl_ricettario_fabbisogno` (`id`, `ricetta_id`, `versione`, `evento_id`, `quantita`, `ordine_id`, `data_creazione`,`operatore`,data_impegno) 
+	VALUES (NULL, '$ricetta_id', '1', '$evento_id', '$quantita', '0', NOW(),'".$_SESSION['number']."','".$evento_info['data_evento']."'); ";
 
 	if($quantita != 0) mysql_query($query,CONNECT);
 

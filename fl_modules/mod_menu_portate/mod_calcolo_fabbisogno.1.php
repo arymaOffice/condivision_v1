@@ -5,6 +5,8 @@ require_once 'fl_settings.php';
 unset($chat);
 $nochat;
 
+ini_set('post_max_size','20M');
+
 $new_button = '';
 $module_title = "Market List dal " . mydate($_SESSION['data_da']) . " al " . mydate($_SESSION['data_a']);
 
@@ -87,7 +89,7 @@ echo "<p><a href='javascript:history.back();' class='button'><i class=\"fa fa-an
 ";
 foreach ($eventiCoinvolti as $key => $evento) {
 
-    $oggetto_per_doc_acquisto .= $evento['id'] . ' ' . $evento['titolo_ricorrenza'] . ' del ' . mydate($evento['data_evento']) . ',';
+    $oggetto_per_doc_acquisto .= $evento['id'] . ' del ' . mydate($evento['data_evento']) . ',';
 
     $coperti = $evento['numero_adulti'] + $evento['numero_operatori'];
     echo '<span class="msg green">' . $evento['titolo_ricorrenza'] . ' del ' . mydate($evento['data_evento']) . '</span>';
@@ -118,19 +120,24 @@ if (isset($_GET['categoria_materia'])) {
     $filtriQuery .= ' AND selectSpecific.categoria_materia LIKE "%'.$cerca.'%" ';
 }
 $TOTALE = 0;
- $megasuperQueryFighissima = "SELECT  GROUP_CONCAT(DISTINCT fb.id  SEPARATOR ',') as fabbisogni,fb.id as fabbId,selectSpecific.categoria_materia,selectSpecific.materiaprima_id,selectSpecific.codice_articolo,selectSpecific.ultimo_prezzo,selectSpecific.anagrafica_id,selectSpecific.descrizione,selectSpecific.valore_di_conversione, SUM( selectSpecific.quantita * fb.quantita ) AS totale, selectSpecific.unita_di_misura FROM `fl_ricettario_fabbisogno` fb JOIN ( SELECT materiaprima_id, m.descrizione, m.unita_di_misura, rf.quantita, ricetta_id,m.codice_articolo,m.ultimo_prezzo,m.anagrafica_id,m.categoria_materia,m.valore_di_conversione FROM fl_ricettario_diba rf JOIN fl_materieprime m ON m.id = materiaprima_id WHERE ricetta_id IN ( ( SELECT ricetta_id FROM `fl_ricettario_fabbisogno` WHERE evento_id IN ( " . $eventiIN . " ) ) ) ) AS selectSpecific ON fb.ricetta_id = selectSpecific.ricetta_id WHERE evento_id IN ( " . $eventiIN . " ) AND fb.ordine_id = 0 ".$filtriQuery." GROUP BY materiaprima_id ORDER BY selectSpecific.anagrafica_id DESC , selectSpecific.codice_articolo ASC "; 
+ echo $megasuperQueryFighissima = "SELECT evento_id,GROUP_CONCAT(DISTINCT fb.id  SEPARATOR ',') as fabbisogni,fb.id as fabbId,selectSpecific.categoria_materia,selectSpecific.materiaprima_id,selectSpecific.codice_articolo,selectSpecific.ultimo_prezzo,selectSpecific.anagrafica_id,selectSpecific.descrizione,selectSpecific.valore_di_conversione, SUM( selectSpecific.quantita * fb.quantita ) AS totale, selectSpecific.unita_di_misura FROM `fl_ricettario_fabbisogno` fb JOIN ( SELECT materiaprima_id, m.descrizione, m.unita_di_misura, rf.quantita, ricetta_id,m.codice_articolo,m.ultimo_prezzo,m.anagrafica_id,m.categoria_materia,m.valore_di_conversione FROM fl_ricettario_diba rf JOIN fl_materieprime m ON m.id = materiaprima_id WHERE ricetta_id IN ( ( SELECT ricetta_id FROM `fl_ricettario_fabbisogno` WHERE evento_id IN ( " . $eventiIN . " ) ) ) ) AS selectSpecific ON fb.ricetta_id = selectSpecific.ricetta_id WHERE evento_id IN ( " . $eventiIN . " ) AND fb.ordine_id = 0 ".$filtriQuery." GROUP BY data_impegno,materiaprima_id ORDER BY selectSpecific.anagrafica_id DESC , selectSpecific.codice_articolo ASC "; 
 
 $risultato = mysql_query($megasuperQueryFighissima, CONNECT);
 
 while ($robaDaOrdinare = mysql_fetch_array($risultato)) {
-     
     $single_tot = ($robaDaOrdinare['ultimo_prezzo']/$robaDaOrdinare['valore_di_conversione']) * $robaDaOrdinare['totale'];
     $TOTALE += $single_tot ;
+
+    echo $robaDaOrdinare['fabbisogni']; echo '<br><br>';
+
+    $evento_info = GQD('fl_eventi_hrc','DATE_FORMAT(data_evento,"%d/%m/%Y") as data_evento','id='.$robaDaOrdinare['evento_id']);
+
     echo '<input type="hidden" name="fabb' . $robaDaOrdinare['materiaprima_id'] . '" value="' . $robaDaOrdinare['fabbId'] . '" >';
+ 
     echo '<input type="hidden" name="fabbisogni' . $robaDaOrdinare['materiaprima_id'] . '" value="' . $robaDaOrdinare['fabbisogni'] . '" >';
 
     echo "<tr><td>" . $robaDaOrdinare['codice_articolo'] . "</td>
-    <td>" . $robaDaOrdinare['descrizione'] . "</td>
+    <td>" . $robaDaOrdinare['descrizione'] ."<br> ".$evento_info['data_evento']. "</td>
     <td> € " . numdec($robaDaOrdinare['ultimo_prezzo'], 2) . "</td>
     <td><input type='text' style='width:100%;' placeholder='quantità da ordinare' name='qta" . $robaDaOrdinare['materiaprima_id'] . "' value='" . $robaDaOrdinare['totale'] . "'></td>
     <td>€ " .  numdec($single_tot,2) . " </td>

@@ -6,7 +6,7 @@ unset($chat);
 $nochat;
 
 $new_button = '';
-$module_title = "";
+$module_title = "2 - Verifica Fabbisogno Ricette";
 
 include "../../fl_inc/headers.php";
 ?>
@@ -56,6 +56,28 @@ include "../../fl_inc/headers.php";
 
     </div> -->
 
+<p><a href='javascript:history.back();' class='button'><i class="fa fa-angle-left"></i> Indietro</a></p>
+<div style="text-align: left;">
+<form method="get" action="" id="fm_filtri">
+ 
+      Periodo di lavorazione <label> dal</label>
+      <input type="text" name="data_da" onFocus="this.value='';" value="<?php  echo  $_SESSION['data_da_t'];  ?>"  class="calendar" size="8" />
+   
+    
+      <label> al </label>
+      <input type="text" name="data_a" onFocus="this.value='';" value="<?php  echo $_SESSION['data_a_t'];  ?>" class="calendar" size="8" />
+
+     <input type="submit" value="Procediamo!" class="button" />
+
+</form>
+</div>
+
+
+
+<p class="noprint"><strong>FASE 2 - VERIFICA:</strong> In questa fase, procedi a rivedere e verificare il calcolo di produzione che il sistema esegue basandosi sulle porzioni che hai pianificato, sommandole per ricetta, e considerando la quantita di porzioni che hai specificato nel ricettario.
+<br>Usalo per monitorare la corretta compilazione delle tue ricette e verificale cliccando sul nome della ricetta per aprire la distinta base. In fondo al foglio prosegui alla fase successiva.</p>
+
+
 
 <form id="form" name="" method="POST" action="../mod_doc_acquisto/mod_opera.php">
 
@@ -63,12 +85,10 @@ include "../../fl_inc/headers.php";
 <tr>
 <th>Cod</th>
 <th>Desc</th>
-<th>Upa</th>
 <th>Um</th>
 <th>Qtà</th>
-<th>Tot</th>
-
 </tr>
+
 
 <?php
 
@@ -81,8 +101,6 @@ $sediCoinvolte = ' AND location_evento = 31'; // da abilitare
 
 $eventiCoinvolti = GQS('fl_eventi_hrc', 'id,titolo_ricorrenza,numero_adulti,numero_bambini,numero_operatori,data_evento', "id > 1  AND DATE(`data_evento`) BETWEEN '$data_da' AND '$data_a' AND stato_evento != 4 ORDER BY data_evento ASC");
 
-echo "<p><a href='javascript:history.back();' class='button'><i class=\"fa fa-angle-left \"></i> Indietro</a></p><h2>" . $_SESSION['nome'] . " verifica le quantità di preparazione delle ricette:</h2>
-";
 
 $eventi = array();
 
@@ -115,15 +133,20 @@ $ricetta_id = NULL;
 while ($ingredienti = mysql_fetch_assoc($result)) {
     if($ricetta_id != $ingredienti['ricetta_id']){
         $ricetta_info = GQS('fl_ricettario','nome_tecnico,porzioni','id = '.$ingredienti['ricetta_id']);
-        $eventi_name = GQS('fl_eventi_hrc',' GROUP_CONCAT(DISTINCT CONCAT(\'<span class="msg green">\', titolo_ricorrenza,\'</span>\') SEPARATOR " ") as eventiname ','id in( '.$ingredienti['eventi'].')');
+        $eventi_name = GQS('fl_eventi_hrc',' GROUP_CONCAT(DISTINCT CONCAT(\'<span class="msg green">\', DATE_FORMAT(data_evento,\'%d/%m/%Y\') , \' \' ,titolo_ricorrenza,\'</span>\') SEPARATOR " ") as eventiname ','id in( '.$ingredienti['eventi'].')');
   
 
-        echo '<tr style="background: #ecefcc;"><td colspan="2">'.$ingredienti['ricetta_id'].' | <a href="../mod_ricettario/mod_diba.php?record_id='.$ingredienti['ricetta_id'].'" data-fancybox-type="iframe" class="fancybox_view">'.$ricetta_info[0]['nome_tecnico'].'</a></td><td><h3>'.$ingredienti['quantita'].' Porzioni</h3></td><td colspan="3"> '.$eventi_name[0]['eventiname'].'</td></tr>';
+        echo '<tr style="background: #ecefcc;">
+        <td colspan="3">'.$ingredienti['ricetta_id'].' | 
+        <a href="../mod_ricettario/mod_diba.php?record_id='.$ingredienti['ricetta_id'].'" data-fancybox-type="iframe" class="fancybox_view">'.$ricetta_info[0]['nome_tecnico'].'</a>
+        <br>'.$eventi_name[0]['eventiname'].'</td>
+        <td><h3>'.$ingredienti['quantita'].' Porzioni</h3></td></tr>
+        ';
         $ricetta_id = $ingredienti['ricetta_id'];
     }//fine if 
     $ingredienti['totale'] = ($ricetta_info[0]['porzioni'] > 1) ?  $ingredienti['totale']/$ricetta_info[0]['porzioni'] : $ingredienti['totale'];
-    $single_tot = ($ingredienti['ultimo_prezzo'] / $ingredienti['valore_di_conversione']) * $ingredienti['totale'];
-    echo '<tr><td>'.$ingredienti['codice_articolo'].'</td><td>'.$ingredienti['descrizione'].'</td><td> € '.numdec($ingredienti['ultimo_prezzo'],2).'</td><td>'.$ingredienti['unita_di_misura'].'</td><td>'.$ingredienti['totale'].'</td><td> € '.numdec($single_tot,2).'</td></tr>';
+    //$single_tot = ($ingredienti['ultimo_prezzo'] / $ingredienti['valore_di_conversione']) * $ingredienti['totale'];<td> € '.numdec($ingredienti['ultimo_prezzo'],2).'</td><td> € '.numdec($single_tot,2).'</td>
+    echo '<tr><td>'.$ingredienti['codice_articolo'].'</td><td>'.$ingredienti['descrizione'].'</td><td>'.$ingredienti['unita_di_misura'].'</td><td>'.$ingredienti['totale'].'</td></tr>';
 
 
 }

@@ -27,7 +27,10 @@
 	
 	//$module_title = 'Madre di tutti i moduli'; //Titolo del modulo
 	//$new_button = '';  //Solo se la funzione new richiede un link diverso da quello standard  
-    $module_menu = '<li><a href="../mod_eventi/?action=17&b=Lista Eventi">Lista Eventi</a></li>'; //Menu del modulo
+    $module_menu = '<li><a href="./mod_generazione_fabbisogno.php">Pianificazione</a></li>
+    <li><a href="./mod_revisione_fabbisogno.php">Verifica</a></li>
+    <li><a href="./mod_calcolo_fabbisogno.php">Market List</a></li>
+    <li><a href="./mod_ordini_fabbisogno.php">Ordini Fabbisogno</a></li>'; //Menu del modulo
 
 	
 	/*Impostazione automatica da tabella */
@@ -47,6 +50,9 @@
    $data_da_t = check($_GET['data_da']); $data_a_t = check($_GET['data_a']); 
    $_SESSION['data_da'] =  $data_da;
    $_SESSION['data_a'] =  $data_a;
+   $_SESSION['data_da_t'] =  $data_da_t;
+   $_SESSION['data_a_t'] =  $data_a_t;
+
    } else {
    $data_da_t = date('d/m/Y'); 
    $data_a_t = date('d/m/Y'); 

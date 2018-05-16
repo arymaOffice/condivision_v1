@@ -50,6 +50,9 @@ if(isset($_POST['creaOrdiniFornitore'])){
 	$ordini = 0;
 	foreach($_POST['id'] as $key ) {
 
+		$fabbisogno_id = filter_var($_POST['fabbisogni'.$key],FILTER_SANITIZE_STRING);
+		
+
 		if($_POST['fornitore'.$key] != $primo_fornitore ){
 			//se sto lavorando su un fornitore diverso emetto ordine differente
 			$primo_fornitore = $anagrafica_id = filter_var($_POST['fornitore'.$key],FILTER_SANITIZE_NUMBER_INT); 
@@ -61,8 +64,8 @@ if(isset($_POST['creaOrdiniFornitore'])){
 
 			$fornitore = GRD('fl_anagrafica',$anagrafica_id);
 			//inserimento docuemnto di acquisto
-			$insert_doc_acq = "INSERT INTO `fl_doc_acquisto` ( `anno_di_competenza`, `tipo_doc_acquisto`,`centro_di_costo`, `anagrafica_id`, `ragione_sociale`,`indirizzo`,`partita_iva`,`codice_fiscale`,`data_documento`, `numero_documento`, `oggetto_documento`,`data_creazione`, `data_aggiornamento`, `operatore`) 
-			VALUES (NOW(),4,'".$fornitore['centro_di_costo']."','".$anagrafica_id."','".$fornitore['ragione_sociale']."','".$fornitore['indirizzo']."','".$fornitore['partita_iva']."','".$fornitore['codice_fiscale']."',NOW(),'".$numero_doc['n_doc']."' ,'".$oggetto."',NOW(),NOW(),'".$_SESSION['number']."');";
+			$insert_doc_acq = "INSERT INTO `fl_doc_acquisto` ( `anno_di_competenza`, `tipo_doc_acquisto`,`centro_di_costo`, `anagrafica_id`, `ragione_sociale`,`indirizzo`,`partita_iva`,`codice_fiscale`,`data_documento`, `numero_documento`, `oggetto_documento`,`data_creazione`, `data_aggiornamento`, `operatore`,fabbisogno_id,data_impegno) 
+			VALUES (NOW(),4,'".$fornitore['centro_di_costo']."','".$anagrafica_id."','".$fornitore['ragione_sociale']."','".$fornitore['indirizzo']."','".$fornitore['partita_iva']."','".$fornitore['codice_fiscale']."',NOW(),'".$numero_doc['n_doc']."' ,'".$oggetto."',NOW(),NOW(),'".$_SESSION['number']."','".$fabbisogno_id."','".$data_impegno."');";
 			$insert_doc_acq = mysql_query($insert_doc_acq,CONNECT);
 
 			
@@ -82,9 +85,11 @@ if(isset($_POST['creaOrdiniFornitore'])){
 
 		$insert_doc_voci = mysql_query($insert_doc_voci,CONNECT);
 		
-		$fabbisogno_id = filter_var($_POST['fabbisogni'.$key],FILTER_SANITIZE_STRING);
 
 		$update = "UPDATE fl_ricettario_fabbisogno set ordine_id = 1 WHERE id IN ( ".$fabbisogno_id.")"; 
+		$update = mysql_query($update,CONNECT);
+
+		$update = "UPDATE fl_materieprime_fabbisogno set data_ordine = NOW() WHERE id IN ( ".$fabbisogno_id.")"; 
 		$update = mysql_query($update,CONNECT);
 
 		

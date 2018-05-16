@@ -6,7 +6,7 @@ unset($chat);
 $nochat;
 
 $new_button = '';
-$module_title = "Market List dal " . mydate($_SESSION['data_da']) . " al " . mydate($_SESSION['data_a']);
+$module_title = "3 - Market List dal " . mydate($_SESSION['data_da']) . " al " . mydate($_SESSION['data_a']);
 
 include "../../fl_inc/headers.php";
 ?>
@@ -42,7 +42,7 @@ include "../../fl_inc/headers.php";
    <label for="anagrafica_id">Fornitore</label>
     <select name="anagrafica_id" id="anagrafica_id">
     <option selected value="">Tutti</option>
-    
+
     <?php foreach ($fornitore as $key => $val) {?>
         <option value="<?php echo $key; ?>"><?php echo $val; ?></option>
     <?php }?>
@@ -52,42 +52,55 @@ include "../../fl_inc/headers.php";
     <input type="submit" value="Mostra" class="salva" id="filter_set" />
 
 </form>
+</div>
+
+<p><a href='javascript:history.back();' class='button'><i class="fa fa-angle-left"></i> Indietro</a></p>
+
+<div style="text-align: left;">
+<form method="get" action="" id="fm_filtri">
+ 
+      Periodo di lavorazione <label> dal</label>
+      <input type="text" name="data_da" onFocus="this.value='';" value="<?php  echo  $_SESSION['data_da_t'];  ?>"  class="calendar" size="8" />
+   
+    
+      <label> al </label>
+      <input type="text" name="data_a" onFocus="this.value='';" value="<?php  echo $_SESSION['data_a_t'];  ?>" class="calendar" size="8" />
+
+     <input type="submit" value="Procediamo!" class="button" />
+
+</form>
+</div>
+
+<p class="noprint"><strong>FASE 3 - MARKET LIST:</strong> In questa fase il sistema ti propone la market list per il periodo selezionato. Ogni ingrediente viene conteggiato per ricetta/giorno per generare poi un'effettivo fabbisogno di acquisto per un dato giorno.
+Quando pensi che il tuo fabbisogno sia definitivo, puoi "Generare un a richiesta di Approvvigionamento" il fabbisogno ingredienti e in seguito elaborare ordini ai fornitori, in base alle tue esigenze temporali di ricezione della merce!</p>
 
 
-    </div>
-
-
-<form id="form" name="" method="POST" action="../mod_doc_acquisto/mod_opera.php">
+<form id="form" name="" method="GET" action="">
 
 <table class="dati">
 <tr>
 <th>Cod</th>
 <th>Desc</th>
 <th>Upa</th>
+<th>Um</th>
 <th>Qtà</th>
 <th>Tot</th>
-<th>Um</th>
-<th>Note</th>
-<th class="noprint">Fornitore</th>
-<th class="noprint">Ordina</th>
+<th>Fornitore</th>
+<th>Approvv.to</th>
 </tr>
 
 <?php
 
-// Periodo
+
+
 $sediCoinvolte = ' AND location_evento = 31'; // da abilitare
 
 $eventiCoinvolti = GQS('fl_eventi_hrc', 'id,titolo_ricorrenza,numero_adulti,numero_bambini,numero_operatori,data_evento', "id > 1  AND DATE(`data_evento`) BETWEEN '$data_da' AND '$data_a' AND stato_evento != 4 ORDER BY data_evento ASC");
 $eventi = array();
+echo "<h2>" . $_SESSION['nome'] . " stai elaborando un approvvigionamento per questi eventi:</h2>";
 
-$oggetto_per_doc_acquisto = 'ORDINE PER EVENTO/I N° ';
 
-echo "<p><a href='javascript:history.back();' class='button'><i class=\"fa fa-angle-left \"></i> Indietro</a></p>
-<h2>" . $_SESSION['nome'] . " stai elaborando un approvvigionamento per questi eventi:</h2>
-";
 foreach ($eventiCoinvolti as $key => $evento) {
-
-    $oggetto_per_doc_acquisto .= $evento['id'] . ' ' . $evento['titolo_ricorrenza'] . ' del ' . mydate($evento['data_evento']) . ',';
 
     $coperti = $evento['numero_adulti'] + $evento['numero_operatori'];
     echo '<span class="msg green">' . $evento['titolo_ricorrenza'] . ' del ' . mydate($evento['data_evento']) . '</span>';
@@ -95,50 +108,62 @@ foreach ($eventiCoinvolti as $key => $evento) {
 
 }
 
-$oggetto_per_doc_acquisto = trim($oggetto_per_doc_acquisto, ',');
-
-echo '<input type="hidden" name="oggetto" value="' . $oggetto_per_doc_acquisto . '" >';
 
 $eventiIN = implode(',', $eventi);
-
-// query esempio SELECT selectSpecific.materiaprima_id,selectSpecific.codice_articolo,selectSpecific.ultimo_prezzo,selectSpecific.anagrafica_id,selectSpecific.descrizione, SUM( selectSpecific.quantita * fb.quantita ) AS totale, selectSpecific.unita_di_misura FROM `fl_ricettario_fabbisogno` fb JOIN ( SELECT materiaprima_id, m.descrizione, m.unita_di_misura, rf.quantita, ricetta_id,m.codice_articolo,m.ultimo_prezzo,m.anagrafica_id FROM fl_ricettario_diba rf JOIN fl_materieprime m ON m.id = materiaprima_id WHERE ricetta_id IN ( ( SELECT ricetta_id FROM `fl_ricettario_fabbisogno` WHERE evento_id IN ( 191,207,456,1100,1123,1465,1703,1722 ) ) ) ) AS selectSpecific ON fb.ricetta_id = selectSpecific.ricetta_id WHERE evento_id IN ( 191,207,456,1100,1123,1465,1703,1722 ) GROUP BY materiaprima_id
-
-$filtriQuery = '';
-
-if (isset($_GET['cerca'])) {
-    $cerca = check($_GET['cerca']);
-    $filtriQuery .= ' AND (selectSpecific.codice_articolo LIKE "%'.$cerca.'%"  OR selectSpecific.descrizione LIKE "%'.$cerca.'%" )';
-}
-if (isset($_GET['anagrafica_id'])) {
-    $cerca = check($_GET['anagrafica_id']);
-    $filtriQuery .= ' AND selectSpecific.anagrafica_id = "'.$cerca.'"';
-}
-if (isset($_GET['categoria_materia'])) {
-    $cerca = check($_GET['categoria_materia']);
-    $filtriQuery .= ' AND selectSpecific.categoria_materia LIKE "%'.$cerca.'%" ';
-}
 $TOTALE = 0;
- $megasuperQueryFighissima = "SELECT  GROUP_CONCAT(DISTINCT fb.id  SEPARATOR ',') as fabbisogni,fb.id as fabbId,selectSpecific.categoria_materia,selectSpecific.materiaprima_id,selectSpecific.codice_articolo,selectSpecific.ultimo_prezzo,selectSpecific.anagrafica_id,selectSpecific.descrizione,selectSpecific.valore_di_conversione, SUM( selectSpecific.quantita * fb.quantita ) AS totale, selectSpecific.unita_di_misura FROM `fl_ricettario_fabbisogno` fb JOIN ( SELECT materiaprima_id, m.descrizione, m.unita_di_misura, rf.quantita, ricetta_id,m.codice_articolo,m.ultimo_prezzo,m.anagrafica_id,m.categoria_materia,m.valore_di_conversione FROM fl_ricettario_diba rf JOIN fl_materieprime m ON m.id = materiaprima_id WHERE ricetta_id IN ( ( SELECT ricetta_id FROM `fl_ricettario_fabbisogno` WHERE evento_id IN ( " . $eventiIN . " ) ) ) ) AS selectSpecific ON fb.ricetta_id = selectSpecific.ricetta_id WHERE evento_id IN ( " . $eventiIN . " ) AND fb.ordine_id = 0 ".$filtriQuery." GROUP BY materiaprima_id ORDER BY selectSpecific.anagrafica_id DESC , selectSpecific.codice_articolo ASC "; 
 
-$risultato = mysql_query($megasuperQueryFighissima, CONNECT);
 
-while ($robaDaOrdinare = mysql_fetch_array($risultato)) {
-     
-    $single_tot = ($robaDaOrdinare['ultimo_prezzo']/$robaDaOrdinare['valore_di_conversione']) * $robaDaOrdinare['totale'];
-    $TOTALE += $single_tot ;
-    echo '<input type="hidden" name="fabb' . $robaDaOrdinare['materiaprima_id'] . '" value="' . $robaDaOrdinare['fabbId'] . '" >';
-    echo '<input type="hidden" name="fabbisogni' . $robaDaOrdinare['materiaprima_id'] . '" value="' . $robaDaOrdinare['fabbisogni'] . '" >';
+$ricette = GQS('fl_ricettario_fabbisogno', 'id,data_impegno, DATE_FORMAT(data_impegno,\'%d/%m/%Y\') as data_evento ,ricetta_id,sum(quantita) as quantitaTOT', 'ordine_id = 0 AND data_impegno BETWEEN "' . $data_da . '" AND "' . $data_a . '" GROUP BY  data_impegno,ricetta_id ORDER BY data_impegno,ricetta_id ASC');
+$righeFabbisogno = 0;
+$queryInserimentoFabbisognoMateria = "INSERT INTO `fl_materieprime_fabbisogno` (`id`,`fabbisogno_id`, `materia_prima_id`, `quantita`, `data_impegno`,`data_ordine`, `data_consegna_prevista`, `data_creazione`, `data_aggiornamento`, `operatore`) VALUES ";
 
-    echo "<tr><td>" . $robaDaOrdinare['codice_articolo'] . "</td>
-    <td>" . $robaDaOrdinare['descrizione'] . "</td>
-    <td> € " . numdec($robaDaOrdinare['ultimo_prezzo'], 2) . "</td>
-    <td><input type='text' style='width:100%;' placeholder='quantità da ordinare' name='qta" . $robaDaOrdinare['materiaprima_id'] . "' value='" . $robaDaOrdinare['totale'] . "'></td>
-    <td>€ " .  numdec($single_tot,2) . " </td>
-    <td>" . $robaDaOrdinare['unita_di_misura'] . "</td>
-    <td><input type='text' placeholder='Nota per il fornitore' name='note" . $robaDaOrdinare['materiaprima_id'] . "' maxlength=\"100\"></td>
-    <td class=\"noprint\"><select name='fornitore" . $robaDaOrdinare['materiaprima_id'] . "' style='width: 100%;'><option value='" . $robaDaOrdinare['anagrafica_id'] . "'>" . $fornitore[@$robaDaOrdinare['anagrafica_id']] . "</option></select> </td>
-    <td class=\"noprint\"><input type='checkbox' name='id[]' value='" . $robaDaOrdinare['materiaprima_id'] . "' id='" . $robaDaOrdinare['materiaprima_id'] . "' checked><label for='" . $robaDaOrdinare['materiaprima_id'] . "'  ><i class=\"fa fa-check \"></i></label></td></tr>";
 
+foreach ($ricette as $key => $value) {
+   
+
+    $ricetta_info = GQD('fl_ricettario','id,nome_tecnico,porzioni','id='. $value['ricetta_id']);
+    $materieprime = GQS('fl_materieprime LEFT JOIN fl_ricettario_diba ON fl_materieprime.id = fl_ricettario_diba.materiaprima_id', '*,fl_materieprime.unita_di_misura AS um', 'fl_ricettario_diba.ricetta_id = '.$value['ricetta_id'].' ORDER BY fl_materieprime.id, fl_ricettario_diba.ricetta_id');
+ 
+    echo '<tr style="background: #ecefcc;"><td colspan="6" title="ID FABBISOGNO: '.$value['id'].'"> '.$ricetta_info['id'].' | <a href="../mod_ricettario/mod_diba.php?record_id='.$ricetta_info['id'].'" data-fancybox-type="iframe" class="fancybox_view">'.$ricetta_info['nome_tecnico'].'</a></td>
+    <td colspan="1" title="Diba per '.numdec($ricetta_info['porzioni'],0).' porzioni."><h3>'.$value['quantitaTOT'].' Porzioni</h3></td>
+    <td colspan="1">'.$value['data_evento'].'</td></tr>';
+
+   
+
+    foreach ($materieprime as $key1 => $value1) {
+       //print_r($value1);
+
+       $daOrdinare = ($value1['quantita']/$ricetta_info['porzioni'])*$value['quantitaTOT'];
+       $single_tot = ($value1['ultimo_prezzo'] / $value1['valore_di_conversione']) * $daOrdinare;
+       $TOTALE += $single_tot;
+
+       $isIn = GQD('fl_materieprime_fabbisogno','id,fabbisogno_id,SUM(`quantita`) AS quantita',' materia_prima_id = '.$value1['id'].' AND fabbisogno_id = '.$value['id'].' GROUP BY fabbisogno_id');
+       $appvto = ($isIn['id'] > 0) ? '<span class="msg green">RICHIESTO</span>' : '<span class="msg gray">NON GENERATO</span>';
+       $integrazioni = ($isIn['id'] > 0) ? $daOrdinare-$isIn['quantita'] : 0;
+       if($integrazioni > 0) $appvto = '<span class="msg orange">DA INTEGRARE ('.$integrazioni.')</span>';
+       $quantitaApprovvigionamento = ($integrazioni > 0) ? $integrazioni : $daOrdinare;
+      
+       if($isIn['id'] < 1 || $integrazioni > 0) {
+        if($righeFabbisogno > 0) $queryInserimentoFabbisognoMateria .= ',';
+        $queryInserimentoFabbisognoMateria .= "(NULL, '".$value['id']."', '".$value1['id']."', '$quantitaApprovvigionamento',  '".$value['data_impegno']."', '', '',  NOW(), NOW(), '".$_SESSION['number']."')";
+        $righeFabbisogno++;
+        //if($integrazioni > 0) $appvto = '<span class="msg orange">RICHIESTI '.$daOrdinare.'</span>';
+        //var_dump($isIn);
+       }
+
+       echo "<tr ><td title=\"CID: ".$value1['id']."\">" . $value1['codice_articolo'] . "</td>
+       <td>" . $value1['descrizione'] . "</td>
+       <td> € " . numdec($value1['ultimo_prezzo'], 2) . "</td>
+       <td>" . $value1['um'] . "</td>
+       <td>" . $daOrdinare . "</td>
+       <td>€ " . numdec($single_tot, 2) . " </td>
+       <td class=\"noprint\"><selectstyle='width: 100%;'><option value='" . $value1['anagrafica_id'] . "'>" . $fornitore[@$value1['anagrafica_id']] . "</option></select></td>
+       <td>" . $appvto . "</td>
+       </td></tr>";
+        
+ 
+
+    }
 }
 
 ?>
@@ -147,18 +172,20 @@ while ($robaDaOrdinare = mysql_fetch_array($risultato)) {
 <th></th>
 <th></th>
 <th></th>
-<th>€ <?php echo numdec($TOTALE,2); ?> </th>
-<th></th>
-<th></th>
-<th class="noprint"></th>
-<th class="noprint"></th></tr>
+<th>Totale ordini: </th>
+<th>€ <?php echo numdec($TOTALE, 2); ?> </th>
+<th></tr>
 </table>
-<input type="hidden" value="1" name="creaOrdiniFornitore">
-<div style="margin:0 auto;text-align: center;">
-<?php if(defined('MAGAZZINO')) echo '<input type="submit" value="Crea Ordini Fornitore" class="button noprint">'; ?>
 <a href="javascript:window.print();" class="button noprint">Stampa</a>
+<?php if (defined('MAGAZZINO')) {
+    echo '<input type="submit" value="Genera Approvvigionamento" class="button noprint" >';
+    echo '<input type="hidden" value="1" name="generazione">';
+    if(isset($_GET['generazione']) &&  $righeFabbisogno > 0) {
+    if(mysql_query($queryInserimentoFabbisognoMateria))  { echo ' | '.$righeFabbisogno.' righe di fabbisogno inserite!'; } else { echo 'ERRORE CONTATTA ASSISTENZA! '.mysql_error(); }
+    }
+}
+?>
 </form>
-</div>
 
 <?php include "../../fl_inc/footer.php";?>
 

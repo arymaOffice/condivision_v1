@@ -64,9 +64,10 @@ include "../../fl_inc/headers.php";
 <th>Cod</th>
 <th>Desc</th>
 <th>Upa</th>
+<th>Um</th>
 <th>Qtà</th>
 <th>Tot</th>
-<th>Um</th>
+
 <th>Note</th>
 <th class="noprint">Fornitore</th>
 <th class="noprint">Ordina</th>
@@ -133,24 +134,30 @@ $ricette = GQS('fl_ricettario_fabbisogno', ' ricetta_id,sum(quantita) as quantit
 $ricette_id = array(); 
 
 foreach ($ricette as $key => $value) {
+   
     if(!in_array($value['ricetta_id'],$ricette_id)){
         $ricette_id[] = $value['ricetta_id'];
     }
-    $ricetta_info = GQD('fl_ricettario','nome_tecnico','id='. $value['ricetta_id']);
-    echo '<tr><td colspan="9">'.$ricetta_info['nome_tecnico'].'</td></tr>';
-    $materieprime = GQS('fl_materieprime', '*', 'id IN(SELECT materiaprima_id FROM fl_ricettario_diba WHERE ricetta_id = '.$value['ricetta_id'].')');
-    foreach ($materieprime as $key1 => $value1) {
-       // print_r($value1);
 
-       $single_tot = ($value1['ultimo_prezzo'] / $value1['valore_di_conversione']) * $ricette['quantitaTOT'];
-       $TOTALE += $single_tot;
+    $ricetta_info = GQD('fl_ricettario','id,nome_tecnico,porzioni','id='. $value['ricetta_id']);
+    echo '<tr style="background: #ecefcc;"><td colspan="8">'.$ricetta_info['id'].' | '.$ricetta_info['nome_tecnico'].'</td><td colspan="1">Diba per '.numdec($ricetta_info['porzioni'],0).' porzioni.</td></tr>';
+    $materieprime = GQS('fl_materieprime LEFT JOIN fl_ricettario_diba ON fl_materieprime.id = fl_ricettario_diba.materiaprima_id', '*,fl_materieprime.unita_di_misura AS um', 'fl_ricettario_diba.ricetta_id = '.$value['ricetta_id'].'');
+
    
+
+    foreach ($materieprime as $key1 => $value1) {
+       //print_r($value1);
+
+       $daOrdinare = ($value1['quantita']/$ricetta_info['porzioni'])*$value['quantitaTOT'];
+       $single_tot = ($value1['ultimo_prezzo'] / $value1['valore_di_conversione']) * $daOrdinare;
+       $TOTALE += $single_tot;
+
        echo "<tr><td>" . $value1['codice_articolo'] . "</td>
        <td>" . $value1['descrizione'] . "</td>
        <td> € " . numdec($value1['ultimo_prezzo'], 2) . "</td>
-       <td><input type='text' style='width:100%;' placeholder='quantità da ordinare' name='qta" . $value1['id'] . "' value='" . $value1['quantitaTOT'] . "'></td>
+       <td>" . $value1['um'] . "</td>
+       <td><input type='text' style='width:100%;' placeholder='quantità da ordinare' name='qta" . $value1['id'] . "' value='" . $daOrdinare . "'></td>
        <td>€ " . numdec($single_tot, 2) . " </td>
-       <td>" . $value1['unita_di_misura'] . "</td>
        <td><input type='text' placeholder='Nota per il fornitore' name='note" . $value1['id'] . "' maxlength=\"100\"></td>
        <td class=\"noprint\"><select name='fornitore" . $value1['id'] . "' style='width: 100%;'><option value='" . $value1['anagrafica_id'] . "'>" . $fornitore[@$value1['anagrafica_id']] . "</option></select> </td>
        <td class=\"noprint\"><input type='checkbox' name='id[]' value='" . $value1['id'] . "' id='" . $value1['id'] . "' checked><label for='" . $value1['id'] . "'  ><i class=\"fa fa-check \"></i></label></td></tr>";
@@ -166,11 +173,11 @@ echo '<input type="hidden" name="ricette_id" value="'.$ricette_id.'">';
 <th></th>
 <th></th>
 <th></th>
+<th>Totale ordini: </th>
 <th>€ <?php echo numdec($TOTALE, 2); ?> </th>
 <th></th>
-<th></th>
-<th class="noprint"></th>
-<th class="noprint"></th></tr>
+<th >Data di Consegna:</th>
+<th><input type="date" value="" name="dataConsegna"></th></tr>
 </table>
 <input type="hidden" value="1" name="creaOrdiniFornitore">
 <div style="margin:0 auto;text-align: center;">

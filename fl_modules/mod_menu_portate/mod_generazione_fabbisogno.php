@@ -6,7 +6,7 @@ unset($chat);
 $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 $nochat;
 $new_button = '';
-$module_title = "Genera Fabbisogno periodo";
+$module_title = "1 - Pianificazione preparazione periodo";
 
 include("../../fl_inc/headers.php");
  ?>
@@ -28,7 +28,7 @@ if(!isset($_GET['data_da']) ) {
 <div style="text-align: left;">
 <form method="get" action="" id="fm_filtri">
  
-     Voglio elaborare il fabbisogno <label> dal</label>
+      Periodo di lavorazione <label> dal</label>
       <input type="text" name="data_da" onFocus="this.value='';" value="<?php  echo $data_da_t;  ?>"  class="calendar" size="8" />
    
     
@@ -40,6 +40,9 @@ if(!isset($_GET['data_da']) ) {
 </form>
 </div>
 
+<p class="noprint"><strong>FASE 1 - PIANIFICA:</strong> Pianificare la produzione per il periodo selezionato indicando il numero di porzioni da produrre per evento, per singola ricetta. Il sistema prende di default il numero di adulti + il numero degli operatori. Per i menù Baby o serali, correggere manualmente fabbisogno portate.<br>
+La produzione extra può essere pianificata in questa fase, per singolo piatto, selezionando una percentuale positiva o negativa e ricalcolando produzione dal tasto aggiorna %. <br>In fondo al foglio prosegui alla fase successiva.</p>
+(Successivamente implementeremo calcolo per tipi di portate BABY e suggerimento produzione EXTRA preimpostato)
 <?php 
 if(isset($_GET['data_da']) && check($_GET['data_da']) != "") { ?>
 

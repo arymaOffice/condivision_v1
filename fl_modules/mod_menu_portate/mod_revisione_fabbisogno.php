@@ -159,8 +159,8 @@ while ($ingredienti = mysql_fetch_assoc($result)) {
 
 </table>
 
-<?php echo '<a href="mod_calcolo_fabbisogno.php" class="button noprint">Produci Market List</a>'; ?>
-<a href="javascript:window.print();" class="button noprint">Stampa</a>
+<?php echo '<a href="mod_calcolo_fabbisogno.php" class="button salva green noprint">Produci Market List</a>'; ?>
+
 
 </div>
 

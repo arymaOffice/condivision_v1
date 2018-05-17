@@ -67,7 +67,7 @@
     $fornitore = $data_set->data_retriever('fl_anagrafica','ragione_sociale'); //Crea un array con i valori X2 della tabella X1
 	$tipo_materia = $data_set->get_items_key("tipo_materia");//Crea un array con gli elementi figli dell'elemento con tag X1	
 	$categoria_materia = $data_set->data_retriever('fl_categorie','label','WHERE id > 1 AND workflow_id = 115','id ASC');
-	$magazzino_id = $data_set->data_retriever('fl_magazzino_anagrafica','codice_magazzino,descrizione'); 
+	$magazzino_id = $data_set->data_retriever('fl_magazzino_anagrafica','codice_magazzino,descrizione','WHERE 1','codice_magazzino ASC'); 
 
 	/*Funzione di merda per gestione dei campi da standardizzare in una classe e legare ad al DB o XML config*/	
 	function select_type($who){

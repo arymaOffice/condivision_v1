@@ -122,7 +122,7 @@ foreach ($ricette as $key => $value) {
    
 
     $ricetta_info = GQD('fl_ricettario','id,nome_tecnico,porzioni','id='. $value['ricetta_id']);
-    $materieprime = GQS('fl_materieprime LEFT JOIN fl_ricettario_diba ON fl_materieprime.id = fl_ricettario_diba.materiaprima_id', '*,fl_materieprime.unita_di_misura AS um', 'fl_ricettario_diba.ricetta_id = '.$value['ricetta_id'].' ORDER BY fl_materieprime.id, fl_ricettario_diba.ricetta_id');
+    $materieprime = GQS('fl_materieprime as m LEFT JOIN fl_ricettario_diba ON m.id = fl_ricettario_diba.materiaprima_id', '*,m.id as matID , m.unita_di_misura AS um', 'fl_ricettario_diba.ricetta_id = '.$value['ricetta_id'].' ORDER BY m.id, fl_ricettario_diba.ricetta_id');
  
     echo '<tr style="background: #ecefcc;"><td colspan="6" title="ID FABBISOGNO: '.$value['id'].'"> '.$ricetta_info['id'].' | <a href="../mod_ricettario/mod_diba.php?record_id='.$ricetta_info['id'].'" data-fancybox-type="iframe" class="fancybox_view">'.$ricetta_info['nome_tecnico'].'</a></td>
     <td colspan="1" title="Diba per '.numdec($ricetta_info['porzioni'],0).' porzioni."><h3>'.$value['quantitaTOT'].' Porzioni</h3></td>
@@ -131,27 +131,36 @@ foreach ($ricette as $key => $value) {
    
 
     foreach ($materieprime as $key1 => $value1) {
-       //print_r($value1);
 
-       $daOrdinare = ($value1['quantita']/$ricetta_info['porzioni'])*$value['quantitaTOT'];
+       $porzioni = ($ricetta_info['porzioni'] < 1)? 1 : $ricetta_info['porzioni']; 
+       $daOrdinare = round(($value1['quantita']/$ricetta_info['porzioni'])*$value['quantitaTOT'],2);
        $single_tot = ($value1['ultimo_prezzo'] / $value1['valore_di_conversione']) * $daOrdinare;
        $TOTALE += $single_tot;
 
-       $isIn = GQD('fl_materieprime_fabbisogno','id,fabbisogno_id,SUM(`quantita`) AS quantita',' materia_prima_id = '.$value1['id'].' AND fabbisogno_id = '.$value['id'].' GROUP BY fabbisogno_id');
-       $appvto = ($isIn['id'] > 0) ? '<span class="msg green">RICHIESTO</span>' : '<span class="msg gray">NON GENERATO</span>';
-       $integrazioni = ($isIn['id'] > 0) ? $daOrdinare-$isIn['quantita'] : 0;
-       if($integrazioni > 0) $appvto = '<span class="msg orange">DA INTEGRARE ('.$integrazioni.')</span>';
+       $isIn = GQD('fl_materieprime_fabbisogno','id,fabbisogno_id,SUM(`quantita`) AS quantita',' materia_prima_id = '.$value1['matID'].' AND fabbisogno_id = '.$value['id'].' GROUP BY fabbisogno_id');
+
+
+       
+       
+       $appvto = ($isIn['id'] > 0) ? '<span class="msg green">RICHIESTO '.round($isIn['quantita'],2).' '.$value1['um'].'</span>' : '<span class="msg gray">NON GENERATO</span>';
+
+       $integrazioni = ($isIn['id'] > 0) ? $daOrdinare - round($isIn['quantita'],2) : 0;
+       if(!is_numeric($daOrdinare) || !is_numeric($isIn['quantita'])  ){
+        $integrazioni = 0;
+        }
+       if(round($integrazioni,2) > 0) $appvto = '<span class="msg orange">DA INTEGRARE ('.$integrazioni.')</span>';
        $quantitaApprovvigionamento = ($integrazioni > 0) ? $integrazioni : $daOrdinare;
       
        if($isIn['id'] < 1 || $integrazioni > 0) {
         if($righeFabbisogno > 0) $queryInserimentoFabbisognoMateria .= ',';
-        $queryInserimentoFabbisognoMateria .= "(NULL, '".$value['id']."', '".$value1['id']."', '$quantitaApprovvigionamento',  '".$value['data_impegno']."', '', '',  NOW(), NOW(), '".$_SESSION['number']."')";
+        $queryInserimentoFabbisognoMateria .= "(NULL, '".$value['id']."', '".$value1['matID']."', '$quantitaApprovvigionamento',  '".$value['data_impegno']."', '', '',  NOW(), NOW(), '".$_SESSION['number']."')";
         $righeFabbisogno++;
-        //if($integrazioni > 0) $appvto = '<span class="msg orange">RICHIESTI '.$daOrdinare.'</span>';
-        //var_dump($isIn);
+        if(isset($_GET['generazione']) && $daOrdinare > 0) $appvto = '<span class="msg blue">RICHIESTI '.$daOrdinare.'</span>';
+        if(isset($_GET['generazione']) && $integrazioni > 0) $appvto = '<span class="msg blue">RICHIESTI '.$daOrdinare.'</span>';
+
        }
 
-       echo "<tr ><td title=\"CID: ".$value1['id']."\">" . $value1['codice_articolo'] . "</td>
+       echo "<tr ><td title=\"CID: ".$value1['matID']."\">" . $value1['codice_articolo'] . "</td>
        <td>" . $value1['descrizione'] . "</td>
        <td> € " . numdec($value1['ultimo_prezzo'], 2) . "</td>
        <td>" . $value1['um'] . "</td>
@@ -176,12 +185,11 @@ foreach ($ricette as $key => $value) {
 <th>€ <?php echo numdec($TOTALE, 2); ?> </th>
 <th></tr>
 </table>
-<a href="javascript:window.print();" class="button noprint">Stampa</a>
 <?php if (defined('MAGAZZINO')) {
-    echo '<input type="submit" value="Genera Approvvigionamento" class="button noprint" >';
+    echo '<input type="submit" value="Genera Approvvigionamento" class="button salva green noprint" >';
     echo '<input type="hidden" value="1" name="generazione">';
     if(isset($_GET['generazione']) &&  $righeFabbisogno > 0) {
-    if(mysql_query($queryInserimentoFabbisognoMateria))  { echo ' | '.$righeFabbisogno.' righe di fabbisogno inserite!'; } else { echo 'ERRORE CONTATTA ASSISTENZA! '.mysql_error(); }
+    if(mysql_query($queryInserimentoFabbisognoMateria))  { echo ' <br> '.$righeFabbisogno.' righe di fabbisogno inserite!'; } else { echo 'ERRORE CONTATTA ASSISTENZA! '.mysql_error(); }
     }
 }
 ?>

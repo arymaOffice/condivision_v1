@@ -30,7 +30,7 @@
     $module_menu = '<li><a href="./mod_generazione_fabbisogno.php">Pianificazione</a></li>
     <li><a href="./mod_revisione_fabbisogno.php">Verifica</a></li>
     <li><a href="./mod_calcolo_fabbisogno.php">Market List</a></li>
-    <li><a href="./mod_ordini_fabbisogno.php">Ordini Fabbisogno</a></li>'; //Menu del modulo
+    <li><a href="./mod_ordini_fabbisogno.php">Ordina</a></li>'; //Menu del modulo
 
 	
 	/*Impostazione automatica da tabella */

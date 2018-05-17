@@ -19,7 +19,7 @@ include("../../fl_inc/headers.php");
 
 <div class="content_scheda">
   <?php
-if(!isset($_GET['data_da']) ) { 
+if(!isset($_SESSION['data_da']) ) { 
 
   echo "<p>Ciao ".$_SESSION['nome'].", indica un periodo da elaborare, grazie.</p>"; 
 
@@ -29,11 +29,12 @@ if(!isset($_GET['data_da']) ) {
 <form method="get" action="" id="fm_filtri">
  
       Periodo di lavorazione <label> dal</label>
-      <input type="text" name="data_da" onFocus="this.value='';" value="<?php  echo $data_da_t;  ?>"  class="calendar" size="8" />
+      <input type="text" name="data_da" onFocus="this.value='';" value="<?php  echo  $_SESSION['data_da_t'];  ?>"  class="calendar" size="8" />
    
     
+
       <label> al </label>
-      <input type="text" name="data_a" onFocus="this.value='';" value="<?php  echo $data_a_t;  ?>" class="calendar" size="8" />
+      <input type="text" name="data_a" onFocus="this.value='';" value="<?php  echo $_SESSION['data_a_t'];  ?>" class="calendar" size="8" />
 
      <input type="submit" value="Procediamo!" class="button" />
 
@@ -44,7 +45,7 @@ if(!isset($_GET['data_da']) ) {
 La produzione extra può essere pianificata in questa fase, per singolo piatto, selezionando una percentuale positiva o negativa e ricalcolando produzione dal tasto aggiorna %. <br>In fondo al foglio prosegui alla fase successiva.</p>
 (Successivamente implementeremo calcolo per tipi di portate BABY e suggerimento produzione EXTRA preimpostato)
 <?php 
-if(isset($_GET['data_da']) && check($_GET['data_da']) != "") { ?>
+if(isset($_SESSION['data_da']) && check($_SESSION['data_da']) != "") { ?>
 
 
 <form id="form" name="" method="POST" action="mod_opera.php">
@@ -133,8 +134,7 @@ $menuId = $menu['id'];
   }
 </script>
 <input type="hidden" value="1" name="creaFabbisogno">
-<input type="submit" value="Genera Fabbisogno" class="button noprint">
-<a href="javascript:window.print();" class="button noprint">Stampa</a>
+<input type="submit" value="Genera Fabbisogno" class="button salva green noprint">
 
 </form>
 

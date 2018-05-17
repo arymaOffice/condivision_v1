@@ -28,8 +28,9 @@ require_once("../../fl_inc/headers.php");
 
 <?php 
   # code...
-  echo '<a href="mod_download.php?causale_movimentazione=1"><div class="module_icon box"><i class="fa fa fa-truck" aria-hidden="true"></i> SCARICO MAGAZZINO</div></a>';
-  echo '<a href="mod_load.php?causale_movimentazione=0"><div class="module_icon box"><i class="fa fa fa-truck" aria-hidden="true"></i> CARICO MAGAZZINO</div></a>';
+  echo '<a href="mod_download.php?causale_movimentazione=1"><div class="module_icon box"><i class="fa fa-cloud-download" aria-hidden="true"></i> SCARICO MAGAZZINO</div></a>';
+  echo '<a href="mod_load.php?causale_movimentazione=0"><div class="module_icon box"><i class="fa fa-cloud-upload" aria-hidden="true"></i> CARICO MAGAZZINO</div></a>';
+  echo '<a href="mod_reso.php?causale_movimentazione=2"><div class="module_icon box"><i class="fa fa-glass" aria-hidden="true"></i> RESO EVENTO</div></a>';
 ?>
 <table class="dati">
 <?php 

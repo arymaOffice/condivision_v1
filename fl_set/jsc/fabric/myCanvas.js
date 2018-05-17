@@ -500,12 +500,19 @@ $(document).ready(function () {
 		localStorage.type = type;
 		localStorage.categoria = categoria;
 		localStorage.numero = numero;
+		id = 0;
 
-		$.get('mod_opera.php', {
-			insertTableId: localStorage.nameT, evento_id: evento_id, text: escape(textInsert),
-			x: marginLeft, y: marginTop, type: localStorage.type, categoria: categoria, numero: numero, diverso: false, ambiente_id: ambiente_id
-		}, function (data) {
-			marginTop = localStorage.marginT;							//margine dall'alto del tavolo
+		$.get('mod_opera.php', {insertTableId: localStorage.nameT, evento_id: evento_id, text: escape(textInsert),
+			x: marginLeft, y: marginTop, type: localStorage.type, categoria: categoria, numero: numero, diverso: false, ambiente_id: ambiente_id},function(data){
+				console.log(data);
+				var parsed = $.parseJSON(data);
+				id = parsed.id;
+
+			});
+
+		setTimeout(function(){
+			if(id > 0){
+				marginTop = localStorage.marginT;							//margine dall'alto del tavolo
 			marginLeft = localStorage.marginL;							//margine sinistro del tavolo
 			name = localStorage.nameT;									//id univoco del tavolo
 			textInsert = localStorage.textInsert;						//nome visualizzato sul tavolo
@@ -583,17 +590,113 @@ $(document).ready(function () {
 			}
 
 			newOne.set("numero_canvas", counter++);						//numero nel canavas caricato ora 
-			var parsed = $.parseJSON(data);
+
 			
-			newOne.set("id", parsed.id);						//id tavolo 
+			newOne.set("id", id);						//id tavolo 
 
 
 
 			var GROUP = new fabric.Group([newOne, into, tito, titoUser, comm, sera], {});//tavolo + testo fornamo un gruppo
 			canvas.add(GROUP);											//gli aggiungo al canvas
 			canvas.renderAll();											//fa il render di tutti gli oggetti\
-			return true;
-		});
+
+			}
+		},3000);
+
+		// $.get('mod_opera.php', {
+		// 	insertTableId: localStorage.nameT, evento_id: evento_id, text: escape(textInsert),
+		// 	x: marginLeft, y: marginTop, type: localStorage.type, categoria: categoria, numero: numero, diverso: false, ambiente_id: ambiente_id
+		// }, function (data) {
+		// 	console.log(data);
+		// 	marginTop = localStorage.marginT;							//margine dall'alto del tavolo
+		// 	marginLeft = localStorage.marginL;							//margine sinistro del tavolo
+		// 	name = localStorage.nameT;									//id univoco del tavolo
+		// 	textInsert = localStorage.textInsert;						//nome visualizzato sul tavolo
+		// 	a = '';														//adulti
+		// 	b = '';														//bambini
+		// 	s = '';														//sedie
+		// 	h = '';														//seggiolini
+		// 	noteInt = '';												//asterisco delle intolleranze
+		// 	seraText = '';												//ospiti serali
+		// 	specialMargin = 0;
+		// 	categoria = localStorage.categoria;							//categoria selezionato
+		// 	numero = (localStorage.numero != 'null') ? localStorage.numero : '';	//numero selezionato
+
+
+		// 	switch (localStorage.type) {
+		// 		case '2':
+		// 			var newOne = fabric.util.object.clone(tavoloBase); //crea tavolo tondo clonando l'oggetto
+		// 			break;
+		// 		case '3':
+		// 			var newOne = fabric.util.object.clone(tavoloBase1); //crea tavolo quadrato clonando l'oggetto
+		// 			newOne.set('height', radius * 2);
+		// 			newOne.set('width', radius * 2);
+		// 			break;
+		// 		case '4':
+		// 			var newOne = fabric.util.object.clone(tavoloBase1); //crea tavolo rettangolare clonando l'oggetto
+		// 			newOne.set('height', radius * 2);
+		// 			newOne.set('width', (radius * 2) * 2);
+		// 			specialMargin = (radius * 2) * 2 * 0.2;
+		// 			break;
+		// 		case '5':
+		// 			var newOne = fabric.util.object.clone(tavoloBase2); //crea tavolo ovale clonando l'oggetto
+		// 			newOne.set('ry', radius * 1.2);
+		// 			newOne.set('rx', radius * 2);
+		// 			specialMargin = radius * 2 * 0.45;
+		// 			break;
+		// 		default:
+		// 			var newOne = fabric.util.object.clone(tavoloBase); //crea tavolo tondo clonando l'oggetto
+		// 	}
+
+		// 	newOne.set('diverso', false);
+		// 	newOne.set("top", Number(marginTop));					//setto margine dall'alto (che cambia per ogni tavolo)
+		// 	newOne.set("name", name);									//ed il nome identificativo
+		// 	newOne.set("numero", numero);								//numero inserito
+		// 	newOne.set("categoria", categoria);							//categoria inserita
+		// 	/* testo intolleranze */
+		// 	var into = fabric.util.object.clone(text);					//clona il testo base
+		// 	into.set("top", Number(marginTop) + radius - 20);			//definisce il margine
+		// 	into.setText(noteInt);										//definisco il testo
+		// 	into.setColor('red');										//coloro il testo
+		// 	into.set({ fontSize: 20 });
+		// 	/* testo titolo tavolo */
+		// 	var tito = fabric.util.object.clone(text);					//clona il testo base
+		// 	tito.set("top", Number(marginTop) + radius - 10);			//definisce il margine
+		// 	tito.setText(categoria + ' ' + numero);						//definisco il testo
+		// 	/* testo personalizzato */
+		// 	var titoUser = fabric.util.object.clone(text);					//clona il testo base
+		// 	titoUser.set("top", Number(marginTop) + radius);			//definisce il margine
+		// 	titoUser.setText(textInsert);	//definisco il testo
+		// 	/* testo commensali */
+		// 	var comm = fabric.util.object.clone(text);					//clona il testo base
+		// 	comm.set("top", Number(marginTop) + radius + 10);				//definisce il margine
+		// 	comm.setText(a + ' ' + b + ' ' + s + ' ' + h);				//definisco il testo
+		// 	comm.setColor('red');										//coloro il testo
+		// 	/* testo ospiti serali */
+		// 	var sera = fabric.util.object.clone(text);					//clona il testo base
+		// 	sera.set("top", Number(marginTop) + radius + 20);			//definisce il margine
+		// 	sera.setText(seraText);	//definisco il testo
+		// 	if (fila == 2) {												//se la fila è 2
+		// 		newOne.set('left', Number(marginLeft));				//imposto un margine sinistro
+		// 		into.set('left', Number(marginLeft) + radius + specialMargin);//imposto un margine sinistro
+		// 		tito.set('left', Number(marginLeft) + radius + specialMargin);//imposto un margine sinistro
+		// 		titoUser.set('left', Number(marginLeft) + radius + specialMargin);//imposto un margine sinistro
+		// 		comm.set('left', Number(marginLeft) + radius + specialMargin);//imposto un margine sinistro
+		// 		sera.set('left', Number(marginLeft) + radius + specialMargin);//imposto un margine sinistro
+		// 	}
+
+		// 	newOne.set("numero_canvas", counter++);						//numero nel canavas caricato ora 
+
+			
+		// 	newOne.set("id", id);						//id tavolo 
+
+
+
+		// 	var GROUP = new fabric.Group([newOne, into, tito, titoUser, comm, sera], {});//tavolo + testo fornamo un gruppo
+		// 	canvas.add(GROUP);											//gli aggiungo al canvas
+		// 	canvas.renderAll();											//fa il render di tutti gli oggetti\
+		// 	return true;
+		// });
 
 		return true;
 	}

@@ -49,6 +49,14 @@ mysql_query($aggiornaPiatto,CONNECT);
 $query1 = "UPDATE fl_synapsy SET id2 = $newPiatto WHERE `id` = $synId";
 mysql_query($query1,CONNECT);	
 
+$leggiDiba = GQS('fl_ricettario_diba','*',' `ricetta_id` = '.$idPiatto);
+
+	foreach ($leggiDiba as $key => $ingrediente) {	
+	$inserisciDiba = "INSERT INTO `fl_ricettario_diba` ( `ricetta_id`, `materiaprima_id`, `semilavorato_id`, `unita_di_misura`, `quantita`, `scarto`, `netto`, `nota`, `sequenza`) VALUES ( '$newPiatto', '".$ingrediente['materiaprima_id']."', '".$ingrediente['semilavorato_id']."', '".$ingrediente['unita_di_misura']."', '".$ingrediente['quantita']."', 
+	'".$ingrediente['scarto']."', '".$ingrediente['netto']."', '".$ingrediente['nota']."', '".$ingrediente['sequenza']."');";
+	mysql_query($inserisciDiba,CONNECT);	
+	}
+
 }
 
 

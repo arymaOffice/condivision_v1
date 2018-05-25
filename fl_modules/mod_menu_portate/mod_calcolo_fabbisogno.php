@@ -121,11 +121,11 @@ $queryInserimentoFabbisognoMateria = "INSERT INTO `fl_materieprime_fabbisogno` (
 foreach ($ricette as $key => $value) {
    
 
-    $ricetta_info = GQD('fl_ricettario','id,nome_tecnico,porzioni','id='. $value['ricetta_id']);
+    $ricetta_info = GQD('fl_ricettario','id,nome_tecnico,porzioni,porzioni_piatto','id='. $value['ricetta_id']);
     $materieprime = GQS('fl_materieprime as m LEFT JOIN fl_ricettario_diba ON m.id = fl_ricettario_diba.materiaprima_id', '*,m.id as matID , m.unita_di_misura AS um', 'fl_ricettario_diba.ricetta_id = '.$value['ricetta_id'].' ORDER BY m.id, fl_ricettario_diba.ricetta_id');
- 
+    $piatti = ($ricetta_info['porzioni_piatto'] > 0) ? round($value['quantitaTOT']/$ricetta_info['porzioni_piatto'],0).' piatti' : '';
     echo '<tr style="background: #ecefcc;"><td colspan="6" title="ID FABBISOGNO: '.$value['id'].'"> '.$ricetta_info['id'].' | <a href="../mod_ricettario/mod_diba.php?record_id='.$ricetta_info['id'].'" data-fancybox-type="iframe" class="fancybox_view">'.$ricetta_info['nome_tecnico'].'</a></td>
-    <td colspan="1" title="Diba per '.numdec($ricetta_info['porzioni'],0).' porzioni."><h3>'.$value['quantitaTOT'].' Porzioni</h3></td>
+    <td colspan="1" title="Diba per '.numdec($ricetta_info['porzioni'],0).' porzioni."><h3>'.$value['quantitaTOT'].' Porzioni</h3> '.$piatti.'</td>
     <td colspan="1">'.$value['data_evento'].'</td></tr>';
 
    
@@ -185,13 +185,13 @@ foreach ($ricette as $key => $value) {
 <th>€ <?php echo numdec($TOTALE, 2); ?> </th>
 <th></tr>
 </table>
-<?php if (defined('MAGAZZINO')) {
+<?php
     echo '<input type="submit" value="Genera Approvvigionamento" class="button salva green noprint" >';
     echo '<input type="hidden" value="1" name="generazione">';
     if(isset($_GET['generazione']) &&  $righeFabbisogno > 0) {
     if(mysql_query($queryInserimentoFabbisognoMateria))  { echo ' <br> '.$righeFabbisogno.' righe di fabbisogno inserite!'; } else { echo 'ERRORE CONTATTA ASSISTENZA! '.mysql_error(); }
     }
-}
+
 ?>
 </form>
 

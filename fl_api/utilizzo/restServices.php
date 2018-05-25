@@ -6,7 +6,7 @@
 
 class restServices{
 
-    protected $endpoint = 'http://dev.bluemotive.it/fl_api/?'; // Endpoint
+    protected $endpoint = 'https://authos.bluemotive.it/fl_api/?'; // Endpoint
 	
 	var $demo = false;  // Se abilitare o meno il demo 
 	var $body = '';
@@ -24,21 +24,21 @@ class restServices{
 	}
 
 	public function insert_lead() {
-			$this->body = http_build_query($_POST);
+			$this->body = http_build_query($_REQUEST);
 			$insert_lead = 'insert_lead&token='.$this->accessToken;
 			$data = $this->get_data_query($insert_lead);
 			return $data; 
 	}
 
 	public function get_attivita() {
-			$this->body = http_build_query($_POST);
+			$this->body = http_build_query($_REQUEST);
 			$insert_lead = 'get_attivita&token='.$this->accessToken;
 			$data = $this->get_data_query($insert_lead);
 			return $data; 
 	}
 
 	public function get_leads() {
-			$this->body = http_build_query($_POST);
+			$this->body = http_build_query($_REQUEST);
 			$insert_lead = 'get_leads&token='.$this->accessToken;
 			$data = $this->get_data_query($insert_lead);
 			return $data; 

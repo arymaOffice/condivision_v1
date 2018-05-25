@@ -102,7 +102,7 @@ JOIN fl_ricettario rc ON rc.id = selectSpecific.ricetta_id
 
 WHERE evento_id IN ( " . $eventiImplode . " )
 GROUP BY fb.ricetta_id, materiaprima_id
-ORDER BY fb.ricetta_id ASC ,rc.portata ASC,rc.priorita ASC,rc.categoria_ricetta ASC
+ORDER BY rc.portata ASC,rc.priorita ASC,rc.categoria_ricetta ASC 
 ";
 
 $coun = 0;

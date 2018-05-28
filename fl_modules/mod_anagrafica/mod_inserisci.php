@@ -1,9 +1,8 @@
 <?php 
 
 require_once('../../fl_core/autentication.php');
-$loadSelectComuni = 1;
-$id = ($_SESSION['usertype'] > 1) ? $_SESSION['anagrafica'] : check($_GET['id']);
-if($_SESSION['usertype'] > 1) $force_id = $_SESSION['anagrafica']; 
+
+$id = check($_GET['id']);
 
 if($id > 1) {
 $profilo = @GRD('fl_anagrafica',@$id); 
@@ -15,7 +14,7 @@ $profilo = @GRD('fl_anagrafica',@$id);
 include('fl_settings.php'); // Variabili Modulo 
 
 include("../../fl_inc/headers.php");
-if(!isset($_GET['view'])) include("../../fl_inc/testata_mobile.php");
+include("../../fl_inc/testata_mobile.php");
  ?>
 
 
@@ -36,7 +35,7 @@ $telefono = phone_format($profilo['telefono'],'39');
 echo '<h1><strong>'.$profilo['ragione_sociale'].'</strong> ('.$profilo['nome'].' '.$profilo['cognome'].')</h1>';
 if(ALERT_DOCUMENTO_SCADUTO == 1)  echo '<h2>Tipo Delega: <span class="msg gray">'.@$pagamenti_f24[@$profilo['pagamenti_f24']].'</span></h2>';
 echo '<p>Telefono: <a href="tel:'.@$telefono.'">'.@$telefono.'</a> mail: <a href="mailto:'.@$profilo['email'].'" >'.@$profilo['email'].'</a></h2>';
-} else { echo '<h1>Nuovo '.$tipo_profilo[ $tipo_profilo_id].'</h1>'; }
+} else { echo '<h1>Nuovo Cliente</h1>'; }
 
 ?>
 
@@ -52,18 +51,21 @@ echo '<p>Telefono: <a href="tel:'.@$telefono.'">'.@$telefono.'</a> mail: <a href
 
 
 
-<?php include('../mod_basic/action_estrai.php');  ?>
-<?php if(isset($_GET['view'])) echo '<input type="hidden" name="info" value="1" />';  
-if(!isset($_GET['associa_evento']) && isset($_GET['j'])) { 
-	$potential_id = base64_decode(check($_GET['j']));  echo '<input type="hidden" name="reload" value="../mod_leads/mod_inserisci.php?id='.$potential_id.'&customer_rel=">';
+<?php 
+if(isset($_GET['j'])) {
+	
+	$potential_id = base64_decode(check($_GET['j']));
+	echo '<input type="hidden" name="potential_rel_id" value="'.$potential_id.'" />';
+}
+if(isset($_GET['m'])) {
+	
+	$meeting_id = base64_decode(check($_GET['m']));
+	echo '<input type="hidden" name="meeting_rel_id" value="'.$meeting_id.'" />';
 }
 
-if(isset($_GET['associa_evento'])) { 
-	$associa_evento = check($_GET['associa_evento']);  echo '<input type="hidden" name="reload" value="../mod_eventi/mod_inserisci.php?id='.$associa_evento.'&anagrafica_cliente=">';
-}
 
+include('../mod_basic/action_estrai.php');  ?>
 
-?>
 <input type="hidden" name="dir_upfile" value="icone_articoli" />
 
 
@@ -73,11 +75,12 @@ if(isset($_GET['associa_evento'])) {
 if(isset($_GET['j'])) {
 	
 	$potential_id = base64_decode(check($_GET['j']));
-	$new_dati = GRD($tables[106],$potential_id);
-	//if(mysql_query("UPDATE `fl_meeting_agenda` SET `issue`= 2 , data_aggiornamento = '".date('Y-m-d H:i:00')."' WHERE potential_rel = '".$potential_id."' LIMIT 1",CONNECT)) {
-	//}
+	$new_dati = GRD('fl_potentials',$potential_id);
+	mysql_query($query,CONNECT);
+	//mysql_query("UPDATE `fl_appuntamenti` SET `issue`= 2 , data_aggiornamento = '".date('Y-m-d H:i:00')."' WHERE potential_rel = '".$potential_id."' LIMIT 1",CONNECT);
+
 	
-	$query = "UPDATE `".$tables[106]."` SET `status_potential` = '4', `in_use` = '0', is_customer = '1' WHERE id = '".$potential_id."';";
+	//$query = "UPDATE `fl_potentials` SET `priorita_contatto` = 0, `status_potential` = '4', `in_use` = '0', is_customer = '1' WHERE  `is_customer` < 2 AND id = '".$potential_id."';";
 	mysql_query($query,CONNECT);
 	
 	echo "<script type=\"text/javascript\">
@@ -96,6 +99,103 @@ if(isset($_GET['j'])) {
 	</script>";
 }
 ?>
+
+<script type="text/javascript">
+/*Avvio*/
+$(document).ready(function() {
+
+function loadProvince(from,where){ 
+  var post = 'sel=provincia&filtro=regione&valore='+$(from).val();
+  var url = '../mod_basic/mod_selectLoader.php';
+  var posting = $.post(url,post); 
+  posting.fail(function( data ) {     });
+  posting.always(function( data ) {    });
+  posting.done(function( response ) {
+    console.log(post);
+	$(where).empty();
+    var data = $.parseJSON(response);
+	  $.each(data, function(i, value) {
+           $(where).append('<option = "'+value+">"+value+"</option>");
+		   $(where).focus();
+        });
+   });
+}
+
+function loadComuni(from,where){ 
+  var post = 'sel=comune&filtro=provincia&valore='+$(from).val();
+  var url = '../mod_basic/mod_selectLoader.php';
+  var posting = $.post(url,post); 
+  posting.fail(function( data ) {     });
+  posting.always(function( data ) {    });
+  posting.done(function( response ) {
+   console.log(post);
+	$(where).empty();
+    var data = $.parseJSON(response);
+	  $.each(data, function(i, value) {
+           $(where).append('<option = "'+value+">"+value+"</option>");
+		   $(where).focus();
+        });
+   });
+}
+
+function loadCap(from,where){ 
+  var post = 'sel=cap&filtro=comune&valore='+$(from).val();
+  var url = '../mod_basic/mod_selectLoader.php';
+  var posting = $.post(url,post); 
+  posting.fail(function( data ) {     });
+  posting.always(function( data ) {    });
+  posting.done(function( response ) {
+    //console.log(response);
+	$(where).empty();
+    var data = $.parseJSON(response);
+	  $.each(data, function(i, value) {
+           $(where).val(value);
+		   $(where).focus();
+        });
+   });
+}
+
+
+
+$('#regione_residenza').change(function(){
+ 	loadProvince('#regione_residenza','#provincia_residenza');
+});
+
+$('#regione_sede').change(function(){
+ 	loadProvince('#regione_sede','#provincia_sede');
+});
+
+$('#regione_punto').change(function(){
+ 	loadProvince('#regione_punto','#provincia_punto');
+});
+
+$('#provincia_residenza').change(function(){
+ 	loadComuni('#provincia_residenza','#comune_residenza');
+});
+
+$('#provincia_sede').change(function(){
+ 	loadComuni('#provincia_sede','#comune_sede');
+});
+
+$('#provincia_punto').change(function(){
+ 	loadComuni('#provincia_punto','#comune_punto');
+});
+
+$('#comune_residenza').change(function(){
+ 	loadCap('#comune_residenza','#cap_residenza');
+});
+
+$('#comune_sede').change(function(){
+ 	loadCap('#comune_sede','#cap_sede');
+});
+
+$('#comune_punto').change(function(){
+ 	loadCap('#comune_punto','#cap_punto');
+});
+
+
+
+});</script>
 
 
 </div></div></body></html>

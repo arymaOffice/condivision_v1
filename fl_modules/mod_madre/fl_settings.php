@@ -10,7 +10,7 @@
 	$select      = "*";
 	$ordine      = $parametri_modulo['ordine_predefinito']; 
 	$step        = $parametri_modulo['risultati_pagina']; 
-	//$text_editor = $parametri_modulo['editor_wysiwyg'];
+	$text_editor = $parametri_modulo['editor_wysiwyg'];
 	$jquery      = $parametri_modulo['jquery'];
 	$fancybox    = $parametri_modulo['fancybox'];
 	$filtri      = $parametri_modulo['filtri'];
@@ -26,9 +26,6 @@
 	$workflow_id = (isset($_GET['workflow_id'])) ? check(@$_GET['workflow_id']) : 0;
 	$parent_id   = (isset($_GET['parent_id']))   ? check(@$_GET['parent_id'])   : 0;
 	$account_id  = (isset($_GET['account_id']))  ? check(@$_GET['account_id'])  : 0;
-	
-	if(!isset($_SESSION['anagrafica'])) $_SESSION['anagrafica'] = 1;
-	if(isset($_GET['ANiD']) && $_SESSION['usertype'] < 2) $_SESSION['anagrafica'] = check($_GET['ANiD']);
 
 	
 	$module_title = 'Madre di tutti i moduli'; //Titolo del modulo
@@ -51,29 +48,22 @@
     if(isset($_GET['potential_id']))  $tipologia_main .= ' AND potential_id = '.check($_GET['potential_id']).' '; 
 	
 	//Filtri di base (da strutturare quelli avanzati)
-	$basic_filters = array('categoria_conto','descrizione_conto');
+	$basic_filters = array('','');//campi della tabella
 	$ordine_mod = array("id DESC"); // Tipologie di ordinamento disponobili 
 	$ordine = $ordine_mod[0];
   
  
 	/* Filtri personalizzati */
-	if(isset($_GET['qualificati'])) { $qualificati_id = check($_GET['qualificati']);  } else {    $qualificati_id = -1; }
-	if(isset($qualificati_id) && @$qualificati_id == 1) {  $tipologia_main .= " AND (email != '' AND telefono != '' AND nome != '') ";	 }
-	if(isset($qualificati_id) && @$qualificati_id == 0) {  $tipologia_main .= " AND (email = '' OR telefono = '' OR nome = '' ) ";	 }
-
-	// Filtro manuale da sessione
-	if($_SESSION['anagrafica'] > 1) $tipologia_main .= ' AND anagrafica_id = '.$_SESSION['anagrafica'];	
+	if(isset($_GET['nome_filtro'])) { $nome_filtro_id = check($_GET['nome_filtro']);  } else {    $nome_filtro_id = -1; }
 
 
 	
 	/* Inclusione classi e dati */	
-	require('../../fl_core/dataset/array_statiche.php'); // Liste di valori statiche
+	require('../../fl_core/dataset/array_statiche.php'); // Liste di valori statiche DEPRECATA
 	require('../../fl_core/class/ARY_dataInterface.class.php'); //Classe di gestione dei dati 
 	$data_set = new ARY_dataInterface();
     $anagrafica_id = $data_set->data_retriever('fl_anagrafica','ragione_sociale'); //Crea un array con i valori X2 della tabella X1
 	$tipologia_hd = $data_set->get_items_key("tipologia_hd");//Crea un array con gli elementi figli dell'elemento con tag X1	
-	$reparto_hd = $data_set->get_items_key("reparto_hd");
-	$stato_hd = array('Aperto','Attesa cliente','Chiuso'); // Valori manuali (sconsigliato)
 	
 	/*Funzione di merda per gestione dei campi da standardizzare in una classe e legare ad al DB o XML config*/	
 	function select_type($who){

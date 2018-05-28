@@ -25,11 +25,12 @@
 	} 
 
 
-	$ordine_mod = array("id ASC","marchio DESC","tipo ASC","attivo DESC","gruppo ASC","user DESC");
+	$ordine_mod = array("data_creazione DESC","marchio DESC","tipo ASC","attivo DESC","gruppo ASC","user DESC");
 	$ordine = $ordine_mod[0];
 	
   
-	$step = 30; 
+
+	$step   = 1000;
 	$usertype = $_SESSION['usertype'];
 	
 	$campi = "SHOW COLUMNS FROM `$tabella`";
@@ -81,17 +82,18 @@
 	$persona_id = $data_set->data_retriever('fl_persone','nome,cognome',"WHERE id != 1",'nome ASC');
 	$processo_id = $data_set->data_retriever('fl_processi','processo',"WHERE id != 1",'processo ASC');
 	$profilo_funzione = $data_set->data_retriever('fl_profili_funzione','funzione',"WHERE id != 1 ",'funzione ASC');
-
+	$sede_principale = $data_set->data_retriever('fl_sedi','sede,citta',"WHERE id != 1",'sede ASC');
+	$sede_principale[0] = 'Tutte'; 
 	$attivo = array('1'=>'Attivo','0'=>'Sospeso');
 	
 	function select_type($who){
 	$textareas = array("descrizione","note"); 
-	$select = array('persona_id','tipo',"modulo");
+	$select = array('sede_principale','persona_id','tipo',"modulo");
 	$checkbox = array();
 	$disabled = array("total_scooring");
-	$hidden = array('processo_id',"uid","cuid","anagrafica","sede","data_creazione","aggiornamento_password","proprietario","marchio","foto","data","password","id","codice","type","ip","continente","operatore","data_aggiornamento","visite");
-	$selectbtn = array('attivo');	
-	$radio = array("alert");	
+	$hidden = array('fb_id','processo_id',"uid","cuid","anagrafica","sede","data_creazione","aggiornamento_password","proprietario","marchio","foto","data","password","id","codice","type","ip","continente","operatore","data_aggiornamento","visite");
+	$selectbtn = array();	
+	$radio = array("alert",'attivo');	
 	$multi_selection = array("giorni_lavorativi");	
 	$calendario = array('data_scadenza','data_emissione','data_nascita');	
 	$type = 1;

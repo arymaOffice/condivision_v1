@@ -40,11 +40,12 @@ $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p class="esito '.$c
 
 </div><p> L'account pu&ograve; essere attivato in seguito.</p>
 
+<div class="form_row"><p class="input_text"><label for="external_id">External ID</label>
+<input  type="text" name="external_id" id="external_id"  value="<?php if(isset($_GET['external_id'])) echo check($_GET['external_id']); ?>" placeholder="Inserire ID esterno o lasciare vuoto"  />
+</p>
+</div>
 
-
-<?php if(defined('MULTI_MARCHIO')) { ?>
-
-<div class="form_row">
+<!--<div class="form_row">
 <div class="select_text">
 <label for="account">Marchio</label>
 
@@ -56,8 +57,8 @@ foreach($marchio as $valores => $label){ // Recursione Indici di Categoria
 			} ?>
 
 </select>
-</div></div><?php } else { echo '<input name="marchio" id="marchio" value="1" type="hidden">'; } ?>
-
+</div></div>-->
+<input name="marchio" id="marchio" value="1" type="hidden">
 
 
 <div class="form_row">
@@ -163,17 +164,10 @@ foreach($persona_id as $valores => $label){ // Recursione Indici di Categoria
 </p>
 
 </div>
-<p>Le credenziali di accesso verranno spedite alla casella di posta inserita.<br />
+<p>Le credenziali di accesso vengono inviate alla mail inserita.<br />
 <strong>Verifica che la mail sia valida e attiva.</strong>.</p>
 
-<p>
-<strong>GDPR 2016/679 Informativa sul trattamento dei dati riguardanti il vostro account</strong>
-L'accesso alla piattaforma è da intendersi personale ed esclusivamente riservato all'utente autorizzato. 
-Ne è vietata la riproduzione sotto ogni forma. La vostra password scade ogni 90 giorni e va reimpostata obbligatoriamente.
-In conformità ai requisiti del DL 196 del 30/6/2003, 
-si informa che ogni accesso, riconoscibile da IP e username, sarà registrato e potrà essere monitorato.
-Le attività eseguite nell'ambiente gestionale sono registrate per motivi di sicurezza.
-</p>
+
 
 
 

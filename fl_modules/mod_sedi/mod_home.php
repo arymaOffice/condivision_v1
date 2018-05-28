@@ -10,7 +10,7 @@
 			
 			 foreach($anagrafica as $valores => $label){ // Recursione Indici di Categoria
 			$selected = ($proprietario_id == $valores) ? ' checked="checked"' : '';
-			if($valores == 2){ echo '
+			if($valores > 1){ echo '
 			<input id="'.$valores.'" onClick="form.submit();" type="radio" name="cmy" value="'.base64_encode($valores).'" '.$selected.' />
 			<label for="'.$valores.'"><i class="fa fa-user"></i><br>'.$label.'</label>'; }
 			}
@@ -23,10 +23,10 @@
 <?php } else { 
 
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
+$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 ?>
 
-
+<h1><?php echo $module_title.' '.$anagrafica[$proprietario_id].' '.$new_button; ?></h1>
 
        
 
@@ -88,7 +88,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 			$sede = ucfirst($riga['sede']);		
 			echo "<td ><span class=\"Gletter\"></span></td>"; 
 			echo "<td><span class=\"color\">$sede</span><br>".$anagrafica_id[$riga['anagrafica_id']]."</td>";
-			echo "<td class=\"hideMobile\">".$riga['citta']." (".@$riga['provincia'].") ".$riga['cap']."<br>".$riga['indirizzo']."</td>"; 
+			echo "<td class=\"hideMobile\">".$riga['citta']." (".@$provincia[$riga['provincia']].") ".$riga['cap']."<br>".$riga['indirizzo']."</td>"; 
 			echo "<td  class=\"strumenti\">";
 			echo "<a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Gestione Cliente \"> <i class=\"fa fa-search\"></i> </a>
 			$elimina </td>";

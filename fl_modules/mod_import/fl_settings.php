@@ -24,7 +24,16 @@
 	if($parametri_modulo['ricerca'] == 1) $searchbox = $parametri_modulo['placeholder_ricerca'];
 	$checkRadioLabel = '<i class="fa fa-check-square"></i><i class="fa fa-square-o"></i>'; // Pulsante checkbox radio button Toggle apple
  	$dateTimePicker = 1;
+	
 
+	/* Inclusioni dataset */
+	include('../../fl_core/dataset/array_statiche.php'); //Array statiche
+	include('../../fl_core/dataset/proprietario.php'); //Array statiche
+	require('../../fl_core/class/ARY_dataInterface.class.php'); //Classe di data provisioning
+	$data_set = new ARY_dataInterface();
+
+	$source_potential = $data_set->data_retriever('fl_campagne_attivita','oggetto',"WHERE id != 1",'oggetto ASC');
+	$campagna_id = $data_set->data_retriever('fl_campagne','descrizione',"WHERE id != 1",'id DESC');
 
 	
 ?>

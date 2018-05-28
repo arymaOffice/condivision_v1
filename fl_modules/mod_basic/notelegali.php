@@ -21,8 +21,7 @@ include("../../fl_inc/headers.php");?>
 	if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 	//if(!is_numeric($_GET['action'])){ exit; };
 	?>
-   <div class="box_div"> 
-<h3>Note legali di utilizzo della piattaforma</h3>
+<h1>Note legali di utilizzo della piattaforma</h1>
 
     
 <p>&nbsp;</p>
@@ -36,7 +35,7 @@ include("../../fl_inc/headers.php");?>
 <p class="intestazione">Per motivi di sicurezza &egrave; necessario cambiare la propria password almeno ogni tre mesi,<br />
   E' possibile effettuare il cambio della propria password da <a href="../mod_account/">questa pagina</a>.</p>
 <p class="intestazione">&nbsp;</p>
-   </div>
+ 
 
 
 <?php include("../../fl_inc/footer.php"); ?>

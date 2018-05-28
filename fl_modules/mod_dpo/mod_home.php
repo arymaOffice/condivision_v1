@@ -23,9 +23,10 @@
 <?php } else { 
 
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
+$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 ?>
 
+<h1>Obiettivi <?php echo $anagrafica[$proprietario_id].' '.$new_button; ?></h1>
 
        
 
@@ -77,7 +78,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 			echo "<td class=\"tab_green\">".@$riga['numero_obiettivo']."</td>";
 			echo "<td>".@$tipo_obiettivo[$riga['tipo_obiettivo']]."</td>";
 			echo "<td><strong>".ucfirst($persona_id[$riga['persona_id']])."</strong><br>".ucfirst($processo_id[$riga['processo_id']])." - ".$anagrafica_id[$riga['anagrafica_id']]."</td>";
-			echo "<td>".ucfirst(strip_tags(converti_txt($riga['descrizione'])))." </td>";
+			echo "<td>".ucfirst(strip_tags(convert($riga['descrizione'])))." </td>";
 			echo "<td>&euro; ".@numdec($riga['valore_target'],2)."</td>";
 			echo "<td>".@$fornitore_informazioni[$riga['fornitore_informazioni']]."</td>";
 			echo "<td><span title=\"Ultima Revisione: ".mydate($riga['data_aggiornamento'])."\">".mydate($riga['scadenza_obiettivo'])."</td>";

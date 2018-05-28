@@ -1,8 +1,7 @@
 <?php 
 require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
-
+$_SESSION['POST_BACK_PAGE'] = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 
 $autorefresh = 0;
 

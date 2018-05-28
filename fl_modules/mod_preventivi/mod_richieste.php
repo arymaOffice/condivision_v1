@@ -7,8 +7,7 @@ unset($chat);
 	$jquery = 1;
 	$fancybox = 1;
 
-$tab_id = 56;
-$tabella = $tables[$tab_id];
+$tab_id = 71;
 $parent_id = check($_GET['reQiD']);
 include("../../fl_inc/headers.php");
  ?>
@@ -39,7 +38,7 @@ include("../../fl_inc/headers.php");
 <?php 
 	
 	
-	$query = "SELECT * FROM `$tabella` WHERE `workflow_id` = 71 AND `parent_id` = $parent_id ORDER BY data_scadenza DESC";
+	$query = "SELECT * FROM `fl_richieste` WHERE `workflow_id` = 71 AND `parent_id` = $parent_id ORDER BY data_scadenza DESC";
 	$risultato = mysql_query($query, CONNECT);
 	if(mysql_affected_rows() == 0){ echo "<p>Nessun Elemento</p>"; } else {
 	?>
@@ -75,7 +74,7 @@ include("../../fl_inc/headers.php");
      
       <tr>
       <td <?php echo $colore; ?>><span class=\"Gletter\"></span></td>
-       <td><?php echo $riga['note'].'<br>'.mydatetime($riga['data_creazione']); ?></td>
+       <td><?php echo mydatetime($riga['data_scadenza']); ?></td>
       <td><?php echo $tipo_richiesta[$riga['tipo_richiesta']]; ?></td>
            <td>
 	  <?php if($riga['tipo_richiesta'] == 2) { ?>

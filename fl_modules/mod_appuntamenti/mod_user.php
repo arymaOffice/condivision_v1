@@ -1,11 +1,9 @@
 <?php 
 require_once('../../fl_core/autentication.php');
-
 include('fl_settings.php'); // Variabili Modulo 
-if(isset($_GET['j'])) { $potential_id =  base64_decode(check($_GET['j'])); $potential = GRD($tables[106], $potential_id);  }
-if(isset($_GET['potential_rel'])) { $potential_id =  check($_GET['potential_rel']); $potential = GRD($tables[106], $potential_id);  }
+if(isset($_GET['j'])) { $potential_id =  base64_decode(check($_GET['j'])); $potential = GRD('fl_potentials', $potential_id);  }
+if(isset($_GET['potential_rel'])) { $potential_id =  check($_GET['potential_rel']); $potential = GRD('fl_potentials', $potential_id);  }
 unset($chat);
-unset($text_editor);
 
 include("../../fl_inc/headers.php");
 if(!isset($_GET['history'])) { include("../../fl_inc/testata_mobile.php"); }
@@ -15,25 +13,22 @@ if(!isset($_GET['history'])) { include("../../fl_inc/testata_mobile.php"); }
 
 ?>
 
-<link href='<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/fullcalendar/fullcalendar.css' rel='stylesheet' />
-<link href='<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
-<script src='<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/fullcalendar/lib/moment.min.js'></script>
-<script src='<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/fullcalendar/fullcalendar.min.js'></script>
-<script src='<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/fullcalendar/lang/it.js'></script>
 
 <style>
 	.tap_label { width: 100%; padding: 10px;  }
 </style>
 
 
+<?php if(isset($_GET['ok'])) { echo '<h1><strong>Good Job '.$proprietario[$_SESSION['number']].'</strong></h1><p>Condivision has sent an email to the potential customer to confirm the meeting. <br> <a href="javascript:parent.$.fancybox.close();">Close this job</a></p>'; } else {  ?>
 <?php if(!isset($_GET['history'])) { ?>
 
 <body style=" background: rgb(241, 241, 241) none repeat scroll 0% 0%;">
 
 
 <div id="container" >
-<div id="content_scheda">
 
+
+<div id="content_scheda" >
 
 
 <div class="info_dati">
@@ -47,8 +42,6 @@ echo '<p>Tel: '.@$potential['telefono'].' mail: <a href="mailto:'.@$potential['e
 </div>
 
   
-
-
 <?php if(($meeting_location_id < 1 || isset($_GET['intro']))) {  ?>
 <h2>Dove desidera fissare l'appuntamento?</h2>
 <form method="get" action="" id="meeting_location_set">
@@ -75,17 +68,68 @@ echo '<p>Tel: '.@$potential['telefono'].' mail: <a href="mailto:'.@$potential['e
  <div class="" style=" text-align: center;">     
      
        
+     
+
+
+ <!--  <form id="select_account" action="" method="get">
+ 
+       <input type="hidden" name="meeting_location" value="<?php echo $meeting_location_id ; ?>" />
+       <input type="hidden" value="<?php echo check($_GET['j']);?>" name="j" />	
+
+        Con chi? <select name="proprietario" class="select2"> id="proprietario" onChange="form.submit();"  <?php if($_SESSION['usertype'] != 0 && $_SESSION['usertype'] != 3) {  echo 'disabled'; } ?>>
+     <?php 
+              
+		 	echo '<optgroup label="Venditori">';  
+			foreach($venditore as $valores => $label){ // Recursione Indici di Categoria
+			$selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
+			if($valores > 1)  echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; 
+			}
+			echo '</optgroup>';
+
+			echo '<optgroup label="Digital">';  
+		    foreach($operatoridgt as $valores => $label){ // Recursione Indici di Categoria
+			$selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
+			echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; 
+			}
+			echo '</optgroup>';
+			echo '<optgroup label="Operatori BDC">';  
+		   
+		     foreach($operatoribdc as $valores => $label){ // Recursione Indici di Categoria
+			$selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
+			if($valores > 1) echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; 
+			}
+			echo '</optgroup>';
+
+		 ?>
+    </select> 
+    </form>-->
     
     
     <form id="add_meeting" class="ajaxForm" action="./mod_opera.php" method="get" style=" display: inline-block; ">
 
-         Con chi? <select name="proprietario" class="select2" id="proprietario"  <?php if($_SESSION['usertype'] != 0 && $_SESSION['usertype'] != 3 && $_SESSION['usertype'] != 5) {  echo 'disabled'; } ?>>
+         Con chi? <select name="proprietario" class="select2" id="proprietario"  <?php //if($_SESSION['usertype'] != 0 && $_SESSION['usertype'] != 3 && $_SESSION['usertype'] != 5) {  echo 'disabled'; } ?>>
      <?php 
               
-			foreach($proprietario as $valores => $label){ // Recursione Indici di Categoria
-			$selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
+		 	echo '<optgroup label="Venditori">';  
+			foreach($venditore as $valores => $label){ // Recursione Indici di Categoria
+			$selected = (@$_SESSION['number'] == $valores || $potential['venditore'] == $valores) ? " selected=\"selected\"" : "";
 			if($valores > 1)  echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; 
 			}
+			echo '</optgroup>';
+
+			echo '<optgroup label="Digital">';  
+		    foreach($operatoridgt as $valores => $label){ // Recursione Indici di Categoria
+			$selected = (@$_SESSION['proprietario_id'] == $valores || @$_SESSION['number'] == $valores && $potential['venditore'] < 2) ? " selected=\"selected\"" : "";
+			echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; 
+			}
+			echo '</optgroup>';
+			echo '<optgroup label="Operatori BDC">';  
+		   
+		     foreach($operatoribdc as $valores => $label){ // Recursione Indici di Categoria
+			$selected = (@$_SESSION['proprietario_id'] == $valores || @$_SESSION['number'] == $valores && $potential['venditore'] < 2) ? " selected=\"selected\"" : "";
+			if($valores > 1) echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; 
+			}
+			echo '</optgroup>';
 
 		 ?>
 
@@ -98,16 +142,13 @@ echo '<p>Tel: '.@$potential['telefono'].' mail: <a href="mailto:'.@$potential['e
   
      Sms  
     
-    <!-- <select name="sms" id="sms">
+     <select name="sms" id="sms">
      <option value="0">Non inviare</option>
      <option value="it">Italiano</option>
      </select>
-     -->
-     <input type="hidden" name="sms" value="0">
-
      
-     <textarea cols="3"  style="width:  100%;" type="text" name="note" value="" placeholder="Note appuntamento"></textarea>
-     <input type="submit" id="addmet" value="Crea Appuntamento" class="button"  />
+     <textarea cols="3" id="noteRisalto" style="width:  100%;" type="text" name="note" value="" placeholder="Note appuntamento"></textarea>
+     <input type="submit" id="addmet" class="setAction" data-gtx="<?php echo base64_encode(16); ?>" data-id="<?php echo base64_encode($potential['id']); ?>" data-azione="5"  data-esito="1"  data-note="Appuntamento Creato" value="Crea Appuntamento" class="button setAction"  />
   
     </form>
  
@@ -115,13 +156,6 @@ echo '<p>Tel: '.@$potential['telefono'].' mail: <a href="mailto:'.@$potential['e
 
       <br> 
 <div id="results" class=""></div>
-
-<link href='<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/fullcalendar/fullcalendar.css' rel='stylesheet' />
-<link href='<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
-<script src='<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/fullcalendar/lib/moment.min.js'></script>
-<script src='<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/fullcalendar/fullcalendar.min.js'></script>
-<script src='<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/fullcalendar/lang/it.js'></script>
-
 <?php    
     
 	
@@ -135,7 +169,7 @@ echo '<p>Tel: '.@$potential['telefono'].' mail: <a href="mailto:'.@$potential['e
 $meetings = '';
 	while ($riga = mysql_fetch_array($risultato)) 
 	{
-	$potential = GRD($tables[106],$riga['potential_rel']);
+	$potential = GRD('fl_potentials',$riga['potential_rel']);
 	$meetings .= "
 					{
 					title: '".$potential['nome']." ".$potential['cognome']."',
@@ -161,7 +195,11 @@ $meetings = '';
 					},";
 } ?>
 <br class="clear" />
-
+<link href='fullcalendar/fullcalendar.css' rel='stylesheet' />
+<link href='fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
+<script src='fullcalendar/lib/moment.min.js'></script>
+<script src='fullcalendar/fullcalendar.min.js'></script>
+<script src='fullcalendar/lang/it.js'></script>
 
 		<script>
 	$(document).ready(function() {
@@ -183,56 +221,7 @@ $meetings = '';
 					title: 'Chiusi',
 					start: '2016-05-01'
 				}
-				/*{
-					title: 'Long Event',
-					start: '2015-02-07',
-					end: '2015-02-10'
-				},
-				{
-					id: 999,
-					title: 'Repeating Event',
-					start: '2015-02-09T16:00:00'
-				},
-				{
-					id: 999,
-					title: 'Repeating Event',
-					start: '2015-02-16T16:00:00'
-				},
-				{
-					title: 'Conference',
-					start: '2015-02-11',
-					end: '2015-02-13'
-				},
-				{
-					title: 'Meeting',
-					start: '2015-02-12T10:30:00',
-					end: '2015-02-12T12:30:00'
-				},
-				{
-					title: 'Lunch',
-					start: '2015-02-12T12:00:00'
-				},
-				{
-					title: 'Meeting',
-					start: '2015-02-12T14:30:00'
-				},
-				{
-					title: 'Happy Hour',
-					start: '2015-02-12T17:30:00'
-				},
-				{
-					title: 'Dinner',
-					start: '2015-02-12T20:00:00'
-				},
-				{
-					title: 'Birthday Party',
-					start: '2015-02-13T07:00:00'
-				},
-				{
-					title: 'Click for Google',
-					url: 'http://google.com/',
-					start: '2015-02-28'
-				}*/
+				
 			]
 		});
 		
@@ -245,6 +234,7 @@ $meetings = '';
 	#calendar {
 			margin: 20px;
 	}
+
 </style>
 
 <div style="background: white; padding: 20px;">
@@ -255,13 +245,7 @@ $meetings = '';
 
  <?php   } } else { echo '<h2>Appuntamenti per questo lead</h2> '; $tipologia_main  = "WHERE potential_rel = ". $potential_id." "; ?> 
 
-<style>
 
-	#calendar {
-			margin: 20px;
-	}
- body { background: white !important;  }
-</style>
    
 <?php
 	
@@ -284,7 +268,7 @@ $meetings = '';
 </div>
 -->
 
-  	 <table class="dati" summary="Dati" style=" width: 95%;">
+  	 <table class="dati" summary="Dati" style=" width: 100%;">
         <tr>
      <th scope="col"></th>
        <th scope="col">Data/Ora</th>
@@ -312,7 +296,7 @@ $meetings = '';
 		if($riga['issue'] > 4 ) { $colore = "class=\"tab_orange\"";  }
 		if($riga['issue'] == 6 ) { $colore = "class=\"tab_blue\"";  }
 		$alarm = (strlen($riga['note']) != '') ? "<i class=\"fa fa-exclamation-triangle c-red\" aria-hidden=\"true\"  title=\"".stripcslashes(converti_txt($riga['note']))."\"></i> <i class=\"fa fa-clock-o\"></i>" : "<i title=\"".stripcslashes(converti_txt($riga['note']))."\" class=\"fa fa-clock-o\"></i>";	
-		$add_calendar = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Appuntamento con: '.$potential['nome'].' '.$potential['cognome'].'&location='.$meeting_location[$riga['meeting_location']].'&details=Trovi questo appuntamento anche sul CRM&dates='.substr(str_replace('-','',$riga['start_meeting']),0,8).'T'.substr(str_replace(':','',$riga['start_meeting']),11,8).'/'.substr(str_replace('-','',$riga['start_meeting']),0,8).'T'.substr(str_replace(':','',$riga['start_meeting']),11,8).'&sf=true&pli=1';
+		$add_calendar = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Appuntamento con: '.$potential['nome'].' '.$potential['cognome'].'&location=Torino&details=Trovi questo appuntamento anche sul CRM&dates='.substr(str_replace('-','',$riga['start_meeting']),0,8).'T'.substr(str_replace(':','',$riga['start_meeting']),11,8).'/'.substr(str_replace('-','',$riga['start_meeting']),0,8).'T'.substr(str_replace(':','',$riga['start_meeting']),11,8).'&sf=true&pli=1';
 
 		$meetings .= "
 					{
@@ -321,7 +305,7 @@ $meetings = '';
 					end: '".str_replace(" ","T",$riga['end_meeting'])."'
 					},";
 
-		    $potential = GRD($tables[106],$riga['potential_rel']);
+		    $potential = GRD('fl_potentials',$riga['potential_rel']);
 			echo "<tr><td $colore><span class=\"Gletter\"></span></td>"; 
 			echo "<td><h2><strong> $alarm </strong> ".mydatetime($riga['start_meeting'])."</h2></td>"; 
 
@@ -340,9 +324,10 @@ $meetings = '';
 
 	echo "</table>";
 	
+$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,1); 
 } ?>
 
-<?php  // Appuntamenti per il lead ?> 
+<?php } // Appuntamenti per il lead ?> 
 </div>
 
 </div></div></body></html>

@@ -5,6 +5,7 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 
 ?>
 
+<h1><span class="intestazione">Registro Manutenzioni <?php echo $proprietario[$_SESSION['number']]; ?></span></h1>
 <?php
 	
 
@@ -37,12 +38,11 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 </form>
 <table class="dati" summary="Dati">
       <tr>
-              <th></th>
+              <th>Urgenza</th>
               
 <th>Data Richiesta</th>
         <th>Oggetto</th>
         <th>Costo</th>
-        <th>Account</th>
          <th>Azioni</th>
         <th></th>
 
@@ -78,15 +78,13 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 			if($urgenza == 4 ) $colore = "class=\"tab_red\""; 
 			if($urgenza == 5 ) $colore = "class=\"tab_red\""; 
 		
-			echo "<tr><td $colore></td>";
-			echo "<td><h2 >".mydate($riga['data_creazione'])."</h2><span class=\"msg green\">".$categoria_mnt[$riga['categoria_mnt']]."</span>
+			echo "<tr><td $colore><span class=\"Gletter\"></span></td>";
+			echo "<td><h1 style=\"margin-bottom: 5px;\">".mydate($riga['data_creazione'])."</h1><span class=\"msg green\">".$categoria_mnt[$riga['categoria_mnt']]."</span>
 			</td>";
-			echo "<td><a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"".$riga['descrizione']."\">".strtoupper($riga['oggetto'])."</a> 
+			echo "<td><a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"".$riga['descrizione']."\">".strtoupper($riga['oggetto'])."</a>
 			<br /><i class=\"fa fa-".$approvato_icons[$riga['approvato']]."\"></i> ".$approvato[$riga['approvato']]."</td>";
 			echo "<td>&euro; ".@numdec($saldo_parziale,2)."</td>";
-
-				echo "<td><span class=\"msg blue\">".@$proprietario[$riga['proprietario']]."</span></td>";
-
+			
 			if($riga['approvato'] < 3) {
 			echo "<td><a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Modifica\"> <i class=\"fa fa-search\"></i> </a></td>";
 			echo "<td><a  href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a></td>";
@@ -104,8 +102,8 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 		if($i==1){ $i=0; echo "<tr>"; } else { $i=1; echo "<tr class=\"alternate\">"; }		
 			
 				
-			echo "<td></td>";
-			echo "<td>Riepilogo Interventi: ".mysql_affected_rows()."</td>";
+			echo "<td>Riepilogo</td>";
+			echo "<td>Interventi: ".mysql_affected_rows()."</td>";
 			echo "<td></td>";
 			echo "<td>&euro; ".numdec($saldo,2)."</td>";
 			echo "<td></td>";

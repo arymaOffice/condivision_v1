@@ -1,9 +1,5 @@
-
-<?php 
-
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
-
-if(($proprietario_id < 2 || isset($_GET['intro'])) && defined('PRIMANOTA_MULTIPLA')) {  ?>
+<h1>Prima nota</h1>
+<?php if($proprietario_id < 2 || isset($_GET['intro'])) {  ?>
 <h2>Seleziona un account</h2>
 <form method="get" action="" id="dms_account_sel">
 
@@ -22,13 +18,14 @@ if(($proprietario_id < 2 || isset($_GET['intro'])) && defined('PRIMANOTA_MULTIPL
 		 ?>
       
      <input type="hidden" name="a" value="amministrazione">
+     <input type="hidden" name="d" value="ZG9jdW1lbnRfZGFzaGJvYXJk">
    
 </form>
 <?php } else { ?>
 
 
 <?php
-	$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
+	$_SESSION['POST_BACK_PAGE'] = '//'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
     $balance_query = "SELECT SUM(avere) AS totale_avere, SUM(dare) AS totale_dare FROM `$tabella` WHERE `account_id` = $proprietario_id";
 	$result = mysql_query($balance_query ,CONNECT); 
 	$row = mysql_fetch_assoc($result); 
@@ -41,7 +38,7 @@ if(($proprietario_id < 2 || isset($_GET['intro'])) && defined('PRIMANOTA_MULTIPL
 
 <div > 
 <form method="get" action="" id="fm_filtri">
-   <?php if($_SESSION['usertype'] < 2 && defined('PRIMANOTA_MULTIPLA'))  { ?>Account: 
+   <?php if($_SESSION['usertype'] == 0)  { ?>Account: 
       <select name="cmy" id="cmy" onchange="form.submit();">
       
       <option value="-1">Mostra Tutti</option>

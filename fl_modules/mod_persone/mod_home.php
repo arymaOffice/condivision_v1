@@ -23,9 +23,9 @@
 <?php } else { 
 
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
+$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 ?>
-
+<h1><?php echo $module_title.' '.$anagrafica[$proprietario_id].' '.$new_button; ?></h1>
 
 
 <div id="filtri" class="filtri"> 
@@ -59,44 +59,45 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 	?>
 <table class="dati" summary="Dati" style=" width: 100%;">
 <tr>
-  <th style="width: 1%;"></th>
+  <th></th>
  <th><a href="./?ordine=1">Nominativo/Azienda</a></th>
   <th>Profilo</th>
   <th>Riferimenti</th>
    <th></th> <th></th>
   <th></th>
-  <th  class="hideMobile"></th>
 </tr>
 <?php 
 	
 	$i = 1;
 	
 	if(mysql_affected_rows() == 0) { echo "<tr><td colspan=\"9\">Nessun Record Inserito</td></tr>";		}
-	$tot_res = 0;
-	$deleted = 0;
-	$incomplete = 0;
 	
 	while ($riga = mysql_fetch_array($risultato)) 
 	{					
 			
-			$sedis =  getMultiItems($riga['sedi_id'],$sedi_id);
-	
+	$sedis =  '';//getMultiItems($riga['sedi_id'],$sedi_id);
+			
+			$account = get_account($riga['id'],'persona_id');
+			if($account['id'] > 0)  { 
+			$user_check = '<a data-fancybox-type="iframe" title="Modifica Account" class="fancybox" href="../mod_account/mod_visualizza.php?external&id='.$account['id'].'"></a><br>'.$account['motivo_sospensione'];
+			$user_ball = ($account['attivo'] == 1)  ? "<span class=\"c-green\"><i class=\"fa fa-user\"></i></span>" : "<span class=\"c-red\"><i class=\"fa fa-user\"></i></span>"; 
+			} else {
+			$user_check = "<a href=\"../mod_account/mod_inserisci.php?external&persona_id=".$riga['id']."&email=".$riga['email']."&nominativo=".$riga['nome']." ".$riga['cognome']."\">Attiva</a>";
+			$user_ball = '';
+			}
 			
 			$elimina = "<a href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a>";
-			
-			
-				
 			echo "<tr>"; 
 			$nominativo = ucfirst($riga['nome']).' '.ucfirst($riga['cognome']);		
-			echo "<td ><span class=\"Gletter\"></span></td>"; 
+			echo "<td  class=\"hideMobile\">$user_ball ".$user_check."</td>"; 		
 			echo "<td><span class=\"color\">$nominativo</span><br> $sedis ".$anagrafica_id[$riga['anagrafica_id']]."</td>";
 			echo "<td>".ucfirst($profilo_funzione[$riga['profilo_funzione']])." </td>";
-			echo "<td><i class=\"fa fa-envelope-o\"></i> <a href=\"mailto:".$riga['emails']."\">".$riga['emails']."</a></td>
+			echo "<td><i class=\"fa fa-envelope-o\"></i> <a href=\"mailto:".$riga['email']."\">".$riga['email']."</a></td>
 			<td><i class=\"fa fa-phone\"> </i> ".$riga['telefono']."</td><td> <i class=\"fa fa-mobile\"></i> ".$riga['cellulare']."</td>"; 
 			echo "<td  class=\"strumenti\">";
 			echo "<a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Gestione Cliente \"> <i class=\"fa fa-search\"></i> </a>
 			$elimina </td>";
-			echo "<td  class=\"hideMobile\" style=\"font-size: smaller;\" title=\"Aggiornato da: ". @$proprietario[$riga['operatore']]."\">Agg. ".$riga['data_aggiornamento']."<br />Creaz. ".$riga['data_creazione']."</td>";
+			//echo "<td  class=\"hideMobile\" style=\"font-size: smaller;\" title=\"Aggiornato da: ". @$proprietario[$riga['operatore']]."\">Agg. ".$riga['data_aggiornamento']."<br />Creaz. ".$riga['data_creazione']."</td>";
 		
 		    echo "</tr>"; 
 			}

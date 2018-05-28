@@ -2,8 +2,9 @@
 
 // Controlli di Sicurezza
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
+$_SESSION['POST_BACK_PAGE'] = "//".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];;
 ?>
+<h1>Obiettivi</h1>
    <form method="get" action="" id="sezione_select">
    
  <p>

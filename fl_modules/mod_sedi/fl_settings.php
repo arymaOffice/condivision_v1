@@ -25,7 +25,9 @@
 	$proprietario_id = ($_SESSION['usertype'] > 1) ? $_SESSION['anagrafica'] : $_SESSION['proprietario_id'];
 
 
-
+	$module_title = 'Sedi';
+	$new_button = '<a href="./mod_inserisci.php?id=1&ANiD='.base64_encode($proprietario_id).'" class="" style="color: gray"> <i class="fa fa-plus-circle"></i>  </a>';
+    $module_menu = '';
 		
 
   	 if(isset($_GET['data_da']) && check($_GET['data_da']) != "" && check($_GET['data_a']) != "") { 
@@ -48,7 +50,7 @@
 	
 	/* RICERCA */
 	$tipologia = 0;
-	$tipologia_main = "WHERE id != 1 AND (anagrafica_id < 1 || anagrafica_id = $proprietario_id )";
+	$tipologia_main = "WHERE id != 1 AND anagrafica_id = $proprietario_id ";
 	if(@$sezione != "") $tipologia_main .= $sezione;	
 	if(@$where != "") $tipologia_main .= $where;
 
@@ -63,27 +65,32 @@
 		
 	/* Inclusioni Oggetti Categorie */	
 	include('../../fl_core/dataset/array_statiche.php');
+	include('../../fl_core/dataset/stato.php');
+	include('../../fl_core/dataset/provincia.php');
 	require('../../fl_core/class/ARY_dataInterface.class.php');
 	$data_set = new ARY_dataInterface();
-	$anagrafica =  $anagrafica_id = $data_set->data_retriever('fl_anagrafica','ragione_sociale',"WHERE id != 1 AND id = 2",'ragione_sociale ASC');
-	$stato =  $data_set->data_retriever('fl_stati','descrizione',"WHERE id != 1",'descrizione ASC');
+	$anagrafica =  $anagrafica_id = $data_set->data_retriever('fl_anagrafica','ragione_sociale',"WHERE id != 1  AND tipo_profilo = 0",'ragione_sociale ASC');
 
 	function select_type($who){		
 	/* Gestione Oggetto Statica */	
 	$textareas = array("note"); 
-	$select = array('stato','anagrafica_id');
+	$select = array('stato','provincia','anagrafica_id');
 	$disabled = array("visite");
 	$hidden = array('operatore','data_aggiornamento','data_creazione');
-	$select_text = array("provincia","citta");
-	$radio = array("mostra_in_agenda");
+	$radio = array('mostra_in_agenda',"catalogo");
 	$text = array();
-
+	if($_SESSION['usertype'] > 0){
+	array_push($hidden,"proprietario","attivo","status_anagrafica","marchio","account_affiliato");
+	} else { $radio  = array('mostra_in_agenda',"attivo");	};
+	$calendario = array('data_scadenza_pec','data_scadenza','data_emissione','data_nascita');	
+	$file = array("upfile");
+	$checkbox = array('pagamenti_f24','sesso',"tipo_profilo","forma_giuridica");
+    if(defined('CAMPI_INATTIVI')) array_push($hidden,'centro_di_costo','pagamenti_f24','pin_cassetto_fiscale','data_scadenza_pec'); // Campi disabilitati per cliente governati da file customer.php
 	
 	$type = 1;
 	
 	if(in_array($who,$select)) { $type = 2; }
 	if(in_array($who,$textareas)){ $type = 3; }
-	if(in_array($who,$select_text)) { $type = 12; }	
 	if(in_array($who,$disabled)){ $type = 4; }
 	if(in_array($who,$radio)){ $type = 8; }
 	if(in_array($who,$calendario)){ $type = 20; }
@@ -95,7 +102,5 @@
 	return $type;
 	}
 	
-		$module_title = 'Sedi '.$anagrafica[$proprietario_id];
-    $module_menu = '
-	';
+	
 ?>

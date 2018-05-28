@@ -1,18 +1,14 @@
 <?php 
 	
 	// Variabili Modulo
-	$active = 2;
-	$sezione_tab = 1;
 	$tab_id = 31;
 	$tabella = $tables[$tab_id];
 	$select = "*";
 	$step = 1000; 
-	$sezione_id = -1;
-	$jorel = 0;
 	$jquery = 1;
-	$fancybox = 1;
 	$calendar = 1;
-	$documentazione_auto = 8;
+	//$filtri = 1; //Problemi nei filtri
+	
 	
   	 if(isset($_GET['data_da']) && check(@$_GET['data_da']) != "") { 
 	 $data_da = convert_data($_GET['data_da'],1); 
@@ -21,11 +17,12 @@
 	 $data_da = date('Y-m-d',time()); 	 
 	 $data_da_t = date('d/m/Y',time()); 
 	 }
-	 
-	 $module_menu = '';
+	 if(isset($_GET['template'])) { $template_id = check($_GET['template']); } else {  $template_id  = -1; }
+
+	$module_menu = '';
 	
 	/* Tipologie di ordinamento disponobili */
-    $ordine_mod = array("data_creazione DESC");
+    $ordine_mod = array("data_ricezione DESC");
 	$ordine = $ordine_mod[0];	
 	
 	
@@ -36,12 +33,14 @@
 	$vars = "cerca=".check($_GET['cerca'])."&";		
 	$tipologia_main .= ricerca_avanzata('body','body');	
 	}
-	
+	if(isset($template_id) && @$template_id != -1) {  $tipologia_main .= " AND template = $template_id ";	 }
+
 	
 	/* Inclusioni Oggetti Categorie */
 	include('../../fl_core/dataset/array_statiche.php');
 	require_once('../../fl_core/class/ARY_dataInterface.class.php');
-    $data_retrive = new ARY_dataInterface();
+    $data_set = new ARY_dataInterface();
+	$template = $data_set->data_retriever('fl_msg_template','oggetto',"WHERE id != 1",'oggetto ASC');
 
 
 	function select_type($who){

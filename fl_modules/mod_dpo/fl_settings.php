@@ -20,10 +20,11 @@
 	$proprietario_id = ($_SESSION['usertype'] > 1) ? $_SESSION['anagrafica'] : $_SESSION['proprietario_id'];
 
 
-
+	$module_title = 'Profili Funzione';
     $module_menu = '
 	';
-	
+	$new_button = '<a href="./mod_inserisci.php?id=1&ANiD='.base64_encode($proprietario_id).'" class="" style="color: gray"> <i class="fa fa-plus-circle"></i>  </a>';
+
 	/* Tipologie di ordinamento disponobili */
    	$ordine_mod = array("numero_obiettivo ASC","id ASC","id ASC");
 	$ordine = $ordine_mod[0];	
@@ -46,15 +47,15 @@
 	$data_set = new ARY_dataInterface();
 	$fornitore_informazioni  = $data_set->data_retriever('fl_profili_funzione','funzione',"WHERE id != 1 AND anagrafica_id = $proprietario_id",'funzione ASC');
 	$anagrafica = $anagrafica_id = $data_set->data_retriever('fl_anagrafica','ragione_sociale',"WHERE id != 1",'ragione_sociale ASC');
-	$persona_id = $data_set->data_retriever('fl_persone','nome, cognome',"WHERE id != 1 AND anagrafica_id = $proprietario_id",'nome ASC');
+	$persona_id = $data_set->data_retriever('fl_persone','nome,cognome',"WHERE id != 1 AND anagrafica_id = $proprietario_id",'cognome ASC');
 	$processo_id = $data_set->data_retriever('fl_processi','processo',"WHERE id != 1 AND anagrafica_id = $proprietario_id",'processo ASC');
 	$tipo_obiettivo = $data_set->get_items_key("tipo_obiettivo");	
 
 	function select_type($who){
 	$textareas = array('descrizione_obiettivo','misurazione','scheda_obiettivo','descrizione_premio'); 
-	$select = array('tipo_obiettivo','processo_id',"anagrafica_id",'fornitore_informazioni','persona_id');
+	$select = array('tipo_obiettivo','processo_id','fornitore_informazioni','persona_id');
 	$disabled = array();
-	$hidden = array("id",'operatore','data_creazione','marchio','data_aggiornamento','proprietario',"photo");
+	$hidden = array("anagrafica_id","id",'operatore','data_creazione','marchio','data_aggiornamento','proprietario',"photo");
 	$radio  = array();	
 	$multi_selection = array('sedi_id');	
 	$checkbox = array();	
@@ -80,5 +81,5 @@
 	return $type;
 	}
 	
-		$module_title = 'Obiettivi '.$anagrafica[$proprietario_id];
+	
 ?>

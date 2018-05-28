@@ -1,7 +1,6 @@
 <?php 
 
 require_once('../../fl_core/autentication.php');
-	include('../../fl_core/dataset/array_statiche.php');
 include('../../fl_core/dataset/items_rel.php');
 $id = check($_GET['id']);
 $tab_id = 68;

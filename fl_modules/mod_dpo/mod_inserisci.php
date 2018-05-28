@@ -19,10 +19,12 @@ include("../../fl_inc/testata_mobile.php");
 
 <form id="scheda" action="../mod_basic/action_modifica.php" method="post" enctype="multipart/form-data">
 <?php if(isset($_GET['esito'])) { $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p class="'.$class.'">'.check($_GET['esito']).'</p>'; }  ?>
-<h1>Scheda Profilo</h1>
+<h1>Scheda Obiettivo</h1>
 
 <?php include('../mod_basic/action_estrai.php');  ?>
 
+<input type="hidden" name="dir_upfile" value="courses" />
+<?php if(isset($_GET['external'])) { ?><input type="hidden" name="external" value="1" /><?php } ?>
 
 </form>
 

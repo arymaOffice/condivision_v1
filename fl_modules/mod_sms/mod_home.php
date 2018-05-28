@@ -1,24 +1,19 @@
 
+<h1>Archivio SMS</h1>  
 
 
-
-<div class="content">
-
-
- <div class="filtri">
+<div class="filtri" id="filtri">
 <form method="get" action="" id="fm_filtri">
   
-  <span style="position: relative;">
-   
+  <label>Mittente</label>
   <?php $data_retrive->do_select('VALUES','fl_sms','from'); ?>
-    
-      data  <input type="text" name="data_da" onChange="form.submit();" value="<?php  echo $data_da_t;  ?>"  class="calendar" size="10" /> 
-       <input type="submit" value="<?php echo SHOW; ?>" class="button" />
-
-       </form>
+  <label>Data invio</label>  <input type="text" name="data_da" onChange="form.submit();" value="<?php  echo $data_da_t;  ?>"  class="calendar" size="10" /> 
+  <input type="submit" value="<?php echo SHOW; ?>" class="button" />
+  </form>
      
-      </div>
+ </div>
       
+
        
 <?php
 	
@@ -37,7 +32,6 @@
 
  
  
-  
   	 <table class="dati" summary="Dati" style=" width: 100%;">
         <tr>
      <th scope="col"></th>
@@ -45,8 +39,7 @@
        <th scope="col">Mittente</th>
        <th scope="col">Destinatario</th>
        <th scope="col">SMS</th>
-    <th scope="col"></th>
-
+ <th scope="col"></th>
       </tr>
 	<?php 
 
@@ -61,7 +54,7 @@
 		
 
 
-	 $colore = "class=\"tab_blue\"";  
+	 $colore = "class=\"tab_green\"";  
 		
 	
 		
@@ -70,7 +63,7 @@
 		$phonefrom = $riga['from'];
 		$phoneto = $riga['to'];		
 		
-			echo "<tr ><td $colore><span class=\"Gletter\"></span></td>"; 
+			echo "<tr><td $colore><span class=\"Gletter\"></span></td>"; 
 			echo "<td>".mydatetime($riga['data_creazione'])."</td>"; 
 			echo "<td>".$phonefrom."</td>"; 
 			echo "<td>".$phoneto."</td>";

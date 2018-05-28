@@ -15,11 +15,12 @@
 	$documentazione_auto = 18;
 	if(isset($_GET['new'])){ new_inserimento($tabella,ROOT.$cp_admin."fl_modules/mod_attivita/mod_inserisci.php"); }
 
-	$module_title = 'Attivita ';
+	$module_title = 'Attività';
     $module_menu = '
+	<ul>
   	   <li class=""><a href="./?todo">Attivit&aacute; <span class="subcolor">da svolgere </span></a>      </li>
 	   <li class=""><a href="./?assigned">Attivit&aacute; <span class="subcolor">assegnate </span></a>      </li>
-	';
+	</ul>';
 
 	$operatore_id = $_SESSION['number'];// (isset($_GET['operatore']) && check(@$_GET['operatore']) > 0 && $_SESSION['usertype'] == 0) ? check($_GET['operatore']) : $_SESSION['number']; 
 	$proprietario_id = 0; //(isset($_GET['proprietario']) && check(@$_GET['proprietario']) > 0 && $_SESSION['usertype'] == 0) ? check($_GET['proprietario']) : -1;
@@ -30,7 +31,13 @@
 	 $data_da = convert_data($_GET['data_da'],1); $data_a = convert_data($_GET['data_a'],1); 
 	 $data_da_t = check($_GET['data_da']); $data_a_t = check($_GET['data_a']); 
 	
+	 } else {
+	 $data_da = date('Y-m-d',time()-9204800); 
+	 $data_a = date('Y-m-d',time()+86400); 	 
+	 $data_da_t = date('d/m/Y',time()-9204800); 
+	 $data_a_t = date('d/m/Y'); 
 	 }
+	 
 
 	
 	/* Tipologie di ordinamento disponobili */
@@ -40,7 +47,7 @@
 	
 	/* RICERCA */
 	$tipologia_main = "WHERE id != 1 ";
-	if(isset($data_da_t)) 	$tipologia_main .= " AND (data_creazione BETWEEN '$data_da' AND '$data_a')";
+	if(isset($data_da_t) && @$status_segnalazione_id != 1) 	$tipologia_main .= " AND (data_creazione BETWEEN '$data_da' AND '$data_a')";
 	if(isset($operatore_id) && @$operatore_id > 0) {  $tipologia_main .= " AND operatore = $operatore_id ";	 }
 	if(isset($proprietario_id) && @$proprietario_id > 0) {  $tipologia_main .= " AND proprietario = $proprietario_id ";	 }
 	if(isset($todo) && @$todo > 0) {  $tipologia_main .= " AND fatto = 0 ";	 }

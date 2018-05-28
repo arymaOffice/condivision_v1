@@ -13,7 +13,7 @@ if(isset($_GET['set_meeting'])){
 	$proprietario_id  = check($_GET['proprietario']);
 	$start_meeting  = dbdatetime(check($_GET['start_meeting']),1);
 	$end_meeting  = date('Y-m-d H:i:00',strtotime($start_meeting .' +30 minutes'));
-	$potential = GRD($tables[106], $profile_rel ); 
+	$potential = GRD('fl_potentials', $profile_rel ); 
 	$lang = (isset($_GET['lang'])) ? check($_GET['lang']) : 'en';
 	$meeting_location = (isset($_GET['meeting_location'])) ? check($_GET['meeting_location']) : 0;
 

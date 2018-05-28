@@ -1,11 +1,8 @@
 <?php 
 
-if(isset($_GET['id'])) { $id = (is_numeric($_GET['id'])) ? check($_GET['id']) : exit;  } 
-if(isset($force_id)){ $id = check($force_id); } 
-if(isset($_GET['n'])) $id = 1;
-
-$id = (isset($id)) ? $id : 1;
-
+if(isset($_GET['id']) && !isset($didi) ) { $id = (is_numeric($_GET['id'])) ? check($_GET['id']) : exit;  } 
+else if(isset($didi)){ $id = check($didi); } 
+else { $id = 1; }
 
 
 $where = "WHERE id = '$id' ";
@@ -41,13 +38,13 @@ if(isset($tab_div_labels)) {
 	
 	
 	$risultato = mysql_query($query, CONNECT);
-	echo '<div style="background: white; padding: 10px;">';
+	
 	while ($riga = mysql_fetch_array($risultato)) 
 	{
 	
 	
 		if(isset($riga['destinatario'])) { 
-		if($_SESSION['usertype'] > 0 && $riga['destinatario'] != $_SESSION['number'] && $riga['mittente'] != $_SESSION['number']) {echo "Contenuto non trovato."; exit;  }
+		if($riga['destinatario'] != $_SESSION['number'] && $riga['mittente'] != $_SESSION['number']) {echo "Contenuto non trovato."; exit;  }
 		}
 		
 		foreach($riga as $chiave => $valore){
@@ -127,6 +124,5 @@ if(isset($tab_div_labels)) {
 			
 			
 		}	
-	}
-	echo '</div>';
+	} 
 ?>

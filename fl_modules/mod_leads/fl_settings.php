@@ -1,205 +1,215 @@
 <?php 
 	
-
+	//$active = 'callcencer';
+	//$sezione_tab = 1;
+	
 	$modulo_uid = 26;
 	$parametri_modulo = check_auth($modulo_uid); /* Nuova preconfigurazione dei moduli (da convertire in classe?) */
+	
+	// NUOVA QUERY DA SOSTITUIRE SELECT pot.id,(SELECT GROUP_CONCAT(marca) FROM fl_veicoli WHERE id IN(SELECT DISTINCT id FROM fl_veicoliTest WHERE parent_id = pot.id)) FROM fl_potentialsTest pot WHERE pot.id > 1
 	// Variabili Modulo
-	$module_title = $parametri_modulo['label'];
 	$permesso    = $parametri_modulo['permesso'];
-	$tab_id   = $tab_parent_id   = $parametri_modulo['tab_id'];
+	$tab_id      = $parametri_modulo['tab_id'];
 	$tabella     = $tables[$tab_id];
-	$select      = "*";
-	$ordine      = $parametri_modulo['ordine_predefinito']; 
-	$step        = $parametri_modulo['risultati_pagina']; 
+	$tabella     = $tabella.' AS tb1 '; //.' AS tb1 LEFT JOIN fl_veicoli AS tb2 ON tb1.id = tb2.parent_id';
+	$select      = "*"; //"tb1.*,tb2.*,tb1.id as id,tb2.id as did, tb1.data_creazione as data_creazione";
+	$ordine      =  $parametri_modulo['ordine_predefinito']; 
+	$step        = (isset($_SESSION['step'])) ? $_SESSION['step'] : $parametri_modulo['risultati_pagina']; 
 	//$text_editor = $parametri_modulo['editor_wysiwyg'];
 	$jquery      = $parametri_modulo['jquery'];
 	$fancybox    = $parametri_modulo['fancybox'];
 	$filtri      = $parametri_modulo['filtri'];
 	$toggleOn    = $parametri_modulo['menu_aperto'];
 	$calendar    = $parametri_modulo['calendari'];
-	$export = 1;
 	if($parametri_modulo['ricerca'] == 1) $searchbox = $parametri_modulo['placeholder_ricerca'];
 	$checkRadioLabel = '<i class="fa fa-check-square"></i><i class="fa fa-square-o"></i>'; // Pulsante checkbox radio button Toggle apple
-	//$tab_div_labels = array('id'=>"Dati Personali",'tipo_interesse'=>"Interesse");
+ 	$dateTimePicker = 1;
 
-	$data_dafault = 'data_creazione';//(defined('tab_prefix') && @tab_prefix == 'hrc') ? 'data_visita' : 'data_creazione';
-	
-	if(isset($_GET['id']) && check(@$_GET['id']) != 1 && !isset($_GET['new'])) {
-	$tab_div_labels = array('mod_richieste.php?reQiD=[*ID*]'=>'Attività','id'=>"Dati Personali",'tipo_interesse'=>"Interesse",'../mod_appuntamenti/mod_user.php?history&potential_rel=[*ID*]'=>"Agenda Incontri",'../mod_preventivi/mod_user.php?potential_id=[*ID*]'=>"Offerte");
-	if(defined('tab_prefix') && tab_prefix == 'hrc')  $tab_div_labels['../mod_eventi/mod_user.php?lead_id=[*ID*]'] = "Eventi";
-	if(defined('MULTI_AMBIENTE'))    $tab_div_labels['../mod_eventi/mod_disponibilita_note.php?leadCollegato&lead_id=[*ID*]'] = "Disponibilità Proposte";
-	}
-
+ 	$tab_div_labels = array('id'=>"Dati Personali",'tipo_interesse'=>"Interesse Vettura",'note'=>'Gestione');
+	if(isset($_GET['id']) && check(@$_GET['id']) != 1) $tab_div_labels = array('mod_richieste.php?reQiD=[*ID*]'=>'Gestione BDC','id'=>"Dati Personali",'../mod_appuntamenti/mod_user.php?history&potential_rel=[*ID*]'=>"Agenda Incontri", 'tipo_interesse'=>"Interesse Vettura",'../mod_preventivi/mod_user.php?potential_id=[*ID*]'=>"Preventivi",);
+		
 	
 	if(!isset($_SESSION['status_potential_id'])) $_SESSION['status_potential_id'] = -1;
 	if(isset($_GET['status_potential'])) $_SESSION['status_potential_id'] = check($_GET['status_potential']);
 	$status_potential_id = $_SESSION['status_potential_id'];
 
-	
+
   	 if(isset($_GET['data_da']) && check($_GET['data_da']) != "" && check($_GET['data_a']) != "") { 
 	 $data_da = convert_data($_GET['data_da'],1); $data_a = convert_data($_GET['data_a'],1); 
 	 $data_da_t = check($_GET['data_da']); $data_a_t = check($_GET['data_a']); 
 	 } else {
-	 $data_da = date('Y-m-d',time()-31536000);  
-	 $data_a =  date('Y-m-d',time()); 
-	 $data_da_t = date('d/m/Y',time()-31536000); 
+	 $data_da_t = date('Y-m-d',time()-99204800); 
+	 $data_a_t = date('Y-m-d'); 
+	 $data_da_t = date('d/m/Y',time()-99204800); 
 	 $data_a_t = date('d/m/Y'); 
 	 }
 	 
 	
-	/* Tipologie di ordinamento disponobili */
-    $ordine_mod = array("in_use DESC, data_creazione DESC, data_aggiornamento ASC","user ASC","proprietario ASC","id DESC");
-	//$ordine = $ordine_mod[0];	
 	
-	
-	/* Tipologie di ordinamento disponobili */
-    $ordine_mod = array("id DESC");
-	
-	/*Crea i campi, ordinamemnti e modalista */
-	$campi = "SHOW COLUMNS FROM `$tabella`";
-	$risultato = mysql_query($campi, CONNECT);
-	$x = 0;
-	$campi = array();
-	while ($riga = mysql_fetch_assoc($risultato)) 
-	{			
-	$ordinamento[$x] = record_label($riga['Field'],CONNECT,1); 
-	$ordine_mod[$x] = $riga['Field'];
-	$campi[$riga['Field']] = record_label($riga['Field'],CONNECT,1); $x++; 
-	}
-	
+ 	/*Impostazione automatica da tabella */
+	$campi = gcolums('fl_potentials'); //Ritorna i campi della tabella
+    $tipologia_main = gwhere($campi,'WHERE tb1.id != 1 ','tb1.');//Imposta i filtri della query prendendo i dati GET e se sono tra i filtri li applica
+    /*$campi2 = gcolums('fl_veicoli'); //Ritorna i campi della tabella
+    $tipologia_main .= gwhere($campi2,'','tb2.');//Imposta i filtri della query prendendo i dati GET e se sono tra i filtri li applica
+	*/
+
 	//Filtri di base (da strutturare quelli avanzati)
-	$basic_filters = array('location_evento','status_potential','proprietario','campagna_id','source_potential','interessato_a','centro_di_ricavo','tipo_interesse','anno_di_interesse');
-	$ordine = $ordine_mod[0].' DESC';	
+	$basic_filters = array('source_potential','tipo_interesse','permuta','promo_pneumatici','test_drive','campagna_id','telefono');
+	$basic_filters2 = array();//array('alimentazione','anno_immatricolazione','pagamento_veicolo');
+	if(!isset($_SESSION['ordine_type'])) $_SESSION['ordine_type'] = 'DESC';
+	$ordine_mod = array("tb1.data_associazione_attivita ".$_SESSION['ordine_type'].",tb1.data_creazione ".$_SESSION['ordine_type'],'tb1.nome '.$_SESSION['ordine_type'],'tb1.proprietario '.$_SESSION['ordine_type'],'tb1.venditore '.$_SESSION['ordine_type']); // Tipologie di ordinamento disponobili 
+	$ordine = (isset($_SESSION['ordine_mode'])) ? $ordine_mod[$_SESSION['ordine_mode']] :  $ordine_mod[0];
 
-	/* Strutturazione della query */
-	$tipologia_main = gwhere($campi,'WHERE id != 1 ','','id','data_creazione',31536000,0);//Imposta i filtri della query prendendo i dati GET e se sono tra i filtri li applica
+	/* Personalizzazione della query */
+	if(isset($_GET['proprietario']) && check(@$_GET['proprietario']) != -1) { $proprietario_id = check($_GET['proprietario']);  } else {    $proprietario_id = -1; }
+    
+    if(!isset($_GET['all']) && isset($proprietario_id) && @$proprietario_id > 1 && $_SESSION['usertype'] != 4 ) {  
+    $tipologia_main .= " AND (tb1.proprietario = $proprietario_id OR tb1.venditore = $proprietario_id)  "; 
+    } 
+
+    if($status_potential_id != 0 && !isset($_GET['daAssegnare']) && !isset($_GET['all']) && $_SESSION['usertype'] != 0 && $_SESSION['profilo_funzione'] != 8 && $_SESSION['usertype'] != 5){ 
+    $tipologia_main .= " AND (tb1.proprietario = ".$_SESSION['number']." OR tb1.venditore = ".$_SESSION['number'].")"; 
+	} else { 
+	$tipologia_main .= ''; 
+	}
+  	
+  	/*if($_SESSION['usertype'] > 0 && isset($_GET['all'])) {
+  	$proprietariStesseSedi = getAccountSede($_SESSION['sedi_id']);
+  	if($proprietariStesseSedi != '') $tipologia_main .= ' AND (tb1.proprietario IN('.$proprietariStesseSedi.') OR tb1.venditore IN('.$proprietariStesseSedi.') )';
+  	}*/
+
+  	if(isset($_GET['venditore']) && check(@$_GET['venditore']) != -1) { $venditore_id = check($_GET['venditore']);  } else {    $venditore_id = -1; }
+    //if(isset($venditore_id) && @$venditore_id != -1) {  $tipologia_main .= " AND tb1.venditore = $venditore_id "; } else if($_SESSION['usertype'] == 4 && !isset($_GET['venditore'])) { $tipologia_main .= " AND tb1.venditore = ".$_SESSION['number']." "; }
+	if(isset($_GET['todayCreated']))  $tipologia_main .= " AND DATE(tb1.`data_associazione_attivita`) = CURDATE()";
+	if(isset($_GET['today']))  $tipologia_main .= " AND DATE(tb1.`data_scadenza_venditore`) = CURDATE()";
+    if(isset($_GET['tomorrow']))  $tipologia_main .= "  AND DATE(tb1.`data_scadenza_venditore`) = CURDATE() + INTERVAL 1 DAY";
+    if(isset($_GET['next']))  $tipologia_main .= "  AND DATE(tb1.`data_scadenza_venditore`) > CURDATE() + INTERVAL 1 DAY";
+    if(isset($_GET['gestioneBdc']))  $tipologia_main .= "  AND proprietario > 0";
+    if(isset($_GET['gestioneVendita']))  $tipologia_main .= " AND tb1.status_potential < 2 AND (venditore > 0 AND proprietario > 0)";
+    if(isset($_GET['gestioneDirectSales']))  $tipologia_main .= "  AND (venditore > 0 AND proprietario < 1)";
+    if(isset($_GET['daAssegnare']))  $tipologia_main .= "  AND (proprietario < 1)";
 
 
-	if(isset($data_da) && !isset($_GET['cerca']) && check($_GET['action'] != 12) ) 	$tipologia_main .= " AND (`$data_dafault`  BETWEEN '$data_da' AND '$data_a' OR `$data_dafault`  = '0000-00-00') ";
+	$proprie = ($_SESSION['usertype'] > 2 && (!isset($_GET['status_potential']) || @$_GET['status_potential'] != 0) && !isset($_GET['daAssegnare']))  ?  " AND proprietario = ".$_SESSION['number']." " : ''; // Aggiunta per i counters e il title counter
+    if($_SESSION['usertype'] == 4)   $proprie =  " AND venditore = ".$_SESSION['number']; // Aggiunta per i counters e il title counter
+	if(isset($data_da) && !isset($_GET['cerca']) && @check($_GET['action'] != 12) ) $tipologia_main .= " AND `tb1`.`data_creazione`  BETWEEN '$data_da' AND '$data_a' ";
+	
 	/* Filtri personalizzati */
 	if(isset($_GET['qualificati'])) { $qualificati_id = check($_GET['qualificati']);  } else {    $qualificati_id = -1; }
-	if(isset($qualificati_id) && @$qualificati_id == 1) {  $tipologia_main .= " AND (email != '' AND telefono != '' AND nome != '') ";	 }
-	if(isset($qualificati_id) && @$qualificati_id == 0) {  $tipologia_main .= " AND (email = '' OR telefono = '' OR nome = '' ) ";	 }
-	if(isset($qualificati_id) && @$qualificati_id == 2) {  $tipologia_main .= " AND (periodo_interesse != ''  AND interessato_a != '' AND email != '' AND telefono != '' AND nome != '') ";	 }
-	$tipologia_main .= ($status_potential_id > -1)  ? " AND status_potential = $status_potential_id" :   "";
-	$tipologia_main .= ($status_potential_id == 1 && !isset($_GET['cerca']) && !defined('MULTI_LOCATION'))  ? " OR (`$data_dafault`  BETWEEN '$data_da' AND '$data_a' AND status_potential != -1 AND data_visita != '0000-00-00') " :   "";	
-	if(defined('MULTI_LOCATION')) {
-	if(!isset($_GET['location_evento']) && isset($_SESSION['sede_id'])) { $tipologia_main .= " AND location_evento = ".$_SESSION['sede_id'];  $_GET['location_evento'] = $_SESSION['sede_id']; }
-	}
+	if(isset($qualificati_id) && @$qualificati_id == 0) {  $tipologia_main .= " AND (tb1.telefono = '' OR tb1.nome = '' ) ";	 }
+	if(isset($qualificati_id) && @$qualificati_id == 1) {  $tipologia_main .= " AND (CHAR_LENGTH(tb1.email) > 5 AND CHAR_LENGTH(tb1.telefono) > 7 AND CHAR_LENGTH(tb1.nome) > 3) ";	 }
+	if(isset($qualificati_id) && @$qualificati_id == 2) {  $tipologia_main .= " AND (CHAR_LENGTH(tb1.email) > 5 AND CHAR_LENGTH(tb1.telefono) > 7 AND CHAR_LENGTH(tb1.nome) > 3 AND permuta = 1) ";	 }
 	
-	$where_count = str_replace('WHERE ','', $tipologia_main);
+	if(!isset($_GET['cerca'])) {
+	$tipologia_main .= ($status_potential_id >= 0)  ? " AND tb1.status_potential = $status_potential_id" :  " AND (tb1.status_potential != 9)";	
+	}
+
+
+	$tipologia_main .= ' GROUP BY tb1.id ';
+	$where_count = str_replace('WHERE ','tb1.id > 1 AND ', $tipologia_main);
 
 	
-	/* Inclusioni Oggetti Categorie */
-	include('../../fl_core/dataset/array_statiche.php');
-	include('../../fl_core/dataset/proprietario.php');
-	require('../../fl_core/class/ARY_dataInterface.class.php');
+	/* Inclusioni dataset */
+	include('../../fl_core/dataset/array_statiche.php'); //Array statiche
+	include('../../fl_core/dataset/proprietario.php'); //Array statiche
+	require('../../fl_core/class/ARY_dataInterface.class.php'); //Classe di data provisioning
 	$data_set = new ARY_dataInterface();
-	$location_evento = $data_set->data_retriever('fl_sedi','sede',"WHERE id != 1",'sede ASC');
 	$mansione = $data_set->get_items_key("mansione");	
 	$tipo_interesse = $data_set->get_items_key("tipo_interesse");	
-	$interessato_a  = $data_set->data_retriever('fl_cg_res','codice,label','WHERE attivo = 1 AND id > 1 AND parent_id = 0 AND tipo_voce = 1',' id ASC ');
-	$centro_di_ricavo  = $data_set->data_retriever('fl_cg_res','codice,label','WHERE attivo = 1 AND id > 1 AND parent_id > 0 AND tipo_voce = 1');
 	$pagamento_vettura = $data_set->get_items_key("pagamento_vettura");	
 	$stato_nascita = $stato_sede = $stato_residenza = $stato_punto = $paese = $data_set->data_retriever('fl_stati','descrizione',"WHERE id != 1",'descrizione ASC');
 	$campagna_id = $data_set->data_retriever('fl_campagne','descrizione',"WHERE id != 1",'descrizione ASC');
 	$source_potential = $data_set->data_retriever('fl_campagne_attivita','oggetto',"WHERE id != 1",'oggetto ASC');
-	$source_potential[1] = 'Inserimento manuale'; 
-	$utm_medium = $data_set->get_items_key("utm_medium");
-
-	unset($campagna_id[0]);
-	unset($campagna_id[-1]);
-	unset($utm_medium[0]);
-	unset($utm_medium[-1]);
-	unset($utm_medium[1]);
-	$campagna_id = $campagna_id+$utm_medium;
-
-	unset($source_potential[0]);
-
+	$sede = $data_set->data_retriever('fl_sedi','sede',"WHERE id != 1",'sede ASC');
 	$priorita_contatto = array('Bassa','Media','Alta');
-	$operatoribdc =  $data_set->data_retriever('fl_account','nominativo',"WHERE id != 1 AND attivo = 1 AND tipo = 3   ",'nominativo ASC');
-	$venditori = $data_set->data_retriever('fl_account','nominativo',"WHERE id != 1 AND attivo = 1 AND  tipo = 4  ",'nominativo ASC');
-	$operatoribdc[0] = 'Non Assegnato'; 
-	unset($venditori[0]);
+	$qualificati = array('1 stella','2 Stelle','3 Stelle');
+	$test_drive = $permuta = $promo_pneumatici = array('No','Si');
+	$tipo_richiesta = array('Chiamata','Email','Follow up','Rifiutato','Concorrenza','Appuntamento','Conversione','Preventivo','No Show','SMS','Modifica');	
 
-	$templateSMS = $data_set->data_retriever('fl_msg_template','oggetto',"WHERE id != 1 AND tipo_template IN(0,1) ",'oggetto ASC');
-	$templateEMAIL = $data_set->data_retriever('fl_msg_template','oggetto',"WHERE id != 1 AND tipo_template IN(0,2) ",'oggetto ASC');
+	$operatoribdc =  $data_set->data_retriever('fl_account','nominativo',"WHERE id != 1 AND attivo = 1 AND tipo = 3   ",'nominativo ASC');
+	$venditore = $data_set->data_retriever('fl_account','nominativo',"WHERE id != 1 AND attivo = 1 AND  tipo = 4  ",'nominativo ASC');
+	$operatoridgt = $data_set->data_retriever('fl_account','nominativo',"WHERE id != 1 AND attivo = 1 AND  (tipo = 5)  ",'nominativo ASC');
+	$operatoribdc[0]  = $proprietario[0] = $venditore[0] = $operatoridgt[0] = 'Non Assegnato'; 
+	$categoria_interesse = $data_set->get_items_key("categoria_preventivo");	
+
+	$status_potential = array('-1'=>"Tutti")+$status_potential;
+
+	$template = $data_set->data_retriever('fl_msg_template','oggetto',"WHERE id != 1",'oggetto ASC');
 	$mittente = $data_set->get_items_key("mittente");	
 	$tag_sms = $data_set->get_items_key("tag_sms");
-	$rito_civile = $data_set->get_items_key("rito_civile");
-    
-	$ambienti =  $data_set->data_retriever('fl_ambienti','nome_ambiente',"WHERE id != 1",'priority ASC,tipo_ambiente ASC, id ASC');
-	unset($ambienti[0]);
-	unset($ambienti[1]);
-	$stato_evento = array('Bozza','Attesa Contratto','Confermato','Archiviato','Annullato');
+	
+	$tipologia_veicolo = $data_set->get_items_key("tipo_interesse");	
+	$pagamento_veicolo = $data_set->get_items_key("pagamento_vettura");	
+	$data_acquisto = array(); for($i=1995;$i<date('Y')+1;$i++) $data_acquisto[$i] = $i;
+	$anno_immatricolazione = array(); for($i=1950;$i<date('Y');$i++) $anno_immatricolazione[$i] = $i;
 
-    $anno_di_interesse = array(); for($i=date('Y');$i<date('Y')+10;$i++) $anno_di_interesse[$i] = $i;
 
 	function select_type($who){
 	
 	/* Gestione Oggetto Statica */	
-	$textareas = array('note_interne'); 
-	$select = array('centro_di_ricavo','proprietario','anno_di_interesse','interessato_a','campagna_id',"source_potential",'vettura_posseduta_alimentazione','pagamento_vettura','experience_level',"mansione","paese","proprietario","status_pagamento","causale","metodo_di_pagamento");
-	$select_text = array("provincia","citta");
-	$disabled = array("messaggio","data_creazione","visite");
-	$hidden = array('industry',"paese",'marchio',"data_assegnazione","data_scadenza","data_scadenza_venditore",'venditore',"company","job_title","data_creazione","sent_mail","in_use",'is_customer',"data_aggiornamento","ip","operatore");
-	$radio = array('rito_civile');
+	$textareas = array("messaggio","note"); 
+	$select = array('sede',"alimentazione",'tipologia_veicolo','pagamento_veicolo','campagna_id','pagamento_vettura',"source_potential",'vettura_posseduta_alimentazione','pagamento_vettura','experience_level',"mansione","paese","proprietario","status_pagamento","causale","metodo_di_pagamento");
+	$select_text = array("provincia","citta",'data_acquisto','anno_immatricolazione');
+	$disabled = array("data_creazione","visite","data_assegnazione");
+	$hidden = array("data_aggiornamento");
+	$radio = array('promo_pneumatici','test_drive','vettura_promo','permuta');
 	$text = array();
-	$selectbtn = array('location_evento',"status_potential",'attivo');	
-	$calendario = array('data_visita');	
+	$calendario = array('data_scadenza','data_acquisto_vettura','data_test_drive','periodo_cambio_vettura');	
 	$file = array();
-	$invisible = array('priorita_contatto');
-	$datePicker = array();
-	$checkbox = array('tipo_interesse');
-	$multi_selection = array("ambienti","mesi_di_interesse","giorni_di_interesse");
-	$ifYesText = array();		
-	if(defined('tab_prefix') && @tab_prefix == 'hrc') $hidden = array("indirizzo","ragione_sociale","partita_iva","paese","","","data_assegnazione","data_scadenza","data_scadenza_venditore",'venditore',"website","fatturato_annuo","mansione","company","job_title","numero_dipendenti","data_creazione","sent_mail","in_use","status_potential",'is_customer',"data_aggiornamento","marchio","ip","operatore");
+	$checkbox = array('categoria_interesse','tipo_interesse','priorita_contatto');
+	$invisible = array('data_assegnazione','data_scadenza_venditore','venditore','vettura_posseduta_marca', 'vettura_posseduta_modello', 'vettura_posseduta_immatricolazione', 'vettura_posseduta_km', 'vettura_posseduta_alimentazione', 'vettura_posseduta_targa', 'quotazione_vettura', 'data_acquisto_vettura',"website","fatturato_annuo","mansione","company","job_title","numero_dipendenti","data_creazione","sent_mail","in_use","status_potential",'is_customer',"marchio","ip","operatore");
+	$datePicker = array('data_scadenza');
+	if(isset($_GET['id'])) { if(check($_GET['id']) > 1) { $invisible[] = 'priorita_contatto'; $invisible[] = "note"; $invisible[] = 'proprietario'; }  }
 	
-	if(isset($_GET['id'])) { 
-		if(check($_GET['id']) == 1 || isset($_GET['new'])) { 
-		array_push($invisible,'anno_di_interesse','ambienti','mesi_di_interesse','tipo_interesse','periodo_interesse','preferenze_menu','prezzo_preventivato'); 
-		array_push($hidden,'cap','proprietario','messaggio','rito_civile'); 
-		if(check($_GET['status_potential']) != 1)  array_push($hidden,'source_potential');  
-		$textareas[] = array('note'); 
-		} else { $hidden[] = 'note'; }
-	}
-
 	$type = 1;
 	
 	if(in_array($who,$select)) { $type = 2; }
 	if(in_array($who,$select_text)) { $type = 12; }	
 	if(in_array($who,$textareas)){ $type = 3; }
 	if(in_array($who,$disabled)){ $type = 4; }
+	if(in_array($who,$hidden)){ $type = 5; }
 	if(in_array($who,$radio)){ $type = 8; }
 	if(in_array($who,$calendario)){ $type = 20; }
 	if(in_array($who,$file)){ $type = 18; }
 	if(in_array($who,$text)){ $type = 24; }
 	if(in_array($who,$checkbox)){ $type = 19; }
-	if(in_array($who,$selectbtn)){ $type = 9; }
-	if(in_array($who,$multi_selection)){ $type = 23; }
-	if(in_array($who,$checkbox)){ $type = 19; }
 	if(in_array($who,$datePicker)){ $type = 11; }
-	if(in_array($who,$ifYesText)){ $type = 13; }
-	if(in_array($who,$hidden)){ $type = 5; }
 	if(in_array($who,$invisible)){ $type = 7; }
 
+	
 	return $type;
 	}
 	
+	
+   $module_menu = '';
 
-	if($status_potential_id >= 0){ 
-	$module_title = mk_count($tabella,$where_count).' leads in ';
-	if(isset($status_potential_id )) $module_title .= $status_potential[$status_potential_id];
-	} else {
-	$module_title = mk_count($tabella,$where_count).' leads (Tutti)';
-	} 
-    
-    $action = (isset($_GET['action'])) ? '&action='.check($_GET['action']) : "";
-	$action .= (isset($_GET['location_evento'])) ? '&location_evento='.check($_GET['location_evento']) : "";
-    $module_menu = '<li $selected><a href="./?status_potential=-1'.$action.'">Tutti</a></li>';
+  
+ /* if($_SESSION['usertype'] == 2){
 
-	     foreach($status_potential as $valores => $label){ // Recursione Indici di Categoria
+ $liste_leads = array('Leads Placement','Leads Facebook','Leads Preventivi','Leads Parco Circolante','Leads Convenzioni','Leads Officine Autorizzate','Leads Segnalatori','Leads Scuole Guide');
+   foreach($liste_leads as $valores => $label){ // Recursione Indici di Categoria
+			$selected = '';//($status_potential_id == $valores) ? " class=\"selected\"" : "";
+			$module_menu .= "<li $selected><a href=\"./?source_potential=$valores\">".ucfirst($label)."</a></li>\r\n"; 
+	}
+ 
+  } else {*/
+
+ foreach($status_potential as $valores => $label){ // Recursione Indici di Categoria
+			
 			$selected = ($status_potential_id == $valores) ? " class=\"selected\"" : "";
-			$module_menu .= "<li $selected><a href=\"./?status_potential=$valores$action\">".ucfirst($label)."</a></li>\r\n"; 
-		 }
+			$action = (isset($_GET['action'])) ? '&action='.check($_GET['action']) : "";
+			$source = '';
+			if(isset($_GET['source_potential'])) { foreach ($_GET['source_potential'] as $key => $value) {
+				$source .= '&source_potential[]='.check($value);
+			}}
+			//$querycount = 'status_potential != 4 ';
+			//$querycount .= ($valores < 0) ? '' : ' AND status_potential = '.$valores;
+			//$querycount .= ($valores > 1) ? '' : $proprie;
+			
+			//$count = mk_count('fl_potentials AS tb1',$querycount,'',0);
+			if($valores != 9 || $_SESSION['number'] == 1) $module_menu .= "<li $selected><a href=\"./?status_potential=$valores$action$source\">".ucfirst($label)."  </a></li>\r\n"; 
+	}
+
+	  
+	  //}
 ?>

@@ -21,11 +21,14 @@
 	$tabella = $tables[$tab_id];
 	
 
-	if(!isset($_SESSION['proprietario_id'])) $_SESSION['proprietario_id'] = $_SESSION['anagrafica'];
+	if(!isset($_SESSION['proprietario_id'])) $_SESSION['proprietario_id'] = 0;
 	if(isset($_GET['cmy'])) $_SESSION['proprietario_id'] = check(base64_decode($_GET['cmy']));
 	$proprietario_id = ($_SESSION['usertype'] > 1) ? $_SESSION['anagrafica'] : $_SESSION['proprietario_id'];
 
 
+	$module_title = 'Processi ';
+	$new_button = '<a href="./mod_inserisci.php?id=1&ANiD='.base64_encode($proprietario_id).'1" class="" style="color: gray"> <i class="fa fa-plus-circle"></i>  </a>';
+    $module_menu = '';
 
 
   	 if(isset($_GET['data_da']) && check($_GET['data_da']) != "" && check($_GET['data_a']) != "") { 
@@ -69,7 +72,7 @@
 
 	require('../../fl_core/class/ARY_dataInterface.class.php');
 	$data_set = new ARY_dataInterface();
-	$anagrafica =  $anagrafica_id = $data_set->data_retriever('fl_anagrafica','ragione_sociale',"WHERE id != 1",'ragione_sociale ASC');
+	$anagrafica =  $anagrafica_id = $data_set->data_retriever('fl_anagrafica','ragione_sociale',"WHERE id != 1  AND tipo_profilo = 0",'ragione_sociale ASC');
 	$sedi_id = $data_set->data_retriever('fl_sedi','sede,citta',"WHERE id != 1 AND anagrafica_id = $proprietario_id",'sede ASC');
 	$sedi_id[0] = 'Tutte';
 
@@ -101,8 +104,5 @@
 	return $type;
 	}
 	
-	$module_title = 'Processi '.$anagrafica[$proprietario_id];
-    $module_menu = '';
-
-
+	
 ?>

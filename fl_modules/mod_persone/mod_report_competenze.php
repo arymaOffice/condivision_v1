@@ -18,25 +18,25 @@ include("../../fl_inc/headers.php");
 
 ?>
  
-<body style=" background: rgb(241, 241, 241) none repeat scroll 0% 0%; text-align: left; padding: 20px;">
+<body style=" background: white none repeat scroll 0% 0%; text-align: left; padding: 20px;">
 
 <?php if($parent_id < 2) { echo '<h2>Salva la scheda prima di inserire le competenze.'; exit; } ?>
 <h1>Panoramica competenze</h1>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <div style="width: 25%; padding: 0; float: left; height: 200px; margin: 0 auto; text-align: center">
-		<div id="container-speed0" style="width:  200px; height: 200px; margin: 0 auto;"></div>
+		<div id="container-speed0" style="width:  220px; height: 200px; margin: 0 auto;"></div>
 </div>
 
 <div style="width: 25%; padding: 0; float: left; height: 200px; margin: 0 auto; text-align: center">
-		<div id="container-speed1" style="width:  200px; height: 200px; margin: 0 auto;"></div>
+		<div id="container-speed1" style="width:  220px; height: 200px; margin: 0 auto;"></div>
 </div>
 
 <div style="width: 25%; padding: 0; float: left;  height: 200px; margin: 0 auto; text-align: center">
-	<div id="container-speed2" style="width: 200px; height: 200px; margin: 0 auto;"></div>
+	<div id="container-speed2" style="width: 220px; height: 200px; margin: 0 auto;"></div>
 </div>
 <div style="width: 25%; padding: 0; float: left;   height: 200px; margin: 0 auto; text-align: center">
-	<div id="container-speed" style="width: 200px; height: 200px; margin: 0 auto;"></div>
+	<div id="container-speed" style="width: 220px; height: 200px; margin: 0 auto;"></div>
 </div>
 
 <div id="results"><?php if(isset($_GET['esito'])) echo '<h2 class="red">'.check($_GET['esito']).'</h2>'; ?></div>
@@ -347,8 +347,8 @@ $(function () {
 	
 });
 		</script>
-<script src="<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/highcharts/highcharts.js"></script>
-<script src="<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/highcharts/highcharts-more.js"></script>
-<script src="<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/highcharts/modules/solid-gauge.src.js"></script>
+<script src="../mod_report/js/highcharts.js"></script>
+<script src="../mod_report/js/highcharts-more.js"></script>
+<script src="../mod_report/js/modules/solid-gauge.src.js"></script>
 
 </body></html>

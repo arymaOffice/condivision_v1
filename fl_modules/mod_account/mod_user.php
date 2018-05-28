@@ -33,16 +33,4 @@ $id = (isset($_GET['id'])) ? check($_GET['id']) : $number;
 
 
 </form>
-
-<p>
-Versione: 2.1.2 |  Utente: <strong><?php echo $_SESSION['user']; ?></strong> |  IP: <?php echo $_SERVER['REMOTE_ADDR'] ?> | 
-<strong>GDPR 2016/679 Informativa sul trattamento dei dati riguardanti il vostro account</strong>
-L'accesso alla piattaforma è da intendersi personale ed esclusivamente riservato all'utente autorizzato. 
-Ne è vietata la riproduzione sotto ogni forma. La vostra password scade ogni 90 giorni e va reimpostata obbligatoriamente.
-In conformità ai requisiti del DL 196 del 30/6/2003, 
-si informa che ogni accesso, riconoscibile da IP e username, sarà registrato e potrà essere monitorato.
-Le attività eseguite nell'ambiente gestionale sono registrate per motivi di sicurezza.
-</p>
-
-
 </div>

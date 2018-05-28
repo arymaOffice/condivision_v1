@@ -5,7 +5,7 @@
 </form>
 
 <?php
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
+$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 
 // Controlli di Sicurezza
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}

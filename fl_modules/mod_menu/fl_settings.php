@@ -16,9 +16,16 @@
 	if(isset($_GET['modulo_id']) && is_numeric($_GET['modulo_id'])) { $modulo_id = check($_GET['modulo_id']);  } else {  $modulo_id = 0;}
 	if(isset($_GET['menu_id']) && is_numeric($_GET['menu_id'])) { $menu_id = check($_GET['menu_id']);  } else {  $menu_id = 0;}
 	
-	$module_title = 'Gestore dei Menù';
-    $module_menu = ' <li class=""><a href="./">Menù</a></li>';
-
+	$module_title = 'Impostazioni';
+    $module_menu = '
+	<ul>
+  	   <li class=""><a href="./">Sezioni</a></li>';
+        if(isset($sezione_id) && $sezione_id != 0) {  
+		$module_menu .= '<li class=""><a href="'.ROOT.$cp_admin.'fl_modules/mod_menu/mod_inserisci.php?id=1&item_rel='.$sezione_id.'&modulo_id='.$modulo_id.'&menu_id='.$menu_id.'" class="create_new"><i class="fa fa-plus-circle"></i>Nuovo Elemento</a></li>';
+		} else if($_SESSION['usertype'] == 0){
+	 	$module_menu .= '<li class=""><a href="'.ROOT.$cp_admin.'fl_modules/mod_menu/mod_inserisci.php?item_rel=0&amp;id=1&modulo_id='.$modulo_id.'&menu_id='.$menu_id.'" class="create_new"><i class="fa fa-plus-circle"></i>Nuovo Menù</a></li>';
+		}
+    $module_menu .= '</ul>';
 	
 	 
 	$tabella = $tables[$tab_id];

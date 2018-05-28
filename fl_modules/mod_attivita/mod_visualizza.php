@@ -17,7 +17,7 @@ include("../../fl_inc/testata_mobile.php");
 <br><br>
 
 <br><br>
-<h1>Dettaglio Attivit&agrave; |  <a href="mod_inserisci.php?id=<?php echo check($_GET['id']); ?>" class="noprint"><i class="fa fa-edit"></i></a> | <a href="#" class="noprint" onClick=" window.print();"><i class="fa fa-print"></i></a></h1>
+<h1>Dettaglio Attivit&agrave; <a href="#" class="noprint" onClick=" window.print();"><i class="fa fa-print"></i></a></h1>
 
 <?php include('../mod_basic/action_visualizza.php'); ?>
 

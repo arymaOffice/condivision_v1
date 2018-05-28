@@ -1,11 +1,35 @@
+<h1><?php echo $module_title.' '.$anagrafica[$proprietario_id].' '.$new_button; ?></h1>
 
-<?php 
+<?php if($proprietario_id < 2 || isset($_GET['intro'])) {  ?>
+<h2>Seleziona un account</h2>
+<form method="get" action="" id="dms_account_sel">
+
+<?php 			$selected = ($proprietario_id == 0) ? ' checked="checked"' : '';
+?>
+<input id="0" onClick="form.submit();" type="radio" name="cmy" value="0" <?php echo $selected; ?> />
+		
+ <?php
+			
+			 foreach($anagrafica as $valores => $label){ // Recursione Indici di Categoria
+			$selected = ($proprietario_id == $valores) ? ' checked="checked"' : '';
+			if($valores > 1){ echo '
+			<input id="'.$valores.'" onClick="form.submit();" type="radio" name="cmy" value="'.base64_encode($valores).'" '.$selected.' />
+			<label for="'.$valores.'"><i class="fa fa-user"></i><br>'.$label.'</label>'; }
+			}
+		 ?>
+      
+     <input type="hidden" name="a" value="amministrazione">
+     <input type="hidden" name="d" value="ZG9jdW1lbnRfZGFzaGJvYXJk">
+   
+</form>
+<?php } else { 
 
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
+$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 ?>
 
-     
+
+       
 
 <div id="filtri" class="filtri"> 
 
@@ -42,7 +66,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 <tr>
   <th style="width: 1%;"></th>
  <th><a href="./?ordine=1">Campagna</a></th>
-  <th>Tipo Campagna</th>
+  <th>Categoria Campagna</th>
   <th></th>
 </tr>
 <?php 
@@ -66,11 +90,11 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 			echo "<tr>"; 
 			$descrizione = ucfirst($riga['descrizione']);		
 			echo "<td ><span class=\"Gletter\"></span></td>"; 
-			echo "<td><span class=\"color\">$descrizione</span><br>".$anagrafica_id[$riga['anagrafica_id']]."</td>";
-			echo "<td class=\"hideMobile\">".@$tipo_campagna[$riga['tipo_campagna']]."</td>"; 
+			echo "<td><span class=\"color\"><a href=\"../mod_campagne_attivita/?campagna_id[]=".$riga['id']."\">$descrizione</a></span><br>".$anagrafica_id[$riga['anagrafica_id']]."</td>";
+			echo "<td class=\"hideMobile\"><span class=\"msg blue\">".$tipo_campagna[$riga['tipo_campagna']]."</span> ".@$categoria_campagna[$riga['categoria_campagna']]."</td>"; 
 			echo "<td  class=\"strumenti\">";
-			echo "<a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Gestione Cliente \"> <i class=\"fa fa-search\"></i> </a>
-			$elimina </td>";
+			if($_SESSION['usertype'] < 1) echo "<a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Gestione Cliente \"> <i class=\"fa fa-search\"></i> </a>	$elimina";
+			echo " </td>";
 		
 		    echo "</tr>"; 
 			}
@@ -80,3 +104,4 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 	
 
 ?>
+ <?php } ?>

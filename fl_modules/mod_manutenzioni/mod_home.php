@@ -1,14 +1,31 @@
 <?php
+
 // Controlli di Sicurezza
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
+
 ?>
 
-<div id="filtri" class="filtri"> 
+<h1><span class="intestazione">Interventi</span></h1>
+<?php
+	
+     
+$_SESSION['POST_BACK_PAGE'] = "//".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];;
 
-<form method="get" action="" id="fm_filtri">
- <h2> Filtri</h2> 
+	if(isset($_GET['ordine'])) { if(!is_numeric($_GET['ordine'])){ exit; } else { $ordine = $ordine_mod[$_GET['ordine']]; }}
+	
+	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,0);
+						
+	$query = "SELECT $select FROM `$tabella` $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
+	
+	$risultato = mysql_query($query,CONNECT);
+	
 
-   <label for="proprietario">ACCOUNT</label>
+		
+	?>
+       
+
+<form method="get" action="" id="sezione_select">
+    Punto vendita: 
       <select name="proprietario" id="proprietario" onchange="form.submit();">
       
       <option value="-1">Mostra Tutti</option>
@@ -21,9 +38,6 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 			}
 		 ?>
        </select>
-
-       
-       <label for="approvato">STATO</label>
        <select name="approvato" id="approvato"  onchange="form.submit();">
          <option value="-1">Mostra Tutto</option>
            	<?php 
@@ -34,7 +48,7 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 			}
 		 ?>
        </select>
-		<label for="data_da">periodo da</label>
+		periodo <label for="data_da">da</label>
        <input name="data_da" id="data_da" value="<?php echo $data_da_t; ?>" size="20" type="text" class="calendar" > 
        <label for="data_a">a</label>
        <input name="data_a" id="data_a" value="<?php echo $data_a_t;  ?>" size="20" type="text"  class="calendar" >
@@ -42,27 +56,6 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
     <input type="submit" value="Mostra" class="button" /> 
     </p>
 </form>
-</div>
-
-
-
-<?php
-	
-     
-	$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
-
-	if(isset($_GET['ordine'])) { if(!is_numeric($_GET['ordine'])){ exit; } else { $ordine = $ordine_mod[$_GET['ordine']]; }}
-	
-	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,1);
-						
-	$query = "SELECT $select FROM `$tabella` $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
-	
-	$risultato = mysql_query($query,CONNECT);
-	
-
-		
-	?>
-       
 
 
   
@@ -73,7 +66,7 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
        <th>Oggetto | <a href="./?ordine=3">Operatore</a></th>
        <th >Costo</th>
        <th></th>
-      <th></th>
+      
       
         <th ></th>
 
@@ -87,7 +80,7 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 
 	if(mysql_affected_rows() == 0) { echo "<tr><td colspan=\"7\">Nessun Record Inserito</td></tr>";		}
 
-	$entrate = 0;
+		$entrate = 0;
 	$uscite = 0;
 	$saldo = 0;
 	$saldo_parziale = 0;
@@ -111,16 +104,15 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 			if($urgenza == 4 ) $colore = "class=\"tab_red\""; 
 			if($urgenza == 5 ) $colore = "class=\"tab_red\""; 
 		
-			echo "<tr><td $colore></td>";
+			echo "<tr><td $colore><span class=\"Gletter\"></span></td>";
 
-			echo "<td><h2>".mydate($riga['data_creazione'])."</h2><span class=\"msg gray\">".$categoria_mnt[$riga['categoria_mnt']]."</span>
+			echo "<td><h1 style=\"margin-bottom: 5px;\">".mydate($riga['data_creazione'])."</h1><span class=\"msg green\">".$categoria_mnt[$riga['categoria_mnt']]."</span>
 			</td>";
 			echo "<td><a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"".$riga['descrizione']."\">".strtoupper($riga['oggetto'])."</a>
-			<br />".@$proprietario[$riga['proprietario']]." <i class=\"fa fa-".$approvato_icons[$riga['approvato']]."\"></i> ".$approvato[$riga['approvato']]."</td>";
+			<br />".$proprietario[$riga['proprietario']]." <i class=\"fa fa-".$approvato_icons[$riga['approvato']]."\"></i> ".$approvato[$riga['approvato']]."</td>";
 			echo "<td>&euro; ".@numdec($saldo_parziale,2)."</td>";
 			echo "<td><a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Modifica\" > <i class=\"fa fa-search\"></i> </a></td>"; 
-					echo "<td><a  href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a></td>"; 
-
+		
 
 		    echo "</tr>";
 	}
@@ -128,18 +120,18 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 
 	echo "<tr style=\"height: 30px;\"><td colspan=\"11\"></td></tr>";
 
-	 "<tr>"; 
+		if($i==1){ $i=0; echo "<tr>"; } else { $i=1; echo "<tr class=\"alternate\">"; }
 
 
-				echo "<td></td>";
-			echo "<td>Riepilogo</td>";
+				echo "<td>Riepilogo</td>";
+			echo "<td></td>";
 			echo "<td></td>";
 			echo "<td style=\"background: #E8FFE8; font-weight: bold;\" colspan=\"3\">Spesa: &euro; ".numdec($saldo,2)."</td>";
 	
 
 		    echo "</tr>";
 
-		echo "</table>";
+		echo "</table><h2>Interventi: ".mysql_affected_rows()."</h2>";
 
 
 ?>

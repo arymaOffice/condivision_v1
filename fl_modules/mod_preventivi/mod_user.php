@@ -5,13 +5,13 @@ require_once('../../fl_core/autentication.php');
 include('fl_settings.php');
 	
 $nochat = 1;
-include("../../fl_inc/headers.php");
+	include("../../fl_inc/headers.php");
 
-?>
+	?>
 
 
-<style type="text/css"> body { background: white;  }</style>
-<h2>Offerte</h2>   
+
+<h2>Preventivi</h2>   
 
 <?php
 
@@ -24,13 +24,11 @@ include("../../fl_inc/headers.php");
 ?> 
  
 
-<table class="dati" summary="Dati" style=" width: 95%;">
+<table class="dati" summary="Dati" style=" width: 100%;">
 <tr>
   <th style="width: 1%;"></th>
   <th>Estremi</th>
-  <th>Descrizione</th>
   <th>Offerta</th>
-  <th  class="hideMobile"></th>
 </tr>
 <?php 
 	
@@ -44,13 +42,14 @@ include("../../fl_inc/headers.php");
 	while ($riga = mysql_fetch_array($risultato)) 
 	{					
 		
-				if($riga['status_preventivo'] == 0) { $colore = "tab_orange";  }
-			if($riga['status_preventivo'] == 1) { $colore = "tab_blue";  }
-			if($riga['status_preventivo'] == 2) { $colore = "tab_blue";  }
-			if($riga['status_preventivo'] == 3) { $colore = "tab_red";  }
-			if($riga['status_preventivo'] == 4) { $colore = "tab_green";  }
-			if($riga['status_preventivo'] == 5) { $colore = "tab_red";  }
-			
+			if($riga['status_preventivo'] == 0) { $colore = "class=\"tab_orange\"";  }
+			if($riga['status_preventivo'] == 1) { $colore = "class=\"tab_blue\"";  }
+			if($riga['status_preventivo'] == 2) { $colore = "class=\"tab_red\"";  }
+			if($riga['status_preventivo'] == 3) { $colore = "class=\"tab_green\"";  }
+			if($riga['status_preventivo'] == 4) { $colore = "class=\"tab_red\"";  }
+			if($riga['status_preventivo'] == 5) { $colore = "class=\"tab_red\"";  }
+
+
 			$nextAction = get_nextAction(71,$riga['id']);
 			$nextAction = ($nextAction['id'] != NULL) ? '<i class="fa fa-share"></i>'.mydatetime($nextAction['data_aggiornamento']).' '.$nextAction['note'].'<br>' :  '<i class="fa fa-tags"></i>'.'Creato: '.mydate($riga['data_creazione']);
 
@@ -62,35 +61,29 @@ include("../../fl_inc/headers.php");
 			$scadenza = ($riga['data_scadenza'] == '0000-00-00') ? '-' :  mydate($riga['data_scadenza']);
 			echo "<tr>";
 			$nominativo = ($riga['cliente_id'] > 1) ? @$cliente_id[$riga['cliente_id']] : @$potential_id[$riga['potential_id']];		
-			$chiusura = "<strong>&euro; ".$riga['totale_preventivo']."</strong>";
 			$followup = get_followup(2,$riga['id']);
-			$inviaPdf = "<a data-fancybox-type=\"iframe\" class=\"facyboxParent\" href=\"mod_send.php?id=".$riga['id']."&lead_id=".$riga['potential_id']."&cliente_id=".$riga['cliente_id']."\" title=\"Invio Offerta\"><i class=\"fa fa-paper-plane-o\"></i></a>";
-
-			echo "<td class=\"$colore\"></td>"; 			
-			echo "<td><span class=\"\">
-			<h2><a title=\"Scheda Contatto\" href=\"../mod_leads/mod_inserisci.php?id=".$riga['potential_id']."\" target=\"_parent\">".checkValue($nominativo)."</a></h2>
-			</span>
-			<span class=\"\" style=\"font-size: 100%; \"><strong>P".substr($riga['data_creazione'],2,2)."-".str_pad($riga['id'],3,0,STR_PAD_LEFT)."-".strtoupper(@substr(trim($tipo_preventivo[$riga['tipo_preventivo']]),0,2))."</strong></span>";
-			echo "<br>";
-			echo "<span class=\"msg $colore\">".$status_preventivo[$riga['status_preventivo']]."</span> $attesa <span class=\"msg gray\" >".@$tipo_preventivo[$riga['tipo_preventivo']]."</span>
 			
-			<span title=\"".strip_tags(converti_txt($riga['note']))."\"></span>
+			echo "<td $colore></td>"; 			
+			echo "<td>".mydate($riga['data_apertura']).' '.$riga['marca'].' '.$riga['modello']." FPOWER-ID
+			<span class=\"msg \" style=\"font-size: 100%; \"><strong>".$riga['id_fordpower']."</strong></span>";
+			echo "<br>";
+			echo "$note <span class=\"msg gray\" >".@$tipo_preventivo[$riga['tipo_preventivo']]."</span><span class=\"msg orange\" >".@$categoria_preventivo[$riga['categoria_preventivo']]."</span>
 			</td>";
-			echo "<td class=\"hideMobile\">".$riga['oggetto_preventivo']." <br>".$nextAction."
-			<strong></strong></span>
-			</td>"; 
-			echo "<td style=\"background: #E8FFE8;\"><strong>&euro; ".$riga['totale_preventivo']."</strong></td>"; 
-			echo "<td  class=\"strumenti\"><a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Dettagli\" target=\"_parent\"> <i class=\"fa fa-search\"></i> </a>
-			<a data-fancybox-type=\"iframe\" class=\"facyboxParent\" href=\"mod_stampa.php?external&action=1&amp;id=".$riga['id']."\" title=\"Scheda di stampa\"> <i class=\"fa fa-print\"></i> </a>
- 			$inviaPdf $elimina</td>";
-			echo "<td  class=\"hideMobile\" style=\"font-size: smaller; text-align: right;\" title=\"Aggiornato da: ". @$proprietario[$riga['operatore']]."\"><br>AP. ".mydate($riga['data_preventivo'])."<br />SCAD. ".$scadenza."</td>";
+			/*echo "<td class=\"hideMobile\">".strip_tags(converti_txt($riga['note']))."
+			<br>".$nextAction."</td>"; */
+			echo "<td style=\"background: #E8FFE8;\"><strong>&euro; ".$riga['offerta']."</strong></td>"; 
+			
+ 			echo "<td  class=\"strumenti\">";
+			echo "<a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Dettagli\" data-fancybox-type=\"iframe\" class=\"fancybox_view\"> <i class=\"fa fa-search\"></i> </a>
+			</td>";//<a href=\"mod_inserisci.php?copy_record&amp;id=".$riga['id']."\" title=\"Copia\"  target=\"_parent\"><i class=\"fa fa-files-o\"></i></a>
+ 			//$elimina
+
 		    echo "</tr>"; 
 			
 	}
 
 	echo "</table>";
-	
 
 
 ?>
-<a href="javascript:location.reload();" class="button">Aggiorna Lista</a>
+

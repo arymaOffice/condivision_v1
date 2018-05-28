@@ -2,9 +2,10 @@
 
 // Controlli di Sicurezza
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
+$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 ?>
 
+<h1><?php echo $module_title.' '.$new_button; ?></h1>
 <div id="filtri" class="filtri"> 
 
 <form method="get" action="" id="fm_filtri">
@@ -47,7 +48,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 	  <th><a href="./?ordine=2">Oggetto</a></th>
 	  <th>Scadenza</th>  
       <th>Visualizza/Modifica</th>
-      <th>Stato</th>
+      <th>Fatto</th>
       
      </tr>';	
 	
@@ -71,13 +72,13 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 			$assegnata_a = ($riga['operatore'] == $_SESSION['number']) ? ' a te' : ' a '.ucfirst($operatore[$riga['operatore']]);
 			$assegnata_da = ($riga['proprietario'] == $_SESSION['number']) ? 'Assegnato da te ' : 'Assegnato da '.ucfirst($operatore[$riga['proprietario']]).'';
 			echo "<td $colore></td>"; 			
-			echo "<td><h2><a href=\"mod_visualizza.php?external&action=1&amp;id=".$riga['id']."\" title=\"Vedi\" > ".ucfirst($riga['oggetto'])."</h2></a>".$assegnata_da." ".$assegnata_a." il ".mydate($riga['data_avvio'])." $importante $urgente</td>";
+			echo "<td><h2><a data-fancybox-type=\"iframe\" class=\"fancybox_view\" href=\"mod_visualizza.php?external&action=1&amp;id=".$riga['id']."\" title=\"Vedi\" > ".ucfirst($riga['oggetto'])."</h2></a>".$assegnata_da." ".$assegnata_a." il ".mydate($riga['data_avvio'])." $importante $urgente</td>";
 			echo "<td><h3>$giorni</h3> ".mydate($riga['data_conclusione'])."</td>";  
 		
 			if($_SESSION['number'] ==  $riga['proprietario'] ) {
 				echo "<td><a href=\"mod_inserisci.php?external&action=1&amp;id=".$riga['id']."\" title=\"Modifica\" > <i class=\"fa fa-search\"> </a></td>";
 			} else {
-				echo "<td><a  href=\"mod_visualizza.php?external&action=1&amp;id=".$riga['id']."\" title=\"Vedi\" > <i class=\"fa fa-search\"> </a></td>";
+				echo "<td><a data-fancybox-type=\"iframe\" class=\"fancybox_view\" href=\"mod_visualizza.php?external&action=1&amp;id=".$riga['id']."\" title=\"Vedi\" > <i class=\"fa fa-search\"> </a></td>";
 
 			}
 			

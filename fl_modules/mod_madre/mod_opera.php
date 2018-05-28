@@ -5,11 +5,9 @@ include('fl_settings.php'); // Variabili Modulo
 
 
 // Modifica Stato se è settata $stato	
-if(isset($_GET['stato_prenotazione'])) { 
-$stato_prenotazione = check($_GET['stato_prenotazione']);
-$id = check($_GET['id']);
-$query1 = "UPDATE fl_prenotazioni SET stato_prenotazione = $stato_prenotazione WHERE `id` = $id";
-mysql_query($query1,CONNECT);	
+if(isset($_GET['faiqualcosa'])) { 
+
+	//fai qualcosa e torna a casa o restituisci JSON 
 }
 
 

@@ -13,8 +13,16 @@
 	$highslide = 0;
 	$text_editor = 0;
 	
-	$module_title = 'Aliquote IVA';
-	
+	$module_title = 'Registro Acessi';
+	if($_SESSION['usertype'] == 0) { 
+    $module_menu = '
+	<ul>
+	  <li><a href="./" class="">Lista Aliquote</a></li>
+   <li><a href="./mod_inserisci.php?id=1"><i class="fa fa-plus-circle"></i> Nuova Aliquota</a></li>
+
+    </ul>';
+	} 
+
 	
 	
 	include('../../fl_core/dataset/array_statiche.php');

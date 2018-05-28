@@ -1,13 +1,10 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 // Controllo Login
 session_start(); 
 if(!isset($_SESSION['user'])){ Header("Location: ../../login.php"); exit; }
-require('../../fl_core/core.php'); 
+if($_SESSION['idh'] != $_SERVER['REMOTE_ADDR']) { echo "Non autorizzato ".$_SESSION['idh']." NOT VALID ".$_SERVER['REMOTE_ADDR']; exit; }
+require('../../fl_core/settings.php'); 
 
 
 if(isset($_GET['cw'])) {
@@ -118,7 +115,7 @@ $file_name = (isset($_POST['RiD'])) ? $record_id.'_'.$source['name'] : $source['
 	
 
 /* Check Estensione */
- $info = pathinfo($source['name']); 
+$info = pathinfo($source['name']); 
 foreach($info as $key => $valore){ if($key == "extension") $ext = $info["extension"]; }
 if(!isset($ext)) error();
 if(in_array(strtolower($ext),$formati)){ error(); } 
@@ -126,14 +123,8 @@ if(isset($_POST['NAme'])) $file_name = base64_decode(check($_POST['NAme'])).'.'.
 
 
 /*Check Dir*/
-if(!@is_dir(DMS_ROOT.$folder.'/')) {  
-	if(!@mkdir(DMS_ROOT.$folder.'/',0777)) { 
-		return $esiti[7]; mysql_close(CONNECT);  exit; } 
-	}
-
-
-
-if(!is_writable(DMS_ROOT.$folder.'/')) {  return $esiti[9]; mysql_close(CONNECT); exit; }
+if(!@is_dir(DMS_ROOT.$folder.'/')) {  if(!@mkdir(DMS_ROOT.$folder.'/',0777)) { return $esiti[7]; mysql_close(CONNECT);  break; } }
+if(!is_writable(DMS_ROOT.$folder.'/')) {  return $esiti[9]; mysql_close(CONNECT); break; }
 if(file_exists(DMS_ROOT.$folder.'/'.$file_name)) {  $file_name = time().$file_name; }
 
 
@@ -141,26 +132,9 @@ if(is_uploaded_file($source['tmp_name'])){
 	if(move_uploaded_file($source['tmp_name'],DMS_ROOT.$folder.'/'.$file_name)){
 	$query = "INSERT INTO `fl_dms` (`id`, `resource_type`, `account_id`, `workflow_id`, `record_id`, `parent_id`, `label`, `descrizione`, `tags`, `file`, `lang`, `proprietario`, `operatore`, `data_creazione`, `data_aggiornamento`) 
 	VALUES (NULL, '1', '$account_id', '$workflow_id', '$record_id', '$folder', '$file_name', '$descrizione', '', '$file_name', 'it', '".$_SESSION['number']."', '".$_SESSION['number']."',NOW(),NOW());	";
-	if(mysql_query($query,CONNECT)){ 
-	
-	$descrizione_invio = (isset($_REQUEST['descrizione_invio'])) ? '<p>'.check($_REQUEST['descrizione_invio']).'</p>'  : ''; 
-	$allegato = (isset($_REQUEST['allega_invio'])) ? DMS_ROOT.$folder.'/'.$file_name : '';
-	$allegatoName = (isset($_REQUEST['allega_invio'])) ? $file_name : '';
-
-	if(isset($_REQUEST['notifica']) && $account_id > 1) $notifi = notifica(0,$_SESSION['number'],$account_id,'Nuovo file pubblicato sul cloud di '.client,'<div style="font-family:Helvetica;">'.$descrizione_invio.'<h4> File: '.$file_name.' </h4> <br>Sulla piattaforma puoi accedere alla risorsa pubblicata dopo aver eseguito il login. <br><a href="'.ROOT.'">Accedi da qui</a></div>',1,0,1,0,0,$allegato,$allegatoName);
-	mysql_close(CONNECT);
-	exit;
+	mysql_query($query,CONNECT);
 	
 	} else {
-	smail(mail_admin,'Errore Upload DMS su '.ROOT,$query.mysql_error());
-	mysql_close(CONNECT);
-	error();
-	}
-
-	
-	} else {
-	smail(mail_admin,'Errore Upload DMS su '.ROOT,"Erroe di move_uploaded_file");	
-	mysql_close(CONNECT);
 	error();
 	}
 	

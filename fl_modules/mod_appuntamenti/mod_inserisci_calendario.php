@@ -25,6 +25,8 @@ include("../../fl_inc/testata_mobile.php");
 <form id="scheda" action="../mod_basic/action_modifica.php" method="post" enctype="multipart/form-data">
 <?php include('../mod_basic/action_estrai.php');  ?>
 </form>
-
+<?php 
+if($id > 1) echo "<a  href=\"../mod_basic/action_elimina.php?POST_BACK_PAGE=".urlencode('../mod_appuntamenti/a=crm&action=17')."&gtx=$tab_id&amp;unset=".$id."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i> Elimina </a>";
+?>
 </div></body></html>
 </div></div></body></html>

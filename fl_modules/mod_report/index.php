@@ -11,6 +11,9 @@ include("../../fl_inc/headers.php");?>
 <?php include('../../fl_inc/module_menu.php'); ?>
 
 <?php /* Inclusione Pagina */
-if(isset($_GET['report'])) { include('mod_'.check($_GET['report']).'.php'); } else { include("mod_report.php"); 
+if(isset($_GET['report'])) { include('mod_'.check($_GET['report']).'.php'); } else { 
+
+
+include("mod_home.php"); 
 } 
 include("../../fl_inc/footer.php"); ?>

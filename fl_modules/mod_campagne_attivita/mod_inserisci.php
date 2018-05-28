@@ -7,15 +7,8 @@ $id = check($_GET['id']);
 
 include('fl_settings.php'); // Variabili Modulo 
 
-include("../../fl_inc/headers.php");
-include("../../fl_inc/testata_mobile.php");
  ?>
 
-
-
-
-<body style=" background: rgb(241, 241, 241) none repeat scroll 0% 0%;">
-<div id="container" >
 
 
 
@@ -37,4 +30,3 @@ include("../../fl_inc/testata_mobile.php");
 
 
 
-</div></body></html>

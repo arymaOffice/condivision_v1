@@ -1,10 +1,4 @@
 <?php $_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']; ?>
-<link href='<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/fullcalendar/fullcalendar.css' rel='stylesheet' />
-<link href='<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
-<script src='<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/fullcalendar/lib/moment.min.js'></script>
-<script src='<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/fullcalendar/fullcalendar.min.js'></script>
-<script src='<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/fullcalendar/lang/it.js'></script>
-
 <h1>Calendario <?php echo $proprietario[$proprietario_id]; ?></h1>  
   <div class="day_selector">
  
@@ -34,15 +28,27 @@
     </select> 
    <?php if($_SESSION['usertype'] == 0 || $_SESSION['profilo_funzione'] == 8) { ?>
 
- <label> Persona</label> 
-     <select name="proprietario" id="proprietario">
+  <label> Persona </label> 
+   <select name="proprietario" id="proprietario">
       <option value="-1">Tutti</option>
       <?php 
-             foreach($proprietario as $valores => $label){ // Recursione Indici di Categoria
-			$selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
+              
+			echo '<optgroup label="Operatori BDC">';  
+		     foreach($operatoribdc as $valores => $label){ // Recursione Indici di Categoria
+			$selected = ($proprietario_id == $valores) ? " selected=\"selected\"" : "";
 			 echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; 
 			}
 
+			echo '<optgroup label="Digital">';  
+		     foreach($operatoridgt as $valores => $label){ // Recursione Indici di Categoria
+			$selected = ($proprietario_id == $valores) ? " selected=\"selected\"" : "";
+			 echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; 
+			}
+	 		echo '<optgroup label="Venditori">';  
+			    foreach($venditore as $valores => $label){ // Recursione Indici di Categoria
+			$selected = ($proprietario_id == $valores) ? " selected=\"selected\"" : "";
+			 echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; 
+			}
 		 ?>
     </select> 
       
@@ -77,7 +83,7 @@
 	$meetings = '';
 	while ($riga = mysql_fetch_array($risultato)) 
 	{
-	$potential = GRD($tables[106],$riga['potential_rel']);
+	$potential = GRD('fl_potentials',$riga['potential_rel']);
 	$meetings .= "
 					{
 					title: '".$potential['nome']." ".$potential['cognome']." [".$proprietario[$riga['proprietario']]."]',
@@ -105,6 +111,11 @@
 					},";
 } ?>
 <br class="clear" />
+<link href='fullcalendar/fullcalendar.css' rel='stylesheet' />
+<link href='fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
+<script src='fullcalendar/lib/moment.min.js'></script>
+<script src='fullcalendar/fullcalendar.min.js'></script>
+<script src='fullcalendar/lang/it.js'></script>
 
 		<script>
 	$(document).ready(function() {

@@ -12,7 +12,6 @@
 	$fancybox = 1;
 	$searchbox = 'Ricerca richiesta';
 	$calendar = 1;
-	$filtri = 1;
 	$documentazione_auto = 18;
 	$tabs_div = 0;
 
@@ -20,17 +19,14 @@
 
 	$module_title = 'Registro Manutenzioni ';
     $module_menu = '
+	<ul>
   	   <li class=""><a href="./">Richieste  <span class="subcolor">Manutenzione </span></a>      </li>
- 
-     ';
+	   <li><a href="./mod_inserisci.php?external&action=1&id=1"> Nuova  <i class="fa fa-plus-circle"></i></a></li>
+     
+	 
+     </ul>';
 		
-	if(isset($_GET['proprietario']) && check(@$_GET['proprietario']) != -1 && check(@$_GET['proprietario']) != ''  && $_SESSION['usertype'] == 0) { 
-		$proprietario_id = check($_GET['proprietario']); 
-	} else {  $proprietario_id = -1; }
-	if( $_SESSION['usertype'] > 1) $proprietario_id = $_SESSION['number']; 
-
-
-
+	if(isset($_GET['proprietario']) && check(@$_GET['proprietario']) != -1 && check(@$_GET['proprietario']) != ''  && $_SESSION['usertype'] == 0) { $proprietario_id = check($_GET['proprietario']); } else {  $proprietario_id = -1; }
 	if(isset($_GET['approvato'])) { $approvato_id = check($_GET['approvato']);} else { $approvato_id = -1; }
 
   	 if(isset($_GET['data_da']) && check($_GET['data_da']) != "" && check($_GET['data_a']) != "") { 
@@ -47,7 +43,7 @@
 	 }
 	
 	/* Tipologie di ordinamento disponobili */
-    $ordine_mod = array("data_creazione DESC","data_creazione DESC","categoria_mnt ASC","proprietario DESC");
+    $ordine_mod = array("data_aggiornamento DESC","data_creazione DESC","categoria_mnt ASC","proprietario DESC");
 	$ordine = $ordine_mod[0];	
 	
 	/* RICERCA */
@@ -77,7 +73,7 @@
 		
 	function select_type($who){
 	$textareas = array("note","descrizione"); 
-	$select = array("proprietario","categoria_mnt","lang","percorso");
+	$select = array("fornitore","proprietario","categoria_mnt","lang","percorso");
 	$disabled = array("operatore");
 	$hidden = array('urgenza',"operatore","status","data_aggiornamento");
 	$radio  = array('eseguito');	

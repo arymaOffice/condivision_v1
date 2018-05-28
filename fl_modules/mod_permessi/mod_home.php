@@ -37,7 +37,7 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 	
 	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,0);
 						
-	$query = "SELECT $select FROM `$tabella` $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
+	echo $query = "SELECT $select FROM `$tabella` $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
 	
 	$risultato = mysql_query($query, CONNECT);
 	

@@ -1,7 +1,8 @@
+<h1><?php echo $module_title.' '.$new_button; ?></h1>
 
 
 <?php
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
+$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 

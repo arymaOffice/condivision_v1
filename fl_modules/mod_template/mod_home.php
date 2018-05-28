@@ -1,4 +1,5 @@
 
+<h1><?php echo $module_title.' '.$new_button; ?></h1>
 
 
  <?php 
@@ -7,6 +8,17 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 
 
 
+ <div class="filtri">
+     
+      </div>
+ 
+ <p style="clear: both; text-align: left;"> 
+ <a href="../mod_sms/"  style=" padding: 8px 20px;  font-size: 100%;" class="button">Archivio SMS</a> 
+ <a href="../mod_sms/?action=24"  style=" padding: 8px 20px;  font-size: 100%;" class="button">Report SMS</a> 
+ 
+ </p>
+
+      
 <?php
 	
 
@@ -22,16 +34,15 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
  
   
   	 <table class="dati" summary="Dati" style=" width: 100%;">
-    
-     <tr>
+        <tr>
      <th scope="col"></th>
-     <th scope="col">Tipo</th>
-     <th scope="col">Oggetto</th>
-     <th scope="col">Mittente</th>
-     <th scope="col">Contenuto</th>
-     <th scope="col">Inviati</th>
-     <th scope="col"></th>
-     </tr>
+       <th scope="col">Oggetto</th>
+       <th scope="col">Mittente</th>
+        <th scope="col">Contenuto</th>
+    <th scope="col">Inviati</th>
+    <th scope="col"></th>
+
+      </tr>
 	<?php 
 
 
@@ -43,18 +54,20 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 	{
 		
 
-	 $invii = mk_count('fl_sms'," template = ".$riga['id']);
+	 $invii = CREST('fl_sms'," template = ".$riga['id']);
 	 $colore = "class=\"tab_blue\"";  
-	 $text_editOption = ($riga['tipo_template'] > 1) ? '&tipo_template=2' : '';
-
+		
 			echo "<tr ><td $colore><span class=\"Gletter\"></span></td>";
-			echo "<td><span class=\"msg blue\">".$tipo_template[$riga['tipo_template']]."</span></td>";  
+//			echo "<td><span class=\"msg blue\">".$tipo_template[$riga['tipo_template']]."</span></td>";  
 			echo "<td><strong>".$riga['oggetto']."</strong></td>"; 
-			echo "<td>".$mittente[$riga['mittente']]."</td>"; 
-			echo "<td>".strip_tags(converti_txt($riga['messaggio']))."</td>"; 
+			echo "<td>".@$mittente[$riga['mittente']]."</td>"; 
+			echo "<td>".$riga['messaggio']."</td>"; 
 			echo "<td><strong><a href=\"../mod_sms/?template=".$riga['id']."\">".$invii."</a></strong></td>"; 
-		    echo "<td><a href=\"mod_inserisci.php?id=".$riga['id']."$text_editOption\" title=\"Gestione \"> <i class=\"fa fa-search\"></i><a href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Delete\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a></td>"; 
+
 			
+		    echo "<td><a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Gestione \"> <i class=\"fa fa-search\"></i><a href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Delete\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a></td>"; 
+		
+				
 		    echo "</tr>";
 			
 			

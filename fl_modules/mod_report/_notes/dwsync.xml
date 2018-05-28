@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="fl_settings.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130838645139716819" remote="130838645400000000" Dst="2" />
-<file name="index.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130911070941219037" remote="130911070800000000" Dst="1" />
-<file name="pin.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130911102334324620" remote="130911102000000000" Dst="1" />
-<file name="ricarica.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130911102131853039" remote="130911102000000000" Dst="1" />
-<file name="conferma.php" server="ftp.goservizi.it:2121/goservizi.it/html/" local="130911102749348358" remote="130911102600000000" Dst="1" />
+<file name="fl_settings.php" server="ftp.etlapp.com/public_html/" local="130647606210753778" remote="130674473400000000" Dst="1" />
+<file name="index.php" server="ftp.etlapp.com/public_html/" local="130674487361607095" remote="130674472800000000" Dst="1" />
+<file name="mod_home.php" server="ftp.etlapp.com/public_html/" local="130614121162399818" remote="130613869200000000" Dst="1" />
+<file name="mod_inserisci.php" server="ftp.etlapp.com/public_html/" local="130620857255678395" remote="130620604800000000" Dst="1" />
+<file name="mod_opera.php" server="ftp.etlapp.com/public_html/" local="130609723133230570" remote="130609505400000000" Dst="1" />
+<file name="mod_recruiters.php" server="ftp.etlapp.com/public_html/" local="130674505911904500" remote="130674472800000000" Dst="1" />
+<file name="mod_personal.php" server="vps6874.mondoserver.com:2121/public_html/" local="130899246228854767" remote="130899246000000000" Dst="2" />
+<file name="fl_settings.php" server="vps6874.mondoserver.com:2121/public_html/" local="130899242000992948" remote="130899241800000000" Dst="2" />
+<file name="mod_fatturati.php" server="vps6874.mondoserver.com:2121/public_html/" local="130899246327970437" remote="130899246000000000" Dst="2" />
 </dwsync>

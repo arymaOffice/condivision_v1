@@ -1,9 +1,10 @@
 <?php
 // Controllo Login
 session_start(); 
-require_once('../../fl_core/core.php'); 
+require_once('../../fl_core/settings.php'); 
 
-$rcx = check($_SERVER['HTTP_REFERER']);
+
+$rcx = $_SERVER['HTTP_REFERER'];
 
 
 if (isset($_GET['step'])) 
@@ -15,6 +16,11 @@ $_SESSION['step'] = check($_GET['step']);
 if (isset($_GET['ordine_type'])) 
 {   
 $_SESSION['ordine_type'] = check($_GET['ordine_type']);
+}
+
+if (isset($_GET['ordine_mode'])) 
+{   
+$_SESSION['ordine_mode'] = check($_GET['ordine_mode']);
 }
 
 

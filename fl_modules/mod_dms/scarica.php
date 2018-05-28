@@ -1,7 +1,9 @@
 <?php
 
 // Controllo Login
-require_once('../../fl_core/autentication.php');
+session_start(); 
+if(!isset($_SESSION['user'])){ header("Location: ../../login.php"); exit; }
+require('../../fl_core/settings.php');
 
 $dir_files =  DMS_ROOT.base64_decode(check($_GET['d']))."/";
 $file = base64_decode(check($_GET['f']));

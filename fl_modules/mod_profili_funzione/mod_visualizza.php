@@ -11,7 +11,7 @@ include("../../fl_inc/headers.php"); ?>
 
 
 
-<h2>Scheda profilo <a href="#" class="noprint" onClick=" window.print();"><i class="fa fa-print"></i></a></h2>
+<h1>Scheda Stampa <a href="#" class="noprint" onClick=" window.print();"><i class="fa fa-print"></i></a></h1>
 
 <?php include('../mod_basic/action_visualizza.php'); ?>
 

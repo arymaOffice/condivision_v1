@@ -1,7 +1,10 @@
 <?php 
 
-require_once('../../fl_core/autentication.php');
-include('fl_settings.php'); // Variabili Modulo 
+// Controllo Login
+session_start(); 
+if(!isset($_SESSION['user'])){ header("Location: ../../login.php"); exit; }
+if($_SESSION['idh'] != $_SERVER['REMOTE_ADDR']) { echo "Non autorizzato ".$_SESSION['idh']." NOT VALID ".$_SERVER['REMOTE_ADDR']; exit; }
+require('../../fl_core/settings.php'); 
 
 
 
@@ -21,7 +24,7 @@ mysql_query($query,CONNECT);
 }
 
 mysql_close(CONNECT);
-header("Location: ".$_SERVER['HTTP_REFERER']); 
+header("Location: ".check($_SERVER['HTTP_REFERER'])); 
 exit;
 					
 ?>  

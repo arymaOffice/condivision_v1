@@ -3,7 +3,6 @@
 require_once('../../fl_core/autentication.php');
 require_once('../mod_profili_funzione/fl_settings.php');
 
-$root = $data_set->data_retriever('fl_profili_funzione','funzione',"WHERE id != 1 AND dipendenza < 2 AND anagrafica_id = $proprietario_id",'funzione ASC');
 
 ?>
 <!DOCTYPE html>
@@ -48,13 +47,13 @@ $root = $data_set->data_retriever('fl_profili_funzione','funzione',"WHERE id != 
 	 function show_person(id)
     {
 		  $.fancybox({
-            'width': '60%',
+            'width': '90%',
             'height': '50%',
-            'autoScale': true,
+            'autoScale': false,
             'transitionIn': 'fade',
             'transitionOut': 'fade',
             'type': 'iframe',
-            'href': '../mod_persone/mod_visualizza.php?id='+id
+            'href': '../mod_persone/mod_visualizza.php?id=3'
         });
     }
 	
@@ -63,7 +62,7 @@ $root = $data_set->data_retriever('fl_profili_funzione','funzione',"WHERE id != 
 	 function openit(id)
     {
 		  $.fancybox({
-            'width': '60%',
+            'width': '80%',
             'height': '50%',
             'autoScale': true,
             'transitionIn': 'fade',
@@ -77,7 +76,7 @@ $root = $data_set->data_retriever('fl_profili_funzione','funzione',"WHERE id != 
     {
 		       
 		  $.fancybox({
-            'width': '60%',
+            'width': '80%',
             'height': '60%',
             'autoScale': true,
             'transitionIn': 'fade',
@@ -157,7 +156,7 @@ $(document).ready(function ()
 <?php } else { 
 
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
+$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 ?>
 
 
@@ -181,37 +180,69 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
             </div>
         </div>
     </div>
-
-     <?php 
-   
-    function getLi($relation,$proprietario_id) {
-
-    $query = "SELECT * FROM fl_profili_funzione WHERE id != 1 AND dipendenza = $relation AND anagrafica_id = $proprietario_id ORDER BY id ASC";
-    $risultato = mysql_query($query,CONNECT);
-    while ($riga = mysql_fetch_array($risultato))  { 
-    $riga['abbreviazione'] = ($riga['abbreviazione'] != '') ? $riga['abbreviazione'] : 'Profilo';
     
-        echo '<li><span class="position-code">
-        <a onclick="openit('.$riga['id'],');" href="#">'.$riga['abbreviazione'].'</a></span><br>
-        <a onclick="show_person('.$riga['id'].');" href="#">'.$riga['funzione'].'</a>
-        <a onclick="inserisci('.$riga['id'].');" href="#" class="addnew">+</a>';
-        echo '<ul>';
-        getLi($riga['id'],$proprietario_id);
-        echo '</ul>';
-        echo '</li>';
-     } }
-
-
-?>
-
-
-<ul id="org" style="display:none">
-    <?php foreach($root as $chiave => $valore) { ?>
-    <li><span class="position-code"><?php echo $valore; ?></span><br>
-    <ul><?php getLi($chiave,$proprietario_id); ?></ul>        
-    </li>
-    <?php } ?>
-</ul>            
+    <ul id="org" style="display:none">
+    <?php 
+	$root = $data_set->data_retriever('fl_profili_funzione','funzione',"WHERE id != 1 AND dipendenza < 2 AND anagrafica_id = $proprietario_id",'funzione ASC');
+	foreach($root as $chiave => $valore) { ?>
+        <li><span class="position-code"><?php echo $valore; ?></span><br>
+          <ul>
+          <?php 
+	 $query = "SELECT * FROM fl_profili_funzione WHERE id != 1 AND dipendenza = $chiave AND anagrafica_id = $proprietario_id ORDER BY id ASC";
+          $risultato = mysql_query($query,CONNECT);
+		  while ($riga = mysql_fetch_array($risultato))  { ?>
+          <li><span class="position-code"><a  onclick="openit(<?php echo $riga['id']; ?>);" href="#"><?php echo $riga['abbreviazione']; ?></a></span><br>
+              <a  onclick="show_person(2);" href="#">Massimo Favia</a>
+              <a  onclick="inserisci(<?php echo $riga['id']; ?>);" href="#" class="addnew">+</a>
+               <ul>
+          <?php 
+	 	  $query2 = "SELECT * FROM fl_profili_funzione WHERE id != 1 AND dipendenza = ".$riga['id']." AND anagrafica_id = $proprietario_id ORDER BY id ASC";
+          $risultato2 = mysql_query($query2,CONNECT);
+		  while ($riga2 = mysql_fetch_array($risultato2))  { ?>
+          <li><span class="position-code"><a  onclick="openit(<?php echo $riga2['id']; ?>);" href="#"><?php echo $riga2['abbreviazione']; ?></a></span><br>
+              <a  onclick="show_person(2);" href="#">Massimo Favia</a>
+              <a  onclick="inserisci(<?php echo $riga2['id']; ?>);" href="#" class="addnew">+</a>
+                <ul>
+          <?php 
+	 	  $query3 = "SELECT * FROM fl_profili_funzione WHERE id != 1 AND dipendenza = ".$riga2['id']." AND anagrafica_id = $proprietario_id ORDER BY id ASC";
+          $risultato3 = mysql_query($query3,CONNECT);
+		  while ($riga3 = mysql_fetch_array($risultato3))  { ?>
+          <li><span class="position-code"><a  onclick="openit(<?php echo $riga3['id']; ?>);" href="#"><?php echo $riga3['abbreviazione']; ?></a></span><br>
+              <a  onclick="show_person(2);" href="#">Massimo Favia</a>
+              <a  onclick="inserisci(<?php echo $riga3['id']; ?>);" href="#" class="addnew">+</a>
+                      <ul>
+          <?php 
+	 	  $query4 = "SELECT * FROM fl_profili_funzione WHERE id != 1 AND dipendenza = ".$riga3['id']." AND anagrafica_id = $proprietario_id ORDER BY id ASC";
+          $risultato4 = mysql_query($query4,CONNECT);
+		  while ($riga4 = mysql_fetch_array($risultato4))  { ?>
+          <li><span class="position-code"><a  onclick="openit(<?php echo $riga4['id']; ?>);" href="#"><?php echo $riga4['abbreviazione']; ?></a></span><br>
+              <a  onclick="show_person(2);" href="#">Michele Fazio</a>
+              <a  onclick="inserisci(<?php echo $riga4['id']; ?>);" href="#" class="addnew">+</a>
+                   <ul>
+          <?php 
+	 	  $query5 = "SELECT * FROM fl_profili_funzione WHERE id != 1 AND dipendenza = ".$riga4['id']." AND anagrafica_id = $proprietario_id ORDER BY id ASC";
+          $risultato5 = mysql_query($query5,CONNECT);
+		  while ($riga5 = mysql_fetch_array($risultato5))  { ?>
+          <li><span class="position-code"><a  onclick="openit(<?php echo $riga5['id']; ?>);" href="#"><?php echo $riga5['abbreviazione']; ?></a></span><br>
+              <a  onclick="show_person(2);" href="#">Michele Fazio</a>
+              <a  onclick="inserisci(<?php echo $riga5['id']; ?>);" href="#" class="addnew">+</a>
+          </li>
+         <?php } ?>
+         </ul>
+          </li>
+         <?php } ?>
+         </ul>
+          </li>
+         <?php } ?>
+         </ul>
+          </li>
+         <?php } ?>
+         </ul>
+          </li>
+         <?php } ?>
+         </ul>
+      </li><?php } ?>
+   </ul>            
     
     <div id="chart" class="orgChart"></div>
     

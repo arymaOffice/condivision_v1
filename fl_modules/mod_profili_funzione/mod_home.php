@@ -10,7 +10,7 @@
 			
 			 foreach($anagrafica as $valores => $label){ // Recursione Indici di Categoria
 			$selected = ($proprietario_id == $valores) ? ' checked="checked"' : '';
-			if($valores == 2){ echo '
+			if($valores > 1){ echo '
 			<input id="'.$valores.'" onClick="form.submit();" type="radio" name="cmy" value="'.base64_encode($valores).'" '.$selected.' />
 			<label for="'.$valores.'"><i class="fa fa-user"></i><br>'.$label.'</label>'; }
 			}
@@ -23,10 +23,12 @@
 <?php } else { 
 
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
+$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 ?>
 
+<h1><?php echo $module_title.' '.$anagrafica[$proprietario_id].' '.$new_button; ?><!--<span style="font-size: 60%;">[<a href="./?intro&a=management">CAMBIA</a>]</span>--></h1>
 
+       
 
 
 <div class="filtri" id="filtri"> </div>
@@ -68,7 +70,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 	while ($riga = mysql_fetch_array($risultato)) 
 	{
 	
-	$sedis =  getMultiItems($riga['sedi_id'],$sedi_id);
+	$sedis =  '';//getMultiItems($riga['sedi_id'],$sedi_id);
 	
 	
 	echo "<tr>"; 	

@@ -3,9 +3,7 @@
 require_once('../../fl_core/autentication.php');
 
 include('fl_settings.php'); // Variabili Modulo 
-$text_editor = 2;
-$nochat = 1;
-if(isset($_GET['potential_rel'])) $_SESSION['destinatari'] = array(check($_GET['potential_rel']));
+unset($chat);
 
 include("../../fl_inc/headers.php");
 
@@ -44,87 +42,67 @@ $messaggio = '';
 
 {  ?>
 
-
-<form id="caricaTemplate" class="loadData" action="../mod_template/mod_opera.php" method="post">
-<select name="template" id="template" style="width: 50%; float: left; clear:  none;" >
-           
-           <option value="-1">Scegli..</option>
-			<?php 
-              
-		     foreach($templateEMAIL as $valores => $label){ // Recursione Indici di Categoria
-			$selected = ($status_potential_id == $valores) ? " selected=\"selected\"" : "";
-			 echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; 
-			}
-		 ?>
-       </select>
-       <input type="submit" value="Carica Template" />
-</form>
-
-<br class="clear">
-
-
-
-<div id="results"></div>
-
-<form id="modulo" action="mod_opera.php" method="post" enctype="multipart/form-data" style="width: 90%; margin: 0 auto;">
+<form id="" action="mod_opera.php" method="post" enctype="multipart/form-data" style="width: 90%; margin: 0 auto;">
 
 <h1><strong>Invia Messaggio Email a:</strong> <?php 
     $noway = 0;
-	
+	$destinatari = '';
 	if(isset($_SESSION['destinatari'])){ 
-	
-	$query = "SELECT id,telefono,email,nome,cognome FROM `$tabella` WHERE `id` IN (" . implode(',', array_map('intval', $_SESSION['destinatari'])) . ") ;";
+	$query = "SELECT id,telefono,email FROM `fl_potentials` WHERE `id` IN (" . implode(',', array_map('intval', $_SESSION['destinatari'])) . ") ;";
 	} else {
-	//$query = "SELECT $select FROM `$tabella` $tipologia_main;";
-	die('Funzione invio massivo non abilitata. Contatta il supporto tecnico.');
-	}
-
+	$query = "SELECT $select FROM `$tabella` $tipologia_main;";
+	}	
+	
 	$risultato = mysql_query($query, CONNECT);
 	while ($riga = mysql_fetch_array($risultato)) 
 	{
 		if(strlen($riga['email']) > 5) { $destinatari[] =  $riga['id']; } else { $noway++;}
 	}
-	echo mysql_affected_rows()-$noway;
+	echo $invii = mysql_affected_rows()-$noway.mysql_error();
 
  ?> persone <?php if( $noway > 0) echo  '('.$noway.' senza email)'; ?></h1>
-<p>da: <?php echo mail_user; ?></p>
-<?php foreach($destinatari as $destinatario_id){ ?>
+<p>da: <?php echo $_SESSION['mail']; ?></p>
+<?php 
+
+if($invii > 0) { 
+
+foreach(@$destinatari as $destinatario_id){ ?>
 <input type="hidden" name="destinatario[]" value="<?php echo $destinatario_id; ?>">
-<?php } ?>
-
-
-
+<?php }  ?>
 
 <p class="input_text">
-<input id="oggetto" type="text" value="Comunicazione" name="oggetto" placeholder="Oggetto"></input>
+<input id="oggetto" type="text" value="" name="oggetto" placeholder="Oggetto"></input>
 </p>
 
+<p class="input_text">
+<textarea name="messaggio" id="messaggio" placeholder="Scrivi un messaggio..." style="height: 100px;" onkeyup="$('#info').html(this.value.length+' caratteri');"><?php $messaggio; ?></textarea>
+<span id="info"></span></p>
 
 <p class="insert_tags">Inserisci tag: 
-<a href="#" onclick="tinyMCE.execCommand('mceInsertContent',false,'[nome]'); return false;">[nome]</a>
-<a href="#" onclick="tinyMCE.execCommand('mceInsertContent',false,'[cognome]'); return false;">[cognome]</a>
+<a href="#" onclick="insertAtCaret('messaggio',' [nome] ');return false;">[nome]</a>
+<a href="#" onclick="insertAtCaret('messaggio',' [modello_vettura_permuta] ');return false;">[modello_vettura_permuta] </a>
+<a href="#" onclick="insertAtCaret('messaggio',' [vettura_di_interesse] ');return false;">[vettura_di_interesse] </a>
+<a href="#" onclick="insertAtCaret('messaggio',' [prezzo_vettura] ');return false;">[prezzo_vettura] </a>
+<a href="#" onclick="insertAtCaret('messaggio',' [valore_permuta] ');return false;">[valore_permuta] </a>
+<a href="#" onclick="insertAtCaret('messaggio',' [nome_bdc] ');return false;">[nome_bdc] </a>
+<a href="#" onclick="insertAtCaret('messaggio',' [cellulare_bdc] ');return false;">[cellulare_bdc] </a>
+
 
 <?php foreach($tag_sms as $chiave => $valore) {
 	$infotag = GRD('fl_items',$chiave);
-	if($chiave > 1) echo "<a href=\"#\" onclick=\"tinyMCE.execCommand('mceInsertContent',false,'".$infotag['descrizione']."'); return false;\"> ".$infotag['label']." </a>";
+	if($chiave > 1) echo "<a href=\"#\" onclick=\"insertAtCaret('messaggio',' ".$infotag['descrizione']." ');return false;\"> ".$infotag['label']." </a>";
 	} ?>
 </p>
-
-
-
-<p class="input_text">
-<textarea name="messaggio" id="messaggio"  class="mceEditor"  placeholder="Scrivi un messaggio..." style="height: 100px;" onkeyup="$('#info').html(this.value.length+' caratteri');"><?php $messaggio; ?></textarea>
-<span id="info"></span></p>
-
-
 <input type="hidden" name="inviaEmail" value="1">
 
-<input type="submit" value="Invia Email" class="button salva" onClick="$('#results').html('<div class=\'esito green\'> Invio in corso</div>'); $(this).hide(); $('body,html').animate({scrollTop: 0}, 800); " />
+<input type="submit" value="Invia Email" class="button salva" onClick="$('#results').html('Invio in corso'); $(this).hide();" />
 <br>
 </form>
-<?php } 
+<?php } else {  echo "<h1 class=\"red\">Nessun destinatario con una mail valida!</h1>"; }
 
-unset($_SESSION['destinatari']);
+} 
+
+
 mysql_close(CONNECT);
 ?>
 

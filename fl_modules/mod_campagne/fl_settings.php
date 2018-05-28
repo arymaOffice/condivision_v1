@@ -20,11 +20,14 @@
 	$documentazione_auto = 18;
 	$tabella = $tables[$tab_id];
 
-	$module_title = 'Canali CRM';
+	if(!isset($_SESSION['proprietario_id'])) $_SESSION['proprietario_id'] = 0;
+	if(isset($_GET['cmy'])) $_SESSION['proprietario_id'] = check(base64_decode($_GET['cmy']));
+	$proprietario_id = ($_SESSION['usertype'] > 1) ? $_SESSION['anagrafica'] : $_SESSION['proprietario_id'];
+
+
+	$module_title = 'Campagne';
 	$new_button = '<a href="./mod_inserisci.php?id=1&ANiD='.base64_encode($proprietario_id).'1" class="" style="color: gray"> <i class="fa fa-plus-circle"></i>  </a>';
-    $module_menu = ' <li class=""><a href="'.ROOT.$cp_admin.'fl_modules/mod_items/">Liste Parametri </a></li>
-    <li class=""><a href="'.ROOT.$cp_admin.'fl_modules/mod_campagne/">Canali CRM</a></li>
-    <li class=""><a href="'.ROOT.$cp_admin.'fl_modules/mod_campagne_attivita/">Attività CRM</a></li>';
+    $module_menu = '';
 
 
 		
@@ -49,7 +52,7 @@
 	
 	/* RICERCA */
 	$tipologia = 0;
-	$tipologia_main = "WHERE id != 1";
+	$tipologia_main = "WHERE id != 1 AND anagrafica_id = $proprietario_id ";
 	if(@$sezione != "") $tipologia_main .= $sezione;	
 	if(@$where != "") $tipologia_main .= $where;
 
@@ -64,18 +67,22 @@
 		
 	/* Inclusioni Oggetti Categorie */	
 	include('../../fl_core/dataset/array_statiche.php');
+	include('../../fl_core/dataset/stato.php');
+	include('../../fl_core/dataset/provincia.php');
 	require('../../fl_core/class/ARY_dataInterface.class.php');
 	$data_set = new ARY_dataInterface();
-	$anagrafica =  $anagrafica_id = $data_set->data_retriever('fl_anagrafica','ragione_sociale',"WHERE id != 1",'ragione_sociale ASC');
-	$tipo_campagna = array('Offline','Online');
+	$anagrafica =  $anagrafica_id = $data_set->data_retriever('fl_anagrafica','ragione_sociale',"WHERE id != 1 AND tipo_profilo = 0",'ragione_sociale ASC');
+	$anagrafica[1] = "Globale";
+	$categoria_campagna = $data_set->get_items_key('categoria_campagna');
+	$tipo_campagna = array('Lead Generation','Upselling','QoS');
 	
 	
 	function select_type($who){		
 	/* Gestione Oggetto Statica */	
 	$textareas = array("note"); 
-	$select = array('tipo_campagna','stato','provincia','anagrafica_id');
+	$select = array('tipo_campagna','categoria_campagna','stato','provincia');
 	$disabled = array("visite");
-	$hidden = array('anagrafica_id','icona','operatore','data_aggiornamento','data_creazione');
+	$hidden = array('operatore','data_aggiornamento','data_creazione','anagrafica_id');
 	$radio = array("catalogo");
 	$text = array();
 	if($_SESSION['usertype'] > 0){

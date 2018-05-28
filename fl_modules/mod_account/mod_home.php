@@ -1,5 +1,5 @@
 
-
+<h1><?php echo $module_title.' '.$new_button; ?></h1>
 <div class="filtri" id="filtri"> 
 
 <form method="get" action="" id="fm_filtri">
@@ -40,10 +40,8 @@
 
 	if($_SESSION['usertype'] == 0) {
 
-	if(isset($_GET['ordine'])) { if(!is_numeric($_GET['ordine'])){ exit; } else { $ordine = $ordine_mod[$_GET['ordine']]; }}
 
-
-	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,0);
+	$start = 0;//paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,1);
 	
 	$query = "SELECT * FROM $tabella $tipologia_main ORDER BY $ordine LIMIT $start,$step";
 	$risultato = mysql_query($query, CONNECT);
@@ -109,7 +107,7 @@ var totalChecked = 0;
 		if ( checks[j].checked == true )
 		totalChecked++;
 	}
-	$('#counter').val('Invia ' + totalChecked + ' notifiche');
+	$('#counter').val('Scrivi a ' + totalChecked + ' mail');
 }
 
 $(function() {
@@ -190,7 +188,7 @@ $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p class="esito '.$c
     <td><a href="../mod_accessi/?cerca=<?php echo $riga['user']; ?>" title="Mostra Accessi"><?php echo $riga['visite']; ?></a></td>
    <td> <a href="./mod_visualizza.php?id=<?php echo $riga['id']; ?>" title="Dettagli Account di <?php echo $riga['nominativo']; ?>"><i class="fa fa-search"></i></a>
       <?php if($_SESSION['usertype'] < 1){ ?>
-      <a href="../mod_basic/action_elimina.php?gtx=<?php echo  $tab_id; ?>&unset=<?php echo $riga['id']; ?>" title="Elimina" onclick="return conferma_del();"><i class="fa fa-trash-o"></i></a>
+      <a href="../mod_basic/elimina.php?gtx=<?php echo  $tab_id; ?>&unset=<?php echo $riga['id']; ?>" title="Elimina" onclick="return conferma_del();"><i class="fa fa-trash-o"></i></a>
     <?php } ?>
       </td>
     <td><?php echo mydate($riga['data_creazione']); ?></td>
@@ -199,18 +197,8 @@ $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p class="esito '.$c
 </table>
 <?php 	$_SESSION['send'] = 1;
 echo '<p style="text-align: right; padding: 20px 0;">
-<input type="submit" id="counter" value="Invia '.$count.' notifiche " class="button">
+<input type="submit" id="counter" value="Scrivi a '.$count.' mail " class="button">
 </p></form>'; 
 
 
-$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main);  mysql_close(CONNECT); } else { include('mod_user.php'); } ?>
-<br class="clear">
-<p>
-Versione: 2.1.2 |  Utente: <strong><?php echo $_SESSION['user']; ?></strong> |  IP: <?php echo $_SERVER['REMOTE_ADDR'] ?> | 
-<strong>GDPR 2016/679 Informativa sul trattamento dei dati riguardanti il vostro account</strong>
-L'accesso alla piattaforma è da intendersi personale ed esclusivamente riservato all'utente autorizzato. 
-Ne è vietata la riproduzione sotto ogni forma. La vostra password scade ogni 90 giorni e va reimpostata obbligatoriamente.
-In conformità ai requisiti del DL 196 del 30/6/2003, 
-si informa che ogni accesso, riconoscibile da IP e username, sarà registrato e potrà essere monitorato.
-Le attività eseguite nell'ambiente gestionale sono registrate per motivi di sicurezza.
-</p>
+  mysql_close(CONNECT); } else { include('mod_user.php'); } ?>

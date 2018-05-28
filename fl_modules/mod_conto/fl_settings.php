@@ -18,16 +18,21 @@
 	
 	$anno_di_imposta = date('Y');
 	
-	if(!isset($_SESSION['proprietario_id'])) $_SESSION['proprietario_id'] = 1;
+	if(!isset($_SESSION['proprietario_id'])) $_SESSION['proprietario_id'] = 0;
 	if(isset($_GET['cmy'])) $_SESSION['proprietario_id'] = check(base64_decode($_GET['cmy']));
 	$proprietario_id = ($_SESSION['usertype'] > 1) ? $_SESSION['anagrafica'] : $_SESSION['proprietario_id'];
 	if(isset($_GET['causale']) && check(@$_GET['causale']) != -1 && check(@$_GET['causale']) != '') { $causale_id = check($_GET['causale']); } else {  $causale_id = -1; }
 	if(isset($_GET['cId']) && check(@$_GET['cId']) != -1 && check(@$_GET['cId']) != '') {  $conto_id = base64_decode(check($_GET['cId'])); } else {  $conto_id = -1; }
 
 
-
-    $module_menu = '';
-	$new_button = '<a href="./mod_inserisci.php?id=1&AiD='.base64_encode($proprietario_id).'&cId='.base64_encode($conto_id).'" style="color: gray;"><i class="fa fa-plus-circle"></i></a>';
+	$module_title = 'Area Anagrafica';
+    $module_menu = '
+	<ul>
+  	   <li class=""><a href="./">Prima <span class="subcolor">Nota </span></a>      </li>
+	   <li><a href="././mod_inserisci.php?id=1&AiD='.base64_encode($proprietario_id).'&cId='.base64_encode($conto_id).'" class="create_new">Inserisci Movimentazione <i class="fa fa-plus-circle"></i></a></li>
+     
+	 
+     </ul>';
 		
 
   	 if(isset($_GET['data_da']) && check($_GET['data_da']) != "" && check($_GET['data_a']) != "") { 
@@ -111,6 +116,4 @@
 	}
 	
 	
-	$module_title = 'Prima nota '.$anagrafica[$proprietario_id];
-
 ?>

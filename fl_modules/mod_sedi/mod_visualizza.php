@@ -11,7 +11,7 @@ include("../../fl_inc/headers.php"); ?>
 
 
 
-<h1>Scheda <a href="#" class="noprint" onClick=" window.print();"><i class="fa fa-print"></i></a></h1>
+<h1>Scheda Anagrafica <a href="#" class="noprint" onClick=" window.print();"><i class="fa fa-print"></i></a></h1>
 
 <?php include('../mod_basic/action_visualizza.php'); ?>
 

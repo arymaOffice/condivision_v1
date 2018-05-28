@@ -9,7 +9,7 @@ include("../../fl_inc/testata_mobile.php");
  ?>
 
 
-<body style=" background: #FFFFFF;">
+<body>
 <div id="container" >
 
 

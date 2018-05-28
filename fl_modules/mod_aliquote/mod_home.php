@@ -2,8 +2,9 @@
 
 // Controlli di Sicurezza
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
+$_SESSION['POST_BACK_PAGE'] = "https://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];;
 ?>
+<h1>Aliquote IVA</h1>
 <div class="filtri"> 
   <form id="fm_cerca" action="" method="get">
       <span id="cerca">
@@ -21,14 +22,15 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 	if(mysql_affected_rows() == 0){ echo "<p>Nessun Record</p>"; } else {
 	?>
     
-<table class="dati">
-   <tr>
+    <table class="dati">
+      <tr>
    <th style="width: 1%;"></th>
     <th>Codice</th>
         <th>Descrizione</th>
         <th>Aliquota</th>
         <th></th>
-    </tr>
+     
+      </tr>
           
  <?php
 	
@@ -46,7 +48,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
            <td><?php echo $riga['codice']; ?></td>
         <td><?php echo $riga['descrizione']; ?></td>
          <td><?php echo numdec($riga['aliquota'],2); ?>%</td>
- 		<td><a href="mod_inserisci.php?id=<?php echo $riga['id']; ?>" title="Modifica"> <i class="fa fa-search"></i> </a>
+ 		<td><a href="./?action=1&amp;id=<?php echo $riga['id']; ?>" title="Modifica"> <i class="fa fa-search"></i> </a>
 
 
     <?php }  //Chiudo la Connessione	?>

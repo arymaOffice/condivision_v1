@@ -185,6 +185,8 @@ foreach ($ricette as $key => $value) {
 <th>€ <?php echo numdec($TOTALE, 2); ?> </th>
 <th></tr>
 </table>
+
+<br clear="clear">
 <?php
     echo '<input type="submit" value="Genera Approvvigionamento" class="button salva green noprint" >';
     echo '<input type="hidden" value="1" name="generazione">';

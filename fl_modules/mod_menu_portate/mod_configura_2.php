@@ -19,7 +19,7 @@ include("../../fl_inc/headers.php");
 
 <?php 
 
-$queryPortate = "SELECT r.nome_tecnico,r.variante,r.portata,r.id,r.nome,r.valore_di_conversione,lasts.valore,lasts.note,lasts.priority,lasts.id AS synId FROM fl_ricettario r JOIN ( SELECT  s.id,s.id1,s.id2,s.valore,s.note,s.priority FROM fl_synapsy s WHERE s.type2 = 119 AND s.type1 = 123 and s.id1 = $menuId) lasts ON r.id = lasts.id2 ORDER BY (r.portata) ASC, lasts.priority ASC, lasts.id ASC ";
+ $queryPortate = "SELECT r.nome_tecnico,r.variante,r.portata,r.id,r.nome,r.valore_di_conversione,lasts.valore,lasts.note,lasts.priority,lasts.id AS synId,lasts.id2,lasts.descrizione FROM fl_ricettario r RIGHT JOIN ( SELECT  s.id,s.id1,s.id2,s.valore,s.note,s.priority,s.descrizione FROM fl_synapsy s WHERE s.type2 = 119 AND s.type1 = 123 and s.id1 = $menuId) lasts ON r.id = lasts.id2 ORDER BY (r.portata) ASC, lasts.priority ASC, lasts.id ASC ";
 $resultPortate = @mysql_query($queryPortate,CONNECT);
 $groupId = -1;
 echo mysql_error();
@@ -34,18 +34,21 @@ $thTemplate = '<tr>
 $totCosto = 0;
 $totVendita = 0;
 
+
+
 while ($row = @mysql_fetch_array($resultPortate)) {
 
-if($groupId != $row['portata']) { 
+if($groupId != @$row['portata']) { 
 if($row['valore'] == '1') $row['valore'] = '';
-echo '<tr><th colspan="3"><h2>'.$portata[$row['portata']].'</h2></th><th colspan="3" style="text-align: right;">Ambiente: <input type="text" name="valore" class="updateField" style="border: none; width: 200px;" data-gtx="91" data-rel="'.$row['synId'].'" value="'.$row['valore'].'"></th></tr>'.$thTemplate;  
+$piatto_eliminato = ($row['portata'] == NULL)? ' PIATTO ELIMINATO ex id '.$row['id2']: '' ;
+echo '<tr><th colspan="3"><h2>'.$portata[$row['portata']].' '.$piatto_eliminato.'</h2></th><th colspan="3" style="text-align: right;">Ambiente: <input type="text" name="valore" class="updateField" style="border: none; width: 200px;" data-gtx="91" data-rel="'.$row['synId'].'" value="'.$row['valore'].'"></th></tr>'.$thTemplate;  
 $groupId = $row['portata']; 
 }
 
     
     if(defined('GESTIONE_VARIANTI')) {
     $variante = ($row['variante'] > 1) ? '<br><span class="msg orange">VARIANTE</span>' : '';
-    $tastoVariante = ($row['variante'] > 1) ? '<a href="../mod_ricettario/mod_inserisci.php?id='.$row['id'].'&backToMenu='.$menuId.'">Modifica nome del piatto e ricetta </a>' : '<a href="mod_opera.php?creaVarianteMenu='.$menuId.'&idPiatto='.$row['id'].'&synId='.$row['synId'].'">Crea una variante</a>';
+    $tastoVariante = ($row['variante'] > 1) ? '<a href="../mod_ricettario/mod_inserisci.php?id='.$row['id'].'&backToMenu='.$menuId.'">Modifica nome del piatto e ricetta </a>' : '<a title="crea variante a {{nome}} " href="mod_opera.php?creaVarianteMenu='.$menuId.'&idPiatto='.$row['id'].'&synId='.$row['synId'].'">Crea una variante</a>';
     } else { $variante =  $tastoVariante = ''; $tastoVariante = 'Nessuna'; }
 
 	$query = "SELECT * FROM `fl_ricettario_diba` WHERE `ricetta_id` = ".$row['id']." ORDER BY id DESC";
@@ -63,15 +66,16 @@ $groupId = $row['portata'];
 
     $foodSell = numdec($foodCost*$row['valore_di_conversione'],2);
     $foodCost = numdec($foodCost,2);
-    $nome = converti_txt($row['nome_tecnico']);
+    $nome = ($row['descrizione'] != '') ? converti_txt($row['descrizione']) : converti_txt($row['nome_tecnico']);
     @mysql_query('UPDATE fl_synapsy SET descrizione = \''.$nome.'\' WHERE id = '.$row['synId']);
+    $tastoVariante = str_replace('{{nome}}',$nome,$tastoVariante);
 
 echo '<tr id="p'.$row['id'].'">';
 echo '<td>'.$row['id'].'</td>';
 echo '<td>'.$variante.' '.$nome.'<br> '.$tastoVariante.'</td>';
 echo '<td><input type="text" name="note" class="updateField" style="border: none; width: 250px;" data-gtx="91" data-rel="'.$row['synId'].'" value="'.$row['note'].'" placeholder="Note sulla portata"></td>';
 
-echo '<td>&euro; <a href="../mod_ricettario/mod_diba.php?record_id='.$row['id'].'" class="fancybox_view" data-fancybox-type="iframe">'.$foodCost.'</td>';
+echo '<td>&euro; <a title="'.$nome.'" href="../mod_ricettario/mod_diba.php?record_id='.$row['id'].'" class="fancybox_view" data-fancybox-type="iframe">'.$foodCost.'</td>';
 echo '<td>&euro; '.$foodSell.'</td>';
 echo '<td><input type="text" name="priority" class="updateField" style="border: none; width: 20px;" data-gtx="91" data-rel="'.$row['synId'].'" value="'.$row['priority'].'"></td>';
 if($menuInfo['confermato'] != 1) echo '<td><a href="../mod_basic/action_elimina.php?gtx=91&amp;unset='.$row['synId'].'" title="Elimina"  onclick="return conferma_del();"><i class="fa fa-trash-o"></i></a></td>';

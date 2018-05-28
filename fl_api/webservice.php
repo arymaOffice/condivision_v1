@@ -888,11 +888,23 @@ VALUES (NULL, '$id_drakkar', 16, '$parent_id', '$tipologia_veicolo', '$data_acqu
 
     }
 
-    public function get_data_lead($campi = '')
+    public function get_data_lead($campi = '',$user_id = '',$when = '')
     {
         $this->app_start();
+
+        $where = ' WHERE 1 '; 
+
+
         if($campi == ''){
             $this->cnv_makedata();
+        }
+
+        if($user_id != ''){
+            $where.= ' AND  lead_generator ='.filter_var($user_id,FILTER_SANITIZE_NUMBER_INT);
+        }
+
+        if($when != ''){
+            $where.= ' AND pot.data_creazione = DATE(NOW()) ';
         }
 
         $campi = explode(',',$campi);
@@ -912,7 +924,8 @@ VALUES (NULL, '$id_drakkar', 16, '$parent_id', '$tipologia_veicolo', '$data_acqu
         $campi_da_selezionare = implode(",",$campi);
 
 
-        $query = "SELECT ".$campi_da_selezionare." FROM fl_potentials as pot LEFT JOIN fl_campagne_attivita ca ON ca.id = pot.campagna_id LEFT JOIN fl_veicoli v ON v.parent_id = pot.id  ";
+        $query = "SELECT ".$campi_da_selezionare." FROM fl_potentials as pot LEFT JOIN fl_campagne_attivita ca ON ca.id = pot.campagna_id LEFT JOIN fl_veicoli v ON v.parent_id = pot.id  ".$where;
+       
         $risultato = mysql_query($query, CONNECT);
         $dati = array();
         while ($riga = mysql_fetch_assoc($risultato)) {
@@ -933,12 +946,7 @@ VALUES (NULL, '$id_drakkar', 16, '$parent_id', '$tipologia_veicolo', '$data_acqu
         if (mysql_affected_rows(CONNECT) < 1) {
             $this->contenuto['class'] = 'red';
             $this->contenuto['esito'] = "Error 1102: Errore caricamento." . mysql_error();
-        } else {
-            $this->contenuto['class'] = 'green';
-            $this->contenuto['esito'] = "OK";
-            $this->contenuto['dati'] = $dati;
-
-        }
+        } 
         $this->cnv_makedata();
 
     }

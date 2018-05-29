@@ -12,11 +12,7 @@ unset($_SESSION['POST_BACK_PAGE']);
 	$info = GRD($tabella,2);
 	$tab_div_labels = array('id'=>"Profilo",'ip_autorizzato'=>"Configurazioni");
 	
-include("../../fl_inc/headers.php");?>
-
-<?php include('../../fl_inc/testata.php'); ?>
-<?php include('../../fl_inc/menu.php'); ?>
-<?php include('../../fl_inc/module_menu.php'); ?>
+include('../../fl_inc/module_menu.php'); ?>
 
 
 <body style=" background: #FFFFFF;">
@@ -41,4 +37,4 @@ if(isset($_GET['esito'])) { $class = (isset($_GET['success'])) ? 'green' : 'red'
 
 </form>
 
-<?php } else { echo '<h1>Non puoi configurare condivision da questo computer</h1>'; } include("../../fl_inc/footer.php"); ?>
+<?php } else { echo '<h1>Non puoi configurare condivision da questo computer</h1>'; } ?>

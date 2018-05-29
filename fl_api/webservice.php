@@ -334,7 +334,7 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
 
         $status_potentials = array('Da Assegnare', 'Assegnato a BDC', 'Appuntamento', 'Non Interessato', 'Cliente', 'Valuta', 'Acquistato Concorrenza', 'Preventivo', 'Assegnato a Venditore', 'Eliminato');
 
-        $campi = array('professione', 'sms_send', 'id_cliente_fordpower', 'id_cliente_drakkar', 'campagna_id', 'source_potential', 'priorita_contatto', 'paese', 'company', 'job_title', 'nome', 'cognome', 'email', 'telefono', 'website', 'indirizzo', 'provincia', 'citta', 'cap', 'industry', 'ragione_sociale', 'partita_iva', 'fatturato_annuo', 'numero_dipendenti', 'messaggio', 'tipo_interesse', 'interessato_a', 'periodo_cambio_vettura', 'permuta', 'test_drive', 'data_test_drive', 'pagamento_vettura', 'note', 'operatore', 'tipologia_veicolo', 'data_acquisto', 'pagamento_veicolo', 'marca', 'modello', 'colore', 'descrizione', 'anno_immatricolazione', 'chilometri_percorsi', 'alimentazione', 'targa', 'quotazione_attuale', 'proprietario', 'venditore', 'telefono_alternativo');
+        $campi = array('professione', 'sms_send', 'id_cliente_fordpower', 'id_cliente_drakkar', 'campagna_id', 'source_potential', 'priorita_contatto', 'paese', 'company', 'job_title', 'nome', 'cognome', 'email', 'telefono', 'website', 'indirizzo', 'provincia', 'citta', 'cap', 'industry', 'ragione_sociale', 'partita_iva', 'fatturato_annuo', 'numero_dipendenti', 'messaggio', 'tipo_interesse', 'interessato_a', 'periodo_cambio_vettura', 'permuta', 'test_drive', 'data_test_drive', 'pagamento_vettura', 'note', 'operatore', 'tipologia_veicolo', 'data_acquisto', 'pagamento_veicolo', 'marca', 'modello', 'colore', 'descrizione', 'anno_immatricolazione', 'chilometri_percorsi', 'alimentazione', 'targa', 'quotazione_attuale', 'proprietario', 'venditore', 'telefono_alternativo','lead_generator');
 
         foreach ($campi as $chiave => $valore) {
 
@@ -381,6 +381,7 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
                 operatore = '$operatore',
                 proprietario = 0,
                 venditore = '$venditore',
+                lead_generator = '$lead_generator';
                 data_associazione_attivita = NOW()
                 WHERE id = " . $isInDb[0]['id'] . ";";
 
@@ -406,8 +407,8 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
 
         $permuta = (trim($marca . $modello) != '') ? 1 : 0;
 
-        $sql = "INSERT INTO `fl_potentials` (`id`, `in_use`, `id_cliente_fordpower` ,`id_cliente_drakkar` , `status_potential`, `sent_mail`, `marchio`, `campagna_id`, `source_potential`, `data_aggiornamento`, `is_customer`, `priorita_contatto`, `paese`, `company`, `job_title`, `nome`, `cognome`, `email`, `telefono`, `website`, `indirizzo`, `provincia`, `citta`, `cap`, `industry`, `ragione_sociale`, `partita_iva`, `fatturato_annuo`, `numero_dipendenti`, `messaggio`, `tipo_interesse`, `interessato_a`, `periodo_cambio_vettura`, `permuta`, `test_drive`, `data_test_drive`, `promo_pneumatici`,`pagamento_vettura`, `note`, `operatore`, `proprietario`, `venditore`, `data_creazione`, `data_assegnazione`,`data_scadenza`,`data_scadenza_venditore`,`data_associazione_attivita`)
-VALUES (NULL, '0', '$id_cliente_fordpower' ,'$id_cliente_drakkar' , '$status_potential', '0', '0', '$campagna_id', '$source_potential', NOW(), '0', '$priorita_contatto', '$paese', '$company', '$job_title', '$nome', '$cognome', '$email', '$telefono', '$website', '$indirizzo', '$provincia', '$citta', '$cap', '$industry', '$company', '$partita_iva', '$fatturato_annuo', '$numero_dipendenti', '$messaggio', '$tipo_interesse', '$interessato_a', '$periodo_cambio_vettura', '$permuta', '$test_drive', '$data_test_drive',0, '$pagamento_vettura', '$note','$operatore', 0,  '$venditore', NOW(),NOW(),'','',NOW());";
+        $sql = "INSERT INTO `fl_potentials` (`id`, `in_use`, `id_cliente_fordpower` ,`id_cliente_drakkar` , `status_potential`, `sent_mail`, `marchio`, `campagna_id`, `source_potential`, `data_aggiornamento`, `is_customer`, `priorita_contatto`, `paese`, `company`, `job_title`, `nome`, `cognome`, `email`, `telefono`, `website`, `indirizzo`, `provincia`, `citta`, `cap`, `industry`, `ragione_sociale`, `partita_iva`, `fatturato_annuo`, `numero_dipendenti`, `messaggio`, `tipo_interesse`, `interessato_a`, `periodo_cambio_vettura`, `permuta`, `test_drive`, `data_test_drive`, `promo_pneumatici`,`pagamento_vettura`, `note`, `operatore`, `proprietario`, `venditore`, `data_creazione`, `data_assegnazione`,`data_scadenza`,`data_scadenza_venditore`,`data_associazione_attivita`,lead_generator)
+VALUES (NULL, '0', '$id_cliente_fordpower' ,'$id_cliente_drakkar' , '$status_potential', '0', '0', '$campagna_id', '$source_potential', NOW(), '0', '$priorita_contatto', '$paese', '$company', '$job_title', '$nome', '$cognome', '$email', '$telefono', '$website', '$indirizzo', '$provincia', '$citta', '$cap', '$industry', '$company', '$partita_iva', '$fatturato_annuo', '$numero_dipendenti', '$messaggio', '$tipo_interesse', '$interessato_a', '$periodo_cambio_vettura', '$permuta', '$test_drive', '$data_test_drive',0, '$pagamento_vettura', '$note','$operatore', 0,  '$venditore', NOW(),NOW(),'','',NOW(),'$lead_generator');";
 
         if (mysql_query($sql, CONNECT)) {
 
@@ -895,7 +896,14 @@ VALUES (NULL, '$id_drakkar', 16, '$parent_id', '$tipologia_veicolo', '$data_acqu
             $this->cnv_makedata();
         }
 
+
         $campi = explode(',',$campi);
+
+        $start = (isset($campi['start'])) ? filter_var($campi['start'],FILTER_SANITIZE_NUMBER_INT) : 0;
+        $step = (isset($campi['step'])) ? filter_var($campi['step'],FILTER_SANITIZE_NUMBER_INT) : 100;
+        
+        unset($campi['start']);
+        unset($campi['step']);
 
         $campi_controllo = array('modello_interesse', 'ora', 'vettura interesse', 'id', 'nome', 'cognome', 'indirizzo', 'email', 'telefono', 'professione', 'marca', 'modello', 'anno_immatricolazione', 'chilometri_percorsi', 'alimentazione', 'targa', 'note', 'caog', 'test_drive', 'partita_iva', 'ragione_sociale', 'priorita_contatto', 'permuta', 'pagamento_vettura');
 
@@ -912,7 +920,7 @@ VALUES (NULL, '$id_drakkar', 16, '$parent_id', '$tipologia_veicolo', '$data_acqu
         $campi_da_selezionare = implode(",",$campi);
 
 
-        $query = "SELECT ".$campi_da_selezionare." FROM fl_potentials as pot LEFT JOIN fl_campagne_attivita ca ON ca.id = pot.campagna_id LEFT JOIN fl_veicoli v ON v.parent_id = pot.id  ";
+        $query = "SELECT ".$campi_da_selezionare." FROM fl_potentials as pot LEFT JOIN fl_campagne_attivita ca ON ca.id = pot.campagna_id LEFT JOIN fl_veicoli v ON v.parent_id = pot.id LIMIT $start,$step ";
         $risultato = mysql_query($query, CONNECT);
         $dati = array();
         while ($riga = mysql_fetch_assoc($risultato)) {

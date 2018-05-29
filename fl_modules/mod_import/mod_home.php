@@ -8,7 +8,7 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit; }
 
 
 
-<h1>CSV Importer</h1>
+<h1>CSV Importer & Leads export </h1>
 <!-- Tipo di codifica dei dati, DEVE essere specificato come segue -->
 <form enctype="multipart/form-data" action="mod_upload.php" method="post" id="upload_csv" style="padding-top: 3%; text-align: right; max-width: 400px; float: left;">
     <!-- MAX_FILE_SIZE deve precedere campo di input del nome file -->
@@ -65,3 +65,5 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit; }
 </form>
     
 
+
+<a href="../../fl_core/services/exportleadpp.php" class="button" style="margin-right: 400px;float: right;">Esporta leads dalla app</a>

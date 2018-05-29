@@ -198,12 +198,13 @@ if(isset($dataset['save_sign'])){
 /* ritorna dati dei lead */
 if(isset($dataset['get_data_lead'])){
     ini_set('max_execution_time', 300);
-    set_time_limit(0);
+
+set_time_limit(0);
     mandatory_fileds(array('token'));
     session_cache_limiter( 'private_no_expire' );
     $webservice->token = check($dataset['token']);
     $webservice->app_start();
-    $webservice->get_data_lead($_GET['campi'],$_GET['user_id'],$_GET['when']);
+    $webservice->get_data_lead($_GET['campi']);
 }
 
 echo json_encode(array('esito' => 0, 'info_txt' => "Specifica un metodo o autentica client"));

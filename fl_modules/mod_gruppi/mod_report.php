@@ -52,7 +52,7 @@ if($_SESSION['usertype'] < 4) {
 
 
 
-		$report .= "<span class=\"msg blue\">Attività assegnate</span> ".$attivitaGruppo['names'].' ('.$proprietario[$attivitaGruppo['supervisor_id']].') '.$auto ;
+		$report .= "<span class=\"msg blue\">Attività assegnate</span> ".@$attivitaGruppo['names'].' ('.@$proprietario[@$attivitaGruppo['supervisor_id']].') '.@$auto ;
 		//print_r($gruppo);
 
 		$report .= '<table class="dati" summary="Dati" style=" width: 100%; text-align: left; ">

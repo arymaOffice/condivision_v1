@@ -926,15 +926,15 @@ VALUES (NULL, '$id_drakkar', 16, '$parent_id', '$tipologia_veicolo', '$data_acqu
         while ($riga = mysql_fetch_assoc($risultato)) {
             //$temp_array = array();
 
-            echo json_encode($riga);
-            echo ',';
+            // echo json_encode($riga);
+            // echo ',';
 
-            // foreach($campi as $key => $value){
-            //     $value_show = $value;
-            //     if($value == 'pot.id as POTID'){ $value_show = 'id'; $value="POTID";}
-            //     $temp_array[$value_show] = $riga[$value];
-            // }
-            // array_push($dati,$temp_array);
+            foreach($campi as $key => $value){
+                $value_show = $value;
+                if($value == 'pot.id as POTID'){ $value_show = 'id'; $value="POTID";}
+                $temp_array[$value_show] = $riga[$value];
+            }
+            array_push($dati,$temp_array);
 
         }
 
@@ -942,7 +942,8 @@ VALUES (NULL, '$id_drakkar', 16, '$parent_id', '$tipologia_veicolo', '$data_acqu
             $this->contenuto['esito'] = 0;
         } else {
 
-            $this->contenuto['esito'] = 1;           
+            $this->contenuto['esito'] = 1; 
+            $this->contenuto['dati'] = $dati;          
 
         }
         $this->cnv_makedata();

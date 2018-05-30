@@ -24,6 +24,7 @@ if(scrollPosition > minHead){
 //$("#menu").attr("class", "aperto");
 }
 });
+
 </script>
 
 <!-- Chiudo Corpo -->

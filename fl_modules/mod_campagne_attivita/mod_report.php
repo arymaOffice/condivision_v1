@@ -13,7 +13,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 
 <?php
 	
-	echo '<a class="button" href="./"><i class="fa fa-user" aria-hidden="true"></i> Mostra le tue attività</a><br><br><br>';
+	echo '<a class="button ajaxLinkCharge" href="'.ROOT . $cp_admin.'fl_modules/mod_campagne_attivita/?"><i class="fa fa-user" aria-hidden="true"></i> Mostra le tue attività</a><br><br><br>';
 
 	if($_SESSION['usertype'] < 4) {
 	

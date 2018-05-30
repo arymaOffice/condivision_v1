@@ -6,6 +6,10 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRIN
 $sedi = (isset($_GET['sede']) && check($_GET['sede']) > 0) ? check($_GET['sede']) : @$_SESSION['sedi_id'];
 $proprietariStesseSedi = getAccountSede($sedi);
 
+if($new_button != ''){
+    $new_button = '<a class="ajaxLinkCharge" href="'.ROOT .$cp_admin.'fl_modules/mod_campagne_attivita/mod_inserisci.php?id=1" class="" style="color: gray"> <i class="fa fa-plus-circle"></i>  </a>';
+}
+
 ?>
 
 
@@ -75,19 +79,19 @@ echo '<optgroup label="Digital">';
 
 if ($_SESSION['usertype'] == 5 || $_SESSION['usertype'] == 0 || $_SESSION['profilo_funzione'] == 8 || $_SESSION['profilo_funzione'] == 10 || $_SESSION['profilo_funzione'] == 11 || $_SESSION['profilo_funzione'] == 23 || $_SESSION['profilo_funzione'] == 14 || $_SESSION['profilo_funzione'] == 15) {
     if (!isset($_GET['all'])) {
-        echo '<a class="button" style="background-color:#4788ef;" href="./?' . $_SERVER['QUERY_STRING'] . '&all"><i class="fa fa-users" aria-hidden="true"></i> Mostra tutte le attività</a>';
+        echo '<a class="button ajaxLinkCharge" style="background-color:#4788ef;"  href="'.ROOT . $cp_admin.'fl_modules/mod_campagne_attivita/?' . $_SERVER['QUERY_STRING'] . '&all"><i class="fa fa-users" aria-hidden="true"></i> Mostra tutte le attività</a>';
     }
 
     if (isset($_GET['all'])) {
-        echo ' <a class="button" style="background-color:#008E37;" href="./?' . str_replace('&all', '', $_SERVER['QUERY_STRING']) . '"><i class="fa fa-user" aria-hidden="true"></i> Mostra le tue attività</a>';
+        echo ' <a class="button ajaxLinkCharge" style="background-color:#008E37;" href="'.ROOT . $cp_admin.'fl_modules/mod_campagne_attivita/?' . str_replace('&all', '', $_SERVER['QUERY_STRING']) . '"><i class="fa fa-user" aria-hidden="true"></i> Mostra le tue attività</a>';
     }
 
     if ($_SESSION['usertype'] == 5 || $_SESSION['usertype'] == 0 || $_SESSION['profilo_funzione'] == 8) {
-        echo ' <a class="button" href="./?action=24"><i class="fa fa-bullseye" aria-hidden="true"></i>  Panoramica Operatori</a>';
+        echo ' <a class="button ajaxLinkCharge" href="'.ROOT . $cp_admin.'fl_modules/mod_campagne_attivita/?action=24"><i class="fa fa-bullseye" aria-hidden="true"></i>  Panoramica Operatori</a>';
     }
 
     if ($_SESSION['usertype'] == 5 || $_SESSION['usertype'] == 0 || $_SESSION['profilo_funzione'] == 8) {
-        echo ' <a class="button" href="../mod_gruppi/?action=24" ><i class="fa fa-user" aria-hidden="true"></i> Panoramica Gruppi di Lavoro</a>';
+        echo ' <a class="button ajaxLinkCharge" href="'.ROOT . $cp_admin.'fl_modules/mod_gruppi/?action=24" ><i class="fa fa-user" aria-hidden="true"></i> Panoramica Gruppi di Lavoro</a>';
     }
 
 }
@@ -152,7 +156,7 @@ foreach ($tipo_campagna as $key => $valore) {
             while ($riga = mysql_fetch_array($risultato)) {
 
                 $colore = "class=\"tab_blue\"";
-                $elimina = ($_SESSION['usertype'] > 0) ? '' : "<a href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=" . $riga['id'] . "\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a>";
+                $elimina = ($_SESSION['usertype'] > 0) ? '' : "<a class=\"ajaxLinkDel\" href=\"".ROOT .$cp_admin."fl_modules/mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=" . $riga['id'] . "\" title=\"Elimina\"  ><i class=\"fa fa-trash-o\"></i></a>";
 
                 $mieileads = '';
                 $allFilter = (isset($_GET['all']) || $riga['supervisor_id'] == $_SESSION['number']) ? '&all' : '';
@@ -263,7 +267,7 @@ foreach ($tipo_campagna as $key => $valore) {
                     //echo "<td class=\"center fontlarge\">$tasso_conversione %</td>";
 
                     if ($_SESSION['usertype'] == 5 || $_SESSION['usertype'] == 0 || $_SESSION['profilo_funzione'] == 8 || $_SESSION['profilo_funzione'] == 10 || $_SESSION['profilo_funzione'] == 11 || $_SESSION['profilo_funzione'] == 23 || $_SESSION['profilo_funzione'] == 14 || $_SESSION['profilo_funzione'] == 15 || $_SESSION['profilo_funzione'] == 13 || $_SESSION['usertype'] == 0) {
-                        echo "<td  class=\"strumenti\"><a  class=\"ajaxLinkChargeRel\" href=\"mod_inserisci.php?id=" . $riga['id'] . "\" title=\"Gestione  \"> <i class=\"fa fa-pencil\"></i> </a>$elimina </td>";
+                        echo "<td  class=\"strumenti\"><a  class=\"ajaxLinkCharge\" href=\"".ROOT.$cp_admin."/fl_modules/mod_campagne_attivita/mod_inserisci.php?id=" . $riga['id'] . "\" title=\"Gestione  \"> <i class=\"fa fa-pencil\"></i> </a>$elimina </td>";
                     }
 
                     echo "</tr>";

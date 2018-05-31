@@ -889,12 +889,26 @@ VALUES (NULL, '$id_drakkar', 16, '$parent_id', '$tipologia_veicolo', '$data_acqu
 
     }
 
-    public function get_data_lead($campi = '')
+    public function get_data_lead($campi = '',$when = '',$range = '',$usr_id = '')
     {
+        $time_coiche = array('DAY','MONTH','YEAR');
+        $where = ' WHERE 1 ';
+
         $this->app_start();
         if($campi == ''){
             $this->cnv_makedata();
         }
+        
+        
+        // if(in_array(toupper($when),$time_choiche)){
+        //     $range = filter_var($range,FILTER_SANITIZE_NUMBER_INT);
+        //     $where.= ' AND pot.data_creazione BETWEEN DATE(NOW()) AND DATE(NOW - INTERVAL '.$range.' '.$when.')';
+        // }
+
+        // if($usr_id != ''){
+        //     $id_lead_generator = filter_var($usr_id,FILTER_SANITIZE_NUMBER_INT);
+        //     $where.= ' AND lead_generator = '.$id_lead_generator;
+        // }
 
 
         $campi = explode(',',$campi);
@@ -920,7 +934,7 @@ VALUES (NULL, '$id_drakkar', 16, '$parent_id', '$tipologia_veicolo', '$data_acqu
         $campi_da_selezionare = implode(",",$campi);
 
 
-        $query = "SELECT ".$campi_da_selezionare." FROM fl_potentials as pot LEFT JOIN fl_campagne_attivita ca ON ca.id = pot.campagna_id LEFT JOIN fl_veicoli v ON v.parent_id = pot.id LIMIT $start,$step ";
+        $query = "SELECT ".$campi_da_selezionare." FROM fl_potentials as pot LEFT JOIN fl_campagne_attivita ca ON ca.id = pot.campagna_id LEFT JOIN fl_veicoli v ON v.parent_id = pot.id $where LIMIT $start,$step ";
         $risultato = mysql_query($query, CONNECT);
         $dati = array();
         while ($riga = mysql_fetch_assoc($risultato)) {

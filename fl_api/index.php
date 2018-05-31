@@ -204,7 +204,8 @@ set_time_limit(0);
     session_cache_limiter( 'private_no_expire' );
     $webservice->token = check($dataset['token']);
     $webservice->app_start();
-    $webservice->get_data_lead($_GET['campi']);
+    //get_data_lead($campi = '',$when = '',$range = '',$usr_id = '')
+    $webservice->get_data_lead(@$_GET['campi'],@$_GET['when'],@$_GET['range'],@$_GET['usr_id']);
 }
 
 echo json_encode(array('esito' => 0, 'info_txt' => "Specifica un metodo o autentica client"));

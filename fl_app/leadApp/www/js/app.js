@@ -19,7 +19,7 @@ var mainView = app.views.create('.view-main', {
   url: '/'
 });
 
-var endpoint = 'https://authos.bluemotive.it/fl_api/';
+var endpoint = 'https://dev.bluemotive.it/fl_api/';
 var current_lead_id = '';
 // Show/hide preloader for remote ajax loaded pages
 $$(document).on('ajaxStart', function (e) {

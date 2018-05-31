@@ -16,7 +16,7 @@ $tipologia_main = str_replace('tb1', 'pot', $tipologia_main);
 
 
 //prendi i leads con query filtrata
-$leads = GQS('fl_potentials as pot LEFT JOIN fl_campagne_attivita ca ON ca.id = pot.campagna_id LEFT JOIN fl_veicoli v ON v.parent_id = pot.id ', '*,pot.id as poteID,ca.oggetto as caog', $tipologia_main);
+$leads = GQS('fl_potentials as pot LEFT JOIN fl_campagne_attivita ca ON ca.id = pot.campagna_id LEFT JOIN fl_veicoli v ON v.parent_id = pot.id ', '*,pot.id as poteID,ca.oggetto as caog,pot.data_creazione as date', $tipologia_main);
 
 $dati = array();
 
@@ -32,8 +32,10 @@ foreach ($leads as $key => $value) {
     $value['campagna_id'] = $campagna_id[$value['campagna_id']]; //Valori da array per alcuni campi
 
     $dati[$value['id']] = array('id' => $value['id'], 'stato' => $value['status_potential'], 'sorgente' => $value['campagna_id'], 'attivita' => $value['source_potential'], 'nome' => ucfirst(strtolower($value['nome'])), 'cognome' => ucfirst(strtolower($value['cognome'])), 'citta' => $value['citta'], 'cellulare' => $value['telefono'], 'email' => strtolower($value['email']));*/
-
-    $dati[$value['poteID']] = array('data' => $data, 'ora' => $ora,
+    $test_drive = ($value['test_drive'] > 1)? 'Sì':'No';
+    $permuta = ($value['permuta'] > 1)? 'Sì':'No';
+    $dati[$value['poteID']] = array('data' => $value['date'], 
+        'lead generator' => @$proprietario[$value['lead_generator']],
         'vettura interesse' => $value['modello_interesse'],
         'id' => $value['poteID'],
         'nome' => ucfirst(strtolower($value['nome'])),
@@ -50,15 +52,15 @@ foreach ($leads as $key => $value) {
         'targa' => $value['targa'],
         'note' => $value['note'],
         'oggetto' => $value['caog'],
-        'test_drive' => $value['test_drive'],
+        'test_drive' => $test_drive ,
         'partita_iva' => $value['partita_iva'],
         'societa' => $value['ragione_sociale'],
-        '(priorità) status' => $value['priorita_contatto'],
-        'permuta' => $value['permuta'],
-        'pagamento_vettura' => $value['pagamento_vettura']);
+        '(priorità) status' => @$priorita_contatto[$value['priorita_contatto']],
+        'permuta' => $permuta,
+        'pagamento_vettura' => @$pagamento_veicolo[$value['pagamento_vettura']]);
 
 }
-$campi = array('data', 'ora', 'vettura interesse', 'id', 'nome', 'cognome', 'indirizzo', 'email', 'telefono', 'professione', 'marca', 'modello', 'anno', 'km', 'alimentazione', 'targa', 'note', '(oggetto) attività campagna', 'test drive', 'p.iva', 'societa', '(priorità) status', 'permuta', 'pagamento');
+$campi = array('data','lead generator', 'vettura interesse', 'id', 'nome', 'cognome', 'indirizzo', 'email', 'telefono', 'professione', 'marca', 'modello', 'anno', 'km', 'alimentazione', 'targa', 'note', '(oggetto) attività campagna', 'test drive', 'p.iva', 'societa', '(priorità) status', 'permuta', 'pagamento');
 mysql_close(CONNECT);
 
 /* nuova implementazione*/

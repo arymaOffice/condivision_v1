@@ -889,7 +889,7 @@ VALUES (NULL, '$id_drakkar', 16, '$parent_id', '$tipologia_veicolo', '$data_acqu
 
     }
 
-    public function get_data_lead($campi = '',$when = '',$range = '',$usr_id = '')
+    public function get_data_lead($campi = '',$when = '',$range = '',$usr_id = '',$source_potential = '')
     {
         $time_coiche = array('DAY','MONTH','YEAR');
         $where = ' WHERE 1 ';
@@ -899,16 +899,23 @@ VALUES (NULL, '$id_drakkar', 16, '$parent_id', '$tipologia_veicolo', '$data_acqu
             $this->cnv_makedata();
         }
         
-        
-        // if(in_array(toupper($when),$time_choiche)){
-        //     $range = filter_var($range,FILTER_SANITIZE_NUMBER_INT);
-        //     $where.= ' AND pot.data_creazione BETWEEN DATE(NOW()) AND DATE(NOW - INTERVAL '.$range.' '.$when.')';
-        // }
+        if($when != ''){
+            if(in_array(strtoupper($when),$time_choiche)){
+                $range = filter_var($range,FILTER_SANITIZE_NUMBER_INT);
+                $where.= ' AND pot.data_creazione BETWEEN DATE(NOW()) AND DATE(NOW - INTERVAL '.$range.' '.$when.')';
+            }
+        }
 
-        // if($usr_id != ''){
-        //     $id_lead_generator = filter_var($usr_id,FILTER_SANITIZE_NUMBER_INT);
-        //     $where.= ' AND lead_generator = '.$id_lead_generator;
-        // }
+
+        if($usr_id != ''){
+            $id_lead_generator = filter_var($usr_id,FILTER_SANITIZE_NUMBER_INT);
+            $where.= ' AND lead_generator = '.$id_lead_generator;
+        }
+
+        if($source_potential != ''){
+            $source_potential = filter_var($source_potential,FILTER_SANITIZE_NUMBER_INT);
+            $where.= ' AND source_potential = '.$source_potential;
+        }
 
 
         $campi = explode(',',$campi);

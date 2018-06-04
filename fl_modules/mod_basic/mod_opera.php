@@ -128,7 +128,7 @@ if($questionsAlert != '' || isset($_POST['inviaAlert'])) {
 	smail(mail_admin,$oggetto.'Alert',$messaggioInterno); 
 	smail(mail_qos,$oggetto.'Alert',$messaggioInterno); 
 	smail('mcagnassone@gmail.com',$oggetto.'Alert',$messaggioInterno); 
-	smail('server@aryma.it',$oggetto.'Alert',$messaggioInterno); 
+
 	smail('ced@authos.it',$oggetto.'Alert',$messaggioInterno); 
 	smail('bdc@authos.it',$oggetto.'Alert',$messaggioInterno); 
 	smail('michele.cagnassone@authos.it',$oggetto.'Alert',$messaggioInterno); 

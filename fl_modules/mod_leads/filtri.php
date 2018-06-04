@@ -207,10 +207,15 @@ foreach ($priorita_contatto as $valores => $label) { // Recursione Indici di Cat
 foreach ($campi as $chiave => $valore) {
 
 
+    
+   
+
 
     if (in_array($chiave, $basic_filters)) {
 
-        if ((select_type($chiave) == 2 || select_type($chiave) == 19 || select_type($chiave) == 9 || select_type($chiave) == 8 || select_type($chiave) == 12) && $chiave != 'id') {
+       
+
+        if ((select_type($chiave) == 2 || select_type($chiave) == 19 || select_type($chiave) == 9 || select_type($chiave) == 8 || select_type($chiave) == 12  ) && $chiave != 'id') {
             //if(select_type($chiave) == 8) $$chiave = array('-1'=>'Tutti','0'='No','1'='Si');
             echo '<div class="col-sm-2" style="display: inline-block;">';
             echo '  <label>' . $valore . '</label>';
@@ -229,7 +234,31 @@ foreach ($campi as $chiave => $valore) {
 
     }
 
+
+
+
 }
+
+echo '<div class="col-sm-2" style="display: inline-block;">';
+echo '  <label> Venditore </label>';
+echo '<div class="multicheckboxDiv"><label style="color: black;"><input type="radio" name="venditore" value="-1"/>Non impostato</label>';
+foreach ($venditore as $val => $label) {
+    $selected = (isset($_GET[$chiave]) && is_array($_GET[$chiave]) && in_array($val, $_GET[$chiave])) ? 'checked' : '';
+    echo '<label><input type="radio" ' . $selected . ' name="venditore" value="' . $val . '" />' . $label . ' </label>';}
+echo '</div>';
+echo '</div>';
+
+
+echo '<div class="col-sm-2" style="display: inline-block;">';
+echo '  <label> Lead Generator </label>';
+echo '<div class="multicheckboxDiv"><label style="color: black;"><input type="radio" name="lead_generator" value="-1"/>Non impostato</label>';
+foreach ($venditore as $val => $label) {
+    $selected = (isset($_GET[$chiave]) && is_array($_GET[$chiave]) && in_array($val, $_GET[$chiave])) ? 'checked' : '';
+    echo '<label><input type="radio" ' . $selected . ' name="lead_generator" value="' . $val . '" />' . $label . ' </label>';}
+echo '</div>';
+echo '</div>';
+
+
 ?>
 
 

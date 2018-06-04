@@ -137,11 +137,13 @@ if (isset($_GET['lead_generator']) && $_GET['lead_generator'] > 0) {
 }
 
 if (@$_GET['data_start'] != '') {
-    $tipologia_main .= "  AND data_associazione_attivita >= '" . check($_GET['data_start']) . "'";
+    $data = convert_data($_GET['data_start'], 1);
+    $tipologia_main .= "  AND data_associazione_attivita >= '" . check($data) . "'";
 }
 
 if (@$_GET['data_end'] != '') {
-    $tipologia_main .= "  AND data_associazione_attivita <= '" . check($_GET['data_end']) . "'";
+    $data = convert_data($_GET['data_end'], 1);
+    $tipologia_main .= "  AND data_associazione_attivita <= '" . check($data) . "'";
 }
 
 $proprie = ($_SESSION['usertype'] > 2 && (!isset($_GET['status_potential']) || @$_GET['status_potential'] != 0) && !isset($_GET['daAssegnare'])) ? " AND proprietario = " . $_SESSION['number'] . " " : ''; // Aggiunta per i counters e il title counter
@@ -184,11 +186,11 @@ $qualificati = array('1 stella', '2 Stelle', '3 Stelle');
 $test_drive = $permuta = $promo_pneumatici = array('No', 'Si');
 $tipo_richiesta = array('Chiamata', 'Email', 'Follow up', 'Rifiutato', 'Concorrenza', 'Appuntamento', 'Conversione', 'Preventivo', 'No Show', 'SMS', 'Modifica');
 
-$venditore_ = GQS('fl_account a JOIN fl_persone p ON p.id = persona_id ', 'a.id,nominativo', " profilo_funzione IN  (19,20) ORDER BY nominativo ASC");
-$venditore = array();
-foreach ($venditore_ as $key => $value) {
-    $venditore[$value['id']] = $value['nominativo'];
-}
+// $venditore_ = GQS('fl_account a JOIN fl_persone p ON p.id = persona_id ', 'a.id,nominativo', " profilo_funzione IN  (19,20) ORDER BY nominativo ASC");
+// $venditore = array();
+// foreach ($venditore_ as $key => $value) {
+//     $venditore[$value['id']] = $value['nominativo'];
+// }
 
 $lead_generator_ = GQS('fl_account a JOIN fl_persone p ON p.id = persona_id ', 'a.id,nominativo', " profilo_funzione = 21 ORDER BY nominativo ASC");
 $lead_generator = array();
@@ -224,10 +226,10 @@ function select_type($who)
 
     /* Gestione Oggetto Statica */
     $textareas = array("messaggio", "note");
-    $select = array('sede', "alimentazione", 'tipologia_veicolo', 'pagamento_veicolo', 'campagna_id', 'pagamento_vettura', "source_potential", 'vettura_posseduta_alimentazione', 'pagamento_vettura', 'experience_level', "mansione", "paese", "proprietario", "status_pagamento", "causale", "metodo_di_pagamento", "venditore", "lead_generator");
+    $select = array('sede', "alimentazione", 'tipologia_veicolo', 'pagamento_veicolo', 'campagna_id', 'pagamento_vettura', "source_potential", 'vettura_posseduta_alimentazione', 'pagamento_vettura', 'experience_level', "mansione", "paese", "proprietario", "status_pagamento", "causale", "metodo_di_pagamento");
     $select_text = array("provincia", "citta", 'data_acquisto', 'anno_immatricolazione');
     $disabled = array("data_creazione", "visite", "data_assegnazione");
-    $hidden = array("data_aggiornamento");
+    $hidden = array("data_aggiornamento",'venditore','lead_generator');
     $radio = array('promo_pneumatici', 'test_drive', 'vettura_promo', 'permuta');
     $text = array();
     $calendario = array('data_scadenza', 'data_acquisto_vettura', 'data_test_drive', 'periodo_cambio_vettura');

@@ -299,7 +299,9 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
         foreach ($_REQUEST as $chiave1 => $valore1) {
 
             $array_json = json_decode($chiave1, true);
-
+        
+        mail('asaracino@aryma.it', 'json', $array_json);
+            
             foreach ($array_json as $chiave => $valore) {
 
                 if ($chiave == 'telefono' || $chiave == 'telefono_alternativo') {
@@ -331,6 +333,7 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
                 $mail_message .= '<p>' . $chiave . ' = ' . $$chiave . '</p>';
             }
         }
+
 
         $status_potentials = array('Da Assegnare', 'Assegnato a BDC', 'Appuntamento', 'Non Interessato', 'Cliente', 'Valuta', 'Acquistato Concorrenza', 'Preventivo', 'Assegnato a Venditore', 'Eliminato');
 

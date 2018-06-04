@@ -61,7 +61,7 @@ if (isset($_POST['set_meeting'])) {
         $message = str_replace('[*CORPO*]', "<h3>Gentile " . $potential['nome'] . "</h3>
 	<h4>Ti confermiamo l'appuntamento per le ore " . mydatetime($start_meeting) . ". $with. </h4> <br><br> <a href=\"".$add_calendar."\"> Aggiungi a Google Calendar</a>", $message);
 
-        smail('server@aryma.it', $oggetto, $message, $_SESSION['mail'], $_SESSION['nome']);
+        
         smail('giuseppe.nacci@gmail.com', $oggetto, $message, $_SESSION['mail'], $_SESSION['nome']);
        // smail('proprietario.com', $oggetto, $message, $_SESSION['mail'], $_SESSION['nome']);
 

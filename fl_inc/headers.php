@@ -368,18 +368,6 @@ $( "#invia-sms" ).click(function( event ) {
 });
 
 
-
-
-$('#scheda input').focus(function( event ) {   
-var input = $(this); 
-//input.attr('class', 'bo-orange');
-$(window).bind('beforeunload', function(){
-  return 'Uscire senza salvare?';
-});
-console.log("Modifica: "+input.name);
-});
-
-
 /*Dynamic form processor ajax */
 $( ".ajaxForm" ).on('submit',this,function( event ) {
   

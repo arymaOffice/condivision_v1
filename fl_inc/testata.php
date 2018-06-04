@@ -9,7 +9,7 @@
 <span class="appname">
 <a href="<?php echo ROOT.$cp_admin; ?>?a=dashboard"><img src="<?php echo LOGO; ?>" alt="<?php echo client; ?>"/></a></span>
 <span class="topdx">
-<?php echo $_SESSION['nominativo']; ?> <a class="logout" href="<?php echo ROOT.$cp_admin; ?>fl_core/login.php?logout" title="Sei collegato al server dalle ore: <?php echo @date("H:i",$_SESSION['time'])." come ".@$tipo[$_SESSION['usertype']]; ?>"><i class="fa fa-power-off"></i> <span class="desktop">Esci</span> </a>  
+<a class="logout" href="<?php echo ROOT.$cp_admin; ?>fl_core/login.php?logout" title="Sei collegato al server dalle ore: <?php echo @date("H:i",$_SESSION['time'])." come ".@$tipo[$_SESSION['usertype']]; ?>"><i class="fa fa-power-off"></i> <span class="desktop">Esci</span> </a>  
 
 
 </span>

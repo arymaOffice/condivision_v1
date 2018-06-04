@@ -8,6 +8,7 @@ $callTime = $callEndTime - $callStartTime;
 </div>
 
 <div id="scroll-up" class="hideMobile" ><i class="fa fa-chevron-circle-up"></i></div>
+<script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script>
 
 <script>
 
@@ -35,7 +36,7 @@ if(scrollPosition > minHead){
 
 
 <?php if(account_sid != '' && !isset($client) && $_SESSION['usertype'] == 0) { ?>
-<!--<div id="send-sms"><div id="sms-box">
+<div id="send-sms"><div id="sms-box">
 <div id="sms-close"><a href="#" title="Chiudi">x</a></div>
 <form id="sms-form" action="../mod_basic/mod_opera.php" method="post" enctype="multipart/form-data">
 
@@ -84,7 +85,7 @@ if(isset($_GET['sms'])) {
 ?>
 
 
-</div><a href="#" class="sms-open">Sms</a></div>-->
+</div><a href="#" class="sms-open">Sms</a></div>
 <?php } ?> 
 
 

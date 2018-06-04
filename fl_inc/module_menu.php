@@ -10,8 +10,11 @@
 </ul> 
 
 <ul id="module_menu">
-  	   <li style="margin-left: 10px"><a href="#" onclick="display_toggle('#menu_modulo');" title="Ricerca generica"><i class="fa fa-search"></i></a></li>
+  	   <?php if(isset($searchbox)) { ?>
+       <li style="margin-left: 10px"><a href="#" onclick="display_toggle('#menu_modulo');" title="Ricerca generica"><i class="fa fa-search"></i></a></li>
+       <?php } ?>
        <?php if(isset($module_menu)) echo ''.$module_menu.''; ?>
+
 
 </ul>  
 </div>
@@ -53,5 +56,5 @@
 
 
 
-<?php if(isset($filtri)) { ?><a href="#" style="color: white;" class="filterToggle" title="Mostra Filtri Lista"><i class="fa fa-filter" aria-hidden="true"></i>
+<?php if(isset($filtri) && $filtri > 0) { ?><a href="#" style="color: white;" class="filterToggle" title="Mostra Filtri Lista"><i class="fa fa-filter" aria-hidden="true"></i>
 </a><?php } ?>

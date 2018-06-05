@@ -7,8 +7,15 @@ $id = check($_GET['id']);
 
 include('fl_settings.php'); // Variabili Modulo 
 
+include("../../fl_inc/headers.php");
+include("../../fl_inc/testata_mobile.php");
  ?>
 
+
+
+
+<body style=" background: rgb(241, 241, 241) none repeat scroll 0% 0%;">
+<div id="container" >
 
 
 
@@ -17,7 +24,7 @@ include('fl_settings.php'); // Variabili Modulo
 <?php if(isset($_GET['esito'])) { $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p class="esito '.$class.'">'.check($_GET['esito']).'</p>'; }  ?>
 
 <div id="map-canvas"></div>
-<form id="scheda" class="ajaxLinkCharge" action="<?php echo ROOT.$cp_admin; ?>.'fl_modules/mod_basic/action_modifica.php" method="post" enctype="multipart/form-data">
+<form id="scheda" action="../mod_basic/action_modifica.php" method="post" enctype="multipart/form-data">
 
 
 
@@ -30,3 +37,4 @@ include('fl_settings.php'); // Variabili Modulo
 
 
 
+</div></body></html>

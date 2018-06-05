@@ -128,9 +128,9 @@
 	if(isset($_GET['tipoCampagna'])) $action .= '&tipoCampagna='.check($_GET['tipoCampagna']);
 
     $module_menu = '
-	<li><a class="ajaxLinkCharge"  href="'.ROOT . $cp_admin.'fl_modules/mod_campagne_attivita/?action='.$action.'">Tutte</a></li>
-	<li><a class="ajaxLinkCharge"  href="'.ROOT . $cp_admin.'fl_modules/mod_campagne_attivita/?incorso&action='.$action.'">In corso</a></li>
-	<li><a class="ajaxLinkCharge"  href="'.ROOT . $cp_admin.'fl_modules/mod_campagne_attivita/?future&action='.$action.'" >Future</a></li>	
-	<li><a class="ajaxLinkCharge"  href="'.ROOT . $cp_admin.'fl_modules/mod_campagne_attivita/?concluse&action='.$action.'" >Concluse</a></li>';
+	<li><a href="./?action='.$action.'">Tutte</a></li>
+	<li><a href="./?incorso&action='.$action.'">In corso</a></li>
+	<li><a href="./?future&action='.$action.'" >Future</a></li>	
+	<li><a href="./?concluse&action='.$action.'" >Concluse</a></li>';
 
 ?>

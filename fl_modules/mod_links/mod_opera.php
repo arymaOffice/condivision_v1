@@ -27,7 +27,7 @@ if (isset($_POST['link'])) {
     if (mysql_query($query, CONNECT)) {
 
         @mysql_close(CONNECT);
-        header("Location: ./");
+        header("Location: ./?categoria_id=3");
         exit;
     } else {
         @mysql_close(CONNECT);

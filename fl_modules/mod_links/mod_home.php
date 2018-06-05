@@ -44,7 +44,7 @@
   </div>
   
   <form id="form_1" class="admin_form" method="get" action="" enctype="multipart/form-data">
-  <input type="hidden" name="categoria_id" value="<?php echo check($_GET['categoria_id']); ?>">
+  <input type="hidden" name="categoria_id" value="<?php echo $cat  =  (isset($_GET['categoria_id'])) ? check($_GET['categoria_id']) : 3; ?>">
   <select name="link_cat_id" id="link_cat_id" onChange="form.submit()">
   <?php foreach ($link_cat as $chiave => $valore) {
     $selected = ($_GET['link_cat_id'] == $chiave) ? 'selected' : '';

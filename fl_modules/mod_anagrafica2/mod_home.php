@@ -53,7 +53,7 @@ while ($riga = mysql_fetch_array($risultato)) {
 
 
 
-        $user_check = '<a data-fancybox-type="iframe" title="Modifica Account" class="fancybox" href="../mod_account/mod_visualizza.php?external&id=' . $riga['acid'] . '">' . $riga['user'] . '</a> <br>' . $riga['motivo_sospensione'];
+        $user_check = '<a title="Modifica Account"  href="../mod_account/mod_visualizza.php?external&id=' . $riga['acid'] . '">' . $riga['user'] . '</a> <br>' . $riga['motivo_sospensione'];
         $user_ball = ($riga['accountAttivo'] == 1) ? "<span class=\"c-green\"><i class=\"fa fa-user\"></i></span>" : "<span class=\"c-red\"><i class=\"fa fa-user\"></i></span>";
         $status_anagrafica = ($riga['status_anagrafica'] == 1) ? "" : "<span class=\"msg red\">Anagrafica non attiva</span>";
 

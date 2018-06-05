@@ -30,7 +30,7 @@ if ($_GET['form']) {
         mysql_query('INSERT INTO fl_data_link_mon (id_link,n_monitor,id_account) VALUES (' . $id . ',' . $params['n_monitor'] . ',' . $_SESSION['number'] . ')', CONNECT);
 
         for ($i = 1; $i <= $params['n_monitor']; $i++) {
-            array_push($links['data'], 'http://service.1x2live.it/index' . $external . '.html?id=' . $link_id . '&monitor_id=' . $i . '&monitor_count=' . $params['n_monitor'] . '&token=' . $token);
+            array_push($links['data'], 'https://service.1x2live.it/index' . $external . '.html?id=' . $link_id . '&monitor_id=' . $i . '&monitor_count=' . $params['n_monitor'] . '&token=' . $token);
         }
 
         $links['esito'] = 1;
@@ -40,7 +40,7 @@ if ($_GET['form']) {
         //inserimento per statistiche numero monitor
         mysql_query('INSERT INTO fl_data_link_mon (id_link,n_monitor,id_account) VALUES (' . $id . ',1,' . $_SESSION['number'] . ')', CONNECT);
 
-        array_push($links['data'], 'http://service.1x2live.it/index' . $external . '.html?id=' . $link_id . '&monitor_id=1&monitor_count=1' . '&token=' . $token);
+        array_push($links['data'], 'https://service.1x2live.it/index' . $external . '.html?id=' . $link_id . '&monitor_id=1&monitor_count=1' . '&token=' . $token);
         $links['esito'] = 1;
 
     } else {

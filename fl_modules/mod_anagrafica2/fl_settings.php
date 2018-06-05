@@ -140,6 +140,9 @@ unset($stato_nascita[0]);unset($stato_sede[0]);unset($stato_residenza[0]);unset(
 $luogo_di_nascita = $comune_punto = $comune_sede = $comune_residenza = $data_set->data_retriever('fl_istat_comuni', 'comune', '', 'comune ASC');
 unset($luogo_di_nascita[0]);unset($comune_punto[0]);unset($comune_sede[0]);unset($comune_residenza[0]);
 
+$marchio = array(0 => '1x2Live', 1 => 'Betitaly', 2 => 'Betscore', 3 =>'Giocasempre');
+
+
 $provincia_nascita = $provincia_residenza;
 
 $mandatory = array("id");

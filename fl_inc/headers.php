@@ -314,7 +314,7 @@ $('#action_list').change(function(){
 $( "#invio" ).click(function( event ) {
  
 
-<?php if(isset($text_editor)) { ?> tinymce.triggerSave();  <?php  } ?>
+<?php if(isset($text_editor)) { ?> /*tinymce.triggerSave();*/  <?php  } ?>
 var form = $( "#scheda" ),
 url = '/fl_modules/mod_basic/save_data.php';
 var data = new FormData(form[0]);
@@ -450,8 +450,8 @@ $( ".loadData" ).on('submit',this,function( event ) {
 	$( "#oggetto" ).val(data.oggetto);
 	$( "#messaggio" ).val(data.messaggio);
 	$( "#templateId" ).val(data.id);
-  tinyMCE.activeEditor.setContent('');
-  tinymce.activeEditor.execCommand('mceInsertContent', false, data.messaggio);
+  //tinyMCE.activeEditor.setContent('');
+  //tinymce.activeEditor.execCommand('mceInsertContent', false, data.messaggio);
 	$('#info').html( $("#messaggio" ).value.length+' caratteri');
 
    });
@@ -482,7 +482,7 @@ $("#barcode" ).focus();
 
 $( ".updateField" ).focusout(function( event ) {
   $(window).unbind('beforeunload');
-  <?php if(isset($text_editor)) { ?> tinymce.triggerSave(); /* Salva testo di MCE */  <?php  } ?>
+  <?php if(isset($text_editor)) { ?> /*tinymce.triggerSave();*/ /* Salva testo di MCE */  <?php  } ?>
   var valore = $(this).val();
   var field = $(this).attr('name');
   var id = $(this).attr('data-rel');
@@ -675,22 +675,27 @@ $.fancybox({
 if((!isset($_GET['advanced']) || @check($_GET['advanced']) == 0) && isset($text_editor)) { ?>
 
 
-<script type="text/javascript" src="<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/tinymce/tinymce.min.js"></script>
+<!-- <script type="text/javascript" src="<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="https://dev.1x2live.it/fl_set/jsc/tinymce/tinymce.min.js"></script>  -->
+
+
 <script type="text/javascript">
- tinymce.init({
-  selector: 'textarea',
-  height: 300,
-  menubar: false,
-  plugins: [
-    'advlist autolink lists link image charmap print preview anchor textcolor',
-    'searchreplace visualblocks code fullscreen',
-    'insertdatetime media table contextmenu paste code help wordcount'
-  ],
-  toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-  content_css: [
-    '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-    '//www.tinymce.com/css/codepen.min.css']
-});
+
+
+//  tinymce.init({
+//   selector: 'textarea',
+//   height: 300,
+//   menubar: false,
+//   plugins: [
+//     'advlist autolink lists link image charmap print preview anchor textcolor',
+//     'searchreplace visualblocks code fullscreen',
+//     'insertdatetime media table contextmenu paste code help wordcount'
+//   ],
+//   toolbar: 'insert | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+//   content_css: [
+//     '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+//     '//www.tinymce.com/css/codepen.min.css']
+// });
 
 function inIframe () {
     try {

@@ -29,7 +29,7 @@ while ($riga = mysql_fetch_array($risultato)) {
 
     for ($i = 1; $i <= $slider_info[0]['numero_monitor']; $i++) {
 
-        $link = 'http://service.1x2live.it/index' . $external . '.html?id=' . $riga['link_id'] . '&monitor_id=' . $i . '&monitor_count=' . $slider_info[0]['numero_monitor'] . '&token=' . $token;
+        $link = 'https://service.1x2live.it/index' . $external . '.html?id=' . $riga['link_id'] . '&monitor_id=' . $i . '&monitor_count=' . $slider_info[0]['numero_monitor'] . '&token=' . $token;
         $time = rand();
 
         $string = "window.open('../mod_liveslider/mod_service.php?url=".$link."','".$time."','directories=no,titlebar=no,toolbar=no,location=0,status=no,menubar=no,scrollbars=no')"; 

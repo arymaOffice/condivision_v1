@@ -73,7 +73,7 @@ if (isset($_GET['DELabb'])) {
     $delete = "DELETE FROM `fl_abb_user` WHERE id = " . $abb_id;
     mysql_query($delete, CONNECT);
     mysql_close(CONNECT);
-    header('Location: /fl_modules/mod_live_abbonamenti/mod_user_abbonamento.php?a=gestabbonamenti');
+    header("Location: " . check($_SERVER['HTTP_REFERER']));
     exit;
 }
 

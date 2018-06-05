@@ -4,7 +4,7 @@
 if (!@$thispage) {echo "Accesso Non Autorizzato";exit;}
 
 
-
+$module_title .= '<a href="../mod_account/mod_inserisci.php?id=1&amp;a=direzione" style="color: gray"> <i class="fa fa-plus-circle"></i>  </a>';
 
 if (isset($_GET['ordine'])) {if (!is_numeric($_GET['ordine'])) {exit;} else { $ordine = $ordine_mod[$_GET['ordine']];}}
 

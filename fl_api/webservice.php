@@ -291,22 +291,33 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
 
         $mail_message = '';
 
+$myfile = fopen("testfile.txt", "w") ;
+fwrite($myfile,$input );
+foreach ($_GET as $chiave1 => $valore1) { fwrite($myfile,$chiave1.'--'.$valore1); }
+fclose($myfile);
+
+        $email = check($_GET['email']);
+
         unset($_REQUEST['insert_lead_app']);
         unset($_REQUEST['token']);
+        unset($_GET['email']);
 
-        //echo $_REQUEST;
+        //foreach ($_REQUEST as $chiave1 => $valore1) {
 
-        foreach ($_REQUEST as $chiave1 => $valore1) {
+            $array_json = json_decode($_REQUEST['data'], true);
 
-            $array_json = json_decode($chiave1, true);
-        
-        mail('asaracino@aryma.it', 'json', $array_json);
-            
+       // mail('michelefazio@aryma.it', "Problema inserimento nuovo veicolo su: " . ROOT, $array_json);
+   
             foreach ($array_json as $chiave => $valore) {
 
                 if ($chiave == 'telefono' || $chiave == 'telefono_alternativo') {
                     $valore = $this->cleanPhone($this->check($valore));
                 }
+
+              if ($chiave == 'email' || $chiave == 'email') {
+                     $valore = $email;
+                }
+
 
                 if (in_array($chiave, $this->obbligatorio)) {
                     if ($valore == "") {
@@ -332,7 +343,7 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
 
                 $mail_message .= '<p>' . $chiave . ' = ' . $$chiave . '</p>';
             }
-        }
+        //}
 
 
         $status_potentials = array('Da Assegnare', 'Assegnato a BDC', 'Appuntamento', 'Non Interessato', 'Cliente', 'Valuta', 'Acquistato Concorrenza', 'Preventivo', 'Assegnato a Venditore', 'Eliminato');

@@ -19,7 +19,7 @@ var mainView = app.views.create('.view-main', {
   url: '/'
 });
 
-var endpoint = 'https://dev.bluemotive.it/fl_api/';
+var endpoint = 'https://authos.bluemotive.it/fl_api/';
 var current_lead_id = '';
 // Show/hide preloader for remote ajax loaded pages
 $$(document).on('ajaxStart', function (e) {
@@ -226,17 +226,19 @@ $$('.invia').on('click', function (e) {
   var descrizione = $$('input[name="descrizione"]').val(); formData['descrizione'] = descrizione;
 
   formData['lead_generator'] = localStorage.id;
-
   
+  var email = $$('input[name="email"]').val();
 
-  localStorage.setItem('email', $$('input[name="email"]').val());
+ 
+  localStorage.setItem('email',email);
 
-  var storedData = JSON.stringify(formData);
+  var storedData = { 'data' : JSON.stringify(formData)};
 
+console.log(endpoint + '?insert_lead_app&email='+email+'&token=' + window.GlobalToken);
 
   if (nome != '' && telefono != '' && source_potential != 'NULL') {
     app.request({
-      url: endpoint + '?insert_lead_app&token=' + window.GlobalToken,
+      url: endpoint + '?insert_lead_app&email='+email+'&token=' + window.GlobalToken,
       method: 'POST',
       dataType: 'json',
       //send "query" to server. Useful in case you generate response dynamically

@@ -14,7 +14,8 @@ $dataset = (isset($_GET)) ? $_GET : $_POST;
 $message = $_SERVER['REQUEST_URI'] . "\r\n\r\n<br>";
 //mail('michelefazio@aryma.it','APP',$message,intestazioni);
 
-foreach ($dataset as $chiave => $valore) {$message .= $chiave . " = " . $valore . "\r\n<br>";}
+foreach ($dataset as $chiave => $valore) { $message .= $chiave . " = " . $valore . "\r\n<br>"; }
+
 function mandatory_fileds($array)
 {
     foreach ($array as $chiave => $valore) {

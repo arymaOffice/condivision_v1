@@ -130,6 +130,18 @@ class webservice
             $status_potential = 0;
         }
 
+        /** controllo di source potential per facebook form  */
+        $control_source = mysql_fetch_assoc(mysql_query('SELECT count(*) as esiste FROM fl_campagne_attivita WHERE id = '.$source_potential,CONNECT));
+        if(isset($control_source['esiste']) && $control_source['esiste'] == 0){
+            $id_per_insert = filter_var($source_potential,FILTER_SANITIZE_NUMBER_INT); 
+            $inserisci_attivita = "INSERT INTO fl_campagne_attivita (id,campagna_id,oggetto,descrizione,data_inizio,data_fine) VALUES ('".$id_per_insert
+            ."','2','".$id_per_insert." form facebook','".$id_per_insert." form facebook',NOW(),NOW() + INTERVAL 1 MONTH)";
+            mysql_query($inserisci_attivita,CONNECT);
+        }
+        /**  */
+
+
+
         $industry = $job_title;
 
         $telCheck = ($telefono != '' && $telefono != 0) ? " OR telefono LIKE '$telefono' " : '';
@@ -296,9 +308,9 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
 
         //echo $_REQUEST;
 
-        foreach ($_REQUEST as $chiave1 => $valore1) {
+        //foreach ($_REQUEST as $chiave1 => $valore1) {
 
-            $array_json = json_decode($chiave1, true);
+            $array_json = json_decode($_REQUEST['data'], true);
 
             foreach ($array_json as $chiave => $valore) {
 
@@ -330,7 +342,7 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
 
                 $mail_message .= '<p>' . $chiave . ' = ' . $$chiave . '</p>';
             }
-        }
+        //}
 
         $status_potentials = array('Da Assegnare', 'Assegnato a BDC', 'Appuntamento', 'Non Interessato', 'Cliente', 'Valuta', 'Acquistato Concorrenza', 'Preventivo', 'Assegnato a Venditore', 'Eliminato');
 

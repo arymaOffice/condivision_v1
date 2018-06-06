@@ -391,9 +391,9 @@ if(isset($newid)) { $id = (is_numeric($newid)) ? check($newid) : exit; $where = 
 	}
     }
 	
-	if(isset($_GET['label'])) { echo '</div></div><p class="savetabs"><input type="submit" value="Salva Configurazione"></p> ';} else {
+	if(isset($_GET['label'])) { echo '</div></div><p class="savetabs"><input type="submit"  value="Salva Configurazione"></p> ';} else {
 	if(isset($tabs_div) && @$tabs_div != 0) {  
-	echo '</div></div>'; echo '<p class="savetabs"><a href="#" id="invio" class="button salva"> '.$save_form.' <i class="fa fa-check"></i></a></p>';
-	} else { echo '</div></div><p class="savetabs"><a href="#" id="invio" class="button salva"> '.$save_form.' <i class="fa fa-check"></i></a></p>'; }
+	echo '</div></div>'; echo '<p class="savetabs"><input type="submit"  class="button salva"  value=" '.$save_form.' " ></p>';
+	} else { echo '</div></div><p class="savetabs"><input type="submit" class="button salva" value=" '.$save_form.'" ></p>'; }
 	}
 	?>

@@ -19,7 +19,7 @@
 	$searchbox = 'Cerca..';
 	$documentazione_auto = 18;
 	$tabella = $tables[$tab_id];
-	$tab_div_labels = array('id'=>"Dati Attività",'../mod_import/mod_user.php?id=[*ID*]'=>'Upload CSV');
+	$tab_div_labels = array('id'=>"Dati Attività",'../fl_modules/mod_import/mod_user.php?id=[*ID*]'=>'Upload CSV');
 
 	 $action = (isset($_GET['action'])) ? check($_GET['action']) : 0;
 

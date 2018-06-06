@@ -3,6 +3,7 @@
 require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
 
+
 if(!isset($_GET['external'])) include('../../fl_inc/module_menu.php'); ?>
 
 

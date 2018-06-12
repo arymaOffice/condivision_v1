@@ -5,9 +5,14 @@
 
 require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
+$tabs_div = 2;
+$tab_div_labels = array();
+$tab_div_labels['logo'] = "Info Account";
+$tab_div_labels['./mod_user.php?anagrafica_id=[*ID*]'] = "Modifica Password";
 
 include("../../fl_inc/headers.php");
 include("../../fl_inc/testata_mobile.php");
+
 
 
  ?>

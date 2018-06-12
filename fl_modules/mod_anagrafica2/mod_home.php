@@ -10,7 +10,7 @@ if (isset($_GET['ordine'])) {if (!is_numeric($_GET['ordine'])) {exit;} else { $o
 
 $start = paginazione(CONNECT, $tabella, $step, $ordine, '', 0);
 
-$query = "SELECT $select,ac.id as acid ,an.marchio as anaMarchio, an.id as anid,ac.attivo as accountAttivo, (SELECT count(*) FROM `fl_one_session` WHERE attivo = 1 and utente = ac.email ) sessionActive  FROM `$tabella` an LEFT JOIN fl_account ac ON ac.anagrafica = an.id WHERE ac.id > 1 ORDER BY $ordine LIMIT $start,$step;";
+$query = "SELECT $select,ac.id as acid ,an.marchio as anaMarchio, an.id as anid,ac.attivo as accountAttivo, (SELECT count(*) FROM `fl_one_session` WHERE attivo = 1 and utente = ac.email ) sessionActive  FROM `$tabella` an LEFT JOIN fl_account ac ON ac.anagrafica = an.id   WHERE ac.id > 1 ORDER BY $ordine LIMIT $start,$step;";
 
 $risultato = mysql_query($query, CONNECT);
 echo mysql_error();
@@ -100,7 +100,7 @@ while ($riga = mysql_fetch_array($risultato)) {
 					<td class=\"desktop info_sede_legale\">" . $riga['comune_sede'] . " (" . @$riga['provincia_sede'] . ") " . $riga['cap_sede'] . "<br>" . $riga['indirizzo_sede_legale'] . "</td>
 					<td class=\"desktop info_sede_operativa\" >" . $sede_punto . "</td>";
         echo "<td class=\"desktop\"><i class=\"fa fa-envelope-o\"></i> <a href=\"mailto:" . checkEmail($riga['email']) . "\">" . checkEmail(@$riga['email']) . "</a>
-					<br><i class=\"fa fa-phone\" style=\"padding: 5px 10px;\"></i>" . phone_format($riga['telefono']) . " - " . phone_format($riga['cellulare']) . "</td>";
+					<br><i class=\"fa fa-phone\" style=\"padding: 5px 10px;\"></i>" . $riga['telefono'] . " - " . $riga['cellulare'] . "</td>";
 
 
 

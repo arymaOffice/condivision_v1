@@ -1,14 +1,25 @@
 <?php
 
+if (!isset($_SESSION)) { //pezza a colori per qunado questo file è richiamato da un amministratore e quindi carica tutto per l'iframe
+    require_once '../../fl_core/autentication.php';
+    include 'fl_settings.php'; // Variabili Modulo
+    include "../../fl_inc/headers.php";
+
+}
+
 $number = $_SESSION['number'];
 $id = (isset($_GET['id'])) ? check($_GET['id']) : $number;
 
 ?>
 <div id="content">
-<?php if(isset($_GET['esito'])) { $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p class="esito '.$class.'">'.check($_GET['esito']).'</p>'; }  ?>
+<?php if (isset($_GET['esito'])) {$class = (isset($_GET['success'])) ? 'green' : 'red';
+    echo '<p class="esito ' . $class . '">' . check($_GET['esito']) . '</p>';}?>
 
 <h1>Modifica Password di accesso</h1>
-<p><?php if(@$_SESSION['aggiornamento_password'] < -90) echo "<div class=\"red\" style=\"padding: 5px;\">Devi obbligatoriamente scegliere una nuova password per accedere al sistema.</div>"; ?></p>
+<p><?php if (@$_SESSION['aggiornamento_password'] < -90) {
+    echo "<div class=\"red\" style=\"padding: 5px;\">Devi obbligatoriamente scegliere una nuova password per accedere al sistema.</div>";
+}
+?></p>
 <form id="scheda2" action="./mod_opera.php" method="post" enctype="multipart/form-data">
 
 <div class="form_row">
@@ -35,11 +46,11 @@ $id = (isset($_GET['id'])) ? check($_GET['id']) : $number;
 </form>
 
 <p>
-Versione: 2.1.2 |  Utente: <strong><?php echo $_SESSION['user']; ?></strong> |  IP: <?php echo $_SERVER['REMOTE_ADDR'] ?> | 
+Versione: 2.1.2 |  Utente: <strong><?php echo $_SESSION['user']; ?></strong> |  IP: <?php echo $_SERVER['REMOTE_ADDR'] ?> |
 <strong>GDPR 2016/679 Informativa sul trattamento dei dati riguardanti il vostro account</strong>
-L'accesso alla piattaforma è da intendersi personale ed esclusivamente riservato all'utente autorizzato. 
+L'accesso alla piattaforma è da intendersi personale ed esclusivamente riservato all'utente autorizzato.
 Ne è vietata la riproduzione sotto ogni forma. La vostra password scade ogni 90 giorni e va reimpostata obbligatoriamente.
-In conformità ai requisiti del DL 196 del 30/6/2003, 
+In conformità ai requisiti del DL 196 del 30/6/2003,
 si informa che ogni accesso, riconoscibile da IP e username, sarà registrato e potrà essere monitorato.
 Le attività eseguite nell'ambiente gestionale sono registrate per motivi di sicurezza.
 </p>

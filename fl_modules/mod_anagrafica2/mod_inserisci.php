@@ -5,7 +5,6 @@ $loadSelectComuni = 1;
 
 $id = ($_SESSION['usertype'] > 1) ? $_SESSION['anagrafica'] : check($_GET['id']);
 
-
 if ($id > 1) {
     $profilo = @GRD('fl_anagrafica', @$id);
 }
@@ -17,13 +16,17 @@ if (!isset($_GET['view'])) {
     include "../../fl_inc/testata_mobile.php";
 }
 
-
 $tab_div_labels = array('marchio' => 'Profilo', 'nome' => 'Dati Anagrafici', 'tipo_documento' => "Dati Documento", 'forma_giuridica' => "Dati Fiscali", 'tipologia_attivita' => 'Dati Sede Operativa', 'lat' => $etichette_anagrafica['tipologia_attivita'], 'telefono' => "Contatti");
 
 ?>
 
 
-
+<style>
+.savetabs{
+    position: relative;
+margin-top: 500px;
+}
+</style>
 
 <body style=" background: rgb(241, 241, 241) none repeat scroll 0% 0%;">
 <div id="container" >
@@ -45,13 +48,14 @@ $tab_div_labels = array('marchio' => 'Profilo', 'nome' => 'Dati Anagrafici', 'ti
     echo '<p class="esito ' . $class . '">' . check($_GET['esito']) . '</p>';}?>
 <div id="map-canvas"></div>
 <form id="scheda" action="../mod_basic/action_modifica.php" method="post" enctype="multipart/form-data">
+
 <?php include '../mod_basic/action_estrai.php';?>
-<?php 
-if(!isset($_GET['error']) && isset($_GET['first']) && $_GET['id'] > 1){
-    echo '<input type="hidden" name="goto" value="../mod_account/mod_inserisci.php?id=1&&anagrafica_id='.$id.'" />';
+<?php
+if (!isset($_GET['error']) && isset($_GET['first']) && $_GET['id'] > 1) {
+    echo '<input type="hidden" name="goto" value="../mod_account/mod_inserisci.php?id=1&&anagrafica_id=' . $id . '" />';
 }
-if($_SESSION['usertype'] > 1){
-   echo "<script> $( '#marchio' ).css('display','none); </script>";
+if ($_SESSION['usertype'] > 1) {
+    echo "<script> $( '#marchio' ).css('display','none); </script>";
 }
 ?>
 </form>

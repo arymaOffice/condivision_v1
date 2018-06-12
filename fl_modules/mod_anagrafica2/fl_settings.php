@@ -131,14 +131,15 @@ $data_set = new ARY_dataInterface();
 include $_SERVER['DOCUMENT_ROOT'] . '/fl_core/dataset/array_statiche.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/fl_core/dataset/proprietario.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/fl_core/dataset/provincia.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/fl_core/dataset/citta.php';
 $account_id = $proprietario;
 
 $tipologia_attivita = $data_set->get_items_key("punto_vendita");
+
 $stato_nascita = $stato_sede = $stato_residenza = $stato_punto = $stato = $data_set->data_retriever('fl_stati', 'descrizione', "WHERE id != 1", 'descrizione ASC');
 unset($stato_nascita[0]);unset($stato_sede[0]);unset($stato_residenza[0]);unset($stato_punto[0]);unset($stato[0]);
 
-$luogo_di_nascita = $comune_punto = $comune_sede = $comune_residenza = $data_set->data_retriever('fl_istat_comuni', 'comune', '', 'comune ASC');
-unset($luogo_di_nascita[0]);unset($comune_punto[0]);unset($comune_sede[0]);unset($comune_residenza[0]);
+$luogo_di_nascita = $comune_punto = $comune_sede = $comune_residenza = $citta;
 
 $marchio = array(0 => '1x2Live', 1 => 'Betitaly', 2 => 'Betscore', 3 =>'Giocasempre');
 

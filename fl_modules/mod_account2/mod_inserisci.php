@@ -14,7 +14,7 @@ include("../../fl_inc/headers.php");
 include("../../fl_inc/testata_mobile.php");
 
 
-?><body style=" background: #FFFFFF;">
+?><body style=" background: rgb(241, 241, 241) none repeat scroll 0% 0%;">
 <div id="container" >
 
 

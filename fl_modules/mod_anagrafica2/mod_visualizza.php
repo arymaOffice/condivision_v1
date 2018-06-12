@@ -5,7 +5,7 @@ include('fl_settings.php'); // Variabili Modulo
 include("../../fl_inc/headers.php"); ?>
 
 
-<body style=" background: #FFFFFF;">
+<body style=" background: rgb(241, 241, 241) none repeat scroll 0% 0%;">
 <div id="print_container">
 
 

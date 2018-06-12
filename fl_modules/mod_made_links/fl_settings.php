@@ -44,13 +44,11 @@ $module_title = 'Configuratore link'; //Titolo del modulo
 $module_menu = ''; //Menu del modulo
 
 $module_menu = '
-   	  <li><a href="' . ROOT . $cp_admin . 'fl_modules/mod_made_links/?a=configuratore&cat=3" class="">Calcio</a></li>
-   	  <li><a href="' . ROOT . $cp_admin . 'fl_modules/mod_made_links/?a=configuratore&cat=4" class="">Tennis</a></li>
-   	  <li><a href="' . ROOT . $cp_admin . 'fl_modules/mod_made_links/?a=configuratore&cat=6" class="">Basket</a></li>
-   	  <li><a href="' . ROOT . $cp_admin . 'fl_modules/mod_made_links/?a=configuratore&cat=7" class="">Volley</a></li>
-   	  <li><a href="' . ROOT . $cp_admin . 'fl_modules/mod_made_links/?a=configuratore&cat=8" class="">Hockey</a></li>
-   	  <li><a href="' . ROOT . $cp_admin . 'fl_modules/mod_made_links/?a=configuratore&cat=9" class="">Baseball</a></li>
-   	  <li><a href="' . ROOT . $cp_admin . 'fl_modules/mod_made_links/?a=configuratore&cat=10" class="">Football Americano</a></li>
+   	  <li><a href="' . ROOT . $cp_admin . 'fl_modules/mod_made_links/?a=configuratore&marchio=-1" class="">Tutti</a></li>
+   	  <li><a href="' . ROOT . $cp_admin . 'fl_modules/mod_made_links/?a=configuratore&marchio=0" class="">1x2live</a></li>
+   	  <li><a href="' . ROOT . $cp_admin . 'fl_modules/mod_made_links/?a=configuratore&marchio=1" class="">Betitaly</a></li>
+   	  <li><a href="' . ROOT . $cp_admin . 'fl_modules/mod_made_links/?a=configuratore&marchio=2" class="">Betscore</a></li>
+   	  <li><a href="' . ROOT . $cp_admin . 'fl_modules/mod_made_links/?a=configuratore&marchio=3" class="">Giocasempre</a></li>
     ';
 
 if (isset($_GET['data_da']) && check($_GET['data_da']) != "" && check($_GET['data_a']) != "") {
@@ -76,12 +74,10 @@ $ordine_mod = array("id DESC"); // Tipologie di ordinamento disponobili
 $ordine = $ordine_mod[0];
 
 /* Filtri personalizzati */
-if(isset($_GET['cat'])){
-	$tipologia_main .= ' AND categoria_link='.check($_GET['cat']);
-}
-
 if($_SESSION['usertype']>0){
 	$tipologia_main .= ' AND marchio='.$_SESSION['marchio'];
+}elseif(isset($_GET['marchio']) && $_GET['marchio'] > -1 ){
+    $tipologia_main .= ' AND marchio='.$_SESSION['marchio'];
 }
 
 

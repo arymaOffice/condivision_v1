@@ -8,7 +8,7 @@ $cat_id = filter_var($_GET['categoria_ads'],FILTER_SANITIZE_NUMBER_INT);
 $per_questa_categoria = $data_set->data_retriever('fl_ads','folder_number',' WHERE categoria_ads =  '.$cat_id ); //Crea un array con i valori X2 della tabella X1
 ?>
 
-<body style=" background: #FFFFFF;">
+<body style=" background: rgb(241, 241, 241) none repeat scroll 0% 0%;">
 <div id="container" >
 <div id="content_scheda">
 <form  action="mod_opera.php" method="POST" enctype="multipart/form-data">

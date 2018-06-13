@@ -16,7 +16,13 @@ include "../../fl_inc/headers.php";
 <?php if(!isset($_GET['external'])) include('../../fl_inc/module_menu.php'); ?>
     
 <?php
+
+
+	$tabella = ' fl_abb_user  abb_us JOIN fl_abbonamenti abb ON abb.id = abb_us.id_abb RIGHT JOIN fl_account acc ON acc.id = abb_us.id_user  ';
+	$ordine = ' abb.id ASC';
+	$tipologia_main = '';
 	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main);
+
 	$query = "SELECT *,acc.id as acid,DATE_FORMAT(data_avvio,'%d/%m/%Y %H:%i:%s ') as data_format_start,DATE_FORMAT(data_fine,'%d/%m/%Y %H:%i:%s ') as data_format_end  FROM fl_abb_user  abb_us JOIN fl_abbonamenti abb ON abb.id = abb_us.id_abb RIGHT JOIN fl_account acc ON acc.id = abb_us.id_user  LIMIT $start,$step;";
 	$risultato = mysql_query($query, CONNECT);
 ?>

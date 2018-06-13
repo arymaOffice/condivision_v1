@@ -14,7 +14,7 @@ $riga = mysql_fetch_assoc($risultato);
 ?>
 
 <p>Il tuo abbonamento &egrave attivo dal <?php echo $riga['data_avvio_f'] ?> e scade il <?php echo $riga['data_fine_f'] ?>
-
+<br> per completare l'attivazione &egrave necessario completare il pagamento <a href="" class="button" >Paga ora</a>
 </p>
 
 

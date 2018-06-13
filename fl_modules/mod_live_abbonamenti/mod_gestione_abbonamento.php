@@ -11,7 +11,7 @@ include '../../fl_inc/testata_mobile.php';
 $query = "SELECT *,abb_us.id as abus,DATE_FORMAT(data_avvio,'%d/%m/%Y %H:%i:%s ') as data_format_start,DATE_FORMAT(data_fine,'%d/%m/%Y %H:%i:%s ') as data_format_end  FROM fl_abb_user  abb_us JOIN fl_abbonamenti abb ON abb.id = abb_us.id_abb JOIN fl_periodi p ON p.id = abb.periodo  WHERE abb_us.id_user = '" . $user_id . "'";
 $risultato = mysql_query($query, CONNECT);
 
-echo '<br><br><br><br><table class="dati">';
+echo '<br><br><br><br><div id="content_scheda"><table class="dati">';
 
 if (mysql_affected_rows() == 0) {
     //selezione abbonamenti
@@ -40,6 +40,6 @@ if (mysql_affected_rows() == 0) {
 }
 
 ?>
-
+</div>
 </table>
 

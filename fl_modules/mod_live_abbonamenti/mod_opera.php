@@ -42,11 +42,12 @@ if (isset($_POST['servizi_add'])) { //aggiunta servizi all'abbonamneto
 if (isset($_GET['abb'])) {
 
     $abb_id = filter_var(base64_decode($_GET['abb']), FILTER_SANITIZE_NUMBER_INT);
-    $abb_info = GQD('fl_abbonamenti as abb JOIN fl_periodi pd ON pd.id = abb.periodo ', 'durata,label,costo', 'abb.id = ' . $abb_id);
+    $abb_info = GQD('fl_abbonamenti as abb JOIN fl_periodi pd ON pd.id = abb.periodo ', 'durata,label,costo,free', 'abb.id = ' . $abb_id);
     $user_id = (isset($_GET['user'])) ? check($_GET['user']) : $_SESSION['number'];
+    $status = ($abb_info['free'] == 1) ? 1 : 0;
 
-    $insert = "INSERT INTO `fl_abb_user` (`id_user`, `id_abb`, `data_avvio`, `data_fine`, `data_creazione`, `data_blocco`, `note`, `prezzo`) VALUES (
-        '" . $user_id . "','" . $abb_id . "',NOW(),DATE_ADD(NOW(), INTERVAL " . $abb_info['durata'] . " " . $abb_info['label'] . "),NOW(),'0000-00-00','','" . $abb_info['costo'] . "')";
+    $insert = "INSERT INTO `fl_abb_user` (`id_user`, `id_abb`, `data_avvio`, `data_fine`, `data_creazione`, `data_blocco`, `note`, `prezzo`,`status`) VALUES (
+        '" . $user_id . "','" . $abb_id . "',NOW(),DATE_ADD(NOW(), INTERVAL " . $abb_info['durata'] . " " . $abb_info['label'] . "),NOW(),'0000-00-00','','" . $abb_info['costo'] . "','".$status."')";
 
     $insert = mysql_query($insert, CONNECT);
 
@@ -69,8 +70,8 @@ if (isset($_GET['abb'])) {
 
 //mod_gestione_abbonamento.php disattiva abbonamento andrea
 if (isset($_GET['DELabb'])) {
-    $abb_id = filter_var(base64_decode($_GET['DELabb']), FILTER_SANITIZE_NUMBER_INT);
-    $delete = "DELETE FROM `fl_abb_user` WHERE id = " . $abb_id;
+    $abb_id = filter_var($_GET['DELabb'], FILTER_SANITIZE_NUMBER_INT);
+    $delete = "DELETE FROM `fl_abb_user` WHERE id = " . $abb_id; 
     mysql_query($delete, CONNECT);
     mysql_close(CONNECT);
     header("Location: " . check($_SERVER['HTTP_REFERER']));

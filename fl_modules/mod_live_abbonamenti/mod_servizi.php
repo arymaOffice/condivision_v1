@@ -36,7 +36,7 @@ font-weight: bold;
 }
 </style>
 <h1 style="text-align:center;">Seleziona i servizi associati all'abbonamento</h1><br><br>
-<?php if(@$_GET['esito'] == 1){ echo '<p class="green modificato" >'.@$_GET['info_txt'].'</p>';}elseif(@$_GET['esito'] == 0){
+<?php if(isset($_GET['esito']) && $_GET['esito'] == 1){ echo '<p class="green modificato" >'.@$_GET['info_txt'].'</p>';}elseif(isset($_GET['esito']) && $_GET['esito'] == 0){
     echo '<p class="red modificato">'.@$_GET['info_txt'].'</p>';
 } ?>
 <br>

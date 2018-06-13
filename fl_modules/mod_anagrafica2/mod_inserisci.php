@@ -62,6 +62,7 @@ if ($_SESSION['usertype'] > 1) {
 <script>
 $('label[for="status_anagrafica1"]').text('attiva');
 $('label[for="status_anagrafica2"]').text('disattiva');
+$('[id^=data_]').prop("type", "date");
 $( '#marchio' ).val('<?php echo $profilo['marchio']; ?>');
 
 

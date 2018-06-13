@@ -2,10 +2,13 @@
 
 require_once('../../fl_core/autentication.php');
 
-if((@$_SESSION['anagrafica_attiva'] == 0 && $_SESSION['usertype'] != 0) || ($_SESSION['scelta_abbonamento'] == 1 && $_SESSION['usertype'] != 0)){
+if(@$_SESSION['anagrafica_attiva'] == 0 && $_SESSION['usertype'] != 0){
+    header('Location: ../../index.php');
+}elseif($_SESSION['scelta_abbonamento'] == 1 && $_SESSION['usertype'] != 0){
+    header('Location: ../../index.php');
+}elseif($_SESSION['abbonamento_attivo'] == 1 && $_SESSION['usertype'] != 0){
     header('Location: ../../index.php');
 }
-
 
 include('fl_settings.php'); // Variabili Modulo 
 include("../../fl_inc/headers.php");?>

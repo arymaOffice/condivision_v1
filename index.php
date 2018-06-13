@@ -41,6 +41,8 @@ if(@$_SESSION['anagrafica_attiva'] == 0 && $_SESSION['usertype'] != 0){
     $page = 'fl_modules/mod_anagrafica2/mod_inserisci_smart.php';
 }elseif($_SESSION['scelta_abbonamento'] == 1 && $_SESSION['usertype'] != 0){
     $page = 'fl_modules/mod_live_abbonamenti/mod_user.php';
+}elseif($_SESSION['abbonamento_attivo'] == 1 && $_SESSION['usertype'] != 0){
+    $page = 'fl_modules/mod_live_abbonamenti/mod_user_vista_incluso.php';
 }
 
 

@@ -2,8 +2,7 @@
 
 require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
-
- 
+$new_button = '<a href="../mod_account/mod_inserisci.php?id=1&amp;a=direzione" style="color: gray"> <i class="fa fa-plus-circle"></i>  </a>'; 
 include("../../fl_inc/headers.php");?>
 
 

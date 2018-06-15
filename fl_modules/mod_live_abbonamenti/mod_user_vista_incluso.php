@@ -14,12 +14,17 @@ $risultato = mysql_query($query, CONNECT);
 if (mysql_affected_rows() == 0) {echo "Nessun Elemento";}
 
 $riga = mysql_fetch_assoc($risultato);
-?>
-<div id="container">
-<p>Il tuo abbonamento &egrave attivo dal <?php echo $riga['data_avvio_f'] ?> e scade il <?php echo $riga['data_fine_f'] ?>
-<br> per completare l'attivazione &egrave necessario completare il pagamento <a href="" class="button" >Paga ora</a>
-</p>
-</div>
 
+echo '<div id="container">';
+
+if($riga['status'] == 1){
+    echo '<p>Il tuo abbonamento &egrave attivo dal '.$riga['data_avvio_f'].' e scade il '.$riga['data_fine_f'].'</p>';
+}else{
+    echo '<p>Per completare l\'attivazione &egrave necessario completare il pagamento tramite bonifico </p>';
+}
+
+
+?>
+</div>
 
 <script>$('.paginazione').css('display','none');</script>

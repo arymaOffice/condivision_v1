@@ -47,7 +47,7 @@ if (isset($_GET['abb'])) {
     $status = ($abb_info['free'] == 1) ? 1 : 0;
 
     $insert = "INSERT INTO `fl_abb_user` (`id_user`, `id_abb`, `data_avvio`, `data_fine`, `data_creazione`, `data_blocco`, `note`, `prezzo`,`status`) VALUES (
-        '" . $user_id . "','" . $abb_id . "',NOW(),DATE_ADD(NOW(), INTERVAL " . $abb_info['durata'] . " " . $abb_info['label'] . "),NOW(),'0000-00-00','','" . $abb_info['costo'] . "','".$status."')";
+        '" . $user_id . "','" . $abb_id . "',NOW(),DATE_ADD(NOW(), INTERVAL " . $abb_info['durata'] . " " . $abb_info['label'] . "),NOW(),'0000-00-00','','" . $abb_info['costo'] . "','" . $status . "')";
 
     $insert = mysql_query($insert, CONNECT);
 
@@ -71,11 +71,30 @@ if (isset($_GET['abb'])) {
 //mod_gestione_abbonamento.php disattiva abbonamento andrea
 if (isset($_GET['DELabb'])) {
     $abb_id = filter_var($_GET['DELabb'], FILTER_SANITIZE_NUMBER_INT);
-    $delete = "DELETE FROM `fl_abb_user` WHERE id = " . $abb_id; 
+    $delete = "DELETE FROM `fl_abb_user` WHERE id = " . $abb_id;
     mysql_query($delete, CONNECT);
     mysql_close(CONNECT);
     header("Location: " . check($_SERVER['HTTP_REFERER']));
     exit;
+}
+
+//chimata da index da andrea per l'attivazione dell'abbonamento
+
+if (isset($_GET['UpdateStatus'])) {
+
+    $id = filter_var($_GET['abb_id'], FILTER_SANITIZE_NUMBER_INT);
+    if ($_SESSION['usertype'] != 0) {
+        exit;
+    }
+
+    $update = "UPDATE  `fl_abb_user` SET  data_fine = DATE_ADD(NOW() , INTERVAL DATEDIFF(data_fine,data_avvio) DAY) WHERE id = " . $id;
+    mysql_query($update, CONNECT);
+    $update = "UPDATE  `fl_abb_user` SET  data_avvio = NOW() , status = 1 WHERE id = " . $id;
+    mysql_query($update, CONNECT);
+    mysql_close(CONNECT);
+    header("Location: " . check($_SERVER['HTTP_REFERER']));
+    exit;
+
 }
 
 mysql_close(CONNECT);

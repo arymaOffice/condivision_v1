@@ -41,7 +41,8 @@ if (isset($_GET['ANiD']) && $_SESSION['usertype'] < 2) {
 
 $module_title = 'Configuratore link'; //Titolo del modulo
 //$new_button = '';  //Solo se la funzione new richiede un link diverso da quello standard
-$module_menu = ''; //Menu del modulo
+
+
 
 $module_menu = '
    	  <li><a href="' . ROOT . $cp_admin . 'fl_modules/mod_made_links/?a=configuratore&marchio=-1" class="">Tutti</a></li>
@@ -50,6 +51,7 @@ $module_menu = '
    	  <li><a href="' . ROOT . $cp_admin . 'fl_modules/mod_made_links/?a=configuratore&marchio=2" class="">Betscore</a></li>
    	  <li><a href="' . ROOT . $cp_admin . 'fl_modules/mod_made_links/?a=configuratore&marchio=3" class="">Giocasempre</a></li>
     ';
+if($_SESSION['usertype'] != 0) $module_menu = ''; //Menu del modulo
 
 if (isset($_GET['data_da']) && check($_GET['data_da']) != "" && check($_GET['data_a']) != "") {
     $data_da = convert_data($_GET['data_da'], 1);

@@ -7,8 +7,15 @@ if (!isset($_SESSION)) { //pezza a colori per qunado questo file è richiamato d
 
 }
 
-$number = $_SESSION['number'];
-$id = (isset($_GET['id'])) ? check($_GET['id']) : $number;
+
+
+if($_SESSION['usertype'] == 0 && isset($_GET['anagrafica_id'])){
+
+    $id = check($_GET['anagrafica_id']);
+}else{
+    $id = $_SESSION['number'] ;
+}
+
 
 ?>
 <div id="content">
@@ -34,7 +41,7 @@ $id = (isset($_GET['id'])) ? check($_GET['id']) : $number;
 <input name="password2" id="password2" type="password"  size="40" maxlength="15" />
 </div></div>
 <br>
-<input type="hidden" name="modifica_pass" value="<?php echo ($_SESSION['usertype'] > 0) ? $_SESSION['number'] : $id; ?>">
+<input type="hidden" name="modifica_pass" value="<?php echo $id; ?>">
 <input type="submit" class="button" value="Reimposta password" />
 
 

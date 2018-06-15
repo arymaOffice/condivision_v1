@@ -1,5 +1,6 @@
 <?php
 
+
 require_once '../../fl_core/autentication.php';
 $loadSelectComuni = 1;
 
@@ -20,13 +21,6 @@ $tab_div_labels = array('marchio' => 'Profilo', 'nome' => 'Dati Anagrafici', 'ti
 
 ?>
 
-
-<style>
-.savetabs{
-    position: relative;
-margin-top: 500px;
-}
-</style>
 
 <body style=" background: rgb(241, 241, 241) none repeat scroll 0% 0%;">
 <div id="container" >

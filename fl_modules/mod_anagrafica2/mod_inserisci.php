@@ -8,6 +8,7 @@ $id = ($_SESSION['usertype'] > 1) ? $_SESSION['anagrafica'] : check($_GET['id'])
 
 if ($id > 1) {
     $profilo = @GRD('fl_anagrafica', @$id);
+    $account = @GQD('fl_account','id', 'anagrafica = '.@$id);
 }
 
 include 'fl_settings.php'; // Variabili Modulo
@@ -36,7 +37,12 @@ $tab_div_labels = array('marchio' => 'Profilo', 'nome' => 'Dati Anagrafici', 'ti
     echo '<p>Telefono: <a href="tel:' . @$telefono . '">' . @$telefono . '</a></h2>';
 } else {echo '<h1>Nuovo ' . $tipo_profilo[$tipo_profilo_id] . '</h1>';}
 
+if($_SESSION['usertype'] == 0){
+    echo '<br><br><a href="../mod_account/mod_visualizza.php?id='.$account['id'].'" class="button">Modifica Account</a>';
+}
+
 ?>
+
 </div>
 <?php if (isset($_GET['esito'])) {$class = (isset($_GET['success'])) ? 'green' : 'red';
     echo '<p class="esito ' . $class . '">' . check($_GET['esito']) . '</p>';}?>
@@ -56,6 +62,9 @@ if ($_SESSION['usertype'] > 1) {
 <script>
 $('label[for="status_anagrafica1"]').text('attiva');
 $('label[for="status_anagrafica2"]').text('disattiva');
+$('#data_creazione').hide();
+$('#data_aggiornamento').hide();
+$('#data_scadenza_contratto').hide();
 $('[id^=data_]').prop("type", "date");
 $( '#marchio' ).val('<?php echo $profilo['marchio']; ?>');
 

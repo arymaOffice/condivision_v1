@@ -30,7 +30,7 @@ $dateTimePicker = 1;
 
 $tab_div_labels = array('id' => "Dati Personali", 'tipo_interesse' => "Interesse Vettura", 'note' => 'Gestione');
 if (isset($_GET['id']) && check(@$_GET['id']) != 1) {
-    $tab_div_labels = array('mod_richieste.php?reQiD=[*ID*]' => 'Gestione BDC', 'id' => "Dati Personali", '../mod_appuntamenti/mod_user.php?history&potential_rel=[*ID*]' => "Agenda Incontri", 'tipo_interesse' => "Interesse Vettura", '../mod_preventivi/mod_user.php?potential_id=[*ID*]' => "Preventivi");
+$tab_div_labels = array('mod_richieste.php?reQiD=[*ID*]' => 'Gestione BDC', 'id' => "Dati Personali", 'privacy_1'=>'Privacy' ,'../mod_appuntamenti/mod_user.php?history&potential_rel=[*ID*]' => "Agenda Incontri", 'tipo_interesse' => "Interesse Vettura", '../mod_preventivi/mod_user.php?potential_id=[*ID*]' => "Preventivi" );
 }
 
 if (!isset($_SESSION['status_potential_id'])) {
@@ -183,7 +183,7 @@ $source_potential = $data_set->data_retriever('fl_campagne_attivita', 'oggetto',
 $sede = $data_set->data_retriever('fl_sedi', 'sede', "WHERE id != 1", 'sede ASC');
 $priorita_contatto = array('Bassa', 'Media', 'Alta');
 $qualificati = array('1 stella', '2 Stelle', '3 Stelle');
-$test_drive = $permuta = $promo_pneumatici = array('No', 'Si');
+$test_drive = $permuta = $promo_pneumatici = $privacy_1 = $privacy_2 = $privacy_3 = array('No', 'Si');
 $tipo_richiesta = array('Chiamata', 'Email', 'Follow up', 'Rifiutato', 'Concorrenza', 'Appuntamento', 'Conversione', 'Preventivo', 'No Show', 'SMS', 'Modifica');
 
 // $venditore_ = GQS('fl_account a JOIN fl_persone p ON p.id = persona_id ', 'a.id,nominativo', " profilo_funzione IN  (19,20) ORDER BY nominativo ASC");
@@ -230,7 +230,7 @@ function select_type($who)
     $select_text = array("provincia", "citta", 'data_acquisto', 'anno_immatricolazione');
     $disabled = array("data_creazione", "visite", "data_assegnazione");
     $hidden = array("data_aggiornamento",'venditore','lead_generator');
-    $radio = array('promo_pneumatici', 'test_drive', 'vettura_promo', 'permuta');
+    $radio = array('promo_pneumatici', 'test_drive', 'vettura_promo', 'permuta','privacy_1','privacy_2','privacy_3');
     $text = array();
     $calendario = array('data_scadenza', 'data_acquisto_vettura', 'data_test_drive', 'periodo_cambio_vettura');
     $file = array();

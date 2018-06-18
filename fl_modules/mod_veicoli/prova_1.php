@@ -21,11 +21,11 @@ su vari e versioni (testato come minore )
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-ini_set('max_execution_time',24000);
+
 $host = "localhost";
-$db = "dev_1.1";
-$login = "root";
-$pwd = "87yv7578gh74vfbvbidui4$$";
+$db = "authos";
+$login = "authos";
+$pwd = "v94uyg6589g98656859";
 
 
 function connect($host, $login, $pwd, $db)
@@ -50,7 +50,7 @@ require_once '../../fl_set/librerie/eurotax/index.php'; //richiesta servizio
 for ($i = 2000; $i < 2019; $i++) {
     $anno = $i;
 // $select = "SELECT id,codice FROm fl_marca_eurotax WHERE id IN(3,4,12,14,16,25,24,26,28,19,30,31,32,40,39,41,44,46,48,49,50,51,52,53,54,55,60,56,57,59,64,66,69,70,72,73,76,80,84,86,90,92,93,97,99,100,98,101,104,107,112) ";
-    $select = "SELECT id,codice FROm fl_marca_eurotax WHERE id = 95 ";
+    $select = "SELECT id,codice FROm fl_marca_eurotax WHERE id = 40 ";
 
     $select = mysql_query($select, CONNECT);
     while ($value = mysql_fetch_assoc($select)) {
@@ -85,10 +85,8 @@ for ($i = 2000; $i < 2019; $i++) {
                         $oggetto3 = @$oggetto3['modello'];
 
                         // print_r($oggetto3); exit;
-                        $seg = ($oggetto3['segmento'] == '')?'B':$oggetto3['segmento']; 
 
-                         $insert = "INSERT INTO `fl_modello_eurotax_fiat`(codice_modello,`id_marca_eurotax`, `id_segmento`, `modello`, `cilindrata`, `codice_alimentazione`,  `tipo_motore`, `desc_motore`, `hp`, `kw`, `cavalli_fiscali`, `euro`,codice_eurotax,codice_motornet,anno) VALUES ('" . @$value1['codice_modello'] . "','" . @$value['id'] . "',(SELECT id FROM fl_segmenti_eurotax WHERE segmento = '" . @$oggetto3['segmento'] . "'),'" . @$oggetto3['modello'] . "','" . @$oggetto3['cilindrata'] . "','" . @$oggetto3['codice_alimentazione'] . "','" . @$oggetto3['tipo_motore'] . "','" . $oggetto3['desc_motore'] . "','" . @$oggetto3['hp'] . "','" . $oggetto3['kw'] . "','" . @$oggetto3['cavalli_fiscali'] . "','" . @$oggetto3['euro'] . "','" . @$value2['CodiceMotornet'] . "', '" . @$value2['CodiceEurotax'] . "','" . $anno . "')";
-
+                        $insert = "INSERT INTO `fl_modello_eurotax_fiat`(codice_modello,`id_marca_eurotax`, `id_segmento`, `modello`, `cilindrata`, `codice_alimentazione`,  `tipo_motore`, `desc_motore`, `hp`, `kw`, `cavalli_fiscali`, `euro`,codice_eurotax,codice_motornet,anno) VALUES ('" . @$value1['codice_modello'] . "','" . @$value['id'] . "',(SELECT id FROM fl_segmenti_eurotax WHERE segmento = '" . @$oggetto3['segmento'] . "'),'" . @$oggetto3['modello'] . "','" . @$oggetto3['cilindrata'] . "','" . @$oggetto3['codice_alimentazione'] . "','" . @$oggetto3['tipo_motore'] . "','" . $oggetto3['desc_motore'] . "','" . @$oggetto3['hp'] . "','" . $oggetto3['kw'] . "','" . @$oggetto3['cavalli_fiscali'] . "','" . @$oggetto3['euro'] . "','" . @$value2['CodiceMotornet'] . "', '" . @$value2['CodiceEurotax'] . "','" . $anno . "')";
 
                         mysql_query($insert,CONNECT);
 

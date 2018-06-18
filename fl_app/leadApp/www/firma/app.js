@@ -87,7 +87,16 @@ savePNGButton.addEventListener("click", function (event) {
     //     window.open('./index.html','_self');
     //   }
     // };
-    xhttp.open("POST", "https://authos.bluemotive.it/fl_api/?save_sign&img=" + dataURL + "&potential_id=" + localStorage.getItem('insert_id') + "&token=" + localStorage.getItem('token'), true);
+
+    var privacy_1 = document.querySelector('input[name="privacy_1"]:checked').value;
+
+    var privacy_2 = document.querySelector('input[name="privacy_2"]:checked').value;
+
+    var privacy_3 = document.querySelector('input[name="privacy_3"]:checked').value;
+
+
+
+    xhttp.open("POST", "https://authos.bluemotive.it/fl_api/?save_sign&privacy_1="+privacy_1+"&privacy_2="+privacy_2+"&privacy_3="+privacy_3+"&img=" + dataURL + "&potential_id=" + localStorage.getItem('insert_id') + "&token=" + localStorage.getItem('token'), true);
     xhttp.send();
 
     var xhttp = new XMLHttpRequest();

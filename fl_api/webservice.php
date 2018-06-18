@@ -130,6 +130,18 @@ class webservice
             $status_potential = 0;
         }
 
+        /** controllo di source potential per facebook form  */
+        $control_source = mysql_fetch_assoc(mysql_query('SELECT count(*) as esiste FROM fl_campagne_attivita WHERE id = '.$source_potential,CONNECT));
+        if(isset($control_source['esiste']) && $control_source['esiste'] == 0){
+            $id_per_insert = filter_var($source_potential,FILTER_SANITIZE_NUMBER_INT); 
+            $inserisci_attivita = "INSERT INTO fl_campagne_attivita (id,campagna_id,oggetto,descrizione,data_inizio,data_fine) VALUES ('".$id_per_insert
+            ."','2','".$id_per_insert." form facebook','".$id_per_insert." form facebook',NOW(),NOW() + INTERVAL 1 MONTH)";
+            mysql_query($inserisci_attivita,CONNECT);
+        }
+        /**  */
+
+
+
         $industry = $job_title;
 
         $telCheck = ($telefono != '' && $telefono != 0) ? " OR telefono LIKE '$telefono' " : '';
@@ -291,33 +303,20 @@ VALUES (NULL, '1', '0', '$location_testdrive', '$veicolo', '$start_meeting', '$e
 
         $mail_message = '';
 
-$myfile = fopen("testfile.txt", "w") ;
-fwrite($myfile,$input );
-foreach ($_GET as $chiave1 => $valore1) { fwrite($myfile,$chiave1.'--'.$valore1); }
-fclose($myfile);
-
-        $email = check($_GET['email']);
-
         unset($_REQUEST['insert_lead_app']);
         unset($_REQUEST['token']);
-        unset($_GET['email']);
+
+        //echo $_REQUEST;
 
         //foreach ($_REQUEST as $chiave1 => $valore1) {
 
             $array_json = json_decode($_REQUEST['data'], true);
 
-       // mail('michelefazio@aryma.it', "Problema inserimento nuovo veicolo su: " . ROOT, $array_json);
-   
             foreach ($array_json as $chiave => $valore) {
 
                 if ($chiave == 'telefono' || $chiave == 'telefono_alternativo') {
                     $valore = $this->cleanPhone($this->check($valore));
                 }
-
-              if ($chiave == 'email' || $chiave == 'email') {
-                     $valore = $email;
-                }
-
 
                 if (in_array($chiave, $this->obbligatorio)) {
                     if ($valore == "") {
@@ -344,7 +343,6 @@ fclose($myfile);
                 $mail_message .= '<p>' . $chiave . ' = ' . $$chiave . '</p>';
             }
         //}
-
 
         $status_potentials = array('Da Assegnare', 'Assegnato a BDC', 'Appuntamento', 'Non Interessato', 'Cliente', 'Valuta', 'Acquistato Concorrenza', 'Preventivo', 'Assegnato a Venditore', 'Eliminato');
 
@@ -534,10 +532,16 @@ VALUES (NULL, '16', '$lead_id', '$tipologia_veicolo', '$data_acquisto', '$pagame
 
         $img = $_REQUEST['img'];
         $potential_id = $_REQUEST['potential_id'];
+        $privacy_1 = filter_var($_REQUEST['privacy_1'],FILTER_SANITIZE_NUMBER_INT);
+        $privacy_2 = filter_var($_REQUEST['privacy_2'],FILTER_SANITIZE_NUMBER_INT);
+        $privacy_3 = filter_var($_REQUEST['privacy_3'],FILTER_SANITIZE_NUMBER_INT);
 
         $query = "INSERT INTO `fl_firme` ( `potential_id`, `img_string`)  VALUES ('" . $potential_id . "','" . $img . "')";
 
+        $query_privacy = "UPDATE  `fl_potentials` SET privacy_1 = '".$privacy_1."', privacy_2 =  '".$privacy_2."' ,privacy_3 =  '".$privacy_3."'  WHERE id =  ".$potential_id;
+
         mysql_query($query, CONNECT);
+        mysql_query($query_privacy, CONNECT);
 
         $this->contenuto['class'] = 'green';
         $this->contenuto['esito'] = "OK";
@@ -903,7 +907,7 @@ VALUES (NULL, '$id_drakkar', 16, '$parent_id', '$tipologia_veicolo', '$data_acqu
 
     }
 
-    public function get_data_lead($campi = '',$when = '',$range = '',$usr_id = '',$source_potential = '')
+    public function get_data_lead($campi = '',$when = '',$range = '',$usr_id = '')
     {
         $time_coiche = array('DAY','MONTH','YEAR');
         $where = ' WHERE 1 ';
@@ -913,23 +917,16 @@ VALUES (NULL, '$id_drakkar', 16, '$parent_id', '$tipologia_veicolo', '$data_acqu
             $this->cnv_makedata();
         }
         
-        if($when != ''){
-            if(in_array(strtoupper($when),$time_choiche)){
-                $range = filter_var($range,FILTER_SANITIZE_NUMBER_INT);
-                $where.= ' AND pot.data_creazione BETWEEN DATE(NOW()) AND DATE(NOW - INTERVAL '.$range.' '.$when.')';
-            }
-        }
+        
+        // if(in_array(toupper($when),$time_choiche)){
+        //     $range = filter_var($range,FILTER_SANITIZE_NUMBER_INT);
+        //     $where.= ' AND pot.data_creazione BETWEEN DATE(NOW()) AND DATE(NOW - INTERVAL '.$range.' '.$when.')';
+        // }
 
-
-        if($usr_id != ''){
-            $id_lead_generator = filter_var($usr_id,FILTER_SANITIZE_NUMBER_INT);
-            $where.= ' AND lead_generator = '.$id_lead_generator;
-        }
-
-        if($source_potential != ''){
-            $source_potential = filter_var($source_potential,FILTER_SANITIZE_NUMBER_INT);
-            $where.= ' AND source_potential = '.$source_potential;
-        }
+        // if($usr_id != ''){
+        //     $id_lead_generator = filter_var($usr_id,FILTER_SANITIZE_NUMBER_INT);
+        //     $where.= ' AND lead_generator = '.$id_lead_generator;
+        // }
 
 
         $campi = explode(',',$campi);

@@ -63,7 +63,7 @@ $tipologia_main .= gwhere($campi2,'','tb2.');//Imposta i filtri della query pren
  */
 
 //Filtri di base (da strutturare quelli avanzati)
-$basic_filters = array('source_potential', 'tipo_interesse', 'permuta', 'campagna_id', 'lead_generator', 'proprietario', 'venditore');
+$basic_filters = array('source_potential', 'tipo_interesse', 'permuta', 'campagna_id', 'lead_generator', 'proprietario', 'venditore','privacy_1','privacy_2','privacy_3');
 $basic_filters2 = array(); //array('alimentazione','anno_immatricolazione','pagamento_veicolo');
 if (!isset($_SESSION['ordine_type'])) {
     $_SESSION['ordine_type'] = 'DESC';

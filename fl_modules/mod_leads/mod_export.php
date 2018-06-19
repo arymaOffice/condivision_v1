@@ -34,6 +34,11 @@ foreach ($leads as $key => $value) {
     $dati[$value['id']] = array('id' => $value['id'], 'stato' => $value['status_potential'], 'sorgente' => $value['campagna_id'], 'attivita' => $value['source_potential'], 'nome' => ucfirst(strtolower($value['nome'])), 'cognome' => ucfirst(strtolower($value['cognome'])), 'citta' => $value['citta'], 'cellulare' => $value['telefono'], 'email' => strtolower($value['email']));*/
     $test_drive = ($value['test_drive'] > 1)? 'Sì':'No';
     $permuta = ($value['permuta'] > 1)? 'Sì':'No';
+    $privacy_1 = ($value['privacy_1'] > 1)? 'Sì':'No';
+    $privacy_2 = ($value['privacy_2'] > 1)? 'Sì':'No';
+    $privacy_3 = ($value['privacy_3'] > 1)? 'Sì':'No';
+
+
     $dati[$value['poteID']] = array('data' => $value['date'], 
         'lead generator' => @$proprietario[$value['lead_generator']],
         'vettura interesse' => $value['modello_interesse'],
@@ -57,14 +62,17 @@ foreach ($leads as $key => $value) {
         'societa' => $value['ragione_sociale'],
         '(priorità) status' => @$priorita_contatto[$value['priorita_contatto']],
         'permuta' => $permuta,
-        'pagamento_vettura' => @$pagamento_veicolo[$value['pagamento_vettura']]);
+        'pagamento_vettura' => @$pagamento_veicolo[$value['pagamento_vettura']],
+        'privacy_1' => $privacy_1,
+        'privacy_2' => $privacy_2,
+        'privacy_3' => $privacy_3);
 
 }
-$campi = array('data','lead generator', 'vettura interesse', 'id', 'nome', 'cognome', 'indirizzo', 'email', 'telefono', 'professione', 'marca', 'modello', 'anno', 'km', 'alimentazione', 'targa', 'note', '(oggetto) attività campagna', 'test drive', 'p.iva', 'societa', '(priorità) status', 'permuta', 'pagamento');
+$campi = array('data','lead generator', 'vettura interesse', 'id', 'nome', 'cognome', 'indirizzo', 'email', 'telefono', 'professione', 'marca', 'modello', 'anno', 'km', 'alimentazione', 'targa', 'note', '(oggetto) attività campagna', 'test drive', 'p.iva', 'societa', '(priorità) status', 'permuta', 'pagamento','privacy 1','privacy 2','privacy 3');
 mysql_close(CONNECT);
 
 /* nuova implementazione*/
-$name = 'aaa';
+$name = $data  ;
 $return = 'source';
 
 toSpreadSheet($name, $campi, $dati, $return);

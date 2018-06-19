@@ -1,9 +1,17 @@
 <?php 
-// Controlli di Sicurezza
-if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
+
+require_once('../../fl_core/autentication.php');
+include('fl_settings.php'); // Variabili Modulo 
+
+include("../../fl_inc/headers.php"); include("../../fl_inc/testata_mobile.php");
+
 if(@!is_numeric($_GET['action'])){ exit; };
 ?>
 
+<div id="container" style=" text-align: left; ">
+
+<div id="content_scheda">
+<?php include('../mod_basic/action_visualizza.php'); ?>
 
 <div id="tabs" style="width: 100%;">
 		
@@ -17,7 +25,6 @@ if(@!is_numeric($_GET['action'])){ exit; };
 		</ul>
 
 <div id="tabs-1">
-<?php include('../mod_basic/action_visualizza.php'); ?>
 
 <?php
 	
@@ -41,10 +48,10 @@ if(@!is_numeric($_GET['action'])){ exit; };
 	while ($riga = mysql_fetch_array($risultato)) 	{
 	
 	 $idcol = ($idcol == 0) ? 1 : 0;			
-	 $letto_sino = ($riga['letto'] == 0) ? "Non letto" : '<img src="../../fl_set/icons/letto.png" alt="Letto" />';	
-	 echo "<div class=\"box_div_$idcol\"><span style=\"float: right;\">$letto_sino</span>
+	 $letto_sino = ($riga['letto'] == 0) ? '<i class="fa fa-eye" style="color: gray;"></i>' : '<i class="fa fa-eye" style="color: white;"></i>';	
+	 echo "<div class=\"box_div_$idcol\"><span style=\"float: right;   margin: 10px 10px;  color: white;  font-size: 28px;\">$letto_sino</span>
 	 <h3>".ucfirst($riga['oggetto'])."</h3><div class=\"box_div\">";
-	 echo "<p class=\"data_aggiornamento\">Intervento di ".$proprietario[$riga['operatore']]." del ".@date("d/m/Y - H:i",$riga['data_creazione'])."</p>";
+	 echo "<p class=\"data_aggiornamento\">Intervento di ".$proprietario[$riga['operatore']]." del ".@mydatetime($riga['data_aggiornamento'])."</p>";
 	 echo "".converti_txt(@$riga['descrizione'])."";
 	 echo "</div></div>";
 	
@@ -56,7 +63,7 @@ if(@!is_numeric($_GET['action'])){ exit; };
 
 </div>
 <div id="tabs-2">
-<?php include('../mod_basic/action_visualizza.php'); ?>
+
 
 <div class="box_div_1">
 <h3>Rispondi</h3>
@@ -100,7 +107,8 @@ if(@!is_numeric($_GET['action'])){ exit; };
 <iframe style="width: 100%; border: none; height: 500px;" src="../mod_documentazione/mod_user.php?mode=out&amp;operatore=0&modulo=0&cat=9&contenuto=<?php echo $id; ?>"></iframe></div>
 </div>
 
-
+</div>
+</div></body></html>
 
 
 

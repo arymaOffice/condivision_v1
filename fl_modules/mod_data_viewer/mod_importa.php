@@ -1,7 +1,7 @@
 <?php
 // Controlli di Sicurezza
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
+$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 ?>
 
 <table class="dati">

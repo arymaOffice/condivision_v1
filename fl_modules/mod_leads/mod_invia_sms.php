@@ -3,7 +3,7 @@
 require_once('../../fl_core/autentication.php');
 
 include('fl_settings.php'); // Variabili Modulo 
-unset($chat);
+$nochat = 1;
 include("../../fl_inc/headers.php");
 
 $messaggio = '';
@@ -37,15 +37,38 @@ $messaggio = '';
 
 <div style="width: 100%; background: white;">
 
-<?php if(isset($_GET['esito'])) { $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p class="esito '.$class.'">'.check($_GET['esito']).'</p><br><br><br><br><br><p><a onclick="parent.jQuery.fancybox.close()" href="#" class="button">CHIUDI</a></p><br><br><br><br><br><br>'; } else
+<?php if(isset($_GET['esito'])) { $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p class="esito '.$class.'">'.check($_GET['esito']).'</p><br><br><br><br><br><p><a onclick="parent.jQuery.fancybox.close()" href="#" class="button">CHIUDI FINESTRA</a></p><br><br><br><br><br><br>'; } else
 
 {  ?>
 
 
 <div id="results"></div>
 
-<form id="" class="loadData" action="../mod_template/mod_opera.php" method="post"  style="width: 70%; margin:20px auto; text-align: center;">
-<select name="template" id="template"  >
+<h1 style="clear: both;"><strong>Invia SMS a </strong> <?php 
+    
+	$noway = 0;
+	$destinatari = array();
+	
+	if(isset($_SESSION['destinatari'])){ 
+	$query = "SELECT id,telefono,email FROM `$tabella` WHERE `id` IN (" . implode(',', array_map('intval', $_SESSION['destinatari'])) . ") ;";
+	} else {
+	$query = "SELECT $select FROM `$tabella` $tipologia_main;";
+	}
+	
+	
+	$risultato = mysql_query($query, CONNECT);
+	
+	while ($riga = mysql_fetch_array($risultato)) 
+	{
+		if(strlen($riga['telefono']) > 5) { $destinatari[] =  $riga['id']; } else { $noway++; }
+	}
+	
+	echo mysql_affected_rows()-$noway;
+
+ ?> persone <?php if( $noway > 0) echo  '('.$noway.' senza numero)'; ?></h1>
+<p>Mittente: <?php echo crm_number; ?></p>
+<form id="caricaTemplate" class="loadData" action="../mod_template/mod_opera.php" method="post">
+<select name="template" id="template" style="width: 50%; float: left; clear:  none;" >
            
            <option value="-1">Scegli..</option>
 			<?php 
@@ -58,40 +81,11 @@ $messaggio = '';
        </select>
        <input type="submit" value="Carica Template" />
 </form>
-<h1 style="clear: both;"><strong>Invia SMS a </strong> <?php 
-    
-	$noway = 0;
-	$destinatari = array();
-	
-	if(isset($_SESSION['destinatari'])){ 
-	$query = "SELECT id,telefono,email FROM `fl_potentials` WHERE `id` IN (" . implode(',', array_map('intval', $_SESSION['destinatari'])) . ") ;";
-	} else {
-	$query = "SELECT $select FROM `$tabella` $tipologia_main;";
-	}
-	
-		
-	$risultato = mysql_query($query, CONNECT);
-	while ($riga = mysql_fetch_array($risultato)) 
-	{
-		if(strlen($riga['telefono']) > 5) { $destinatari[] =  $riga['id']; } else { $noway++; }
-	}
-	
-	echo mysql_affected_rows()-$noway;
 
- ?> persone <?php if( $noway > 0) echo  '('.$noway.' senza numero)'; ?></h1>
+<br class="clear">
 
+<form id="inviaSMS" action="mod_opera.php" method="post">
 
-<form id="" action="mod_opera.php" method="post" enctype="multipart/form-data" style="width: 90%; margin: 0 auto;">
-<p style="text-align: left;"><select name="mittente" id="mittente"  >
-           
-         <option value="-1">Mittente..</option>
-			<?php 
-              
-		     foreach($mittente as $valores => $label){ // Recursione Indici di Categoria
-			 echo "<option value=\"$valores\" >".ucfirst($label)."</option>\r\n"; 
-			}
-		 ?>
-       </select>
 
 <?php foreach($destinatari as $destinatario_id){ ?>
 <input type="hidden" name="destinatario[]" value="<?php echo $destinatario_id; ?>">
@@ -101,14 +95,9 @@ $messaggio = '';
 <input type="hidden" name="oggetto" id="oggetto" value="">
 <input type="hidden" name="templateId" id="templateId" value="0">
 
-<p class="insert_tags">Inserisci tag: 
-<a href="#" onclick="insertAtCaret('messaggio',' [nome] ');return false;">[nome]</a>
-<a href="#" onclick="insertAtCaret('messaggio',' [modello_vettura_permuta] ');return false;">[modello_vettura_permuta] </a>
-<a href="#" onclick="insertAtCaret('messaggio',' [vettura_di_interesse] ');return false;">[vettura_di_interesse] </a>
-<a href="#" onclick="insertAtCaret('messaggio',' [prezzo_vettura] ');return false;">[prezzo_vettura] </a>
-<a href="#" onclick="insertAtCaret('messaggio',' [valore_permuta] ');return false;">[valore_permuta] </a>
-<a href="#" onclick="insertAtCaret('messaggio',' [nome_bdc] ');return false;">[nome_bdc] </a>
-<a href="#" onclick="insertAtCaret('messaggio',' [cellulare_bdc] ');return false;">[cellulare_bdc] </a>
+<p class="insert_tags" >Inserisci tag: 
+<a href="#" onclick="insertAtCaret('messaggio','[nome]');return false;">[nome]</a>
+<a href="#" onclick="insertAtCaret('messaggio','[cry_lead_id]');return false;">[cry_lead_id]</a>
 
 
 <?php foreach($tag_sms as $chiave => $valore) {

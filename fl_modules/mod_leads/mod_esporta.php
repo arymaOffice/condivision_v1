@@ -6,7 +6,6 @@
    //Mandare une messaggio ad un gruppo
    //Console/Group/@id_Group/Email/@id_Message/Send
    
-    unset($chat);
     
     $MAILUP_CLIENT_ID = "9233bbfc-57d1-409e-aa64-90ba3a6b099a";
     $MAILUP_CLIENT_SECRET = "a2d21342-b278-4f36-a920-ce4794606a89";
@@ -136,12 +135,12 @@
 	foreach($_SESSION['destinatari'] as  $valore){
 		$destinatari[] = $valore;
 		} 
-		$query = "SELECT tb1.id,telefono,email,nome,cognome FROM $tabella WHERE tb1.`id` IN (" . implode(',', array_map('intval', $destinatari)) . ") ;";
+		$query = "SELECT id,telefono,email,nome,cognome FROM `$tabella` WHERE `id` IN (" . implode(',', array_map('intval', $destinatari)) . ") ;";
 	} else {
 	$query = "SELECT $select FROM `$tabella` $tipologia_main;";
 	}	
 	
-	$_SESSION['view'] = $query; // Query vista con risultati da esportare.
+	$_SESSION['view'] = $query;
 	
 	$risultato = mysql_query($query, CONNECT);
 	while ($riga = mysql_fetch_array($risultato)) 
@@ -170,7 +169,7 @@
             
 oppure crea un nuovo gruppo <br><br>
 <input type="text" name="nuovoGruppo" value="" placeholder="Nuovo gruppo" /><br><br>
-<input type="submit" value="Esporta contatti" class="button" />
+<input type="submit" value="Importa contatti" class="button" />
 
 </form>
  <?php } ?>

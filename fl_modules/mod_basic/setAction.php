@@ -11,6 +11,7 @@ if(isset($_POST['azione'])){
 	$note =  check($_POST['note']);
 	actionTracer($tab_id,$id,$azione,$esito,$note);
 	echo json_encode(array('action'=>'info','class'=>'red','url'=>'','esito'=>$azione)); 
+
 	}
 
 

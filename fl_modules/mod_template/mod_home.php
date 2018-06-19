@@ -1,5 +1,4 @@
 
-<h1><?php echo $module_title.' '.$new_button; ?></h1>
 
 
  <?php 
@@ -54,13 +53,13 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 	{
 		
 
-	 $invii = CREST('fl_sms'," template = ".$riga['id']);
+	 $invii = mk_count('fl_sms'," template = ".$riga['id']);
 	 $colore = "class=\"tab_blue\"";  
 		
 			echo "<tr ><td $colore><span class=\"Gletter\"></span></td>";
 //			echo "<td><span class=\"msg blue\">".$tipo_template[$riga['tipo_template']]."</span></td>";  
 			echo "<td><strong>".$riga['oggetto']."</strong></td>"; 
-			echo "<td>".@$mittente[$riga['mittente']]."</td>"; 
+			echo "<td>".$mittente[$riga['mittente']]."</td>"; 
 			echo "<td>".$riga['messaggio']."</td>"; 
 			echo "<td><strong><a href=\"../mod_sms/?template=".$riga['id']."\">".$invii."</a></strong></td>"; 
 

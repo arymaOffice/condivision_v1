@@ -6,12 +6,8 @@ include('fl_settings.php'); // Variabili Modulo
  
 include("../../fl_inc/headers.php");?>
 
-
-
-<?php if(!isset($_GET['external'])) include('../../fl_inc/testata.php'); ?>
-<?php if(!isset($_GET['external'])) include('../../fl_inc/menu.php'); ?>
 	<!-- Tablesorter: required -->
-	<link rel="stylesheet" href="css/theme.blue.css">
+	<link rel="stylesheet" href="css/theme.yellow.css">
 	<script src="js/jquery.tablesorter.js"></script>
 	<script src="js/widgets/widget-resizable.js"></script>
 	<script src="js/widgets/widget-storage.js"></script>
@@ -24,7 +20,7 @@ include("../../fl_inc/headers.php");?>
 *, *:before, *:after {
 	-moz-box-sizing: content-box;
 	-webkit-box-sizing: content-box;
-	box-sizing: content-box;
+	box-sizing: content-box !important;
 }
 /* overflow table */
 .wrapper {
@@ -46,7 +42,10 @@ include("../../fl_inc/headers.php");?>
 	overflow: hidden;
 	text-overflow: ellipsis;
 	min-width: 10px;
-}</style>
+}
+
+
+</style>
 
 <script id="js">$(function() {
 
@@ -86,10 +85,16 @@ include("../../fl_inc/headers.php");?>
 
 });</script>
 
+
+<?php if(!isset($_GET['external'])) include('../../fl_inc/testata.php'); ?>
+<?php if(!isset($_GET['external'])) include('../../fl_inc/menu.php'); ?>
 <?php if(!isset($_GET['external'])) include('../../fl_inc/module_menu.php'); ?>
 
 
-<?php /* Inclusione Pagina */ if(isset($_GET['action'])) { include($pagine[$_GET['action']]); } else {
+
+<?php /* Inclusione Pagina */ 
+
+if(isset($_GET['action'])) { include($pagine[$_GET['action']]); } else {
 	$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 
  include("mod_home.php");

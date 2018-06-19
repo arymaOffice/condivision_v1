@@ -2,7 +2,7 @@
 	// Variabili Modulo
 	$sezione_tab = 1;
 	$module_uid = 15;
-	//check_auth($module_uid);
+	check_auth($module_uid);
 	$tab_id = 12;
 	$sezione = 0;
 	$jorel = 0;
@@ -10,17 +10,17 @@
 	$select = "*";
 	$step = 100; 
 
-	$tab_div_labels = array('id'=>"Modulo","tab_id"=>"Dettagli");
+
   	 $module_menu = '
-	<ul>
+	
    	  <li class=""><a href="../mod_basic/action_config.php">Configurazione <span class="subcolor"></span></a></li>
 	  
 	    <li class=""><a href="'.ROOT.$cp_admin.'fl_modules/mod_moduli/">Moduli <span class="subcolor"></span></a></li>
-           <li><a href="'.ROOT.$cp_admin.'fl_modules/mod_moduli/mod_inserisci.php?id=1">Nuovo Modulo</a></li>
+           <li><a href="'.ROOT.$cp_admin.'fl_modules/mod_moduli/?action=1&id=1">Nuovo Modulo</a></li>
 
 
 	 
-     </ul>';
+     ';
 
 	
 	/* Tipologie di ordinamento disponobili */

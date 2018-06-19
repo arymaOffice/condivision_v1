@@ -2,15 +2,14 @@
 
 // Controlli di Sicurezza
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
-$_SESSION['POST_BACK_PAGE'] = "//".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];;
+$_SESSION['POST_BACK_PAGE'] = "https://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];;
 ?>
-<h1>Obiettivi</h1>
+<h1>Obbiettivi</h1>
    <form method="get" action="" id="sezione_select">
    
  <p>
     Punto vendita: 
-      <select name="proprietario" id="proprietario" onchange="form.submit();">
-           <option value="-1">Tutti</option>
+      <select name="operatore" id="operatore" onchange="form.submit();">
                <?php 
 			 foreach($proprietario as $valores => $label){ // Recursione Indici di Categoria
 			$selected = ($proprietario_id == $valores) ? " selected=\"selected\"" : "";
@@ -50,14 +49,13 @@ $_SESSION['POST_BACK_PAGE'] = "//".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."?
       <tr>
    <th style="width: 1%;"></th>
     <th>Periodo</th>
-    <th>PV</th>
     <th>Fatturato Lordo</th>
-    <th>Transazioni</th>
+    <th>DNR</th>
     <th>Ore Lavoro</th>
     <th>Costo Orario</th>
     <th>Produttivit&agrave;</th>
     <th></th>
-
+     
       </tr>
           
  <?php
@@ -74,14 +72,14 @@ $_SESSION['POST_BACK_PAGE'] = "//".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."?
       
      <td <?php echo $colore; ?>><span class=\"Gletter\"></span></td>
         <td><?php echo $mese[$riga['mese']].' '.$riga['anno']; ?></td>
-        <td><?php echo $proprietario[$riga['account_id']]; ?></td>
+        
         <td>&euro; <?php echo $riga['fatturato_lordo']; ?></td>
         <td><?php echo $riga['deals_number']; ?></td>
         <td><?php echo $riga['ore_lavoro']; ?></td>
         <td><?php echo $riga['costo_orario']; ?></td>
         <td>&euro;  <?php echo @numdec(@$riga['fatturato_lordo']/@$riga['ore_lavoro'],2); ?></td>
- 		<td><a href="./mod_inserisci.php?id=<?php echo $riga['id']; ?>" title="Modifica"> <i class="fa fa-search"></i> </a>
- 		<a  href="../mod_basic/action_elimina.php?gtx=<?php echo $tab_id; ?>&amp;unset=<?php echo $riga['id']; ?>" title="Elimina"  onclick="return conferma_del();"><i class="fa fa-trash-o"></i></a></td>
+ 		<td><a href="./?action=1&amp;id=<?php echo $riga['id']; ?>" title="Modifica"> <i class="fa fa-search"></i> </a>
+
 
     <?php }  //Chiudo la Connessione	?>
     
@@ -90,3 +88,4 @@ $_SESSION['POST_BACK_PAGE'] = "//".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."?
     <?php 	paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,1); mysql_close(CONNECT);} ?>
 </p>
  <p>&nbsp;</p>
+ <p><strong><i class="fa fa-info-circle"></i></strong> Il <strong>DNR</strong> è il numero di <strong>deals</strong> che determina la produttività. (Es. Contratti, Fatture, Scontrini, Contatti dal web).</p>

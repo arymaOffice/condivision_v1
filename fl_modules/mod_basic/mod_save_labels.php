@@ -1,15 +1,8 @@
 <?php 
 
 session_start(); 
-require_once('../../fl_core/settings.php'); 
+require_once('../../fl_core/core.php'); 
 
-
-$ref =  str_replace('new','',@$_SERVER['HTTP_REFERER']);
-$baseref = @explode('?', @$ref);
-$rct = $baseref[0]; 
-$val = (count($baseref) > 1) ? $baseref[1] : "";
-$valb = explode('#',$val);
-$vars = $valb[0];
 
 $tabella = 'fl_labels';
 
@@ -43,14 +36,17 @@ if(strstr($chiave,"fl_help_")){ array_push($help,$valore); }
 
 }
 $ic = count($labels);
+
 for($i=0;$i<$ic;$i++){
 $query = "SELECT * FROM `$tabella` WHERE campo = '".$campi[$i]."' LIMIT 1;";
 $rus = mysql_query($query,CONNECT);
+
 if(mysql_affected_rows() <= 0){
 
 $query = "INSERT INTO `fl_labels` (`id`, `label_ref`, `lang`, `campo`, `label`, `tipo`, `richiesto`, `header`, `help`) 
 						  VALUES (NULL, 0,0,'".$campi[$i]."', '".str_replace("</p>","",str_replace("<p>","",$labels[$i]))."', '".$tipi[$i]."', '".$richiesto[$i]."', '".$headers[$i]."', '".$help[$i]."');";
 if(mysql_query($query,CONNECT)) echo "<p>Inserita label per: ".$campi[$i]." - Etichetta: ".$labels[$i]."</p>\r\n";
+echo mysql_error();
 } else {
 
 $query = "UPDATE `$tabella` SET `label` = '".str_replace("</p>","",str_replace("<p>","",$labels[$i]))."',`tipo` = '".$tipi[$i]."',`richiesto` = '".$richiesto[$i]."', `header` = '".$headers[$i]."' ,`help` = '".$help[$i]."' WHERE `campo` = '".$campi[$i]."' LIMIT 1 ;";

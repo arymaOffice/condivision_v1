@@ -2,7 +2,7 @@
 
 // Controlli di Sicurezza
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
-$_SESSION['POST_BACK_PAGE'] = "//".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];;
+$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 
 ?>
 
@@ -51,7 +51,7 @@ $_SESSION['POST_BACK_PAGE'] = "//".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."?
 			echo "<td class=\"\">".$accesso_utenza[$riga['accesso_utenza']]."</td>"; 
 			echo "<td class=\"\"><a href=\"../mod_menu/?menu_id=2&modulo_id=".$riga['id']."\"><i class=\"fa fa-bars\"></i></a></td>"; 
 			
-			echo "<td class=\"\"><a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Modifica\"> <i class=\"fa fa-search\"></i>  </a></td>"; 
+			echo "<td class=\"\"><a href=\"?action=1&amp;id=".$riga['id']."\" title=\"Modifica\"> <i class=\"fa fa-search\"></i>  </a></td>"; 
 			
 				
 		    echo "</tr>";

@@ -70,8 +70,8 @@
 	
 	
 	/* Inclusioni Oggetti Categorie */
-	include('../../fl_core/data_manager/array_statiche.php');
-	include('../../fl_core/category/proprietario.php');
+	include('../../fl_core/dataset/array_statiche.php');
+	include('../../fl_core/dataset/proprietario.php');
 	require('../../fl_core/class/ARY_dataInterface.class.php');
 	$data_set = new ARY_dataInterface();
     $causale = $data_set->data_get_items(82);

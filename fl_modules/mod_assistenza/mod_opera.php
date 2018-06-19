@@ -48,12 +48,12 @@ $stato  =  "";
 $stato_text = "";
 }
 
-$query = "INSERT INTO `fl_assistenza` (`id`, `jorel`, `letto`,`proprietario`, `status_assistenza`, `cat`, `urgenza`, `oggetto`, `descrizione`, `data_chiusura`, `data_creazione`, `data_aggiornamento`, `operatore`, `ip`) VALUES (NULL, $jorel, $letto, $proprietarioid, 0, 0, 0, '$oggetto', '$descrizione $stato_text ', $time, $time, $time, ".$_SESSION['number'].", '$ip');";
-$query2 = "UPDATE fl_assistenza SET data_aggiornamento = $time,operatore = ".$_SESSION['number']." $stato WHERE id = $jorel LIMIT 1;";
+$query = "INSERT INTO `fl_assistenza` (`id`, `jorel`, `letto`,`proprietario`, `status_assistenza`, `cat`, `urgenza`, `oggetto`, `descrizione`, `data_chiusura`, `data_creazione`, `data_aggiornamento`, `operatore`, `ip`) VALUES (NULL, $jorel, $letto, $proprietarioid, 0, 0, 0, '$oggetto', '$descrizione $stato_text ', NOW(), NOW(), NOW(), ".$_SESSION['number'].", '$ip');";
+$query2 = "UPDATE fl_assistenza SET data_aggiornamento = NOW(),operatore = ".$_SESSION['number']." $stato WHERE id = $jorel LIMIT 1;";
 mysql_query($query, CONNECT);	
 mysql_query($query2, CONNECT);	
 mysql_close(CONNECT);
-//echo $query; exit;
+echo $query; exit;
 Header("Location: $rct?$vars");
 exit;	
 

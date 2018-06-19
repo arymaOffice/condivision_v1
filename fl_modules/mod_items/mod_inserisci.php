@@ -33,6 +33,7 @@ include("../../fl_inc/testata_mobile.php");
 
 <?php include('../mod_basic/action_estrai.php');  ?>
 
+<?php if(check($_GET['id']) == 1) { ?><input type="hidden" name="reload" value="../mod_items/mod_inserisci.php?id=" /><?php } ?>
 
 
 </form>

@@ -77,10 +77,11 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 
 			$status_pagamento_txt = ($riga['status_pagamento'] == 2) ? "<span class=\"green msg\">".$status_pagamento[$riga['status_pagamento']]."</span>" : "<span class=\"orange msg\">".$status_pagamento[$riga['status_pagamento']]."</span>"; 
 		    $note = ($riga['note'] != "") ?  "<span class=\"c-red\"><a href=\"?action=1&amp;sezione=".@$riga['sezione']."&amp;id=".$riga['id']."\" title=\"".convert_note($riga['note'])."\"><i class=\"fa fa-exclamation-triangle fa-lg\"></i></a></span>" : "";
-			$files = "../mod_dms/uploader.php?PiD=".base64_encode(11)."&NAme[]=Ricevuta pagamento&workflow_id=$workflow_id&record_id=".$riga['id'];
+			$files = ($riga['id'] < 16487) ? 'http://www.betitalynetwork.it/condivision/fl_modules/mod_documentazione/?cat=8&contenuto='.$riga['id'] : "../mod_dms/uploader.php?PiD=".$dmsFolder."&NAme[]=Ricevuta pagamento&workflow_id=$workflow_id&record_id=".$riga['id'];
+			if($riga['id'] < 16487) $documenti_count = '!';
 
 					
-			echo "<tr><td>".$proprietario[$riga['proprietario']]."</td>";		
+			echo "<tr><td>".ucfirst($riga['user_associato'])."</td>";		
 			echo "<td>".$status_pagamento_txt."</td>"; 
 			echo "<td>".mydate($riga['data_pagamento'])."</td>"; 
 			echo "<td> &euro; ".$riga['importo']."</td>"; 

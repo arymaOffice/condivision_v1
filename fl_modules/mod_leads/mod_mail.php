@@ -4,7 +4,6 @@ require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
 $id = check(@$_GET['id']);
 $potential = @get_potential(@$id); 
-unset($chat);
 
 include("../../fl_inc/headers.php"); ?>
 

@@ -2,7 +2,7 @@
 	
 	// Variabili Modulo
 	
-	$tab_id = 95;
+	$tab_id = 107;
 	$tabella = $tables[$tab_id];
 	$select = "*";
 	$step = 1000; 
@@ -34,7 +34,6 @@
 	require_once('../../fl_core/class/ARY_dataInterface.class.php');
     $data_set = new ARY_dataInterface();
     $mittente = $data_set->get_items_key("mittente");	
-    unset($mittente[0]);
 	$tag_sms = $data_set->get_items_key("tag_sms");
 	$tipo_template = array('Generico','SMS','Email');
 	

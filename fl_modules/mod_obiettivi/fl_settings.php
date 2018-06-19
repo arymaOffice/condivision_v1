@@ -13,22 +13,17 @@
 	$highslide = 0;
 	$text_editor = 0;
 	
-	if(!isset($_SESSION['proprietario_id'])) $_SESSION['proprietario_id'] = $_SESSION['number'];
-	if(isset($_GET['proprietario'])) $_SESSION['proprietario_id'] = check($_GET['proprietario']);
-	$proprietario_id = ($_SESSION['usertype'] > 1) ? $_SESSION['number'] : $_SESSION['proprietario_id'];
-	if(isset($_GET['mese'])) { $mese_sel = check($_GET['mese']); } else { $mese_sel = date("m");}
-	if(isset($_GET['anno'])) { $anno_sel = check($_GET['anno']); } else { $anno_sel = date("Y");}
-
 	$module_title = 'Obiettivi Vendita';
 	if($_SESSION['usertype'] == 0) { 
     $module_menu = '
 	<ul>
 	  <li><a href="./" class="">Lista Obiettivi</a></li>
-   <li><a href="././mod_inserisci.php?id=1&AiD='.base64_encode($proprietario_id).'" class="create_new"><i class="fa fa-plus-circle"></i> Nuovo</a></li>
+   <li><a href="./?action=1&id=1" class="create_new"><i class="fa fa-plus-circle"></i> Nuovo</a></li>
 
     </ul>';
 	} 
 
+	
 	
 	include('../../fl_core/dataset/array_statiche.php');
 	include('../../fl_core/dataset/proprietario.php');
@@ -43,14 +38,12 @@
 	$where = ricerca_semplice('note','note');
 	$tipologia_main .= $where.") ";
 	} 
-	if(@$proprietario_id > 0) $tipologia_main .= " AND ( account_id = 0 OR account_id = ".$proprietario_id.')';
-	$tipologia_main .= " AND (mese = $mese_sel AND anno =  $anno_sel)";
-		
+	
 	function select_type($who){
 	$textareas = array(); 
 	$select = array("mese","account_id","tipo_obiettivo","aliquota");
 	$disabled = array();
-	$hidden = array("id","operatore","data_aggiornamento");
+	$hidden = array('resource_type','lang','file',"id","workflow_id","proprietario","parent_id","account_id","operatore","data_aggiornamento");
 	$radio  = array("attivo");	
 	
 	$type = 1;

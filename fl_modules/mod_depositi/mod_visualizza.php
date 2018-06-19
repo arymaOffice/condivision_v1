@@ -1,35 +1,25 @@
 <?php 
-
 require_once('../../fl_core/autentication.php');
-
-
+$all = 1;
 include('fl_settings.php'); // Variabili Modulo 
 
-include("../../fl_inc/headers.php");
-
-?>
+include("../../fl_inc/headers.php"); ?>
 
 
-
-
-
-<body style=" background: rgb(241, 241, 241) none repeat scroll 0% 0%;">
-
-
-<div id="container" >
+<body style=" background: #FFFFFF;">
+<div id="print_container">
 
 
 
-<div id="content_scheda">
 
-
-<form id="scheda" action="../mod_basic/action_modifica.php" method="post" enctype="multipart/form-data">
+<h1>Scheda Operazione <a href="#" class="noprint" onClick=" window.print();"><i class="fa fa-print"></i></a></h1>
 
 <?php include('../mod_basic/action_visualizza.php'); ?>
 
+
+<?php if(isset($_GET['mode'])) { ?><input type="hidden" name="mode" value="1" /><?php } ?>
+
 </form>
-
-
-
-</div></div></body></html>
-
+<?php if(isset($_GET['mode'])) { ?>
+</div></body></html>
+<?php } ?>

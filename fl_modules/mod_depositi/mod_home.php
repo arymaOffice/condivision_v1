@@ -2,30 +2,16 @@
 
 // Controlli di Sicurezza
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
-$_SESSION['POST_BACK_PAGE'] = "https://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];;
+	$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF'];
 ?>
 <h1><?php  if(isset($_GET['estratto'])) { echo 'Estratto Conto'; } else { echo 'Gestione Depositi e Prelievi'; } ?></h1>   
- 
-
- <?php if($proprietario_id > 1) { ?>
-<div style="margin: 10px 0;">
-<h3 style=" text-align: left; float: left; padding: 0 10px;">Affiliato: <?php echo $proprietario[$proprietario_id]; ?></h3>
-
-  <!--<a href="./?action=1&id=1&causale=84&external&proprietario=<?php echo $proprietario_id;?>" class="inparent button right" style="margin-left: 5px; min-width: 10%;"><i class="fa fa-plus"></i> Deposito </a> &nbsp;&nbsp;&nbsp;
-  <a href="./?action=1&id=1&causale=86&external&proprietario=<?php echo $proprietario_id;?>" class="button right" style="margin-left: 5px;  min-width: 10%;"><i class="fa fa-plus"></i> Prelievo </a> &nbsp;&nbsp;&nbsp;
-  <a href="./?action=1&id=1&causale=88&external&proprietario=<?php echo $proprietario_id;?>" class="inparent button right" style="margin-left: 5px;  min-width: 10%;"><i class="fa fa-plus"></i> Bonus </a> &nbsp;&nbsp;&nbsp;
---></div>
-
-<br clear="all">
- <?php } else if(isset($_GET['estratto'])) { echo '<h2 style="margin: 0; color: green;">Seleziona un affiliato per caricare estratto conto</h2>'; } ?>
-
-
- <div >
+ <div class="filtri">
 <form method="get" action="" id="fm_filtri">
   
     
    <select name="proprietario" id="proprietario" class="select2" onChange="form.submit();">
             <option value="-1">Seleziona affiliato</option>
+             <option value="-2">Mostra Tutti</option>
 			<?php 
               
 		     foreach($proprietario as $valores => $label){ // Recursione Indici di Categoria
@@ -41,7 +27,7 @@ $_SESSION['POST_BACK_PAGE'] = "https://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SEL
               
 		    foreach($causale as $valores => $label){ // Recursione Indici di Categoria
 			$selected = ($causale_id == $valores) ? " selected=\"selected\"" : "";
-		    if($valores > 0 && $valores != 85 && $valores != 89)  echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; 
+		   if($valores > 0)  echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; 
 			}
 		 ?>
        </select>
@@ -107,13 +93,27 @@ $_SESSION['POST_BACK_PAGE'] = "https://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SEL
  
        </form>
    
-  
+   <span style="float: right; margin-right: 4px;">
+   <form method="get" action="../../fl_core/imposta.php" id="res">
+	
+   <input name="step" type="text" value="<?php echo $step; ?>"  onFocus="this.value='';" size="2" maxlength="4" /> 
+   </form>
+    
+    </span>
+    
+    
+      </div>
+<?php if($proprietario_id > 1) { ?>
+<div style="margin: 10px 0;">
+<h3 style=" text-align: left; float: left; padding: 0 10px;">Affiliato: <?php echo $proprietario[$proprietario_id]; ?></h3>
 
- 
-    </div>
+  <!--<a href="./?action=1&id=1&causale=84&external&proprietario=<?php echo $proprietario_id;?>" class="inparent button right" style="margin-left: 5px; min-width: 10%;"><i class="fa fa-plus"></i> Deposito </a> &nbsp;&nbsp;&nbsp;
+  <a href="./?action=1&id=1&causale=86&external&proprietario=<?php echo $proprietario_id;?>" class="button right" style="margin-left: 5px;  min-width: 10%;"><i class="fa fa-plus"></i> Prelievo </a> &nbsp;&nbsp;&nbsp;
+  <a href="./?action=1&id=1&causale=88&external&proprietario=<?php echo $proprietario_id;?>" class="inparent button right" style="margin-left: 5px;  min-width: 10%;"><i class="fa fa-plus"></i> Bonus </a> &nbsp;&nbsp;&nbsp;
+--></div>
 
-
-
+<br clear="all">
+ <?php } ?>
  
 
 <?php
@@ -127,12 +127,10 @@ $_SESSION['POST_BACK_PAGE'] = "https://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SEL
 
 	$risultato = mysql_query($query, CONNECT);
 	
-	
 	$query2 = "SELECT $select, SUM(dare) AS tot_dare, SUM(avere) as tot_avere FROM `$tabella` $tipologia_main;";
 	$risultato2 = mysql_query($query2, CONNECT);
 	$riga2 = mysql_fetch_array($risultato2);
-	//echo $query2;
-	//
+
 	if((isset($_GET['estratto']) && $proprietario_id > 1) || !isset($_GET['estratto']) ) {		
 	?>
 
@@ -146,7 +144,7 @@ $_SESSION['POST_BACK_PAGE'] = "https://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SEL
        <th>Utente</th>
        <th>Data</th>
        <th>Operazione</th>
-       <th>Info Operazione</th>
+       <th>Metodo Pagamento</th>
        <th>Accrediti</th>
        <th>Addebiti</th>
        <th class="noprint">Modifica</th>
@@ -173,18 +171,18 @@ $_SESSION['POST_BACK_PAGE'] = "https://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SEL
 			
 			if($riga['status_pagamento'] == 0){
 			$elimina_id = "<a href=\"../mod_basic/elimina.php?gtx=$tab_id&unset=".$riga['id']."\" title=\"Elimina\" onclick=\"conferma_del();\"><i class=\"fa fa-trash-o\"></i></a>";   
-			$modifica_id = "<a href=\"mod_inserisci_user.php?id=".$riga['id']."&causale=".$riga['causale']."\" title=\"Modifica\"> <i class=\"fa fa-search\"></i> </a>"; 
+			$modifica_id = "<a href=\"?action=1&amp;sezione=".@$riga['sezione']."&amp;id=".$riga['id']."&causale=".$riga['causale']."\" title=\"Modifica\"> <i class=\"fa fa-search\"></i> </a>"; 
 			$colore = "class=\"gray\"";
 			if($riga['dare'] > 0 || $riga['avere'] > 0) $conferma = "<a class=\"button green\" href=\"./?action=21&set=1&amp;id=".$riga['id']."&causale=".$riga['causale']."\" title=\"Conferma\"> CONFERMA </a>";
 			$cred = 'c-gray';
 			$cgreen = 'c-gray';
 			} else if($riga['status_pagamento'] == 1){
 			$elimina_id = "";  
-			$modifica_id = "<a data-fancybox-type=\"iframe\" class=\"fancybox_view\" href=\"mod_visualizza.php?id=".$riga['id']."&causale=".$riga['causale']."\" title=\"Visualizza\"> <i class=\"fa fa-search\"></i> </a>"; 
+			$modifica_id = "<a data-fancybox-type=\"iframe\" class=\"fancybox_view\" href=\"mod_visualizza.php?&amp;id=".$riga['id']."&causale=".$riga['causale']."\" title=\"Visualizza\"> <i class=\"fa fa-search\"></i> </a>"; 
 			$colore = "style=\" background: #008233; color: #FFF;\"";
 			} else {
 			$elimina_id = "";  
-			$modifica_id = "<a data-fancybox-type=\"iframe\" class=\"fancybox_view\" href=\"mod_visualizza.php?id=".$riga['id']."&causale=".$riga['causale']."\" title=\"Visualizza\"> <i class=\"fa fa-search\"></i> </a>"; 
+			$modifica_id = "<a data-fancybox-type=\"iframe\" class=\"fancybox_view\" href=\"mod_visualizza.php?&amp;id=".$riga['id']."&causale=".$riga['causale']."\" title=\"Visualizza\"> <i class=\"fa fa-search\"></i> </a>"; 
 			$colore = "class=\"gray\"";
 			$cred = 'c-gray';
 			$cgreen = 'c-gray';
@@ -198,9 +196,9 @@ $_SESSION['POST_BACK_PAGE'] = "https://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SEL
 			echo "<td>".@$causale[@$riga['causale']]." ".$riga['rif_operazione']."</td>";	
 			echo "<td><strong>".$pagamento."</strong><br>".$riga['estremi_del_pagamento']."</td>";	
 			echo "<td class=\"".$cgreen."\">";
-			if($riga['dare'] > 0) echo " &euro; ".numdec($riga['dare'],2); 
+			if($riga['dare'] > 0) echo " &euro; ".numdec($riga['dare'],3); 
 			echo "</td><td class=\"".$cred."\">";
-			if($riga['avere'] > 0) echo " &euro; ".numdec($riga['avere'],2); 
+			if($riga['avere'] > 0) echo " &euro; ".numdec($riga['avere'],3); 
 			echo "</td>"; 
 			
 			echo "<td class=\"noprint\">$modifica_id</td>";
@@ -216,7 +214,7 @@ $_SESSION['POST_BACK_PAGE'] = "https://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SEL
 	}
 		echo "<tr  style=\"background: #F4F4F4;\"><td colspan=\"10\"></td></tr>";
 
-	echo "<tr style=\"background: white;\"><td colspan=\"4\"></td><td>Totale periodo: </td><td class=\"c-green\">&euro; ".numdec($riga2['tot_dare'],2)."</td><td class=\"c-red\">&euro; ".numdec($riga2['tot_avere'],2)."</td><td colspan=\"3\"></td></tr>";
+	echo "<tr style=\"background: white;\"><td colspan=\"4\"></td><td>Totale periodo: </td><td class=\"c-green\">&euro; ".numdec($riga2['tot_dare'],3)."</td><td class=\"c-red\">&euro; ".numdec($riga2['tot_avere'],3)."</td><td colspan=\"3\"></td></tr>";
 	echo "<tr><td colspan=\"10\"></td></tr>";
  
 	echo "<tr  style=\"background: white;\"><td colspan=\"10\"><br><br></td></tr>";
@@ -232,14 +230,14 @@ $_SESSION['POST_BACK_PAGE'] = "https://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SEL
 
 	echo "<tr  style=\"background: white;\"><td colspan=\"4\"></td>
 	<td>Saldo Disponibile: </td>
-	<td colspan=\"2\" class=\"$colore\" style=\"font-size: larger; text-align: center;\"><strong>&euro; ".numdec($saldo,2)."</strong></td>
+	<td colspan=\"2\" class=\"$colore\" style=\"font-size: larger; text-align: center;\"><strong>&euro; ".numdec($saldo,3)."</strong></td>
 	<td colspan=\"4\"></td></tr>";
 	
 	$saldofoglio = get_saldo($proprietario_id,1);
 
 	echo "<tr style=\"background: white;\"><td colspan=\"4\"></td>
 	<td>Saldo Contabile: </td>
-	<td colspan=\"2\">&euro; ".numdec($saldofoglio,2)."</td>
+	<td colspan=\"2\">&euro; ".numdec($saldofoglio,3)."</td>
 	<td colspan=\"4\"></td></tr>";
 
 
@@ -247,20 +245,10 @@ if($fido > 0 ) echo "<tr  style=\"background: white;\"><td colspan=\"4\"></td><t
 <td  style=\"background: white;\"></td></tr>";
 	}
 	echo "</table>";
-	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,1);
-
-	echo '
-	<span style="float: right; margin-right: 4px;">
-    <form method="get" action="../../fl_core/imposta.php" id="res">
 	
-    Mostra per pagina: <input name="step" type="text" value="'.$step.'"  onFocus="this.value=\'\';" size="2" maxlength="4" /> 
-    </form>
-    
-    </span>';
-	} 
-
-
+	} else { echo '<h3>Seleziona un affiliato</h3>'; }
 ?>	
 
 
 
+<?php $start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,1);  ?>

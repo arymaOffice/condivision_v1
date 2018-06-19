@@ -2,14 +2,13 @@
 
 require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
-
+$nochat = 1;
 unset($chat);
 	$jquery = 1;
 	$fancybox = 1;
 
 $tab_id = 56;
 $parent_id = check($_GET['reQiD']);
-$dettagliLead = GRD('fl_potentials',$parent_id);
 include("../../fl_inc/headers.php");
  ?>
 
@@ -17,15 +16,6 @@ include("../../fl_inc/headers.php");
 .fancybox-wrap { 
   top: 25px !important; 
 }</style>
-<h1>Modifica Priorità</h1>   
-<span style="text-align:  center;">
-
-<a href="mod_opera.php?priorita_contatto=0&id=<?php echo base64_encode($parent_id); ?>" class="touch  <?php echo ($dettagliLead['priorita_contatto'] == 0) ? 'orange_push' : 'gray_push'; ?> setAction" data-gtx="<?php echo base64_encode($parametri_modulo['tab_id']); ?>" data-id="<?php echo base64_encode($parent_id); ?>" data-azione="10"  data-esito="7" data-note="Priorità Contatto: Bassa">Bassa</a>
-<a href="mod_opera.php?priorita_contatto=1&id=<?php echo base64_encode($parent_id); ?>" class="touch  <?php echo ($dettagliLead['priorita_contatto'] == 1) ? 'orange_push' : 'gray_push'; ?> setAction" data-gtx="<?php echo base64_encode($parametri_modulo['tab_id']); ?>" data-id="<?php echo base64_encode($parent_id); ?>" data-azione="10"  data-esito="7" data-note="Priorità Contatto: Media">Media</a>
-<a href="mod_opera.php?priorita_contatto=2&id=<?php echo base64_encode($parent_id); ?>" class="touch  <?php echo ($dettagliLead['priorita_contatto'] == 2) ? 'orange_push' : 'gray_push'; ?> setAction" data-gtx="<?php echo base64_encode($parametri_modulo['tab_id']); ?>" data-id="<?php echo base64_encode($parent_id); ?>" data-azione="10"  data-esito="7" data-note="Priorità Contatto: Alta">Alta</a>
-
-
-	
 
 <h1>Log Attivit&agrave;</h1>   
  
@@ -47,7 +37,7 @@ include("../../fl_inc/headers.php");
 <?php 
 	
 	
-	$query = "SELECT * FROM `fl_richieste` WHERE `workflow_id` = 16 AND `parent_id` = $parent_id ORDER BY data_apertura DESC, data_scadenza DESC";
+	$query = "SELECT * FROM `fl_richieste` WHERE `workflow_id` = $tab_parent_id AND `parent_id` = $parent_id ORDER BY data_apertura DESC, data_scadenza DESC";
 	$risultato = mysql_query($query, CONNECT);
 	if(mysql_affected_rows() == 0){ echo "<p>Nessun Elemento</p>"; } else {
 	?>
@@ -55,9 +45,9 @@ include("../../fl_inc/headers.php");
     <table class="dati">
       <tr>
    <th style="width: 1%;"></th>
-   <th>Data / Operatore </th>
+    <th>Data</th>
    <th>Azione</th>
-   <th>Note</th>
+   <th>Scadenza</th>
    <th></th>
    <th></th>
    </tr>
@@ -80,7 +70,8 @@ include("../../fl_inc/headers.php");
 		if($riga['tipo_richiesta'] == 7) { $colore = "class=\"tab_orange\"";  }
 		if($riga['tipo_richiesta'] == 8) { $colore = "class=\"tab_red\"";  } 
 		if($riga['tipo_richiesta'] == 9) { $colore = "class=\"tab_blue\"";  } 
-		if($riga['tipo_richiesta'] == 10) { $colore = "class=\"tab_gray\"";  } 
+		if($riga['tipo_richiesta'] == 10) { $colore = "class=\"tab_green\"";  } 
+
 
 	?> 
     
@@ -88,18 +79,16 @@ include("../../fl_inc/headers.php");
      
       <tr>
       <td <?php echo $colore; ?>><span class=\"Gletter\"></span></td>
-      <td><?php echo mydatetime($riga['data_apertura']); ?><br> <?php echo $proprietario[$riga['operatore']]; ?></td>
+      <td><?php echo mydatetime($riga['data_apertura']); ?></td>
       <td><?php echo $tipo_richiesta[$riga['tipo_richiesta']]; ?>
-      <?php if($riga['data_scadenza'] != '' && $riga['data_scadenza'] != '0000-00-00 00:00:00') { echo 'Scad. '.mydatetime($riga['data_scadenza']); } ?>
+      <?php if($riga['data_scadenza'] != '' && $riga['data_scadenza'] != '0000-00-00 00:00:00') { echo 'Scad. '.mydate($riga['data_scadenza']); } ?>
 <!--      <input type="text" name="data_chiusura" class="updateField calendar" data-rel="<?php echo $riga['id']; ?>" value="<?php echo ($riga['data_chiusura'] == '0000-00-00') ? $riga['data_chiusura'] : mydate($riga['data_chiusura']); ?>" />
--->		</td> <td><textarea style="height: 30px;" name="note" class="updateField" data-rel="<?php echo $riga['id']; ?>"><?php echo $riga['note']; ?></textarea></td>
-  	  <!--<td><a href="../mod_basic/action_elimina.php?gtx=<?php echo $tab_id; ?>&amp;unset=<?php echo $riga['id'];?>" title="Elimina"  onclick="return conferma_del();"><i class="fa fa-trash-o"></i></a></td>-->
-  	  <!--  colonna elimina nascosta su richiesta di giuseppe 08/03/2017-->
+-->		</td> <td><textarea  name="note" class="updateField" data-rel="<?php echo $riga['id']; ?>"><?php echo $riga['note']; ?></textarea></td>
+  	  <td><a href="../mod_basic/action_elimina.php?gtx=<?php echo $tab_id; ?>&amp;unset=<?php echo $riga['id'];?>" title="Elimina"  onclick="return conferma_del();"><i class="fa fa-trash-o"></i></a></td>
 </tr>
 
 
     <?php } } //Chiudo la Connessione	?>
     
- </table><p><a href="#" onclick="location.reload();"><i class="fa fa-refresh" aria-hidden="true"></i> Aggiorna lista </a> 
-</p>
+ </table>
 </body></html>

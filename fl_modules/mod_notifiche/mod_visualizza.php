@@ -5,6 +5,7 @@ include('fl_settings.php'); // Variabili Modulo
 include("../../fl_inc/headers.php"); 
 include("../../fl_inc/testata_mobile.php");
 
+
 $id =  check($_GET['id']);
 $query1 = "INSERT INTO `fl_conferme` (`modulo`, `contenuto`, `proprietario`, `conferma`, `data_apertura`) VALUES ('1', '$id', '".$_SESSION['number']."', '0', NOW());";
 mysql_query($query1, CONNECT);	
@@ -20,6 +21,15 @@ mysql_query($query1, CONNECT);
 
 
 <div id="content_scheda">
+
+<style>
+
+.messaggio { 
+border: 5px solid rgb(233, 233, 233);
+padding: 20px;
+margin-bottom: 40px;
+}
+</style>
 
 
 <h1>Contenuti da leggere  <a href="#" class="noprint" onClick=" window.print();"><i class="fa fa-print"></i></a></h1>

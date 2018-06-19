@@ -11,6 +11,7 @@
 	$jquery = 1;
 	$calendar = 1;
 	$fancybox = 1;
+	$text_editor = 2;
 	$searchbox = 'Cerca..';
 	if(isset($_GET['id'])) $tab_div_labels = array('id'=>"Notifica",'mod_conferme.php?id=[*ID*]' =>'Conferme di Lettura');
   	
@@ -23,15 +24,10 @@
 	 $data_da_t = check($_GET['data_da']); $data_a_t = check($_GET['data_a']); 
 	
 	 } else {
-	 $data_da = date('Y-m-d H:i',time()-9204800); 
-	 $data_a = date('Y-m-d H:i',time()+86400); 
-	 
-	 $data_da_t = date('d/m/Y',time()-9204800); 
-	 $data_a_t = date('d/m/Y'); 
 	 }
 	
 	/* Tipologie di ordinamento disponobili */
-    $ordine_mod = array("titolo ASC","sezione ASC","categoria ASC","visite DESC");
+    $ordine_mod = array("id DESC","sezione ASC","categoria ASC","visite DESC");
 	$ordine = $ordine_mod[0];	
 	
 	
@@ -56,36 +52,12 @@
 	if(@$home_items != "") $tipologia_main .= $home_items;
 	
 	
-	
-	
 	/* Inclusioni Oggetti Categorie */
-	
-	include('../../fl_core/dataset/sezione.php');
-	include('../../fl_core/dataset/categoria.php');
 	include('../../fl_core/dataset/array_statiche.php');
 	include('../../fl_core/dataset/proprietario.php');
 	
-		$categories = '';
 	
-	  
-		foreach($sezione as $hj => $label){ // Recursione Indici di Categoria
-			$selected = ($sezione_id == $hj) ? 'class="selected"' : '';
-			$categories .=   '<li '.$selected.'><a href="?sezione='.$hj.'">'.ucfirst($label).'</a></li>';
-			}
-
-	
-	$module_menu = '
-	<ul>
-  
-	  <li><a href="./">Notifiche</a></li>
-      <!--<li class=""><a href="#">Categorie <span class="subcolor"></span></a>
-  <ul>
-        '.$categories.'
-        </ul>
-      </li>-->
-	       <li><a href="./mod_inserisci.php?external&action=1&id=1">Nuovo </a></li>
-
-    </ul>';
+	$module_menu = '';
 	
 	
 		

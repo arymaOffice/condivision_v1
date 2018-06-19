@@ -11,9 +11,9 @@ include("../../fl_inc/headers.php");?>
 <body style=" background: #FFFFFF;">
 <div style="padding: 10px;">
 <?php if($proprietario_id > 1) { ?>
-<a href="mod_inserisci.php?id=1&causale=84&external&proprietario=<?php echo $proprietario_id;?>" target="_parent" class="inparent button right" style="margin-left: 5px; min-width: 10%;"><i class="fa fa-plus"></i> Deposito </a> &nbsp;&nbsp;&nbsp;
-<a href="mod_inserisci.php?id=1&causale=86&external&proprietario=<?php echo $proprietario_id;?>" target="_parent" class="button right" style="margin-left: 5px;  min-width: 10%;"><i class="fa fa-plus"></i> Prelievo </a> &nbsp;&nbsp;&nbsp;
-<a href="mod_inserisci.php?id=1&causale=88&external&proprietario=<?php echo $proprietario_id;?>" target="_parent" class="inparent button right" style="margin-left: 5px;  min-width: 10%;"><i class="fa fa-plus"></i> Bonus </a> &nbsp;&nbsp;&nbsp;
+<a href="mod_inserisci_user.php?id=1&causale=84&external&proprietario=<?php echo $proprietario_id;?>" class="inparent button right" style="margin-left: 5px; min-width: 10%;"><i class="fa fa-plus"></i> Deposito </a> &nbsp;&nbsp;&nbsp;
+<a href="mod_inserisci_user.php?id=1&causale=86&external&proprietario=<?php echo $proprietario_id;?>" class="button right" style="margin-left: 5px;  min-width: 10%;"><i class="fa fa-plus"></i> Prelievo </a> &nbsp;&nbsp;&nbsp;
+<a href="mod_inserisci_user.php?id=1&causale=88&external&proprietario=<?php echo $proprietario_id;?>" class="inparent button right" style="margin-left: 5px;  min-width: 10%;"><i class="fa fa-plus"></i> Bonus </a> &nbsp;&nbsp;&nbsp;
 <?php } ?>
  </div>
 <h1 style=" text-align: left;">Estratto Conto <?php echo $proprietario[$proprietario_id]; ?></h1>
@@ -127,7 +127,7 @@ include("../../fl_inc/headers.php");?>
 			$cgreen = 'c-gray';
 			}
 			
-			$pagamento = ($riga['causale'] != 85) ? @$metodo_di_pagamento[$riga['metodo_di_pagamento']] : '';
+			$pagamento = ($riga['causale'] != 85) ? $metodo_di_pagamento[$riga['metodo_di_pagamento']] : '';
 
 		
 			echo "<tr><td $colore>".$status_pagamento[$riga['status_pagamento']]."</td>"; 
@@ -135,9 +135,9 @@ include("../../fl_inc/headers.php");?>
 			echo "<td>".$causale[$riga['causale']]."<br>".$riga['rif_operazione']."</td>";	
 			echo "<td><strong>".$pagamento."</strong><br>".$riga['estremi_del_pagamento']."</td>";	
 			echo "<td class=\"".$cgreen."\">";
-			if($riga['dare'] > 0) echo " &euro; ".numdec($riga['dare'],2); 
+			if($riga['dare'] > 0) echo " &euro; ".numdec($riga['dare'],3); 
 			echo "</td><td class=\"".$cred."\">";
-			if($riga['avere'] > 0) echo " &euro; ".numdec($riga['avere'],2); 
+			if($riga['avere'] > 0) echo " &euro; ".numdec($riga['avere'],3); 
 			echo "</td>"; 
 
 			
@@ -152,7 +152,7 @@ include("../../fl_inc/headers.php");?>
 
 
 	echo "<tr  style=\"background: #F4F4F4;\"><td colspan=\"7\"></td></tr>";
-	echo "<tr style=\"background: white;\"><td colspan=\"3\"></td><td>Totale periodo: </td><td class=\"c-green\">&euro; ".numdec($dare,2)."</td><td class=\"c-red\">&euro; ".numdec($avere,2)."</td></tr>";
+	echo "<tr style=\"background: white;\"><td colspan=\"3\"></td><td>Totale periodo: </td><td class=\"c-green\">&euro; ".numdec($dare,3)."</td><td class=\"c-red\">&euro; ".numdec($avere,3)."</td></tr>";
 	echo "<tr  style=\"background: white;\"><td colspan=\"7\"></td></tr>";
 	echo "<tr  style=\"background: white;\"><td colspan=\"7\"><br><br></td></tr>";
 	echo "<tr  style=\"background: white;\"><td colspan=\"7\"></td></tr>";
@@ -167,14 +167,14 @@ include("../../fl_inc/headers.php");?>
 
 	echo "<tr  style=\"background: white;\"><td colspan=\"3\"></td>
 	<td>Saldo Disponibile: </td>
-	<td colspan=\"2\" class=\"$colore\" style=\"font-size: larger; text-align: center;\"><strong>&euro; ".numdec($saldo,2)."</strong></td>
+	<td colspan=\"2\" class=\"$colore\" style=\"font-size: larger; text-align: center;\"><strong>&euro; ".numdec($saldo,3)."</strong></td>
 	<td colspan=\"3\"></td></tr>";
 	
 	$saldofoglio = get_saldo($proprietario_id,1);
 
 	echo "<tr style=\"background: white;\"><td colspan=\"3\"></td>
 	<td>Saldo Contabile: </td>
-	<td colspan=\"2\">&euro; ".numdec($saldofoglio,2)."</td>
+	<td colspan=\"2\">&euro; ".numdec($saldofoglio,3)."</td>
 	<td colspan=\"3\"></td></tr>";
 
 

@@ -2,39 +2,17 @@
 
 // Controlli di Sicurezza
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
-echo "<h2>".ucfirst(@$proprietario[$_SESSION['number']])."</h2>";  ?>
+	$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 
-     <a href="./?new&amp;auto" class="button" style=" float: right; padding: 4px 4px;">Nuova Richiesta </a> </p>
+?>
 
-<form method="get" action="" id="sezione_select">
-   
- <div style="position: relative; background:  #F4F4F4; padding: 1px 5px;"> 
-  
-         Stato: <select name="status_assistenza" id="status_assistenza">
-            <option value="0">Mostra Tutti</option>
-			<?php 
-              
-		     foreach($status_assistenza as $valores => $label){ // Recursione Indici di Categoria
-			$selected = ($status_assistenza_id == $valores) ? " selected=\"selected\"" : "";
-			if($valores != 0){ echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; }
-			}
-		 ?>
-       </select>
-       creato tra il <input type="text" name="data_da" onFocus="this.value='';" value="<?php  echo $data_da_t;  ?>" size="10" class="calendar" /> e il <input type="text" name="data_a" onFocus="this.value='';" value="<?php  echo $data_a_t;  ?>" class="calendar" size="10" /> 
-        
-       <input type="submit" value="Mostra" class="button" />
 
-    </div>
-      
-     
-       
-       </form>
 <?php
 	
 
 	if(isset($_GET['ordine'])) { if(!is_numeric($_GET['ordine'])){ exit; } else { $ordine = $ordine_mod[$_GET['ordine']]; }}
 	
-	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,0);
+	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,1);
 						
 	$query = "SELECT $select FROM `$tabella` $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
 	//echo $query;
@@ -45,7 +23,7 @@ echo "<h2>".ucfirst(@$proprietario[$_SESSION['number']])."</h2>";  ?>
        
 
   
-<table class="dati" summary="Dati">
+<table class="dati">
       <tr>
         <th>Oggetto | <a href="./?ordine=1">Operatore</a></th>
         <th><a href="./?ordine=5">Status</a></th>
@@ -77,10 +55,10 @@ echo "<h2>".ucfirst(@$proprietario[$_SESSION['number']])."</h2>";  ?>
 		
  			echo "<tr>";
 			
-			echo "<td><a href=\"?action=8&amp;proprietario=".$riga['proprietario']."&amp;jorel=$jorel&amp;id=".$riga['id']."\" title=\"".$riga['descrizione']."\">".$riga['oggetto']."</a><br />".$proprietario[$riga['proprietario']]."</td>";
+			echo "<td><a href=\"mod_scheda.php?action=8&amp;proprietario=".$riga['proprietario']."&amp;jorel=$jorel&amp;id=".$riga['id']."\" title=\"".$riga['descrizione']."\">".$riga['oggetto']."</a><br />".$proprietario[$riga['proprietario']]."</td>";
 		    echo "<td>".$status_assistenza[$riga['status_assistenza']]."</td>";
-			echo "<td style=\"font-size: 8px;\" title=\"Creato da: ". @$proprietario[$riga['proprietario']]."\">".date("d/m/y H:i",$riga['data_creazione'])."</td>";
-			echo "<td  class=\"$new_mail\" style=\"font-size: 8px;\" title=\"Aggiornato da: ". @$proprietario[$riga['operatore']]."\"><a href=\"?action=8&amp;jorel=$jorel&amp;id=".$riga['id']."\" title=\"".$riga['descrizione']."\">".date("d/m/y H:i",$riga['data_aggiornamento'])."</a></td>";
+			echo "<td title=\"Creato da: ". @$proprietario[$riga['proprietario']]."\">".mydate($riga['data_creazione'])."</td>";
+			echo "<td  class=\"$new_mail\" title=\"Aggiornato da: ". @$proprietario[$riga['operatore']]."\"><a href=\"mod_scheda.php?action=8&amp;jorel=$jorel&amp;id=".$riga['id']."\" title=\"".strip_tags(converti_txt($riga['descrizione']))."\">".mydate($riga['data_aggiornamento'])."</a></td>";
 	
 			
 		
@@ -89,16 +67,6 @@ echo "<h2>".ucfirst(@$proprietario[$_SESSION['number']])."</h2>";  ?>
 	}
 	
 
-	echo "<tr></tr>";
-	
-		if($i==1){ $i=0; echo "<tr>"; } else { $i=1; echo "<tr class=\"alternate\">"; }		
-			
-			
-			echo "<td class=\"codice\" colspan=\"4\">Elementi in lista: ".mysql_affected_rows()."</td>";
-			
-		
-				
-		    echo "</tr>";
 	
 
 	

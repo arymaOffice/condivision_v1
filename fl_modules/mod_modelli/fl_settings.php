@@ -40,7 +40,7 @@
 	
 	/*Impostazione automatica da tabella */
 	$campi = gcolums($tabella); //Ritorna i campi della tabella
-	$tipologia_main = gwhere($campi,'WHERE id != 1 AND attivo = 1 ','');//Imposta i filtri della query prendendo i dati GET e se sono tra i filtri li applica
+	$tipologia_main = gwhere($campi,'WHERE id != 1 ','');//Imposta i filtri della query prendendo i dati GET e se sono tra i filtri li applica
  
 	
 	//Filtri di base (da strutturare quelli avanzati)

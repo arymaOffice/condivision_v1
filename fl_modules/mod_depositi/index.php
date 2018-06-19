@@ -15,7 +15,7 @@ if(isset($_GET['action'])) { include($pagine[$_GET['action']]); } else {
 
 $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 
-if($_SESSION['usertype'] > 1){
+if($_SESSION['usertype'] > 0){
 include("mod_user.php"); 
 }else{
 include("mod_home.php"); 

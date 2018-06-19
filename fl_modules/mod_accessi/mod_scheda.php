@@ -2,8 +2,7 @@
 // Controlli di Sicurezza
 require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
-unset($chat);
-
+ 
 include("../../fl_inc/headers.php");
 ?>
   	<?php 

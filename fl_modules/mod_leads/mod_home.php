@@ -1,418 +1,373 @@
 <?php
 
+
 // Controlli di Sicurezza
-if (!@$thispage) {echo "Accesso Non Autorizzato";exit;}
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'];
-include 'filtri.php';
-
-if (isset($_GET['ordine'])) {if (!is_numeric($_GET['ordine'])) {exit;} else { $ordine = $ordine_mod[$_GET['ordine']];}}
-
-$start = paginazione(CONNECT, $tabella, $step, $ordine, $tipologia_main, 1);
-$query = "SELECT $select FROM $tabella $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
-
-$risultato = mysql_query($query, CONNECT);
-if ($_SESSION['number'] == 1) {
-    echo $query . mysql_error();
-}
+if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 
 ?>
-
-<p style="clear: both; text-align: left;">
-
-<!--<a href="mod_invia_sms.php<?php echo "?" . $_SERVER['QUERY_STRING']; ?>" data-fancybox-type="iframe"  style=" padding: 8px 20px;
-    font-size: 100%;" class="fancybox_view_small button">Invia SMS</a> <a href="mod_invia_mail.php<?php echo "?" . $_SERVER['QUERY_STRING']; ?>" data-fancybox-type="iframe"  style=" padding: 8px 20px;
-    font-size: 100%;" class="fancybox_view_small button">Invia Email</a>
-
-        <a href="mod_esporta.php<?php echo "?" . $_SERVER['QUERY_STRING']; ?>" data-fancybox-type="iframe"  style=" padding: 8px 20px;
-    font-size: 100%;" class="fancybox_view_small button">Esporta in MailUp</a>
--->
-      <a href="#"  style=" padding: 8px 20px;
-    font-size: 100%;" class="showcheckItems button">Seleziona contatti</a>
-    <?php echo '<a style=" padding: 8px 20px;
-    font-size: 100%;" class="button" href="./?' . $_SERVER['QUERY_STRING'] . '&proprietario=-1"><i class="fa fa-users" aria-hidden="true"></i>  Mostra tutti</a>'; ?>
-	<a href="#" style="padding: 8px 20px;" onclick="window.location.href = 'mod_export.php?'+ window.location.search.substring(1) ;" class="button" >Esporta i risultati correnti in excel</a> </p>
-<form method="get">
-
-
-      <?php if (isset($_GET['all'])) {
-    echo '<input type="hidden" name="all" value="1" />';
+<script type="text/javascript">
+function checkAllFields(ref)
+{
+var chkAll = document.getElementById('checkAll');
+var checks = document.getElementsByName('leads[]');
+var boxLength = checks.length;
+var allChecked = false;
+var totalChecked = 0;
+	if ( ref == 1 )
+	{
+		if ( chkAll.checked == true )
+		{
+			for ( i=0; i < boxLength; i++ )
+			checks[i].checked = true;
+		}
+		else
+		{
+			for ( i=0; i < boxLength; i++ )
+			checks[i].checked = false;
+		}
+	}
+	else
+	{
+		for ( i=0; i < boxLength; i++ )
+		{
+			if ( checks[i].checked == true )
+			{
+			allChecked = true;
+			continue;
+			}
+			else
+			{
+			allChecked = false;
+			break;
+			}
+		}
+		if ( allChecked == true )
+		chkAll.checked = true;
+		else
+		chkAll.checked = false;
+	}
+	for ( j=0; j < boxLength; j++ )
+	{
+		if ( checks[j].checked == true )
+		totalChecked++;
+	}
+	countFields(1);
 }
-?>
-      <?php if (isset($_GET['source_potential'])) {
-    if (is_array($_GET['source_potential'])) {
-        foreach (@$_GET['source_potential'] as $chiave) 
-        {echo '<input type="hidden" name="source_potential[]" value="' . $chiave . '" />';}
-    }else{
-        echo '<input type="hidden" name="source_potential[]" value="' . $_GET['source_potential'] . '" />';
-    }
-}?>
-
-
-
-
-
-
-
-
-	      <select name="tipo_interesse" >
-      	  <option value="-1">Interesse</option>
-   <option value="-1">Tutti</option>
-
-      <?php
-
-foreach ($tipo_interesse as $valores => $label) { // Recursione Indici di Categoria
-    $selected = (isset($_GET['tipo_interesse']) && check($_GET['tipo_interesse']) == $valores) ? " selected=\"selected\"" : "";
-    echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
+  
+  
+  function countFields(ref)
+{
+var checks = document.getElementsByName('leads[]');
+var boxLength = checks.length;
+var totalChecked = 0;
+	for ( j=0; j < boxLength; j++ )
+	{
+		if ( checks[j].checked == true )
+		totalChecked++;
+	}
+	$('#counter').html('' + totalChecked + ' leads');
 }
-?>
-    </select>
+</script>
 
 
-          <select name="categoria_interesse" >
-          	 <option value="-1">Categoria Veicolo</option>
-   <option value="-1">Tutti</option>
+<?php  if($status_potential_id != 4) include ("counters.php");?>
 
-      <?php
 
-foreach ($categoria_interesse as $valores => $label) { // Recursione Indici di Categoria
-    $selected = (isset($_GET['categoria_interesse']) && check($_GET['categoria_interesse']) == $valores) ? " selected=\"selected\"" : "";
-    echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
-}
-?>
-    </select>
 
-          <select name="sede" >
-          	  <option value="-1">Sede</option>
-   <option value="-1">Tutti</option>
+<br class="clear">
+<div id="filtri" class="filtri">
+  <h2>Filtri</h2>
+  <form method="get" action="" id="fm_filtri">
+    <label> Qualificati </label>
+    
+    <input type="radio" name="qualificati" id="qualificati1" value="1" <?php if($qualificati_id == 1) echo 'checked'; ?>>
+    <label for="qualificati1">SI</label>
+   
+    <input type="radio" name="qualificati" id="qualificati0" value="0"  <?php if($qualificati_id == 0) echo 'checked'; ?>>
+    <label for="qualificati0">NO</label>
+    
+    <input type="radio" name="qualificati" id="qualificati2" value="2"  <?php if($qualificati_id == 2) echo 'checked'; ?>>
+    <label for="qualificati2">SUPER</label>
+    
+    <input type="radio" name="qualificati" id="qualificati3" value="-1"  <?php if($qualificati_id == -1) echo 'checked'; ?>>
+    <label for="qualificati3">Tutti</label>
+    
+   <?php 
+ 
+	foreach ($campi as $chiave => $valore) 
+	{		
+			if(in_array($chiave,$basic_filters)){
+			
+			
 
-      <?php
+			if((select_type($chiave) == 2 || select_type($chiave) == 19) && $chiave != 'id' || $chiave == 'status_potential' || $chiave == 'proprietario') {
+				echo '<div class="filter_box">';
+				echo '  <label>'.$valore.'</label>';
+				echo '<select name="'.$chiave.'" class="select"><option value="-1">Tutti</option>';
+				foreach($$chiave as $val => $label) { $selected = (isset($_GET[$chiave]) && check(@$_GET[$chiave]) == $val) ? 'selected' : ''; echo '<option '.$selected.' value="'.$val.'">'.$label.'</option>'; }
+				echo '</select>';
+				echo '</div>';
+			} else if( $chiave != 'id') { $cont = (isset($_GET[$chiave])) ? check($_GET[$chiave]) : ''; 
+			echo '<div class="filter_box">';
+			echo '<label>'.$valore.'</label><input type="text" name="'.$chiave.'" value="'.$cont.'" />'; echo '</div>';}
 
-foreach ($sede as $valores => $label) { // Recursione Indici di Categoria
-    $selected = (isset($_GET['sede']) && check($_GET['sede']) == $valores) ? " selected=\"selected\"" : "";
-    echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
-}
-?>
-    </select>
+			
+			
+			} 
+		
+	}
+	 ?>    
+
+  
+    <?php //if($_SESSION['usertype'] == 3 || $_SESSION['usertype'] == 0) $data_set->do_select('VALUES',$tabella,'in_use','operatore',$operatore_id,'','','','',$proprietario); ?>
+    <div style="width: 50%; margin: 0; float: left;">
+      <label> da</label>
+      <input type="text" name="data_da" onFocus="this.value='';" value="<?php  echo $data_da_t;  ?>"  class="calendar" size="8" />
+    </div>
+    <div style="width: 50%; margin: 0; float: left;">
+      <label> a</label>
+      <input type="text" name="data_a" onFocus="this.value='';" value="<?php  echo $data_a_t;  ?>" class="calendar" size="8" />
+    </div>
     <input type="submit" value="<?php echo SHOW; ?>" class="button" />
+  </form>
+</div>
+<?php
 
-</form>
+
+	if(isset($_GET['ordine'])) { if(!is_numeric($_GET['ordine'])){ exit; } else { $ordine = $ordine_mod[$_GET['ordine']]; }}
+	
+	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,0);
+	$query = "SELECT $select FROM `$tabella` $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
+
+	$risultato = mysql_query($query, CONNECT);
+	if($_SESSION['number'] == 1) echo $query.mysql_error();
+	?>
+<p style="clear: both; text-align: left;"> 
+
+
+
+
+      <a href="#"  style=" padding: 8px 20px;   font-size: 100%;" class="showcheckItems button">Seleziona contatti</a> </p>
+
+
 <div id="results" class="green"></div>
 <form action="./mod_opera.php?<?php echo $_SERVER['QUERY_STRING']; ?>" id="print" class="ajaxForm" method="post" style="padding: 0; margin: 0;">
+  <table class="dati" summary="Dati" style=" width: 100%;">
+    <tr>
+      <?php if($status_potential_id != 4){ ?>
+      <th></th>
+      <?php }  ?>
+      <th style="width: 1%;" class="checkItemTd"><input onclick="checkAllFields(1);" id="checkAll"  name="checkAll" type="checkbox"  />
+        <label for="checkAll"><?php echo $checkRadioLabel; ?></label>
+      </th>
+     <th>Data</th>
+      <th>Nominativo</th>
+     
+      <th>Contatti</th>
+      <th>Interesse</th>
+      <th>Sorgente</th>
+      <th>Scadenza </th>
+      <th></th>
+    </tr>
+    <?php 
+	
+	$i = 1;
 
 
 
-   <div class="checkItemTd">
-    <?php
-$count = 0;
-//if($_SESSION['usertype'] > 0 || $_SESSION['usertype'] == 0) {
-echo '<h3 style="text-align: left; clear: both;" id="bottom-bar">
-	<strong>Esegui su <span  id="counter"> ' . $count . ' lead</span> </strong> questa azione:
+	if(mysql_affected_rows() == 0) { echo "<tr><td colspan=\"9\">No records</td></tr>";		}
+	$tot_res = $count = 0;
+	
+	
+	while ($riga = mysql_fetch_array($risultato)) 
+	{
+		
+		$colore = "class=\"tab_blue\"";
+		if($riga['priorita_contatto'] == 0) { $colore = "class=\"turquoise\"";  }
+		if($riga['priorita_contatto'] == 1) { $colore = "class=\"orange\"";  }
+		if($riga['priorita_contatto'] == 2) { $colore = "class=\"red\"";  }
+		
+		$input = '';
+		if($_SESSION['usertype'] < 4) { 
+		$checked = ($riga['status_potential']==0) ? '' : ''; //checked auto
+		//$count += ($riga['status_potential']==0) ? 1 : 0;
+		$input =  '<input onClick="countFields(1);" type="checkbox" name="leads[]" value="'.$riga['id'].'" id="'.$riga['id'].'"  '.$checked.' /><label for="'.$riga['id'].'">'.$checkRadioLabel.'</label>';
+		}
 
+		
+	 	$data_principale = data_visita_lead($riga[$data_dafault]);
+		
+
+		/*Gestione Assegnazion e scadenza */
+		if($riga['data_scadenza'] != '0000-00-00' && $riga['data_scadenza'] != '') {
+		$date = strtotime(@$riga['data_scadenza']);
+		$giorniCount = giorni(date('Y-m-d',$date));
+		$giorni =  '<span class="msg green">- '.$giorniCount.' giorni</span>';
+		if($giorniCount == 0) $giorni =  '<span class="msg red">SCADE OGGI</span>';
+		if($giorniCount == 1) $giorni =  '<span class="msg orange">Domani</span>';
+		if($giorniCount < 0) $giorni = '<span class="msg red">SCADUTO</span>';	
+		if($riga['status_potential'] == 4) $giorni = '';	
+		} else { $giorni = '';	 }
+
+		if($riga['data_scadenza_venditore'] != '0000-00-00' && $riga['data_scadenza_venditore'] != '') {
+		$date = strtotime(@$riga['data_scadenza_venditore']);
+		$giorniCount = giorni(date('Y-m-d',$date));
+		$giorni2 =  '<span class="msg green">- '.$giorniCount.' giorni</span>';
+		if($giorniCount == 0) $giorni2 =  '<span class="msg red">SCADE OGGI</span>';
+		if($giorniCount == 1) $giorni2 =  '<span class="msg orange">Domani</span>';
+		if($giorniCount < 0) $giorni2 = '<span class="msg red">SCADUTO</span>';	
+		if($riga['status_potential'] > 2) $giorni2 = '';	
+		} else { $giorni2 = '';	 }
+		
+		
+		
+		$bdcActivity = get_nextAction($tab_id,$riga['id'],0);		
+		$bdcAction = ($bdcActivity != NULL ) ? '<span title="'.@$proprietario[$bdcActivity['operatore']].'"><strong>'.mydatetime($bdcActivity['data_aggiornamento']).' </strong></span><br><span title="'.$bdcActivity['note'].'">'.substr($bdcActivity['note'],0,85).' ...</span><br>' :  'Inserito il: '.mydate($riga['data_creazione']);
+
+		/*$sellAction = get_nextAction($tab_id,$riga['id'],$riga['venditore']);
+		$sellAction = ($riga['venditore'] > 0 && $riga['proprietario'] != $riga['venditore'] && $sellAction['id'] != NULL) ? '<span title="'.@$proprietario[$sellAction['operatore']].'"><strong>'.mydatetime($sellAction['data_aggiornamento']).'</strong> '.$sellAction['note'].'</span><br>' :  'Nessuna Azione';
+		*/
+
+	
+		$phone = phone_format($riga['telefono'],'39');	
+		$website = www($riga['website']);		
+	
+		$synapLead  = $synapsy = ''; // Gestione parentele, solo se attiva
+
+		if(defined('synapLead')) {
+		$query = 'SELECT * FROM `fl_synapsy` WHERE (`type1` = '.$tab_id.' OR `type2` = '.$tab_id.') AND (`id1` = '.$riga['id'].' OR `id2` = '.$riga['id'].')';
+		$parentele = mysql_query($query);
+		if(mysql_affected_rows() > 0) {
+			$synapsy = '<span class="msg"><i class="fa fa-link"></i></a>';
+			while ($parente = mysql_fetch_array($parentele)){  	
+			$record_rel = ($parente['id1'] == $riga['id']) ? $parente['id2'] : $parente['id1'];
+			$nominativocorrelato = GRD($tabella,$record_rel);
+			$synapsy .= ' <a href="../mod_leads/mod_inserisci.php?id='.$record_rel .'">'.$nominativocorrelato['nome'].' '.$nominativocorrelato['cognome'].'</a> <a href="mod_opera.php?disaccoppia='.$parente['id'].'" class="c-red">[x]</a>'; }
+			$synapsy .= '</span>'; 
+		}
+		if(isset($_SESSION['synapsy'])) {
+			 $synapLead = ($_SESSION['synapsy'] != $riga['id']) ? '<a href="mod_opera.php?connect='.$riga['id'].'" style="color: #E84B4E;"><i class="fa fa-link" aria-hidden="true"></i></a>' : '' ;
+		} else {
+			 $synapLead = '<a href="mod_opera.php?synapsy='.$riga['id'].'"><i class="fa fa-link" aria-hidden="true"></i></a>';
+		}
+		}
+		
+		$new_contract = ($riga['is_customer'] > 1) ? '../mod_anagrafica/mod_inserisci.php?id='.$riga['is_customer'].'&meeting_id=0' : '../mod_anagrafica/mod_inserisci.php?id=1&meeting_id=0&j='.base64_decode($riga['id']).'&nominativo='.$riga['nome'].' '.$riga['cognome'];
+		$color_contract = ($riga['is_customer'] > 1) ? 'c-green' : '';
+		$qualified = ($status_potential_id != 4 && $riga['nome'] != '' && $riga['telefono'] != '' && $riga['email'] != '') ? '<i class="fa fa-star" style="padding: 0; color: rgb(246, 205, 64); font-size: 60%;" aria-hidden="true"></i>' : '';
+		$feedback = get_feedback($riga['id'] );
+		$feedback = ($feedback != '0') ? '<i class="fa fa-smile-o '.$feedback.'" style aria-hidden="true"></i>' : '';
+		
+
+			if($status_potential_id != 4)  echo "<tr><td $colore><span class=\"Gletter\"></span></td>"; 
+
+			echo "<td class=\"checkItemTd\">$input</td>";
+			echo "<td><h3>$data_principale</h3><span class=\"msg blue\">".$status_potential[$riga['status_potential']]."</span></td>";
+
+			echo "<td>$feedback
+			<a class=\"mobile-buttons\" style=\"color: gray;\" href=\"mod_inserisci.php?id=".$riga['id']."&potential_rel=".$riga['id']."\" title=\"Gestisci scheda ".ucfirst($riga['nome'])."\">
+			$qualified ".$riga['ragione_sociale']." <strong title=\"".strip_tags(converti_txt($riga['messaggio']))."\">".ucfirst($riga['nome'])." ".ucfirst($riga['cognome'])."</strong></a> $synapsy    <br> ".strip_tags(converti_txt($riga['note']))."
+			 </td>";
+			echo "<td><i class=\"fa fa-phone\" style=\"padding: 3px;\"> </i>  $phone <br><i class=\"fa fa-envelope-o\" style=\"padding: 3px;\"></i><a href=\"mailto:".$riga['email']."\"> ".$riga['email']."</a></td>";
+
+			$interesse = ($status_potential_id != 4) ? @$interessato_a[$riga['interessato_a']] : '';
+			
+			echo "<td>";
+			echo "<span class=\"msg orange\">".@$tipo_interesse[@$riga['tipo_interesse']]."</span> ".$interesse;
+			if(defined('tab_prefix') && @tab_prefix == 'hrc') echo  @$anno_di_interesse[@$riga['anno_di_interesse']]."<br>";
+			if(defined('tab_prefix') && @tab_prefix == 'hrc') echo $riga['numero_persone']." persone</td>";
+			
+			echo "<td>".$campagna_id[$riga['campagna_id']]."/".$source_potential[$riga['source_potential']]."</td>";
+		
+			
+			
+	
+			echo "<td><strong>".@$proprietario[@$riga['proprietario']]."</strong><br><br>$bdcAction</td>";
+			//echo "<td><strong>".@$proprietario[@$riga['venditore']]."</strong><br>".$giorni2."<br>$sellAction</td>";
+
+			
+			
+				echo "<td>";
+			echo $synapLead;
+						
+			if($riga['in_use'] == 0) {
+			echo "<a class=\"mobile-buttons\" href=\"mod_inserisci.php?id=".$riga['id']."&potential_rel=".$riga['id']."\" title=\"Gestisci scheda ".ucfirst($riga['nome'])."\"> <i class=\"fa fa-search\"></i> </a>";
+			} else {
+			echo "<a class=\"mobile-buttons\" href=\"mod_inserisci.php?id=".$riga['id']."&potential_rel=".$riga['id']."&nominativo=".$riga['nome']."\" title=\"Bloccato: ".@$proprietario[$riga['in_use']]." sta chiamando il contatto\" style=\"color: red;\"> Gestito da ".@$proprietario[$riga['in_use']]."  </a>";
+			}
+
+			if($_SESSION['usertype'] == 0 ) echo " <a href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Cancella\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a>"; 
+
+			echo "</td>";
+			if($riga['is_customer'] > 1) echo "<td><a href=\"$new_contract\"><i class=\"fa fa-user $color_contract\" ></i></a></td>"; 
+
+		    echo "</tr>";
+		
+
+			
+			
+	}
+?>
+  </table>
+  <?php  $start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,1);  ?>
+  <div class="checkItemTd">
+    <?php if($_SESSION['usertype'] == 3 || $_SESSION['usertype'] == 0) {
+ echo '<h3 style="text-align: left; clear: both;">
+	<strong>Esegui su <span  id="counter"> '.$count.' lead</span> </strong> questa azione: 
+	
 	<select name="azione" id="action_list" class="select2" style="min-width: 250px;">
 	<option value="-1">Seleziona Azione</option>
-	<option value="1">Assegna Gestione</option>
-	<option value="2">Assegna Venditore</option>
-	<option value="6">Cambia Status</option>
-	<option value="3">Invia SMS</option>
+	<option value="1">Assegna a Persona</option>
+    <option value="6">Cambia Status</option>
+    <option value="3">Invia SMS</option>
 	<option value="4">Invia Email</option>
-	<option value="5">Esporta in MailUp</option>
-	<option value="7">Elimina</option>
-
+<!--	<option value="5">Esporta in MailUp</option>
+-->	
 	</select>
 
 
  <span id="action1" class="action_options">
  <select name="assegna_leads" id="assegna_leads" class="select2" style="min-width: 250px;">';
-
-echo '<optgroup label="Operatori BDC">';
-foreach ($operatoribdc as $valores => $label) { // Recursione Indici di Categoria
-    $selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
-    if ($valores > 1) {
-        echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
-    }
-
-}
-
-echo '<optgroup label="Digital">';
-foreach ($operatoridgt as $valores => $label) { // Recursione Indici di Categoria
-    $selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
-    echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
-}
-
-echo '</optgroup></select>';
-echo ' giorni scadenza <input type="number" style="width: 50px;" name="scadenza_bdc" value="2" />  ore <input type="number" style="width: 50px;"  name="ore_scadenza_bdc" value="2" />
+            
+			echo '<optgroup label="Operatori BDC">';  
+		     foreach($proprietario as $valores => $label){ // Recursione Indici di Categoria
+			$selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
+			 echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; 
+			}
+		
+ echo '</optgroup></select>';
+ echo ' giorni scadenza <input type="number" style="width: 50px;" name="scadenza" value="2" />
  </span>
-
+ 
   <span id="action2" class="action_options">
  <select name="assegna_venditore" id="assegna_venditore" class="select2" style="min-width: 250px;">';
-
-echo '<optgroup label="Venditori">';
-foreach ($venditore as $valores => $label) { // Recursione Indici di Categoria
-    $selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
-    if ($valores > 1) {
-        echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
-    }
-
-}
-
-echo '<optgroup label="Digital">';
-foreach ($operatoridgt as $valores => $label) { // Recursione Indici di Categoria
-    $selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
-    echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
-}
-
-echo '</optgroup></select>';
-echo ' giorni scadenza <input type="number" style="width: 50px;"  name="scadenza_venditore" value="2" />  ore <input type="number" style="width: 50px;"  name="ore_scadenza_venditore" value="2" />
+            
+		
+			echo '<optgroup label="Venditori">';  
+			    foreach($venditori as $valores => $label){ // Recursione Indici di Categoria
+			$selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
+			 echo "<option value=\"$valores\" $selected>".ucfirst($label)."</option>\r\n"; 
+			}
+		
+ echo '</optgroup></select>';
+ echo ' giorni scadenza <input type="number" style="width: 50px;" name="scadenza" value="2" />
  </span>
-
- <span id="action6" class="action_options">
+ 
+ <span id="action6" class="action_options" style="width: 150px;">
  <select name="status_potential" id="status_potential" class="select2" style="min-width: 250px;">';
-
-foreach ($status_potential as $valores => $label) { // Recursione Indici di Categoria
-    echo "<option value=\"$valores\">" . ucfirst($label) . "</option>\r\n";
-}
-
-echo '</select>';
-echo '</span>
-
-
-
-  <input type="submit" value="Esegui" class="button" style="background: green;">
- </h3>';
-
-?>
-</div>
-
- <table class="dati" summary="Dati" style=" width: 100%;">
-    <tr>
-      <?php if ($status_potential_id != 4) {?>
-      <th></th>
-      <?php }?>
-      <th style="width: 1%;" class="checkItemTd"><input onclick="checkAllFields(1);" id="checkAll"  name="checkAll" type="checkbox"  />
-        <label for="checkAll"><?php echo $checkRadioLabel; ?></label>
-      </th>
-
-      <th><a href="../mod_basic/action_set.php?ordine_mode=1">Nominativo</a></th>
-      <th>Contatti</th>
-      <th>Lead Generator</th>
-      <th><a href="../mod_basic/action_set.php?ordine_mode=2" title="Ordina raggruppando per gestore BDC, non in ordine alfabetico">Gestione </a> </th>
-      <th><a href="../mod_basic/action_set.php?ordine_mode=3" title="Ordina raggruppando per venditore, non in ordine alfabetico">Cons. Vendita</a> </th>
-      <th><a href="../mod_basic/action_set.php?ordine_mode=0">Data Syncro</a></th>
-
-      <th></th>
-    </tr>
-    <?php
-
-$i = 1;
-function www($url)
-{
-    $num = '';
-    if ($url != '') {
-        $num = "http://" . str_replace("http://", "", str_replace(" ", "", $url));
-    }
-
-    return $num;
-}
-
-if (mysql_affected_rows() == 0) {echo "<tr><td colspan=\"9\">No records</td></tr>";}
-$tot_res = $count = 0;
-while ($riga = mysql_fetch_array($risultato)) {
-    $colore = "class=\"tab_blue\"";
-    if ($riga['priorita_contatto'] == 0) {$colore = "class=\"turquoise\"";}
-    if ($riga['priorita_contatto'] == 1) {$colore = "class=\"orange\"";}
-    if ($riga['priorita_contatto'] == 2) {$colore = "class=\"red\"";}
-
-    $input = '';
-    //if($_SESSION['usertype'] < 4) {
-    $checked = ($riga['status_potential'] == 0) ? '' : ''; //checked auto
-    //$count += ($riga['status_potential']==0) ? 1 : 0;
-    $input = '<input onClick="countFields(1);" type="checkbox" name="leads[]" value="' . $riga['id'] . '" id="' . $riga['id'] . '"  ' . $checked . ' /><label for="' . $riga['id'] . '">' . $checkRadioLabel . '</label>';
-    //}
-
-    /*Gestione Assegnazion e scadenza */
-    if ($riga['data_scadenza'] != '0000-00-00 00:00:00' && $riga['data_scadenza'] != '') {
-        $date = strtotime(@$riga['data_scadenza']);
-        $giorniCount = giorni(date('Y-m-d', $date));
-        $giorni = '<span class="msg green">- ' . $giorniCount . ' giorni</span>';
-        if ($giorniCount == 0) {
-            $giorni = '<span class="msg red">SCADE OGGI</span> alle ' . date('H:i', $date);
-        }
-
-        if ($giorniCount == 1) {
-            $giorni = '<span class="msg orange">Domani</span> alle ' . date('H:i', $date);
-        }
-
-        if ($giorniCount < 0) {
-            $giorni = '<span class="msg red">SCADUTO</span>';
-        }
-
-    } else { $giorni = '';}
-
-    if ($riga['data_scadenza_venditore'] != '0000-00-00 00:00:00' && $riga['data_scadenza_venditore'] != '') {
-        $date = strtotime(@$riga['data_scadenza_venditore']);
-        $giorniCount = giorni(date('Y-m-d', $date));
-        $giorni2 = '<span class="msg green">- ' . $giorniCount . ' giorni</span>';
-        if ($giorniCount == 0) {
-            $giorni2 = '<span class="msg red">SCADE OGGI</span> alle ' . date('H:i', $date);
-        }
-
-        if ($giorniCount == 1) {
-            $giorni2 = '<span class="msg orange">Domani</span> alle ' . date('H:i', $date);
-        }
-
-        if ($giorniCount < 0) {
-            $giorni2 = '<span class="msg red">SCADUTO</span>';
-        }
-
-    } else { $giorni2 = '';}
-
-    $gestore = $riga['proprietario'];
-    //if(defined('assegnazione_automatica') && $gestore < 2 && function_exists('assegnazione_automatica')) $gestore = assegnazione_automatica($riga['id'],$riga['source_potential']);
-
-    $bdcAction = get_nextAction(16, $riga['id'], 0); // rimettere valore ID del gestore se vuoi prendere solo azioni del gestore BDC
-    $bdcAction = ($gestore > 0 && $bdcAction['id'] != null) ? '<span title="' . @$proprietario[$bdcAction['operatore']] . '"><strong>' . mydatetime($bdcAction['data_aggiornamento']) . ' </strong>' . $bdcAction['note'] . '</span><br>' : 'Inserito il ' . mydate($riga['data_creazione']);
-
-    $sellAction = get_nextAction(16, $riga['id'], $riga['venditore']);
-    $sellAction = ($riga['venditore'] > 0 && $gestore != $riga['venditore'] && $sellAction['id'] != null) ? '<span title="' . @$proprietario[$sellAction['operatore']] . '"><strong>' . mydatetime($sellAction['data_aggiornamento']) . '</strong> ' . $sellAction['note'] . '</span><br>' : 'Nessuna Azione';
-
-    /*
-    $query = 'SELECT * FROM `fl_meeting_agenda` WHERE potential_rel = '.$riga['id'].'';
-    mysql_query($query);*/
-
-    /* SMS*/
-    $phone = phone_format($riga['telefono'], '39');
-    $website = www($riga['website']);
-    $valutazione = GQD('fl_surveys', '*', ' `workflow_id` = 16 AND `record_id` = ' . $riga['id'] . ' ORDER BY data_creazione DESC LIMIT 1');
-    $valutazioneBadge = ($valutazione['id'] > 0) ? '<span class="msg green" title="' . $valutazione['note'] . '">Gradimento (' . numdec($valutazione['value'], 2) . ')</span>' : '';
-
-    $synapsy = '';
-
-    $query = 'SELECT * FROM `fl_synapsy` WHERE (`type1` = ' . $tab_id . ' OR `type2` = ' . $tab_id . ') AND (`id1` = ' . $riga['id'] . ' OR `id2` = ' . $riga['id'] . ')';
-
-    $parentele = mysql_query($query);
-    if (mysql_affected_rows() > 0) {
-        $synapsy = '<span class="msg"><i class="fa fa-link"></i></a>';
-        while ($parente = mysql_fetch_array($parentele)) {
-            $record_rel = ($parente['id1'] == $riga['id']) ? $parente['id2'] : $parente['id1'];
-            $nominativocorrelato = GRD('fl_potentials', $record_rel);
-            $synapsy .= ' <a href="../mod_leads/mod_inserisci.php?id=' . $record_rel . '">' . $nominativocorrelato['nome'] . ' ' . $nominativocorrelato['cognome'] . '</a> <a href="mod_opera.php?disaccoppia=' . $parente['id'] . '" class="c-red">[x]</a>';}
-        $synapsy .= '</span>';
-    }
-    if (isset($_SESSION['synapsy'])) {
-        $synapLead = ($_SESSION['synapsy'] != $riga['id']) ? '<a href="mod_opera.php?connect=' . $riga['id'] . '" style="color: #E84B4E;"><i class="fa fa-link" aria-hidden="true"></i></a>' : '';
-    } else {
-        $synapLead = '<a href="mod_opera.php?synapsy=' . $riga['id'] . '"><i class="fa fa-link" aria-hidden="true"></i></a>';
-    }
-
-    //$query = 'SELECT * FROM `fl_sms` WHERE `to` LIKE \''.$phone.'%\' ORDER BY `data_ricezione` DESC LIMIT 1';
-    //$sms = mysql_fetch_array(mysql_query($query));
-    //$send = '<a href="../mod_sms/mod_inserisci.php?action=1&id=1&to='.$phone.'&from='.crm_number.'" data-fancybox-type="iframe" class="fancybox_view"><i class="fa fa-envelope"></i></a> ';
-
-    $smsbody = (isset($sms['body']) && strlen($phone) > 4) ? '<br><span class="c-red"><strong>Ultimo SMS inviato:</strong> ' . $sms['body'] . '</span>' : '';
-    $new_contract = ($riga['is_customer'] > 1) ? '../mod_anagrafica/mod_inserisci.php?id=' . $riga['is_customer'] . '&meeting_id=0' : '../mod_anagrafica/mod_inserisci.php?id=1&meeting_id=0&j=' . base64_decode($riga['id']) . '&nominativo=' . $riga['nome'] . ' ' . $riga['cognome'];
-    $color_contract = ($riga['is_customer'] > 1) ? 'c-green' : '';
-
-    $veicolo_lista = '';
-
-    $veicoloUsato = 0; //get_veicolo(16,$riga['id']);
-    $veicoloNuovo = 0; //get_veicolo(48,$riga['id']);
-
-    if ($veicoloUsato != 0) {
-        $veicolo_lista .= '<span class="msg gray">PERMUTA</span> <a href="../mod_veicoli/mod_inserisci.php?id=' . $veicoloUsato['id'] . '">' . $veicoloUsato['marca'] . ' ' . $veicoloUsato['modello'] . ' ';
-    }
-
-    if (isset($veicoloNuovo) && $veicoloNuovo != 0) {
-        $veicolo_lista .= '<span class="msg blue">NUOVO</span> <a href="../mod_veicoli/mod_inserisci.php?id=' . $veicoloNuovo['id'] . '">' . $veicoloNuovo['marca'] . ' ' . $veicoloNuovo['modello'] . '';
-    }
-
-    $qualified = ($status_potential_id != 4 && $riga['nome'] != '' && strlen($riga['telefono']) > 7) ? '<i class="fa fa-star" style="padding: 0; color: rgb(246, 205, 64); font-size: 80%;" aria-hidden="true"></i>' : '';
-    $qualified .= ($status_potential_id != 4 && $riga['nome'] != '' && strlen($riga['email']) > 5 && filter_var($riga['email'], FILTER_VALIDATE_EMAIL)) ? '<i class="fa fa-star" style="padding: 0; color: rgb(246, 205, 64); font-size: 80%;" aria-hidden="true"></i>' : '';
-    $qualified .= ($status_potential_id != 4 && $veicoloUsato != 0) ? '<i class="fa fa-star" style="padding: 0; color: rgb(246, 205, 64); font-size: 80%;" aria-hidden="true"></i>' : '';
-
-    $mainLink = "<a class=\"mobile-buttons nominativo\" href=\"mod_inserisci.php?id=" . $riga['id'] . "&potential_rel=" . $riga['id'] . "\" title=\"Gestisci scheda " . ucfirst($riga['nome']) . "\">"; // LINK APERTURA SCHEDA LEAD
-    $gestore = ($gestore > 0) ? $proprietario[@$gestore] : '';
-    if ($gestore == '') {
-        $attivitaInfo = GRD('fl_campagne_attivita', $riga['source_potential']);
-        if ($attivitaInfo['assegnazione_automatica'] == 2) {
-            $gestore = '<a onclick="return conferma(\'Vuoi prendere in gestione ' . ucfirst($riga['nome']) . ' ' . ucfirst($riga['cognome']) . '?\');" href="mod_inserisci.php?id=' . $riga['id'] . '&aAt">Prendi in gestione</a>';
-            $mainLink = '<a class="mobile-buttons nominativo" onclick="return conferma(\'Vuoi prendere in gestione ' . ucfirst($riga['nome']) . ' ' . ucfirst($riga['cognome']) . '?\');" href="mod_inserisci.php?id=' . $riga['id'] . '&aAt">';
-        }}
-
-    //Controllo esistenza venditore
-    $venditoreAssegnato = (isset($proprietario[@$riga['venditore']])) ? $proprietario[@$riga['venditore']] : '<span class="c-red">Inserire venditore ' . $riga['venditore'] . ' da Impostazioni>Account.</span>';
-
-    if ($venditoreAssegnato > 1 && isset($proprietario[@$riga['venditore']]) && $riga['sede'] < 2) { //Controllo se sede non assegnata e assegno sede di venditore
-        $venditoreDetails = GRD('fl_account', $riga['venditore']);
-        $sedeUpdate = 'UPDATE fl_potentials SET  sede = ' . $venditoreDetails['sede_principale'] . ' WHERE id = ' . $riga['id'];
-        if ($venditoreDetails['sede_principale'] > 1 && mysql_query($sedeUpdate, CONNECT)) {
-            $venditoreAssegnato = $venditoreAssegnato . '<br> <span class="c-green">SEDE AGGIORNATA!</span>';
-        }
-
-        if ($venditoreDetails['sede_principale'] < 2) {
-            $venditoreAssegnato = $venditoreAssegnato . ' <br><span class="c-red"> IL VENDITORE NON HA UNA SEDE ASSEGNATA!</span>';
-        }
-
-    }
-
-    if ($status_potential_id != 4) {
-        echo "<tr><td $colore><span class=\"Gletter\"></span></td>";
-    }
-
-    echo "<td class=\"checkItemTd\">$input</td>";
-
-    //if($status_potential_id != 4)  echo "<td style=\"text-align:center;\"></td>";
-    // <span class=\"msg $priocolor\">".$priorita_contatto[$riga['priorita_contatto']]."</span>
-    echo "<td >
-			$mainLink
-			" . $riga['ragione_sociale'] . " <strong title=\"" . strip_tags(converti_txt($riga['note'])) . "\">" . $riga['nome'] . " " . $riga['cognome'] . "</strong></a> (" . @$categoria_interesse[$riga['categoria_interesse']] . "/" . @$tipo_interesse[$riga['tipo_interesse']] . ")
-			<br><span class=\"msg blue\">" . @$source_potential[$riga['source_potential']] . "</span><span class=\"msg orange\">" . @$sede[$riga['sede']] . "</span>  $valutazioneBadge $synapsy
-			<br>" . $riga['industry'] . "</td>";
-
-    echo "<td>
-			$qualified <strong>" . @$status_potential[$riga['status_potential']] . "</strong> <br>
-			<i class=\"fa fa-phone\" style=\"padding: 3px;\"> </i>  $phone <br><i class=\"fa fa-envelope-o\" style=\"padding: 3px;\"></i><a href=\"mailto:" . $riga['email'] . "\"> " . $riga['email'] . "</a></td>";
-
-    echo "<td><strong>" . @$proprietario[@$riga['lead_generator']] . "</strong></td>";
-    echo "<td><strong>" . @$gestore . "</strong><br>" . $giorni . "<br>$bdcAction</td>";
-    echo "<td><strong>" . $venditoreAssegnato . "</strong><br>" . $giorni2 . "<br>$sellAction</td>";
-    echo "<td>" . mydate($riga['data_associazione_attivita']) . "</td>";
-
-    echo "<td class=\"mobile-buttons\">
-			";
-
-    if ($riga['is_customer'] > 1) {
-        echo "<a href=\"$new_contract\"><i class=\"fa fa-user $color_contract\" ></i></a>";
-    }
-
-    echo $synapLead;
-
-    if ($_SESSION['usertype'] == 0 || @$_SESSION['profilo_funzione'] == 8) {
-        echo "<a href=\"./mod_opera.php?elimina=" . $riga['id'] . "\" title=\"Cancella\" class=\"ajaxLink\"><i class=\"fa fa-trash-o\"></i></a>";
-    }
-
-    echo "</td>";
-
-    echo "</tr>";
-
-}
-?>
-  </table>
-
-
-
-	  <?php $start = paginazione(CONNECT, $tabella, $step, $ordine, $tipologia_main, 1);?>
-
+            
+			foreach($status_potential as $valores => $label){ // Recursione Indici di Categoria
+			 echo "<option value=\"$valores\">".ucfirst($label)."</option>\r\n"; 
+			}
+		
+ echo '</select>';
+ echo '</span>
+ 
+ 
+ 
+  <input type="submit" value="Esegui" class="button">
+  
+</h3>';
+	} ?>
   </div>
 </form>
-
-<div class="results" style="position: fixed; bottom: 20px; left: 0; width: 30%; z-index: 9999;"></div>
-
-<a style="margin:10px 40%;" href="#" onclick="window.location.href = 'mod_export.php?'+ window.location.search.substring(1) ;" class="button" >Esporta i risultati correnti in excel</a>
-
-<?php
-if ($_SERVER['HTTP_HOST'] == 'dev.bluemotive.it') {
-    echo ' <a class="c-red" href="../mod_leads/mod_opera.php?reset" onclick="return conferma(\'Sei sicuro di voler resettare tutto il database?\');"><i class="fa fa-user" aria-hidden="true"></i> Resetta tutti i leads (TEST)</a>';
-}
-
-?>
-

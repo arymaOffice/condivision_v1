@@ -60,6 +60,7 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
        <th style="width: 1%;"></th>
   <th>Account</th>
       <th><a href="./?ordine=2">Partner</a></th>
+                  <th>User</th>
      
         <th scope="col">Stato</th>
         
@@ -85,23 +86,25 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 			$status_pagamento_txt = ($riga['status_pagamento'] == 2) ? "<span class=\"green msg\">".$status_pagamento[$riga['status_pagamento']]."</span>" : "<span class=\"orange msg\">".$status_pagamento[$riga['status_pagamento']]."</span>"; 
 		    $note = ($riga['note'] != "") ?  "<span class=\"c-red\"><a href=\"?action=1&amp;sezione=".@$riga['sezione']."&amp;id=".$riga['id']."\"><i class=\"fa fa-exclamation-triangle fa-lg\"></i></a></span>" : "";
 			
-			if($riga['id'] < 16487 || $documenti_count > 0 && trim($riga['user']) != "" ){
+			if($riga['id'] < 16487 || $documenti_count > 0){
 			
 			$tot_res++;
 			
 				
-			$account = GRD($tables[8],$riga['proprietario']); // tabella degli accounts 
-			$anagrafica =  @GRD('fl_anagrafica',@$account['anagrafica']);
+			$account = GRD('fl_account',$riga['proprietario']);
+			$anagrafica = GRD('fl_anagrafica',@$account['anagrafica']);
 			$user_check = '<a data-fancybox-type="iframe" title="Modifica Account" class="fancybox" href="../mod_account/mod_visualizza.php?external&id='.$account['id'].'">'.$account['user'].'</a><br>'.$account['motivo_sospensione'];
 			$user_ball = ($account['attivo'] == 1)  ? "<span class=\"c-green\"><i class=\"fa fa-user\"></i></span>" : "<span class=\"c-red\"><i class=\"fa fa-user\"></i></span>"; 
-			$concessione = (defined('AFFILIAZIONI ') && AFFILIAZIONI == 1)  ? " ".$anagrafica['numero_concessione'] : '';
-			$files = "../mod_dms/uploader.php?PiD=".base64_encode(11)."&NAme[]=Ricevuta pagamento&workflow_id=$workflow_id&record_id=".$riga['id'];
+			$concessione = (AFFILIAZIONI == 1)  ? " ".$anagrafica['numero_concessione'] : '';
+			$files = ($riga['id'] < 16487) ? 'http://www.betitalynetwork.it/condivision/fl_modules/mod_documentazione/?cat=8&contenuto='.$riga['id'] : "../mod_dms/uploader.php?PiD=".base64_encode(11)."&NAme[]=Ricevuta pagamento&workflow_id=$workflow_id&record_id=".$riga['id'];
+			if($riga['id'] < 16487) $documenti_count = '!';
 			$is_app = ($riga['is_app'] == 1) ? '<i class="fa fa-mobile"  aria-hidden="true"></i>' : '';
 
 			echo "<tr>";
 			echo "<td ><span class=\"Gletter\"></span></td>"; 
 		    echo "<td>".$user_ball." ".$user_check."</td>";
-            echo "<td>".@$anagrafica['ragione_sociale']." - P. iva ".@$anagrafica['partita_iva']."<br>".ucfirst(@$anagrafica['sede_legale'])." ".@$anagrafica['cap_sede']. " ".ucfirst($anagrafica['comune_sede']). " (".@$anagrafica['provincia_sede'].")<br><span class=\"msg orange\">".@$tipo_profilo[$anagrafica['tipo_profilo']]." $concessione </span></td>";
+            echo "<td>".@$anagrafica['ragione_sociale']." - P. iva ".@$anagrafica['partita_iva']."<br>".ucfirst(@$anagrafica['sede_legale'])." ".@$anagrafica['cap_sede']. " ".ucfirst($anagrafica['comune_sede']). " (".@$anagrafica['provincia_sede'].")<br><span class=\"msg blue\">".@$marchio[$anagrafica['marchio']]."</span><span class=\"msg orange\">".@$tipo_profilo[$anagrafica['tipo_profilo']]." $concessione </span></td>";
+			echo "<td>".ucfirst($riga['user_associato'])."</td>";		
 			echo "<td>".$status_pagamento_txt."</td>"; 
 			echo "<td>".mydate($riga['data_pagamento'])."</td>"; 
 			echo "<td> &euro; ".$riga['importo']."</td>"; 

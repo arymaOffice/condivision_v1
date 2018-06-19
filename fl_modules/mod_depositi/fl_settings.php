@@ -15,8 +15,7 @@
 	$text_editor = 2;
 	$jquery = 1;
 	$calendar = 1;
-	 $filtri = 1;
-	//$searchbox = 'Cerca..';
+	$searchbox = 'Cerca..';
 	$fancybox = 1;
 	$documentazione_auto = 8;
 	
@@ -30,7 +29,13 @@
 	if(isset($_GET['metodo_di_pagamento']) && check(@$_GET['metodo_di_pagamento'])  != -1) { $metodo_di_pagamento_id = check($_GET['metodo_di_pagamento']);  } else {    $metodo_di_pagamento_id = -1; }
 
 	$module_menu = '
-  ';
+	<ul>
+    <li class=""><a href="'.ROOT.$cp_admin.'fl_modules/mod_depositi/">Depositi  <span class="subcolor"> e Prelievi</span></a>      </li>
+	    <li class=""><a href="'.ROOT.$cp_admin.'fl_modules/mod_depositi/?estratto">Estratto <span class="subcolor"> Conto </span></a>      </li>';
+
+	//if($_SESSION['usertype'] < 2) $module_menu .= '<li><a href="'.ROOT.$cp_admin.'fl_modules/mod_depositi/?action=11&causale=84" class="">Nuovo Deposito</a></li>';
+  // 	if($_SESSION['usertype'] < 2) $module_menu .= '<li><a href="'.ROOT.$cp_admin.'fl_modules/mod_depositi/?action=11&causale=86" class="">Nuovo Storno</a></li>';
+ $module_menu .=  '</ul>';
 	
   	 if(isset($_GET['data_da']) && check($_GET['data_da']) != "" && check($_GET['data_a']) != "") { 
 	
@@ -49,10 +54,10 @@
 	 $ora_da_id = '00:00:00';
 	 $ora_a_id = '23:59:59';
 	 
-	 $data_da = date('Y-m-1 '.$ora_da_id.':00',time()); 
+	 $data_da = date('Y-m-d '.$ora_da_id.':00',time()); 
 	 $data_a = date('Y-m-d '.$ora_a_id.':59',time()); 
 	 
-	 $data_da_t = date('1/m/Y',time()); 
+	 $data_da_t = date('d/m/Y',time()); 
 	 $data_a_t = date('d/m/Y');
 
  
@@ -82,29 +87,26 @@
 	
 	if(isset($_GET['cerca'])) { 
 	$vars = "cerca=".check($_GET['cerca'])."&";		
-	$tipologia_main .= ricerca_semplice('rif_operazione','rif_operazione');	
-	$tipologia_main .= ricerca_avanzata('estremi_del_pagamento','estremi_del_pagamento');	
-	$tipologia_main .= ")";
+	$tipologia_main .= ricerca_avanzata('estremi_di_pagamento','estremi_di_pagamento');	
 	}
 	
 	
 	/* Inclusioni Oggetti Categorie */
-	include('../../fl_core/data_manager/array_statiche.php');
-	include('../../fl_core/category/proprietario.php');
+	include('../../fl_core/dataset/array_statiche.php');
+	include('../../fl_core/dataset/proprietario.php');
 	require('../../fl_core/class/ARY_dataInterface.class.php');
 	$data_set = new ARY_dataInterface();
     $causale = $data_set->data_get_items(82);
-    $rif_causale = $data_set->data_get_items(90);
     $rif_operazione = $data_set->data_retriever('fl_sottoprodotti','label');
 	$rif_operazione[0] = '';
 	function select_type($who){
 	
 	/* Gestione Oggetto Statica */	
 	$textareas = array('note'); 
-	$select = array("metodo_di_pagamento","rif_causale");
+	$select = array("metodo_di_pagamento");
 	$select_disabled = array("causale","proprietario");
-	$disabled = array("visite");
-	$hidden = array('data_valuta','data_operazione','rif_operazione',"proprietario","status_pagamento","data_creazione","data_aggiornamento","marchio","ip","operatore");
+	$disabled = array('data_valuta','data_operazione',"visite");
+	$hidden = array('rif_operazione',"proprietario","status_pagamento","data_creazione","data_aggiornamento","marchio","ip","operatore");
 	$radio = array();
 	$text = array();
 	if(@!is_numeric($_GET['action']) || $_SESSION['usertype'] > 0){
@@ -125,7 +127,7 @@
 	if(in_array($who,$calendario)){ $type = 20; }
 	if(in_array($who,$file)){ $type = 18; }
 	if(in_array($who,$text)){ $type = 24; }
-	if(in_array($who,$select_disabled)){ $type = 22; }
+	if(in_array($who,$select_disabled)){ $type = 19; }
 	
 	return $type;
 	}

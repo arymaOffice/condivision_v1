@@ -16,7 +16,7 @@
 <p class="input_text">
 <label for="nome">Nome </label>
 <input type ="text" value="<?php echo $_SESSION['nome']; ?>" id="nome" name="nome" class="modulo" disabled />
-<input type="hidden" value="<?php echo @$_SERVER['HTTP_REFERER']; ?>" id="referer" name="referer" class="modulo" disabled />
+<input type="hidden" value="<?php echo $_SERVER['HTTP_REFERER']; ?>" id="referer" name="referer" class="modulo" disabled />
 </p>
 
 <p class="input_text"><label for="oggetto">Oggetto</label>

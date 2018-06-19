@@ -20,7 +20,7 @@ $messaggio = str_replace("[*CORPO*]",$messaggio,mail_template);
 $_SESSION['lastSentRequest'] = $_SESSION['request'];
 smail($request['email_contatto'],"Nuovo Ticket ID: #".$_SESSION['request'],$messaggio);
 smail(mail_admin,"Nuovo Ticket ID: #".$_SESSION['request'],$messaggio);
-
+smail('fersinoandrea@gmail.com',"Nuovo Ticket ID: #".$_SESSION['request'],$messaggio);
 } else {  }
 
 ?>

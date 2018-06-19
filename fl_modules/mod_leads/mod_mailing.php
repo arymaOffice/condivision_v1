@@ -233,7 +233,7 @@ var totalChecked = 0;
 
 
 		
-		$lastAction = (get_lastAction(16,$riga['id']) != NULL) ? mydatetime(get_lastAction(16,$riga['id'])) : mydate($riga['data_creazione']);
+		$lastAction = (get_lastAction($tab_id,$riga['id']) != NULL) ? mydatetime(get_lastAction($tab_id,$riga['id'])) : mydate($riga['data_creazione']);
 		$query = 'SELECT * FROM `fl_meeting_agenda` WHERE potential_rel = '.$riga['id'].'';
 		mysql_query($query);
 
@@ -261,10 +261,10 @@ var totalChecked = 0;
 			echo "<a class=\"mobile-buttons\" href=\"mod_inserisci.php?external&action=1&amp;sezione=".@$riga['sezione']."&amp;id=".$riga['id']."&potential_rel=".$riga['id']."&nominativo=".$riga['nome']."\" title=\"Bloccato: ".@$proprietario[$riga['in_use']]." sta chiamando il contatto\" style=\"color: red;\"> Gestito da ".@$proprietario[$riga['in_use']]."  </a>";
 			}
 			echo "</td>"; 
-			echo "<!--<td class=\"mobile-buttons\">$send"; 
+			echo "<td class=\"mobile-buttons\">$send"; 
 			//echo "<a href=\"$new_contract\"><i class=\"fa fa-user $color_contract\" ></i></a>"; 
 			if($_SESSION['usertype'] == 0 ) echo "<a href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Cancella\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a>"; 
-			echo "</td>-->";
+			echo "</td>";
 			echo "<td style=\"text-align:center;\">$input</td>";
 		    echo "</tr>";
 		

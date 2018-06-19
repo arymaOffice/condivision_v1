@@ -5,9 +5,6 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 
 $_SESSION['last_referrer'] = "https://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];;
 $proprietario_id = $_SESSION['number'];
-$metodo_di_pagamento[6] = 'Accredito';
-$metodo_di_pagamento[0] = 'Addebito';
-
 ?>
 
 <h1 style=" text-align: left;">Estratto Conto <?php echo $proprietario[$proprietario_id]; ?></h1>
@@ -24,13 +21,12 @@ $metodo_di_pagamento[0] = 'Addebito';
 
  		
 	?>
- <div class="filtri" id="filtri">
- 	<h2>Filtri</h2>
+ <div class="filtri">
 <form method="get" action="" id="fm_filtri">
   
-        Status
+        
        <select name="status_pagamento" id="status_pagamento">
-            <option value="-1">Tutti</option>
+            <option value="-1">Stato</option>
 			<?php 
               
 		     foreach($status_pagamento as $valores => $label){ // Recursione Indici di Categoria
@@ -39,9 +35,9 @@ $metodo_di_pagamento[0] = 'Addebito';
 			}
 		 ?>
        </select>
-       Metodo di pagamento
+       
              <select name="metodo_di_pagamento" id="metodo_di_pagamento">
-            <option value="-1">Tutti</option>
+            <option value="-1">Metodo</option>
 			<?php 
               
 		     foreach($metodo_di_pagamento as $valores => $label){ // Recursione Indici di Categoria
@@ -50,17 +46,15 @@ $metodo_di_pagamento[0] = 'Addebito';
 			}
 		 ?>
        </select>
-<br>
-       creato tra il<br> <input type="text" name="data_da" onFocus="this.value='';" value="<?php  echo $data_da_t;  ?>"  class="calendar" size="10" /> <br>e il <br><input type="text" name="data_a" onFocus="this.value='';" value="<?php  echo $data_a_t;  ?>" class="calendar" size="10" /> 
-        <br>
+
+       creato tra il <input type="text" name="data_da" onFocus="this.value='';" value="<?php  echo $data_da_t;  ?>"  class="calendar" size="10" /> e il <input type="text" name="data_a" onFocus="this.value='';" value="<?php  echo $data_a_t;  ?>" class="calendar" size="10" /> 
+        
        <input type="submit" value="Mostra" class="button" />
 
        </form>
      
       </div>
  
- 
-
  
   
   	 <table class="dati" summary="Dati" style=" width: 100%;">
@@ -114,16 +108,16 @@ $metodo_di_pagamento[0] = 'Addebito';
 			$cgreen = 'c-gray';
 
 			}
-		    $pagamento = ($riga['causale'] != 85) ? $metodo_di_pagamento[$riga['metodo_di_pagamento']] : '';
+		$pagamento = ($riga['causale'] != 85) ? $metodo_di_pagamento[$riga['metodo_di_pagamento']] : '';
 	
 			echo "<tr><td $colore>".$status_pagamento[$riga['status_pagamento']]."</td>"; 
 			echo "<td>".mydatetime($riga['data_creazione'])."</td>"; 
 			echo "<td>".$causale[$riga['causale']]."<br>".$riga['rif_operazione']."</td>";	
 			echo "<td><strong>".$pagamento."</strong><br>".$riga['estremi_del_pagamento']."</td>";	
 			echo "<td class=\"".$cgreen."\">";
-			if($riga['dare'] > 0) echo " &euro; ".numdec($riga['dare'],2); 
+			if($riga['dare'] > 0) echo " &euro; ".numdec($riga['dare'],3); 
 			echo "</td><td class=\"".$cred."\">";
-			if($riga['avere'] > 0) echo " &euro; ".numdec($riga['avere'],2); 
+			if($riga['avere'] > 0) echo " &euro; ".numdec($riga['avere'],3); 
 			echo "</td>"; 
 
 			
@@ -136,7 +130,7 @@ $metodo_di_pagamento[0] = 'Addebito';
 	}
 
 	echo "<tr  style=\"background: #F4F4F4;\"><td colspan=\"7\"></td></tr>";
-	echo "<tr style=\"background: white;\"><td colspan=\"3\"></td><td>Totale periodo: </td><td class=\"c-green\">&euro; ".numdec($dare,2)."</td><td class=\"c-red\">&euro; ".numdec($avere,2)."</td></tr>";
+	echo "<tr style=\"background: white;\"><td colspan=\"3\"></td><td>Totale periodo: </td><td class=\"c-green\">&euro; ".numdec($dare,3)."</td><td class=\"c-red\">&euro; ".numdec($avere,3)."</td></tr>";
 	echo "<tr  style=\"background: white;\"><td colspan=\"7\"></td></tr>";
 	echo "<tr  style=\"background: white;\"><td colspan=\"7\"><br><br></td></tr>";
 	echo "<tr  style=\"background: white;\"><td colspan=\"7\"></td></tr>";
@@ -149,14 +143,14 @@ $metodo_di_pagamento[0] = 'Addebito';
 
 	echo "<tr  style=\"background: white;\"><td colspan=\"3\"></td>
 	<td>Saldo Disponibile: </td>
-	<td colspan=\"2\" class=\"$colore\" style=\"font-size: larger; text-align: center;\"><strong>&euro; ".numdec($saldo,2)."</strong></td>
+	<td colspan=\"2\" class=\"$colore\" style=\"font-size: larger; text-align: center;\"><strong>&euro; ".numdec($saldo,3)."</strong></td>
 	<td colspan=\"3\"></td></tr>";
 	
 	$saldofoglio = get_saldo($proprietario_id,1);
 
 	echo "<tr style=\"background: white;\"><td colspan=\"3\"></td>
 	<td>Saldo Contabile: </td>
-	<td colspan=\"2\">&euro; ".numdec($saldofoglio,2)."</td>
+	<td colspan=\"2\">&euro; ".numdec($saldofoglio,3)."</td>
 	<td colspan=\"3\"></td></tr>";
 
 

@@ -18,5 +18,5 @@ $i++;
 
 
 
-
+mysql_close(CONNECT);
 ?>

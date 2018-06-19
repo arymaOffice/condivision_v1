@@ -68,4 +68,5 @@ $formatted_address = $response_a->results[0]->formatted_address;
 $latlon = array('status'=>$status,'formatted_address'=>$formatted_address,'lat'=>$lat,'lon'=>$lon,'location_type'=>$location_type,'postal_code'=>$postal_code);
 
 echo json_encode($latlon);
+mysql_close(CONNECT);
 ?>

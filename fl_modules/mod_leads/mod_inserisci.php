@@ -69,9 +69,9 @@ $telefonoAlternativo = phone_format($potential['telefono_alternativo'],'39');
 
 
 
-$lead_generator =($potential['lead_generator'] > 1) ?  @$proprietario[$potential['lead_generator']] : 'Nessuno';
+$lead_generator_string =($potential['lead_generator'] > 1) ?  @$proprietario[$potential['lead_generator']] : 'Nessuno';
 $callcenter =($potential['proprietario'] > 1) ?  @$proprietario[$potential['proprietario']] : 'Nessuno';
-$venditore = ($potential['venditore'] > 1) ? @$proprietario[$potential['venditore']] : 'Nessuno';
+$venditore_string = ($potential['venditore'] > 1) ? @$proprietario[$potential['venditore']] : 'Nessuno';
 
 
 echo '<div class="info_dati"><h1 style="display: inline-block; margin: 0 0 5px;" class="nominativo">'.$potential['id'].' <strong>'.$potential['nome'].' '.$potential['cognome'].'</strong></h1> ';
@@ -98,7 +98,7 @@ if(mysql_affected_rows() > 0) {
     }
 
 
-echo $status.$synapsy.$synapLead.' <br><br> <strong>LEAD GENERATOR</strong>: '.$lead_generator.' <br><br><strong>BDC</strong>:'.$callcenter.' <br><br><strong>CONSULENTE VENDITA</strong>:'.$venditore;
+echo $status.$synapsy.$synapLead.' <br><br> <strong>LEAD GENERATOR</strong>: '.$lead_generator_string.' <br><br><strong>BDC</strong>:'.$callcenter.' <br><br><strong>CONSULENTE VENDITA</strong>:'.$venditore_string;
 ?>
 <!--<?php if($_SESSION['usertype'] == 0) { ?><p><a href="mod_opera.php?id=<?php echo $potential['id']; ?>&unlock" class="setAction" data-gtx="<?php echo base64_encode($tab_id); ?>" data-id="<?php echo base64_encode($potential['id']); ?>" data-azione="4"  data-esito="0" data-note="Unlocked"><i class="fa fa-unlock-alt"></i> Unlock</a></p><?php } ?>
 -->

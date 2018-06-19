@@ -1,5 +1,5 @@
 
-<h1><?php echo $module_title.' '.$new_button; ?></h1>
+
 <div class="filtri" id="filtri"> 
 
 <form method="get" action="" id="fm_filtri">
@@ -40,8 +40,10 @@
 
 	if($_SESSION['usertype'] == 0) {
 
+	if(isset($_GET['ordine'])) { if(!is_numeric($_GET['ordine'])){ exit; } else { $ordine = $ordine_mod[$_GET['ordine']]; }}
 
-	$start = 0;//paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,1);
+
+	$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main,0);
 	
 	$query = "SELECT * FROM $tabella $tipologia_main ORDER BY $ordine LIMIT $start,$step";
 	$risultato = mysql_query($query, CONNECT);
@@ -107,7 +109,7 @@ var totalChecked = 0;
 		if ( checks[j].checked == true )
 		totalChecked++;
 	}
-	$('#counter').val('Scrivi a ' + totalChecked + ' mail');
+	$('#counter').val('Invia ' + totalChecked + ' notifiche');
 }
 
 $(function() {
@@ -197,8 +199,8 @@ $class = (isset($_GET['success'])) ? 'green' : 'red'; echo '<p class="esito '.$c
 </table>
 <?php 	$_SESSION['send'] = 1;
 echo '<p style="text-align: right; padding: 20px 0;">
-<input type="submit" id="counter" value="Scrivi a '.$count.' mail " class="button">
+<input type="submit" id="counter" value="Invia '.$count.' notifiche " class="button">
 </p></form>'; 
 
 
-  mysql_close(CONNECT); } else { include('mod_user.php'); } ?>
+$start = paginazione(CONNECT,$tabella,$step,$ordine,$tipologia_main);  mysql_close(CONNECT); } else { include('mod_user.php'); } ?>

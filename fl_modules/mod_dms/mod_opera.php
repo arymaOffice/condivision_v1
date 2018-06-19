@@ -3,8 +3,7 @@
 // Controllo Login
 session_start(); 
 if(!isset($_SESSION['user'])){ Header("Location: ../../login.php"); exit; }
-if($_SESSION['idh'] != $_SERVER['REMOTE_ADDR']) { echo "Non autorizzato ".$_SESSION['idh']." NOT VALID ".$_SERVER['REMOTE_ADDR']; exit; }
-require('../../fl_core/settings.php'); 
+require('../../fl_core/core.php'); 
 
 
 if(isset($_GET['cw'])) {
@@ -115,7 +114,7 @@ $file_name = (isset($_POST['RiD'])) ? $record_id.'_'.$source['name'] : $source['
 	
 
 /* Check Estensione */
-$info = pathinfo($source['name']); 
+ $info = pathinfo($source['name']); 
 foreach($info as $key => $valore){ if($key == "extension") $ext = $info["extension"]; }
 if(!isset($ext)) error();
 if(in_array(strtolower($ext),$formati)){ error(); } 
@@ -132,9 +131,21 @@ if(is_uploaded_file($source['tmp_name'])){
 	if(move_uploaded_file($source['tmp_name'],DMS_ROOT.$folder.'/'.$file_name)){
 	$query = "INSERT INTO `fl_dms` (`id`, `resource_type`, `account_id`, `workflow_id`, `record_id`, `parent_id`, `label`, `descrizione`, `tags`, `file`, `lang`, `proprietario`, `operatore`, `data_creazione`, `data_aggiornamento`) 
 	VALUES (NULL, '1', '$account_id', '$workflow_id', '$record_id', '$folder', '$file_name', '$descrizione', '', '$file_name', 'it', '".$_SESSION['number']."', '".$_SESSION['number']."',NOW(),NOW());	";
-	mysql_query($query,CONNECT);
+	if(mysql_query($query,CONNECT)){ 
+	if(isset($_REQUEST['notifica']) && $account_id > 1) $notifi = notifica(0,$_SESSION['number'],$account_id,'Nuovo file pubblicato sul cloud di '.client,'<h4>File: '.$file_name.' </h4> <br>Sulla piattaforma puoi accedere alla risorsa pubblicata dopo aver eseguito il login',1,0,1,0);
+	mysql_close(CONNECT);
+	exit;
 	
 	} else {
+	smail(mail_admin,'Errore Upload DMS su '.ROOT,$query.mysql_error());
+	mysql_close(CONNECT);
+	error();
+	}
+
+	
+	} else {
+	smail(mail_admin,'Errore Upload DMS su '.ROOT,"Erroe di move_uploaded_file");	
+	mysql_close(CONNECT);
 	error();
 	}
 	

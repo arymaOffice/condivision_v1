@@ -1,13 +1,20 @@
 <?php 
 
-require_once('../../fl_core/autentication.php');
-include('fl_settings.php'); // Variabili Modulo 
+
+// Controllo Login
+session_start(); 
+if(!isset($_SESSION['user'])){ Header("Location: ../../login.php"); exit; }
+if($_SESSION['idh'] != $_SERVER['REMOTE_ADDR']) { echo "Non autorizzato ".$_SESSION['idh']." NOT VALID ".$_SERVER['REMOTE_ADDR']; exit; }
+require('../../fl_core/settings.php'); 
+
 
 
 // Modifica Stato se è settata $stato	
-if(isset($_GET['faiqualcosa'])) { 
-
-	//fai qualcosa e torna a casa o restituisci JSON 
+if(isset($_GET['stato_prenotazione'])) { 
+$stato_prenotazione = check($_GET['stato_prenotazione']);
+$id = check($_GET['id']);
+$query1 = "UPDATE fl_prenotazioni SET stato_prenotazione = $stato_prenotazione WHERE `id` = $id";
+mysql_query($query1,CONNECT);	
 }
 
 

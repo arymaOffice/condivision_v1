@@ -44,13 +44,12 @@ include("../../fl_inc/headers.php");
 	$class = ($riga['livello_accesso'] == $chiave) ? 'tab_green' : 'tab_gray';	
 	$accesso .= '<a class="'.$class.'" style="color: white; padding: 5px; margin: 3px; display: inline-block;" href="mod_opera.php?modulo='.$riga['modulo_id'].'&valore='.$chiave.'">'.$valore.'</a>';
 	}
-	
-	$modulo_name = (isset($modulo_id[$riga['modulo_id']])) ? $modulo_id[$riga['modulo_id']] : '<span class="msg red">Modulo non attivo</span>';
+
 
 	echo "<tr>";	
 			
-			echo "<td>".@$account_id[$riga['account_id']]."</td>"; 
-			echo "<td>".@$modulo_name."</td>"; 
+			echo "<td>".$account_id[$riga['account_id']]."</td>"; 
+			echo "<td>".$modulo_id[$riga['modulo_id']]."</td>"; 
 			echo "<td>$accesso</td>"; 
 			
 				

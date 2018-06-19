@@ -11,38 +11,38 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 </form>
 <?php } ?>
 
+<h1><?php echo $module_title.' '.$new_button; ?></h1>
 
 
 <div class="filtri" id="filtri"> 
+
 <form method="get" action="" id="fm_filtri">
 <h2> Filtri</h2>  
 
 <?php if(isset($_GET['action'])) echo '<input type="hidden" value="'.check($_GET['action']).'" name="action" />'; ?>
 <?php if(isset($_GET['start'])) echo '<input type="hidden" value="'.check($_GET['start']).'" name="start" />'; ?>
 
-   <?php 
- 
+<?php 
+
 	foreach ($campi as $chiave => $valore) 
 	{		
-			if(in_array($chiave,$basic_filters)){
+			if(in_array($chiave,$basic_filters)){// Se sono contemplati nei filtri di base li gestisce
 			
+			echo '<div class="filter_box">';
 			
-
-			if((select_type($chiave) == 2 || select_type($chiave) == 19 || select_type($chiave) == 9 || select_type($chiave) == 8 || select_type($chiave) == 12) && $chiave != 'id') {
-				
-								
-				echo '<div class="filter_box">';
-				echo '  <label>'.$valore.'</label>';
-				echo '<select name="'.$chiave.'" class="select"><option value="-1">Non impostato</option>';
+			if(select_type($chiave) == 1 || select_type($chiave) == 3 ) { 
+			$cont = (isset($_GET[$chiave])) ? check($_GET[$chiave]) : ''; 
+			echo '<label>'.$valore.'</label><input type="text" name="'.$chiave.'" value="'.$cont.'" />'; 
+			}
+			
+			if((select_type($chiave) == 2 || select_type($chiave) == 19)) {
+				echo '<label>'.$valore.'</label>';
+				echo '<select name="'.$chiave.'" class="select"><option value="-1">Tutti</option>';
 				foreach($$chiave as $val => $label) { $selected = (isset($_GET[$chiave]) && check(@$_GET[$chiave]) == $val) ? 'selected' : ''; echo '<option '.$selected.' value="'.$val.'">'.$label.'</option>'; }
 				echo '</select>';
-				echo '</div>';
-			} else if( $chiave != 'id') { $valtxt = (isset($_GET[$chiave])) ? check($_GET[$chiave]) : ''; 
-			echo '<div class="filter_box">';
-			echo '<label>'.$valore.'</label><input type="text" name="'.$chiave.'" value="'.$valtxt.'" />'; echo '</div>';}
-
+			}
 			
-			
+			echo '</div>';
 			} 
 		
 	}
@@ -83,14 +83,14 @@ $_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 	while ($riga = mysql_fetch_array($risultato)) 
 	{
 	
-	$attivo = ($riga['status_conto'] == 0) ? 'tab_green' : 'tab_red';
+	$azione = (0) ? '' : '';
 
 			echo "<tr>"; 				
-			echo "<td style=\"$attivo\"></td>";
+			echo "<td></td>";
 			echo "<td>".$riga['id']."</td>";
 			echo "<td>".$riga[$basic_filters[0]]."</td>";	
 			echo "<td>".$riga[$basic_filters[1]]."</td>";	
-			echo "<td>".mydate($riga['data_creazione'])."</td>";
+			echo "<td>".mydatetime($riga['data_creazione'])."</td>";
 			echo "<td>$azione</td>";
 			echo "<td><a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Modifica\" > <i class=\"fa fa-search\"></i> </a></td>"; 
 			echo "<td><a  href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i></a></td>"; 

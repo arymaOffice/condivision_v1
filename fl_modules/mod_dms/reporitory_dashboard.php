@@ -1,7 +1,7 @@
 <?php 	
 
 $proprietario_id = $_SESSION['number'];
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
+$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 $workflow_id = 123;
 ?>
 

@@ -15,7 +15,7 @@ include("../../fl_inc/headers.php");?>
 <?php 
 
  /* Inclusione Pagina */ 
- if(isset($_GET['action'])) { include($pagine[check($_GET['action'])]); } else { include("mod_home.php"); } ?>
+ if(isset($_GET['action'])) { include($pagine[$_GET['action']]); } else { include("mod_home.php"); } ?>
 
 
 

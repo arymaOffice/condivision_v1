@@ -30,12 +30,18 @@
 
 	set_time_limit(1200);
 	ini_set('max_execution_time',300);
-
-	$mail_accounts = array('','goservizi');
+	$username1 = "betitaly@betitalynetwork.it";
+	$username2 = "betscore@betitalynetwork.it";
+	$username3 = "giocasempre@betitalynetwork.it";
+	$password = "fersinoandrea";
+	$server = "mail.betitalynetwork.it";
+	$mail_accounts = array('','betitaly','betscore','giocasempre');
 
 	if(!isset($_GET['userid']) && function_exists('imap_open') ){
-	$mail_conn1 = imap_open(fax_host,fax_name,fax_user);
-	$mail_conns = array('',$mail_conn1);
+	$mail_conn1 = imap_open("{".$server.":110/pop3/novalidate-cert}INBOX",$username1, $password);
+	$mail_conn2 = imap_open("{".$server.":110/pop3/novalidate-cert}INBOX",$username2, $password);
+	$mail_conn3 = imap_open("{".$server.":110/pop3/novalidate-cert}INBOX",$username3, $password);
+	$mail_conns = array('',$mail_conn1,$mail_conn2,$mail_conn3);
 	}
 
 	if(isset($_GET['proprietario']) && check(@$_GET['proprietario']) != -1) { $proprietario_id = check($_GET['proprietario']); } else {  $proprietario_id = -1; }

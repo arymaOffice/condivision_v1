@@ -1,17 +1,36 @@
 <?php 
 
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
+$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 
-if($folder > 0) { ?>
-<h2><a href="../mod_dms/?c=<?php echo base64_encode($folder_info['parent_id']); ?>" title=""><i class="fa fa-arrow-up"></i> Livello Superiore </a> </h2>
-<?php  } ?>
-<h1><?php echo @$folder_info['label'].' '.$proprietario[$proprietario_id];  ?></h1>
-<p style="margin: 10px 20px;
-color: gray;"><?php echo @$folder_info['descrizione'];  ?></p>
- <?php  
+?>
+
+<style >
+
+#content h2.dms_links {
+    margin: 0px 0px 10px 0px;
+    font-size: 140%;
+		position: absolute;
+top: 10px;
+right: 17px;
+}#content h2.dms_links  a { display: inline-block; margin: 2px 2px 2px 0; }
+</style>
+
+
+<h2 class="dms_links"
+><?php if($folder > 0 || isset($_GET['cerca'])) { ?>
+<a href="./"><i class="fa fa-home"></i></a>
+<a href="../mod_dms/?c=<?php echo base64_encode($folder_info['parent_id']); ?>" title=""><i class="fa fa-arrow-up"></i> Livello Superiore </a>
+<?php  } ?> 
+</h2>
+
+
+<p style="margin: 10px 20px; color: gray;"><?php echo @$folder_info['descrizione'];  ?></p>
+
+
+<?php  
  
  
- if($_SESSION['workflow_id'] < 2) { ?>
+ if(1) { // $_SESSION['workflow_id'] < 2 ?>
 
 <?php if($_SESSION['usertype'] < 2 && $folder == 3) {  ?>
 <div class="col_sx_content">
@@ -26,7 +45,7 @@ color: gray;"><?php echo @$folder_info['descrizione'];  ?></p>
 			
 			 foreach($account_id as $valores => $label){ // Recursione Indici di Categoria
 			$selected = ($proprietario_id == $valores) ? ' checked="checked"' : '';
-			if($valores >= 0){ echo '
+			if($valores != 0){ echo '
 			<input id="'.$valores.'" onClick="form.submit();" type="radio" name="proprietario" value="'.$valores.'" '.$selected.' />
 			<label for="'.$valores.'" id="label_'.$valores.'"><i class="fa fa-user"></i><br>'.$label.'</label>'; }
 			}
@@ -76,18 +95,19 @@ echo
 <?php if(@$folder == 3 && $proprietario_id < 2 && $_SESSION['usertype'] < 2) { ?><img src="../../fl_set/lay/intro1.png" alt="Intro"/><?php } else { ?>
 
 
-<?php if(($folder > 0 && $_SESSION['usertype'] < 2) || ($folder > 0 && $folder < 4 && $_SESSION['usertype'] > 1) ) { ?>
+<?php if($folder > 0 && $folder != 4) { ?>
+
 <script src="<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/dropzone.js"></script> 
 <script type="text/javascript">
 $( document ).ready(function() {
-Dropzone.options.dropzone = {
-    maxFilesize: 100, 
-    init: function() {
-      this.on("uploadprogress", function(file, progress) { console.log("File progress", progress); });
-	  this.on("queuecomplete", function(file) { alert("Added file."); }
-  	},
-    }
-};
+	
+	 $("#my-awesome-dropzone").dropzone({
+               addRemoveLinks: true
+			  
+			  });
+
+
+
 });
 </script>
 <link rel="stylesheet" type="text/css" href="<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/dropzone.css">
@@ -95,6 +115,7 @@ Dropzone.options.dropzone = {
 <input type="hidden" name="AiD" value="<?php echo base64_encode($proprietario_id); ?>">
 <input type="hidden" name="PiD" value="<?php echo base64_encode($folder); ?>">
 <input type="hidden" name="WiD" value="<?php echo base64_encode($workflow_id); ?>">
+<?php if($proprietario_id > 1) { ?><input type="checkbox" style="display: inline-block;" name="notifica" value="1" /> Notifica all'utente<?php } ?>
 </form>
 <?php } ?>
 
@@ -137,11 +158,11 @@ $risultato = mysql_query($query, CONNECT);
 			if(strstr($type,'image')) $icona_tipo = '<img src="apri.php?d='.base64_encode($riga['parent_id']).'&f='.base64_encode($riga['file']).'" class="tumb" alt="Anteprima"> ';
 			$open_link = 'apri.php?d='.base64_encode($riga['parent_id']).'&f='.base64_encode($riga['file']) ;
 			$apri_inbrowser = (strstr($type,'image')) ? ' data-fancybox-type="iframe" class="fancybox_view" ' : 'target="_blank"';
-	} else {
-		   $icona_tipo = '<i class="fa fa-folder"></i>';
-		   $open_link = './?c='.base64_encode($riga['id']);
-		   $apri_inbrowser = '';
-	}
+			} else {
+		    $icona_tipo = '<i class="fa fa-folder"></i>';
+		    $open_link =  './?c='.base64_encode($riga['id']);
+		    $apri_inbrowser = '';
+		   }
 
 			
 			echo "<tr>";
@@ -164,8 +185,8 @@ $risultato = mysql_query($query, CONNECT);
 			
 			echo "<td>";			
 			if($_SESSION['usertype'] == 0 || $_SESSION['usertype'] >= 0 && $_SESSION['number'] == $riga['account_id']) {
-			echo "<a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Gestisci\" > <i class=\"fa fa-pencil-square-o\"></i> Gestisci proprietà </a><br>
-			<a href=\"../mod_basic/action_elimina.php?gtx=$tab_id&amp;unset=".$riga['id']."\" title=\"Elimina\"  onclick=\"return conferma_del();\"><i class=\"fa fa-trash-o\"></i> Elimina </a>"; 
+			if($riga['id'] > 5)  echo "<a href=\"mod_inserisci.php?id=".$riga['id']."\" title=\"Gestisci\" > <i class=\"fa fa-pencil-square-o\"></i> Gestisci proprietà </a><br>
+			"; 
 			}
 			echo "</td>"; 
 				

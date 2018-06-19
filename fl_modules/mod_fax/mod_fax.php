@@ -61,8 +61,13 @@ $i = 1;
 $totmsg = 0;	
 
 $intestazioni1 = imap_headers($mail_conn1);
-$totmsg += count($intestazioni1);
+$totmsg += @count($intestazioni1);
 
+$intestazioni2 = imap_headers($mail_conn2);
+$totmsg += @count($intestazioni2);	
+
+$intestazioni3 = imap_headers($mail_conn3);
+$totmsg += @count($intestazioni3);
 
 echo "<p>$totmsg messaggi in arrivo.</p>\n";	
 	
@@ -97,6 +102,82 @@ while (list ($k, $val) = @each ($intestazioni1))
 
 @imap_close($mail_conn1);
 
-	?>
+
+$i = 1;
+	
+
+
+
+$var = 0; 
+
+
+
+while (@list ($k, $val) = @each ($intestazioni2))
+   {
+    $var = $var+1;
+    $f_over = @imap_fetch_overview($mail_conn2, $var, 0);
+	$struttura=imap_fetchstructure($mail_conn2, $var);
+    if(checkAttachments($struttura)){$all=1;}else{$all=0;}	
+	//$dimensione=ceil(($struttura->size/1024)); 
+	
+    while(@list($k, $v) = @each($f_over))
+    { 
+     
+
+	 
+	  echo "<tr><td> $username2</td>\n 
+      <td>" .$v->from."</td>\n</td>\n
+      <td><img src=\"../../fl_set/icons/allegati_$all.jpg\" alt=\"Allegati\" /></td>\n
+      <td> <a href=\"?conn_id=2&read=2&amp;action=16&amp;id=".$var."\" >Apri</td>\n
+	  
+      <td><a href=\"mod_opera.php?conn_id=2&delete=1&amp;id=".$var."\" class=\"button\"  title=\"Elimina\" onclick=\"conferma_del();\">X</a></td>\n\n
+	  <td>".$v->date."</td>\n
+	  <td>".ceil(($v->size/1024))." kb</td></tr>\n";
+	  
+	  
+	  
+    }
+  }
+
+
+@imap_close($mail_conn2);	
+	
+$i = 1;
+	
+
+
+
+$var = "0";
+
+while (@list ($k, $val) = @each ($intestazioni3))
+   {
+    $var = $var+1;
+    $f_over = @imap_fetch_overview($mail_conn3, $var, 0);
+	$struttura=imap_fetchstructure($mail_conn3, $var);
+    if(checkAttachments($struttura)){$all=1;}else{$all=0;}	
+	//$dimensione=ceil(($struttura->size/1024)); 
+	
+    while(@list($k, $v) = @each($f_over))
+    { 
+     
+
+	 
+	  echo "<tr><td> $username3</td>\n 
+      <td>" .$v->from."</td>\n</td>\n
+      <td><img src=\"../../fl_set/icons/allegati_$all.jpg\" alt=\"Allegati\" /></td>\n
+      <td> <a href=\"?conn_id=3&read=1&amp;action=16&amp;id=".$var."\" >Apri</td>\n
+	  
+      <td><a href=\"mod_opera.php?conn_id=3&delete=1&amp;id=".$var."\" class=\"button\"  title=\"Elimina\" onclick=\"conferma_del();\">X</a></td>\n\n
+	  <td>".$v->date."</td>\n
+	  <td>".ceil(($v->size/1024))." kb</td></tr>\n";
+	  
+	  
+	  
+    }
+  }
+
+
+
+@imap_close($mail_conn3);		?>
 </table>
 

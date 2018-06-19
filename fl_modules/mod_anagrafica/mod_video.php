@@ -4,9 +4,9 @@ require_once('../../fl_core/autentication.php');
 include('../../fl_core/dataset/items_rel.php');
 
 unset($chat);
-$tab_id = 13;
+$tab_id = 97;
 $anagrafica_id = check($_GET['anagrafica_id']);
-$video_type = array('Youtube');
+$video_type = array('Youtube','Vimeo','Altro (iframe src)');
 include("../../fl_inc/headers.php");
  ?>
  
@@ -32,6 +32,8 @@ include("../../fl_inc/headers.php");
 <input type="text" name="link" placeholder="http://" value="" />
 <input type="submit" value="Inserisci" />
 </form>
+
+<p>NB: Incollare solo il link a cui deve puntare iframe (qualsiasi fonte)</p>
 <?php 
 	
 	
@@ -61,7 +63,7 @@ include("../../fl_inc/headers.php");
       <td><span class=\"Gletter\"></span></td>
       <td><?php echo $video_type[$riga['link_type']]; ?></td>
       <td><?php echo $riga['label']; ?><br><a href="<?php echo $riga['link']; ?>" target="_blank"><?php echo $riga['link']; ?></a></td>
-  	  <td><a href="../mod_basic/action_elimina.php?gtx=<?php echo $tab_id; ?>&amp;unset=<?php echo $riga['id'];?>" title="Elimina"  onclick="return conferma_del();"><i class="fa fa-trash-o"></i></a></td>
+  <td><a href="../mod_basic/action_elimina.php?gtx=<?php echo $tab_id; ?>&amp;unset=<?php echo $riga['id'];?>" title="Elimina"  onclick="return conferma_del();"><i class="fa fa-trash-o"></i></a></td>
 </tr>
 
     <?php } } //Chiudo la Connessione	?>

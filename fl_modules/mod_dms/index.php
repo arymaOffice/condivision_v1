@@ -26,7 +26,7 @@ if(isset($_SESSION['move'])) {
  '.$action.$element['label'].'</a><a href="mod_opera.php?unset" onClick="return conferma(\'Annullare?\');" class="elimina">x</a></div>';
 } 
 
-if(!is_dir(DMS_ROOT)) mkdir(DMS_ROOT,0777);
+if(!is_dir(DMS_ROOT)) { echo "Creata cartella Root ".DMS_ROOT." "; mkdir(DMS_ROOT,0777); }
 
 ?>
 

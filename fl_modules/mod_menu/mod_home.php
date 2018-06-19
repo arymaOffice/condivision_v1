@@ -7,7 +7,7 @@
 
 
 <?php
-$_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
+$_SESSION['POST_BACK_PAGE'] = $_SERVER['REQUEST_URI'];
 
 if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 
@@ -42,9 +42,9 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 	
 	$articoli = 0;
 	$attiva_sino = ($riga['attiva'] == 1) ? "Si" : "No";
-	$rela = ($riga['modulo'] > 1) ? 'Modulo: '.$modulo[$riga['modulo']] : 'Lista: '.$item_rel[$riga['item_rel']];
 	
-	echo "<tr>"; 	
+	
+	if($i==1){ $i=0; echo "<tr>"; } else { $i=1; echo "<tr class=\"alternate\">"; }		
 			
 			echo "<td>".$riga['id']."</td>";
 			if($sezione_id != 0){ 
@@ -52,7 +52,7 @@ if(!@$thispage){ echo "Accesso Non Autorizzato"; exit;}
 			} else {
 			echo "<td><a href=\"./?item_rel=".$riga['id']."\">".ucfirst($riga['label'])."</a></td>";
 			}
-			echo "<td><strong><span class=\"msg blue\">".$rela."</span></strong><br>".ucfirst($riga['menu_link'])."</td>";
+			echo "<td>".ucfirst($riga['menu_link'])."<br>".$modulo[$riga['modulo']]."</td>";
 			echo "<td>$attiva_sino</td>"; 
 			
 			if($sezione_id != 0){ 

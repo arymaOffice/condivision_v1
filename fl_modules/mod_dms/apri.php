@@ -1,27 +1,45 @@
 <?php
 
-// Controllo Login
-session_start(); 
-if(!isset($_SESSION['user'])){ header("Location: ../../login.php"); exit; }
-require('../../fl_core/settings.php');
+require_once('../../fl_core/autentication.php');
 
-$dir_files = DMS_ROOT.base64_decode(check($_GET['d']))."/";
+$folder = DMS_ROOT.base64_decode(check($_GET['d']))."/";
 $file = base64_decode(check($_GET['f']));
-$dimensione_file = filesize($dir_files.$file); 
-$filetype = filetype($dir_files.$file); 
+$file_fullpath = $folder.$file;
+
+$dimensione_file = filesize($folder.$file); 
+$filetype = filetype($folder.$file); 
 
 if(strstr($file,".doc") || strstr($file,".docx")) {$filetype = "application/msword"; }
 
-header('Content-Type: '.$filetype.'; filename="'.$file.'"');
-header("Content-Transfer-Encoding: binary");
-header("Content-Length: ".$dimensione_file);
-header('Content-Disposition: inline; filename="'.$file.'"');
-header("Expires: 0");
-header("Cache-Control: no-cache, must-revalidate");
-header("Cache-Control: private");
-header("Pragma: no-cache");
-readfile($dir_files.$file);
 
-exit;
+if(file_exists($file_fullpath)){
+
+
+$fp = fopen($file_fullpath, "r") ;
+
+//$action = (isset($_GET['show'])) ? $filetype : 'application/force-download';
+//$disposition = (isset($_GET['show'])) ? 'inline' : 'attachment';
+//if(strstr($file,".doc") || strstr($file,".docx")) { $filetype = "application/msword"; }
+
+
+
+//header("Content-Type:  $action; name=\"$file\"");
+//header("Cache-Control: private");
+//readfile($dir_files.$file);
+header('HTTP/1.0 200 OK');
+header("Cache-Control: maxage=1");
+header("Pragma: public");
+header("Content-type: $filetype");
+header("Content-Disposition: inline; filename=$file");
+header('Accept-Ranges: bytes');
+header("Content-Transfer-Encoding: binary");
+header('Content-Length:' . filesize($file_fullpath));
+
+ob_clean(); //Pulizia memoria
+flush();
+
+readfile($file_fullpath);
+
+} else { echo "File non trovato ".$file_fullpath; }
 
 ?>

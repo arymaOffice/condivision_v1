@@ -6,25 +6,44 @@ $file_name = (isset($_GET['NAme'])) ? $_GET['NAme'] : array();
 $PiD = (isset($_GET['PiD'])) ? base64_decode(check($_GET['PiD'])) : 0;
 $workflow_id = (isset($_GET['workflow_id'])) ? check($_GET['workflow_id']) : $_SESSION['workflow_id'];
 $record_id = (isset($_GET['record_id'])) ? check($_GET['record_id']) : $_SESSION['record_id'];
-include("../../fl_inc/headers.php");?>
+include("../../fl_inc/headers.php");
+
+$folder = GRD('fl_dms',$PiD);
+if(!isset($folder['label'])) { echo "<p>Folder ".$PiD." non trovato. Crea il folder.</p>"; exit;  }
+
+?>
 
 
-<h1><?php if(isset($_GET['title'])) { echo check($_GET['title']); } else { echo @$modulo[$_SESSION['workflow_id']].' '.$proprietario[$proprietario_id]; } ?></h1>
+<h1><?php if(isset($_GET['title'])) { echo check($_GET['title']); } else { echo @$modulo[$_SESSION['workflow_id']].$folder['label'].' '.$proprietario[$proprietario_id]; } ?></h1>
 
 <?php
-  
+ 
+
+
 if(!isset($_GET['view']) && $_SESSION['workflow_id'] > 1) { ?>
+
+
+ <style>
+.dsh_panel { text-align: left;} 
+.dsh_panel input, .dsh_panel input .calendar { width: 90%; margin: 2px; }
+.dsh_panel select { width: 80%; }
+ </style> 
+ <div class="dsh_panel big">
+<h1 onClick="$('.dsh_panel_content').show();">Carica Files <a href="#" class="" style="color: gray"> <i class="fa fa-plus-circle"></i>  </a></h1><span class="open-close"><a href="#"><i class="fa fa-angle-up" aria-hidden="true"></i></a></span>
+<div class="dsh_panel_content" style="display: none;">
+
 
 <script src="<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/dropzone.js"></script> 
 <script type="text/javascript">
 $( document ).ready(function() {
-Dropzone.options.dropzone = {
-    maxFilesize: 100, 
-    init: function() {
-      this.on("uploadprogress", function(file, progress) { console.log("File progress", progress); });
-	  this.on("queuecomplete", function(file) { alert("Added file."); });
-  	},
-    }
+	
+	 $("#my-awesome-dropzone").dropzone({
+               addRemoveLinks: true
+			  
+			  });
+
+
+
 });
 </script>
 <link rel="stylesheet" type="text/css" href="<?php echo ROOT.$cp_admin.$cp_set; ?>jsc/dropzone.css">
@@ -57,14 +76,18 @@ Dropzone.options.dropzone = {
 <br class="clear" />
 
 <p>NOTA BENE: Attendere il caricamento del file fino a che non scompare la barra di caricamento.</p>
+
+</div></div>
+
 <?php }  ?>
 
 <br class="clear" />
 
-<div class="content" style="background: white; text-align: left; padding: 10px;">
+<div class="content" style=" text-align: left; padding: 10px;">
 <?php
 $query = "SELECT $select FROM `$tabella` WHERE resource_type = 1 AND  workflow_id = ".$workflow_id." AND record_id = ".$record_id." ORDER BY $ordine;";
 $risultato = mysql_query($query, CONNECT);
+echo mysql_error();
 if(mysql_affected_rows() < 1) echo "<p>Nessun elemento</p>";
 ?>
 
@@ -85,7 +108,7 @@ if(mysql_affected_rows() < 1) echo "<p>Nessun elemento</p>";
 			$finfo = ''; 
 			$type  = ''; 
 			}
-			if(strstr($type,'image')) $icona_tipo = '<img src="apri.php?d='.base64_encode($riga['parent_id']).'&f='.base64_encode($riga['file']).'" class="tumb"  style="max-width: 250px;"  alt="Anteprima"> ';
+			if(strstr($type,'image')) $icona_tipo = '<img src="apri.php?d='.base64_encode($riga['parent_id']).'&f='.base64_encode($riga['file']).'" class="tumb"  style="max-width: 100%; "  alt="Anteprima"> ';
 			$open_link = 'apri.php?d='.base64_encode($riga['parent_id']).'&f='.base64_encode($riga['file']) ;
 			$apri_inbrowser = (strstr($type,'image')) ? ' data-fancybox-type="iframe" class="fancybox_view" ' : 'target="_blank"';
 	} else {

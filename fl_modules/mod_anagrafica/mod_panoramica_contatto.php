@@ -58,8 +58,8 @@ $lastLogin  = mydatetime($riga['data_creazione']);
 <div class="form_row"><p class="print_p"><label>Scadenza Password:</label> <span>Tra <?php echo $password_update.' giorni'; ?> - <a data-fancybox-type="iframe" class="fancybox" title="Modifica Account" href="../mod_account/mod_visualizza.php?external&id=<?php echo $account['id']; ?>&tId=tab_password">Reimposta Password</a></span></p></div>
 <br class="clear" />
 <div class="form_row"><p class="print_p"><label>Stato:</label> <span>
-<input <?php echo $attivo; ?> type="radio" class="updateField" value="1"  data-gtx="8" name="attivo" id="attivo1" data-rel="<?php echo $account['id']; ?>" /><label for="attivo1" class="green" style="margin-left: 0;">Attivo</label>
-<input <?php echo $sospeso; ?>  type="radio" class="updateField" value="0"  data-gtx="8" name="attivo" id="attivo2" data-rel="<?php echo $account['id']; ?>" /><label  class="red" for="attivo2">Sospeso</label></span></p></div>
+<input <?php echo $attivo; ?> type="radio" class="updateField" value="1"  data-gtx="8" name="attivo" id="attivo1" data-rel="<?php echo $account['id']; ?>" style="display:  inline-block; width:  auto;" /><label class="updateField" value="1"  data-gtx="8" name="attivo" data-rel="<?php echo $account['id']; ?>" for="attivo1" class="green" style="margin-left: 0;">Attivo</label>
+<input <?php echo $sospeso; ?>  type="radio" class="updateField" value="0"  data-gtx="8" name="attivo" id="attivo2" data-rel="<?php echo $account['id']; ?>" style="display:  inline-block;  width:  auto;" /><label  class="red" for="attivo2">Sospeso</label></span></p></div>
 <div class="form_row"><p class="print_p"><label>Motivo Sospensione:</label> <span><textarea style="height: 80px;" data-gtx="8" name="motivo_sospensione" data-rel="<?php echo $account['id']; ?>" class="updateField" rows="3" ><?php echo $account['motivo_sospensione']; ?></textarea></span></p></div>
 <p class="leggi"><a data-fancybox-type="iframe" class="fancybox" title="Modifica Account" href="../mod_account/mod_visualizza.php?external&id=<?php echo $account['id']; ?>">Modifica</a></p>
 

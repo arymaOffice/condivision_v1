@@ -3,8 +3,7 @@
 // Controllo Login
 session_start(); 
 if(!isset($_SESSION['user'])){ header("Location: ../../login.php"); exit; }
-if($_SESSION['idh'] != $_SERVER['REMOTE_ADDR']) { echo "Non autorizzato ".$_SESSION['idh']." NOT VALID ".$_SERVER['REMOTE_ADDR']; exit; }
-require('../../fl_core/settings.php'); 
+require('../../fl_core/core.php'); 
 
 if(isset($_GET['new'])) {
 
@@ -108,6 +107,7 @@ exit;
 $query = "INSERT INTO `fl_conti` (`id`, `anagrafica_id`, `stato_conto`,`intestatario`, `descrizione`, `estremi`, `data_creazione`) 
 VALUES (NULL, '$anagrafca_id', 1, '$intestatario', '$descrizione', '$estremi', NOW());";
 mysql_query($query,CONNECT);
+
 
 mysql_close(CONNECT);
 header("Location: mod_conti.php?anagrafica_id=".$anagrafca_id); 

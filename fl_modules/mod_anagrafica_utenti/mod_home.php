@@ -10,7 +10,7 @@ if (isset($_GET['ordine'])) {if (!is_numeric($_GET['ordine'])) {exit;} else { $o
 
 $start = paginazione(CONNECT, $tabella, $step, $ordine, '', 0);
 
-$query = "SELECT $select,ac.id as acid ,an.marchio as anaMarchio, an.id as anid,ac.attivo as accountAttivo, (SELECT count(*) FROM `fl_one_session` WHERE attivo = 1 and utente = ac.email ) sessionActive  FROM `$tabella` an LEFT JOIN fl_account ac ON ac.anagrafica = an.id   WHERE ac.id > 1 ORDER BY $ordine LIMIT $start,$step;";
+$query = "SELECT $select,ac.id as acid , an.id as anid,ac.attivo as accountAttivo FROM `$tabella` an LEFT JOIN fl_account ac ON ac.anagrafica = an.id   WHERE ac.id > 1 ORDER BY anid DESC LIMIT $start,$step;";
 
 $risultato = mysql_query($query, CONNECT);
 echo mysql_error();
@@ -19,12 +19,11 @@ echo mysql_error();
 <table class="dati" summary="Dati" style=" width: 100%;">
 <tr>
   <?php if (ATTIVA_ACCOUNT_ANAGRAFICA == 1) {?><th class="noprint"><a href="./?ordine=2&<?php echo $_SERVER['QUERY_STRING']; ?>">Account</a></th><?php }?>
-  <th  class="desktop"><a href="./?ordine=3&<?php echo $_SERVER['QUERY_STRING']; ?>">Ragione Sociale</a></th>
+ 
 
-  <th class="desktop"><a href="#" class="sede_legale">Sede Legale</a><?php if (!defined('ANAGRAFICA_SEMPLICE')) {?>/<a href="#" class="sede_operativa">Sede Operativa</a><?php }?> </th>
+ 
   <th>Contatti</th>
-  <?php if (ALERT_DOCUMENTO_SCADUTO == 1) {?><th></th><?php }?>
-  <th class="noprint"><a href="./?ordine=0&<?php echo $_SERVER['QUERY_STRING']; ?>">Recenti</a> | <a href="./?ordine=1&<?php echo $_SERVER['QUERY_STRING']; ?>">Meno recenti</a></th>
+ <th></th>
 
 </tr>
 <?php
@@ -55,7 +54,7 @@ while ($riga = mysql_fetch_array($risultato)) {
 
         $user_check = '<a title="Modifica Account"  href="../mod_account/mod_visualizza.php?external&id=' . $riga['acid'] . '">' . $riga['user'] . '</a> <br>' . $riga['motivo_sospensione'];
         $user_ball = ($riga['accountAttivo'] == 1) ? "<span class=\"c-green\"><i class=\"fa fa-user\"></i></span>" : "<span class=\"c-red\"><i class=\"fa fa-user\"></i></span>";
-        $status_anagrafica = ($riga['status_anagrafica'] == 1) ? "" : "<span class=\"msg red\">Anagrafica non attiva</span>";
+
 
         $tipo_profilo_label = $tipo[$riga['tipo']];
         if (isset($riga['account']) && @$riga['account'] != $riga['user']) {
@@ -82,25 +81,19 @@ while ($riga = mysql_fetch_array($risultato)) {
         
         $tot_res++;
 
-        $nominativo = ($riga['ragione_sociale'] != '') ? ucfirst(checkValue($riga['ragione_sociale'])) : ucfirst(checkValue(@$riga['nome'])) . ' ' . ucfirst(checkValue(@$riga['cognome']));
-        $sede_punto = (!isset($riga['comune_punto'])) ? '' : $riga['comune_punto'] . " (" . @$riga['provincia_punto'] . ") " . $riga['cap_punto'] . "<br>" . $riga['indirizzo_punto'];
+        $nominativo =  ucfirst(checkValue(@$riga['nome'])) . ' ' . ucfirst(checkValue(@$riga['cognome']));
+        $sede_punto = '';
         echo '<tr>';
 
-        if (ATTIVA_ACCOUNT_ANAGRAFICA == 1) {
-            echo "<td class=\"desktop $colore\">$user_ball  $status_anagrafica $user_check </td>";
-        }
 
-        echo "<td><span class=\"color\"><strong>" . $riga['anid'] . "</strong> $nominativo</span><br>P. iva " . $riga['partita_iva'] . '<br>';
-        if (defined('MULTI_BRAND')) {
-            echo "<span class=\"msg blue\">" . $marchio[$riga['anaMarchio']] . "</span> ";
-        }
+
+        echo "<td><span class=\"color\"> $user_check <strong>" . $riga['anid'] . "</strong> $nominativo</span>";
+
 
         echo " <span class=\"msg orange\">" . $tipo_profilo_label . "  </span></a></td>";
-        echo "
-					<td class=\"desktop info_sede_legale\">" . $riga['comune_sede'] . " (" . @$riga['provincia_sede'] . ") " . $riga['cap_sede'] . "<br>" . $riga['indirizzo_sede_legale'] . "</td>
-					<td class=\"desktop info_sede_operativa\" >" . $sede_punto . "</td>";
+        					
         echo "<td class=\"desktop\"><i class=\"fa fa-envelope-o\"></i> <a href=\"mailto:" . checkEmail($riga['email']) . "\">" . checkEmail(@$riga['email']) . "</a>
-					<br><i class=\"fa fa-phone\" style=\"padding: 5px 10px;\"></i>" . $riga['telefono'] . " - " . $riga['cellulare'] . "</td>";
+					<br><i class=\"fa fa-phone\" style=\"padding: 5px 10px;\"></i>" . $riga['telefono'] . "</td>";
 
 
 
@@ -110,7 +103,7 @@ while ($riga = mysql_fetch_array($risultato)) {
         }
 
 
-            echo "<a data-fancybox-type=\"iframe\" class=\"fancybox_view\" href=\"mod_visualizza.php?external&action=1&amp;sezione=" . @$riga['sezione'] . "&amp;id=" . $riga['anid'] . "&nominativo=" . $riga['ragione_sociale'] . "\" title=\"Scheda di stampa " . ucfirst($riga['ragione_sociale']) . "\"> <i class=\"fa fa-print\"></i> </a>";
+
         
 
         echo "$notifica_icon</td>";

@@ -65,11 +65,11 @@ while ($riga = mysql_fetch_assoc($risultato)) {
         $x++;
     }
 }
-$basic_filters = array('marchio', 'ragione_sociale', 'partita_iva', 'numero_concessione', 'email', 'telefono');
+$basic_filters = array('marchio', 'partita_iva', 'numero_concessione', 'email', 'telefono');
 
 /* Tipologie di ordinamento disponobili */
-$ordine_mod = array("id DESC", "id ASC", "account ASC", "ragione_sociale ASC");
-$ordine = $ordine_mod[3];
+$ordine_mod = array("id DESC", "id ASC", "account ASC");
+$ordine = $ordine_mod[0];
 
 /* RICERCA */
 $tipologia_main = "WHERE id > 2 ";
@@ -195,19 +195,13 @@ if (isset($_GET['tBiD'])) {
     if (defined('ANAGRAFICA_SEMPLICE') && @$id != 1) {
         $tab_div_labels = array('forma_giuridica' => "Dati Fiscali", 'telefono' => "Contatti");
     } else if (@$id != 1) {
-        $tab_div_labels = array('marchio' => 'Profilo', 'cognome' => "Dati Anagrafici", 'tipo_documento' => "Dati Documento", 'forma_giuridica' => "Dati Fiscali", 'tipologia_attivita' => $etichette_anagrafica['tipologia_attivita'], 'telefono' => "Contatti", 'note' => "Note");
-    }
-
-    if (isset($id) && @$id != 1 && defined('CONTI_BANCARI')) {
-        $tab_div_labels['./mod_conti.php?anagrafica_id=[*ID*]'] = "Conti";
+        $tab_div_labels = array( 'cognome' => "Dati Anagrafici", 'tipo_documento' => "Dati Documento",  'telefono' => "Contatti");
     }
 
     if (isset($id) && @$id != 1 && defined('ARCHIVIO_DOCUMENTAZIONE_ANAGRAFICA')) { // ID della cartella DMS in cui archiviare i documenti
         $tab_div_labels['../mod_dms/uploader.php?PiD=' . base64_encode(FOLDER_ANAGRAFICA) . '&workflow_id=' . $tab_id . '&NAme[]=Carta di Identita&NAme[]=Codice Fiscale&NAme[]=Visura Camerale&NAme[]=Certificato P.iva&NAme[]=Contratto&record_id=[*ID*]'] = 'Documenti';
     }
 
-    if (isset($id) && @$id != 1 && ATTIVA_ACCOUNT_ANAGRAFICA == 1 && !isset($view)) {
-        $tab_div_labels['../mod_account/mod_scheda.php?anagrafica_id=[*ID*]&external'] = "Account";
-    }
+
 
 }

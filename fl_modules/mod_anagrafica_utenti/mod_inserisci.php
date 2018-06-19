@@ -17,7 +17,7 @@ if (!isset($_GET['view'])) {
     include "../../fl_inc/testata_mobile.php";
 }
 
-$tab_div_labels = array('marchio' => 'Profilo', 'nome' => 'Dati Anagrafici', 'tipo_documento' => "Dati Documento", 'forma_giuridica' => "Dati Fiscali", 'tipologia_attivita' => 'Dati Sede Operativa', 'lat' => $etichette_anagrafica['tipologia_attivita'], 'telefono' => "Contatti");
+//$tab_div_labels = array('marchio' => 'Profilo', 'nome' => 'Dati Anagrafici', 'tipo_documento' => "Dati Documento", 'forma_giuridica' => "Dati Fiscali", 'tipologia_attivita' => 'Dati Sede Operativa', 'lat' => $etichette_anagrafica['tipologia_attivita'], 'telefono' => "Contatti");
 
 ?>
 
@@ -56,6 +56,9 @@ if ($_SESSION['usertype'] > 1) {
 <script>
 $('label[for="status_anagrafica1"]').text('attiva');
 $('label[for="status_anagrafica2"]').text('disattiva');
+$('#data_creazione').hide();
+$('#data_aggiornamento').hide();
+$('#data_scadenza_contratto').hide();
 $('[id^=data_]').prop("type", "date");
 $( '#marchio' ).val('<?php echo $profilo['marchio']; ?>');
 

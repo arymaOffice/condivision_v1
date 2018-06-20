@@ -1,6 +1,5 @@
 <?php
 
-
 require_once '../../fl_core/autentication.php';
 $loadSelectComuni = 1;
 
@@ -23,6 +22,92 @@ if (!isset($_GET['view'])) {
 
 
 <body style=" background: rgb(241, 241, 241) none repeat scroll 0% 0%;">
+
+<script type="text/javascript">
+
+
+
+function loadProvince(from,where){
+
+//regione
+var post = 'sel=provincia&filtro=&valore='+$(from).val();
+if(from == 0) post = 'sel=provincia&filtro=regione';
+var url = '../mod_basic/mod_selectLoader.php';
+var posting = $.post(url,post);
+posting.fail(function( data ) {     });
+posting.always(function( data ) {    });
+posting.done(function( response ) {
+console.log(post);
+$(where).empty();
+var data = $.parseJSON(response);
+  $.each(data, function(i, value) {
+       $(where).append('<option value="'+value+'">'+value+'</option>');
+       $(where).focus();
+    });
+});
+}
+
+function loadComuni(from,where){
+var post = 'sel=comune&filtro=provincia&valore='+$(from+' option:selected').text();
+var url = '../mod_basic/mod_selectLoader.php';
+var posting = $.post(url,post);
+posting.fail(function( data ) {     });
+posting.always(function( data ) {    });
+posting.done(function( response ) {
+console.log(post);
+$(where).empty();
+var data = $.parseJSON(response);
+  $.each(data, function(i, value) {
+       $(where).append('<option value="'+value+'">'+value+'</option>');
+       $(where).focus();
+    });
+});
+}
+
+function loadCap(from,where){
+var post = 'sel=cap&filtro=comune&valore='+$(from).val();
+var url = '../mod_basic/mod_selectLoader.php';
+var posting = $.post(url,post);
+posting.fail(function( data ) {     });
+posting.always(function( data ) {    });
+posting.done(function( response ) {
+//console.log(response);
+$(where).empty();
+var data = $.parseJSON(response);
+  $.each(data, function(i, value) {
+       $(where).val(value);
+       $(where).focus();
+    });
+});
+}
+
+
+
+/*Avvio*/
+$(document).ready(function() {
+    
+
+$('#luogo_di_nascita').change(function(){
+ loadCap('#luogo_di_nascita','#cap');
+});
+
+$('#provincia_nascita').change(function(){
+ loadComuni('#provincia_nascita','#luogo_di_nascita');
+});
+
+$('#comune_residenza').change(function(){
+ loadCap('#comune_residenza','#cap_sede');
+});
+
+});
+
+
+
+</script>
+
+
+
+
 <div id="container" >
 <div id="content_scheda">
 <div class="info_dati">
@@ -62,29 +147,5 @@ $('#data_scadenza_contratto').hide();
 $('[id^=data_]').prop("type", "date");
 $( '#marchio' ).val('<?php echo $profilo['marchio']; ?>');
 
-
-$('#invio').attr('id','nosend');
-$('#nosend').click(function(event){
-    event.preventDefault();
-        //validate fields
-        var fail = false;
-        var fail_log = '';
-        $( '#scheda' ).find( 'select, textarea, input' ).each(function(){
-            if( ! $( this ).prop( 'required' )){
-            } else {
-                if ( ! $( this ).val() ) {
-                    fail = true;
-                    name = $( this ).attr( 'name' );
-                    fail_log += name + " is required \n";
-                }
-            }
-        });
-        //submit if fail never got set to true
-        if ( ! fail ) {
-        $('#scheda').submit();
-        } else {
-            alert( fail_log );
-        }
-});
 </script>
 </div></div></body></html>

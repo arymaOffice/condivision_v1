@@ -2,10 +2,9 @@
 
 // Variabili Modulo
 $active = 1;
-$modulo_uid = 50;
+$modulo_uid = 43;
 $sezione_tab = 1;
-$tab_id = 143;
-$tabella = $tables[$tab_id];
+$tabella = 'fl_anagrafica_utenti';
 $select = "*";
 $step = 2000;
 $sezione_id = -1;
@@ -23,8 +22,7 @@ $searchbox = 'Cerca..';
 
 $module_title = 'Anagrafica Utenti';
 $module_menu = '';
-$new_button = '';
-
+//$new_button = '';
 
 if (isset($_GET['action']) && check(@$_GET['action']) == 4) {
     $module_title = 'Contact Center';
@@ -121,17 +119,15 @@ if (isset($_GET['cerca'])) {
 /* Inclusioni Oggetti Categorie */
 
 /* Inclusione classi e dati */
-require '../../fl_core/dataset/array_statiche.php'; // Liste di valori statiche
-if (!isset($data_set)) {
-    require '../../fl_core/class/ARY_dataInterface.class.php';
-}
+
+require '../../fl_core/class/ARY_dataInterface.class.php';
+include '../../fl_core/dataset/array_statiche.php';
+include '../../fl_core/dataset/proprietario.php';
+include '../../fl_core/dataset/provincia.php';
+
 //Classe di gestione dei dati
 $data_set = new ARY_dataInterface();
 
-include $_SERVER['DOCUMENT_ROOT'] . '/fl_core/dataset/array_statiche.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/fl_core/dataset/proprietario.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/fl_core/dataset/provincia.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/fl_core/dataset/citta.php';
 $account_id = $proprietario;
 
 $tipologia_attivita = $data_set->get_items_key("punto_vendita");
@@ -139,12 +135,11 @@ $tipologia_attivita = $data_set->get_items_key("punto_vendita");
 $stato_nascita = $stato_sede = $stato_residenza = $stato_punto = $stato = $data_set->data_retriever('fl_stati', 'descrizione', "WHERE id != 1", 'descrizione ASC');
 unset($stato_nascita[0]);unset($stato_sede[0]);unset($stato_residenza[0]);unset($stato_punto[0]);unset($stato[0]);
 
-$luogo_di_nascita = $comune_punto = $comune_sede = $comune_residenza = $citta;
 
-$marchio = array(0 => '1x2Live', 1 => 'Betitaly', 2 => 'Betscore', 3 =>'Giocasempre');
+// print_r($provincia_residenza);
+// exit;
 
-
-$provincia_nascita = $provincia_residenza;
+//$provincia_nascita = $provincia_residenza;
 
 $mandatory = array("id");
 
@@ -152,16 +147,19 @@ function select_type($who)
 {
     /* Gestione Oggetto Statica */
     $textareas = array();
-    $select = array('emesso_da', 'sesso', 'forma_giuridica', 'marchio','tipologia_attivita', 'stato_nascita', 'stato_punto', 'stato_sede', 'regione_residenza', 'stato_residenza', 'account_id', "tipo_documento", "punto_vendita", "regione_sede", "regione_punto", "status_anagrafica", "proprietario", "status", "regione", "nazione", 'tipo_profilo', 'provincia_nascita', 'luogo_di_nascita', 'provincia_residenza', "provincia_sede", "provincia_punto", 'comune_punto', 'comune_sede', 'comune_residenza');
+    $select = array('provincia_residenza','emesso_da', 'sesso', 'forma_giuridica', 'marchio', 'tipologia_attivita', 'stato_nascita', 'stato_punto', 'stato_sede', 'regione_residenza', 'stato_residenza', 'account_id', "tipo_documento", "punto_vendita", "regione_sede", "regione_punto", "status_anagrafica", "proprietario", "status", "regione", "nazione", 'tipo_profilo', 'provincia_nascita',   "provincia_sede", "provincia_punto", 'comune_punto', 'comune_sede', 'comune_residenza');
+
+    $select_text = array('luogo_di_nascita','comune_residenza');
 
     $disabled = array();
-    $hidden = array( 'data_creazione', 'data_aggiornamento', 'operatore', 'ip', 'proprietario', 'garanzia_fido', 'attivo', 'data_scadenza_contratto', 'profilo_genitore', 'profilo_commissione');
+    $hidden = array('data_creazione', 'data_aggiornamento', 'operatore', 'ip', 'proprietario', 'garanzia_fido', 'attivo', 'data_scadenza_contratto', 'profilo_genitore', 'profilo_commissione');
     $radio = array('status_anagrafica');
     $text = array();
     $multi_selection = array("servizi");
     $type = 1;
 
     if (in_array($who, $select)) {$type = 2;}
+    if (in_array($who, $select_text)) {$type = 12;}
     if (in_array($who, $textareas)) {$type = 3;}
     if (in_array($who, $disabled)) {$type = 4;}
     if (in_array($who, $radio)) {$type = 8;}
@@ -195,13 +193,11 @@ if (isset($_GET['tBiD'])) {
     if (defined('ANAGRAFICA_SEMPLICE') && @$id != 1) {
         $tab_div_labels = array('forma_giuridica' => "Dati Fiscali", 'telefono' => "Contatti");
     } else if (@$id != 1) {
-        $tab_div_labels = array( 'cognome' => "Dati Anagrafici", 'tipo_documento' => "Dati Documento",  'telefono' => "Contatti");
+        $tab_div_labels = array('cognome' => "Dati Anagrafici", 'tipo_documento' => "Dati Documento", 'telefono' => "Contatti");
     }
 
     if (isset($id) && @$id != 1 && defined('ARCHIVIO_DOCUMENTAZIONE_ANAGRAFICA')) { // ID della cartella DMS in cui archiviare i documenti
         $tab_div_labels['../mod_dms/uploader.php?PiD=' . base64_encode(FOLDER_ANAGRAFICA) . '&workflow_id=' . $tab_id . '&NAme[]=Carta di Identita&NAme[]=Codice Fiscale&NAme[]=Visura Camerale&NAme[]=Certificato P.iva&NAme[]=Contratto&record_id=[*ID*]'] = 'Documenti';
     }
-
-
 
 }

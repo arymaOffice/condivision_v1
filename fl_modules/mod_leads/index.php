@@ -3,6 +3,10 @@
 require_once('../../fl_core/autentication.php');
 include('fl_settings.php'); // Variabili Modulo 
 
+if ($_SESSION['usertype'] == 2) {
+	$module_menu = '';
+
+}
  
 include("../../fl_inc/headers.php");?>
 

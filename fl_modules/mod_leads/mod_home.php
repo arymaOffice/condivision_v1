@@ -3,12 +3,18 @@
 // Controlli di Sicurezza
 if (!@$thispage) {echo "Accesso Non Autorizzato";exit;}
 $_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'];
-include 'filtri.php';
+if ($_SESSION['usertype'] != 2) {
+    include 'filtri.php';
+}
 
 if (isset($_GET['ordine'])) {if (!is_numeric($_GET['ordine'])) {exit;} else { $ordine = $ordine_mod[$_GET['ordine']];}}
 
 $start = paginazione(CONNECT, $tabella, $step, $ordine, $tipologia_main, 1);
-$query = "SELECT $select FROM $tabella $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
+$query = "SELECT $select FROM $tabella $tipologia_main ORDER BY $ordine ";
+
+if ($_SESSION['usertype'] != 2) { $query .= " LIMIT $start,$step; "; }
+
+
 
 $risultato = mysql_query($query, CONNECT);
 if ($_SESSION['number'] == 1) {
@@ -16,6 +22,22 @@ if ($_SESSION['number'] == 1) {
 }
 
 ?>
+
+<style>
+
+<?php if ($_SESSION['usertype'] == 2) {?>
+
+    .filterToggle{
+        display:none !important;
+    }
+<?php }?>
+
+.dati td input {
+    width: 49%;
+}
+</style>
+
+<?php if ($_SESSION['usertype'] != 2) {?>
 
 <p style="clear: both; text-align: left;">
 
@@ -37,15 +59,14 @@ if ($_SESSION['number'] == 1) {
       <?php if (isset($_GET['all'])) {
     echo '<input type="hidden" name="all" value="1" />';
 }
-?>
+    ?>
       <?php if (isset($_GET['source_potential'])) {
-    if (is_array($_GET['source_potential'])) {
-        foreach (@$_GET['source_potential'] as $chiave) 
-        {echo '<input type="hidden" name="source_potential[]" value="' . $chiave . '" />';}
-    }else{
-        echo '<input type="hidden" name="source_potential[]" value="' . $_GET['source_potential'] . '" />';
-    }
-}?>
+        if (is_array($_GET['source_potential'])) {
+            foreach (@$_GET['source_potential'] as $chiave) {echo '<input type="hidden" name="source_potential[]" value="' . $chiave . '" />';}
+        } else {
+            echo '<input type="hidden" name="source_potential[]" value="' . $_GET['source_potential'] . '" />';
+        }
+    }?>
 
 
 
@@ -60,11 +81,11 @@ if ($_SESSION['number'] == 1) {
 
       <?php
 
-foreach ($tipo_interesse as $valores => $label) { // Recursione Indici di Categoria
-    $selected = (isset($_GET['tipo_interesse']) && check($_GET['tipo_interesse']) == $valores) ? " selected=\"selected\"" : "";
-    echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
-}
-?>
+    foreach ($tipo_interesse as $valores => $label) { // Recursione Indici di Categoria
+        $selected = (isset($_GET['tipo_interesse']) && check($_GET['tipo_interesse']) == $valores) ? " selected=\"selected\"" : "";
+        echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
+    }
+    ?>
     </select>
 
 
@@ -74,11 +95,11 @@ foreach ($tipo_interesse as $valores => $label) { // Recursione Indici di Catego
 
       <?php
 
-foreach ($categoria_interesse as $valores => $label) { // Recursione Indici di Categoria
-    $selected = (isset($_GET['categoria_interesse']) && check($_GET['categoria_interesse']) == $valores) ? " selected=\"selected\"" : "";
-    echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
-}
-?>
+    foreach ($categoria_interesse as $valores => $label) { // Recursione Indici di Categoria
+        $selected = (isset($_GET['categoria_interesse']) && check($_GET['categoria_interesse']) == $valores) ? " selected=\"selected\"" : "";
+        echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
+    }
+    ?>
     </select>
 
           <select name="sede" >
@@ -87,11 +108,11 @@ foreach ($categoria_interesse as $valores => $label) { // Recursione Indici di C
 
       <?php
 
-foreach ($sede as $valores => $label) { // Recursione Indici di Categoria
-    $selected = (isset($_GET['sede']) && check($_GET['sede']) == $valores) ? " selected=\"selected\"" : "";
-    echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
-}
-?>
+    foreach ($sede as $valores => $label) { // Recursione Indici di Categoria
+        $selected = (isset($_GET['sede']) && check($_GET['sede']) == $valores) ? " selected=\"selected\"" : "";
+        echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
+    }
+    ?>
     </select>
     <input type="submit" value="<?php echo SHOW; ?>" class="button" />
 
@@ -105,7 +126,7 @@ foreach ($sede as $valores => $label) { // Recursione Indici di Categoria
     <?php
 $count = 0;
 //if($_SESSION['usertype'] > 0 || $_SESSION['usertype'] == 0) {
-echo '<h3 style="text-align: left; clear: both;" id="bottom-bar">
+    echo '<h3 style="text-align: left; clear: both;" id="bottom-bar">
 	<strong>Esegui su <span  id="counter"> ' . $count . ' lead</span> </strong> questa azione:
 
 	<select name="azione" id="action_list" class="select2" style="min-width: 250px;">
@@ -124,64 +145,73 @@ echo '<h3 style="text-align: left; clear: both;" id="bottom-bar">
  <span id="action1" class="action_options">
  <select name="assegna_leads" id="assegna_leads" class="select2" style="min-width: 250px;">';
 
-echo '<optgroup label="Operatori BDC">';
-foreach ($operatoribdc as $valores => $label) { // Recursione Indici di Categoria
-    $selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
-    if ($valores > 1) {
+    echo '<optgroup label="Operatori BDC">';
+    foreach ($operatoribdc as $valores => $label) { // Recursione Indici di Categoria
+        $selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
+        if ($valores > 1) {
+            echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
+        }
+
+    }
+
+    echo '<optgroup label="Digital">';
+    foreach ($operatoridgt as $valores => $label) { // Recursione Indici di Categoria
+        $selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
         echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
     }
 
-}
-
-echo '<optgroup label="Digital">';
-foreach ($operatoridgt as $valores => $label) { // Recursione Indici di Categoria
-    $selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
-    echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
-}
-
-echo '</optgroup></select>';
-echo ' giorni scadenza <input type="number" style="width: 50px;" name="scadenza_bdc" value="2" />  ore <input type="number" style="width: 50px;"  name="ore_scadenza_bdc" value="2" />
+    echo '</optgroup></select>';
+    echo ' giorni scadenza <input type="number" style="width: 50px;" name="scadenza_bdc" value="2" />  ore <input type="number" style="width: 50px;"  name="ore_scadenza_bdc" value="2" />
  </span>
 
   <span id="action2" class="action_options">
  <select name="assegna_venditore" id="assegna_venditore" class="select2" style="min-width: 250px;">';
 
-echo '<optgroup label="Venditori">';
-foreach ($venditore as $valores => $label) { // Recursione Indici di Categoria
-    $selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
-    if ($valores > 1) {
+    echo '<optgroup label="Venditori">';
+    foreach ($venditore as $valores => $label) { // Recursione Indici di Categoria
+        $selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
+        if ($valores > 1) {
+            echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
+        }
+
+    }
+
+    echo '<optgroup label="Digital">';
+    foreach ($operatoridgt as $valores => $label) { // Recursione Indici di Categoria
+        $selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
         echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
     }
 
-}
-
-echo '<optgroup label="Digital">';
-foreach ($operatoridgt as $valores => $label) { // Recursione Indici di Categoria
-    $selected = (@$_SESSION['proprietario_id'] == $valores) ? " selected=\"selected\"" : "";
-    echo "<option value=\"$valores\" $selected>" . ucfirst($label) . "</option>\r\n";
-}
-
-echo '</optgroup></select>';
-echo ' giorni scadenza <input type="number" style="width: 50px;"  name="scadenza_venditore" value="2" />  ore <input type="number" style="width: 50px;"  name="ore_scadenza_venditore" value="2" />
+    echo '</optgroup></select>';
+    echo ' giorni scadenza <input type="number" style="width: 50px;"  name="scadenza_venditore" value="2" />  ore <input type="number" style="width: 50px;"  name="ore_scadenza_venditore" value="2" />
  </span>
 
  <span id="action6" class="action_options">
  <select name="status_potential" id="status_potential" class="select2" style="min-width: 250px;">';
 
-foreach ($status_potential as $valores => $label) { // Recursione Indici di Categoria
-    echo "<option value=\"$valores\">" . ucfirst($label) . "</option>\r\n";
-}
+    foreach ($status_potential as $valores => $label) { // Recursione Indici di Categoria
+        echo "<option value=\"$valores\">" . ucfirst($label) . "</option>\r\n";
+    }
 
-echo '</select>';
-echo '</span>
+    echo '</select>';
+    echo '</span>
 
 
 
   <input type="submit" value="Esegui" class="button" style="background: green;">
  </h3>';
 
-?>
+    ?>
 </div>
+
+<?php } else {echo '<h1>Leads Management</h1><p> <form method="get"> <select name="status_potential">'; 
+
+foreach($source_potential as $key => $value ){
+    $selected = ($_GET['source_potential'] == $key) ? 'selected' : '';
+    echo '<option '.$selected .' value="'.$key.'">'.$value.'</option>';
+}
+
+echo '</select><select style="display:none;" name="priorita_contatto"><option value="" selected disabled >Non Selezionata</option><option value="0" >Bassa</option><option value="1" >Media</option><option value="3" >Alta</option></select><input type="text" style="margin:10px;" onFocus="this.value=\'\';" value="'.$data_da_t.'"class="calendar" name="data_da"><input type="text"  onFocus="this.value=\'\';" value="'.$data_a_t.'"class="calendar" name="data_a" style="margin:10px;"> <input type="submit" value="Applica filtri" class="button"></form></p><p><a  href="#" onclick="window.location.href = \'mod_export.php?\'+ window.location.search.substring(1) ;" class="button" >Esporta i risultati correnti in excel</a></p>';}?>
 
  <table class="dati" summary="Dati" style=" width: 100%;">
     <tr>
@@ -192,12 +222,20 @@ echo '</span>
         <label for="checkAll"><?php echo $checkRadioLabel; ?></label>
       </th>
 
+      <?php if ($_SESSION['usertype'] != 2) {?>
+
       <th><a href="../mod_basic/action_set.php?ordine_mode=1">Nominativo</a></th>
       <th>Contatti</th>
       <th>Lead Generator</th>
       <th><a href="../mod_basic/action_set.php?ordine_mode=2" title="Ordina raggruppando per gestore BDC, non in ordine alfabetico">Gestione </a> </th>
       <th><a href="../mod_basic/action_set.php?ordine_mode=3" title="Ordina raggruppando per venditore, non in ordine alfabetico">Cons. Vendita</a> </th>
       <th><a href="../mod_basic/action_set.php?ordine_mode=0">Data Syncro</a></th>
+
+      <?php } else {?>
+        <th>Nominativo/Contatti</th>
+      <th>Note</th>
+      <th>Lead Generator/Attività</th>
+      <?php }?>
 
       <th></th>
     </tr>
@@ -362,36 +400,62 @@ while ($riga = mysql_fetch_array($risultato)) {
 
     //if($status_potential_id != 4)  echo "<td style=\"text-align:center;\"></td>";
     // <span class=\"msg $priocolor\">".$priorita_contatto[$riga['priorita_contatto']]."</span>
-    echo "<td >
+
+    if ($_SESSION['usertype'] != 2) {
+        echo "<td >
 			$mainLink
 			" . $riga['ragione_sociale'] . " <strong title=\"" . strip_tags(converti_txt($riga['note'])) . "\">" . $riga['nome'] . " " . $riga['cognome'] . "</strong></a> (" . @$categoria_interesse[$riga['categoria_interesse']] . "/" . @$tipo_interesse[$riga['tipo_interesse']] . ")
 			<br><span class=\"msg blue\">" . @$source_potential[$riga['source_potential']] . "</span><span class=\"msg orange\">" . @$sede[$riga['sede']] . "</span>  $valutazioneBadge $synapsy
-			<br>" . $riga['industry'] . "</td>";
+            <br>" . $riga['industry'] . "</td>";
 
-    echo "<td>
+        echo "<td>
 			$qualified <strong>" . @$status_potential[$riga['status_potential']] . "</strong> <br>
 			<i class=\"fa fa-phone\" style=\"padding: 3px;\"> </i>  $phone <br><i class=\"fa fa-envelope-o\" style=\"padding: 3px;\"></i><a href=\"mailto:" . $riga['email'] . "\"> " . $riga['email'] . "</a></td>";
+    } else {
 
-    echo "<td><strong>" . @$proprietario[@$riga['lead_generator']] . "</strong></td>";
-    echo "<td><strong>" . @$gestore . "</strong><br>" . $giorni . "<br>$bdcAction</td>";
-    echo "<td><strong>" . $venditoreAssegnato . "</strong><br>" . $giorni2 . "<br>$sellAction</td>";
-    echo "<td>" . mydate($riga['data_associazione_attivita']) . "</td>";
+        echo "<td>
+                <span> Data Creazione ".mydate($riga['data_creazione'])."</span><br><br>
+                <input type='text' name='nome' data-gtx='" . $tab_id . "' data-rel='" . $riga['id'] . "'  placeholder='nome'  class='updateField' value='" . $riga['nome'] . "'>
+                <input type='text' name='cognome' data-gtx='" . $tab_id . "' data-rel='" . $riga['id'] . "'  placeholder='cognome' class='updateField' value='" . $riga['cognome'] . "'>
+                <br><br>
+                <input type='text' name='email' data-gtx='" . $tab_id . "' data-rel='" . $riga['id'] . "'  placeholder='email'  class='updateField' value='" . $riga['email'] . "'>
+                <input type='text' name='telefono' data-gtx='" . $tab_id . "' data-rel='" . $riga['id'] . "'  placeholder='telefono' class='updateField' value='" . $riga['telefono'] . "'>
+            </td>
+            <td>
+            <textarea type='text' name='note'  style='width:100%;height: 100px;' data-gtx='" . $tab_id . "' data-rel='" . $riga['id'] . "'  placeholder='note'  class='updateField' >" . $riga['note'] . "</textarea>
+            </td>
+            ";
 
-    echo "<td class=\"mobile-buttons\">
+    }
+
+    if ($_SESSION['usertype'] != 2) {
+
+        echo "<td><strong>" . @$proprietario[@$riga['lead_generator']] . "</strong></td>";
+    } else {
+        echo "<td><strong>" . @$proprietario[@$riga['lead_generator']] . "</strong> <br> <span class=\"msg blue\">" . @$source_potential[$riga['source_potential']] . "</span></td>";
+    }
+
+    if ($_SESSION['usertype'] != 2) {
+
+        echo "<td><strong>" . @$gestore . "</strong><br>" . $giorni . "<br>$bdcAction</td>";
+        echo "<td><strong>" . $venditoreAssegnato . "</strong><br>" . $giorni2 . "<br>$sellAction</td>";
+        echo "<td>" . mydate($riga['data_associazione_attivita']) . "</td>";
+
+        echo "<td class=\"mobile-buttons\">
 			";
 
-    if ($riga['is_customer'] > 1) {
-        echo "<a href=\"$new_contract\"><i class=\"fa fa-user $color_contract\" ></i></a>";
+        if ($riga['is_customer'] > 1) {
+            echo "<a href=\"$new_contract\"><i class=\"fa fa-user $color_contract\" ></i></a>";
+        }
+
+        echo $synapLead;
+
+        if ($_SESSION['usertype'] == 0 || @$_SESSION['profilo_funzione'] == 8) {
+            echo "<a href=\"./mod_opera.php?elimina=" . $riga['id'] . "\" title=\"Cancella\" class=\"ajaxLink\"><i class=\"fa fa-trash-o\"></i></a>";
+        }
+
+        echo "</td>";
     }
-
-    echo $synapLead;
-
-    if ($_SESSION['usertype'] == 0 || @$_SESSION['profilo_funzione'] == 8) {
-        echo "<a href=\"./mod_opera.php?elimina=" . $riga['id'] . "\" title=\"Cancella\" class=\"ajaxLink\"><i class=\"fa fa-trash-o\"></i></a>";
-    }
-
-    echo "</td>";
-
     echo "</tr>";
 
 }

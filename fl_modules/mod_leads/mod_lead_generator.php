@@ -3,32 +3,40 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 // Controlli di Sicurezza
-require_once('../../fl_core/autentication.php');
-include('fl_settings.php'); // Variabili Modulo 
+require_once '../../fl_core/autentication.php';
+include 'fl_settings.php'; // Variabili Modulo
 $_SESSION['POST_BACK_PAGE'] = $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'];
 include 'filtri.php';
 
 if (isset($_GET['ordine'])) {if (!is_numeric($_GET['ordine'])) {exit;} else { $ordine = $ordine_mod[$_GET['ordine']];}}
 
 $start = paginazione(CONNECT, $tabella, $step, $ordine, $tipologia_main, 0);
-$query = "SELECT $select FROM $tabella $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
+echo '<br><br>';
+echo $db;
+echo $query = "SELECT $select FROM $tabella $tipologia_main ORDER BY $ordine LIMIT $start,$step;";
 
-if($_SESSION['usertype'] == 0){
-  echo $query;
-}
+
 
 $risultato = mysql_query($query, CONNECT);
 
+//$module_menu = '';
 
-$module_menu = '';
-
-include("../../fl_inc/headers.php");?>
-
+include "../../fl_inc/headers.php";?>
 
 
-<?php if(!isset($_GET['external'])) include('../../fl_inc/testata.php'); ?>
-<?php if(!isset($_GET['external'])) include('../../fl_inc/menu.php'); ?>
-<?php if(!isset($_GET['external'])) include('../../fl_inc/module_menu.php'); ?>
+
+<?php if (!isset($_GET['external'])) {
+    include '../../fl_inc/testata.php';
+}
+?>
+<?php if (!isset($_GET['external'])) {
+    include '../../fl_inc/menu.php';
+}
+?>
+<?php if (!isset($_GET['external'])) {
+    include '../../fl_inc/module_menu.php';
+}
+?>
 
 
 <p style="clear: both; text-align: left;">
@@ -44,17 +52,11 @@ include("../../fl_inc/headers.php");?>
       <?php if ($status_potential_id != 4) {?>
       <th></th>
       <?php }?>
-      <th style="width: 1%;" class="checkItemTd"><input onclick="checkAllFields(1);" id="checkAll"  name="checkAll" type="checkbox"  />
-        <label for="checkAll"><?php echo $checkRadioLabel; ?></label>
-      </th>
+
 
       <th><a href="../mod_basic/action_set.php?ordine_mode=1">Nominativo</a></th>
       <th>Contatti</th>
       <th>Lead Generator</th>
-      <th><a href="../mod_basic/action_set.php?ordine_mode=2" title="Ordina raggruppando per gestore BDC, non in ordine alfabetico">Gestione </a> </th>
-      <th><a href="../mod_basic/action_set.php?ordine_mode=3" title="Ordina raggruppando per venditore, non in ordine alfabetico">Cons. Vendita</a> </th>
-      <th><a href="../mod_basic/action_set.php?ordine_mode=0">Data Syncro</a></th>
-
       <th></th>
     </tr>
     <?php
@@ -70,9 +72,12 @@ function www($url)
     return $num;
 }
 
-if (mysql_affected_rows() == 0) {echo "<tr><td colspan=\"9\">No records</td></tr>";}
+print_r(mysql_fetch_array($risultato));
+echo mysql_affected_rows();
+//if (mysql_affected_rows() == 0) {echo "<tr><td colspan=\"9\">No records</td></tr>";}
 $tot_res = $count = 0;
 while ($riga = mysql_fetch_array($risultato)) {
+
     $colore = "class=\"tab_blue\"";
     if ($riga['priorita_contatto'] == 0) {$colore = "class=\"turquoise\"";}
     if ($riga['priorita_contatto'] == 1) {$colore = "class=\"orange\"";}
@@ -218,36 +223,17 @@ while ($riga = mysql_fetch_array($risultato)) {
 
     //if($status_potential_id != 4)  echo "<td style=\"text-align:center;\"></td>";
     // <span class=\"msg $priocolor\">".$priorita_contatto[$riga['priorita_contatto']]."</span>
-    echo "<td >
-			$mainLink
-			" . $riga['ragione_sociale'] . " <strong title=\"" . strip_tags(converti_txt($riga['note'])) . "\">" . $riga['nome'] . " " . $riga['cognome'] . "</strong></a> (" . @$categoria_interesse[$riga['categoria_interesse']] . "/" . @$tipo_interesse[$riga['tipo_interesse']] . ")
-			<br><span class=\"msg blue\">" . @$source_potential[$riga['source_potential']] . "</span><span class=\"msg orange\">" . @$sede[$riga['sede']] . "</span>  $valutazioneBadge $synapsy
+    echo "<td >".$mainLink." ".$riga['nome'] . " " . $riga['cognome'] . "<br><span class=\"msg blue\">" . @$source_potential[$riga['source_potential']] . "</span><span class=\"msg orange\">" . @$sede[$riga['sede']] . "</span>  $valutazioneBadge $synapsy
 			<br>" . $riga['industry'] . "</td>";
 
     echo "<td>
 			$qualified <strong>" . @$status_potential[$riga['status_potential']] . "</strong> <br>
-			<i class=\"fa fa-phone\" style=\"padding: 3px;\"> </i>  $phone <br><i class=\"fa fa-envelope-o\" style=\"padding: 3px;\"></i><a href=\"mailto:" . $riga['email'] . "\"> " . $riga['email'] . "</a></td>";
+			<i class=\"fa fa-phone\" style=\"padding: 3px;\"> </i>  $phone <br><i class=\"fa fa-envelope-o\" style=\"padding: 3px;\"></i> " . $riga['email'] . "</a></td>";
 
     echo "<td><strong>" . @$proprietario[@$riga['lead_generator']] . "</strong></td>";
     echo "<td></td>";
     echo "<td></td>";
     echo "<td></td>";
-
-    echo "<td class=\"mobile-buttons\">
-			";
-
-    if ($riga['is_customer'] > 1) {
-        echo "<a href=\"$new_contract\"><i class=\"fa fa-user $color_contract\" ></i></a>";
-    }
-
-    echo $synapLead;
-
-    if ($_SESSION['usertype'] == 0 || @$_SESSION['profilo_funzione'] == 8) {
-        echo "<a href=\"./mod_opera.php?elimina=" . $riga['id'] . "\" title=\"Cancella\" class=\"ajaxLink\"><i class=\"fa fa-trash-o\"></i></a>";
-    }
-
-    echo "</td>";
-
     echo "</tr>";
 
 }
@@ -270,6 +256,7 @@ if ($_SERVER['HTTP_HOST'] == 'dev.bluemotive.it') {
     echo ' <a class="c-red" href="../mod_leads/mod_opera.php?reset" onclick="return conferma(\'Sei sicuro di voler resettare tutto il database?\');"><i class="fa fa-user" aria-hidden="true"></i> Resetta tutti i leads (TEST)</a>';
 }
 
-
-
-if(!isset($_GET['external'])) include("../../fl_inc/footer.php"); ?>
+if (!isset($_GET['external'])) {
+    include "../../fl_inc/footer.php";
+}
+?>

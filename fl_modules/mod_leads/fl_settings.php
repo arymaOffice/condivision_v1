@@ -30,7 +30,7 @@ $dateTimePicker = 1;
 
 $tab_div_labels = array('id' => "Dati Personali", 'tipo_interesse' => "Interesse Vettura", 'note' => 'Gestione');
 if (isset($_GET['id']) && check(@$_GET['id']) != 1) {
-$tab_div_labels = array('mod_richieste.php?reQiD=[*ID*]' => 'Gestione BDC', 'id' => "Dati Personali", 'privacy_1'=>'Privacy' ,'../mod_appuntamenti/mod_user.php?history&potential_rel=[*ID*]' => "Agenda Incontri", 'tipo_interesse' => "Interesse Vettura", '../mod_preventivi/mod_user.php?potential_id=[*ID*]' => "Preventivi" );
+    $tab_div_labels = array('mod_richieste.php?reQiD=[*ID*]' => 'Gestione BDC', 'id' => "Dati Personali", 'privacy_1' => 'Privacy', '../mod_appuntamenti/mod_user.php?history&potential_rel=[*ID*]' => "Agenda Incontri", 'tipo_interesse' => "Interesse Vettura", '../mod_preventivi/mod_user.php?potential_id=[*ID*]' => "Preventivi");
 }
 
 if (!isset($_SESSION['status_potential_id'])) {
@@ -63,7 +63,7 @@ $tipologia_main .= gwhere($campi2,'','tb2.');//Imposta i filtri della query pren
  */
 
 //Filtri di base (da strutturare quelli avanzati)
-$basic_filters = array('source_potential', 'tipo_interesse', 'permuta', 'campagna_id', 'lead_generator', 'proprietario', 'venditore','privacy_1','privacy_2','privacy_3');
+$basic_filters = array('source_potential', 'tipo_interesse', 'permuta', 'campagna_id', 'lead_generator', 'proprietario', 'venditore', 'privacy_1', 'privacy_2', 'privacy_3');
 $basic_filters2 = array(); //array('alimentazione','anno_immatricolazione','pagamento_veicolo');
 if (!isset($_SESSION['ordine_type'])) {
     $_SESSION['ordine_type'] = 'DESC';
@@ -133,7 +133,18 @@ if (isset($_GET['venditore']) && $_GET['venditore'] > 0) {
 }
 
 if (isset($_GET['lead_generator']) && $_GET['lead_generator'] > 0) {
-    $tipologia_main .= "  AND lead_generator = " . check($_GET['lead_generator']);
+    if ($_SESSION['usertype'] != 2) {
+        $tipologia_main .= "  AND lead_generator = " . check($_GET['lead_generator']);
+    } else {
+        $tipologia_main .= "  AND lead_generator = " . $_SESSION['number'];
+    }
+
+    //debug $tipologia_main .= "  AND lead_generator = " . check($_GET['lead_generator']);
+}else{
+
+    if ($_SESSION['usertype'] == 2)   $tipologia_main .= "  AND lead_generator = " . $_SESSION['number'];
+    
+
 }
 
 if (@$_GET['data_start'] != '') {
@@ -229,8 +240,8 @@ function select_type($who)
     $select = array('sede', "alimentazione", 'tipologia_veicolo', 'pagamento_veicolo', 'campagna_id', 'pagamento_vettura', "source_potential", 'vettura_posseduta_alimentazione', 'pagamento_vettura', 'experience_level', "mansione", "paese", "proprietario", "status_pagamento", "causale", "metodo_di_pagamento");
     $select_text = array("provincia", "citta", 'data_acquisto', 'anno_immatricolazione');
     $disabled = array("data_creazione", "visite", "data_assegnazione");
-    $hidden = array("data_aggiornamento",'venditore','lead_generator');
-    $radio = array('promo_pneumatici', 'test_drive', 'vettura_promo', 'permuta','privacy_1','privacy_2','privacy_3');
+    $hidden = array("data_aggiornamento", 'venditore', 'lead_generator');
+    $radio = array('promo_pneumatici', 'test_drive', 'vettura_promo', 'permuta', 'privacy_1', 'privacy_2', 'privacy_3');
     $text = array();
     $calendario = array('data_scadenza', 'data_acquisto_vettura', 'data_test_drive', 'periodo_cambio_vettura');
     $file = array();
@@ -277,12 +288,14 @@ foreach ($status_potential as $valores => $label) { // Recursione Indici di Cate
     $action = (isset($_GET['action'])) ? '&action=' . check($_GET['action']) : "";
     $source = '';
     if (isset($_GET['source_potential'])) {
-        if(is_array($_GET['source_potential']))
+        if (is_array($_GET['source_potential'])) {
             foreach (@$_GET['source_potential'] as $key => $value) {
                 $source .= '&source_potential[]=' . check($value);
             }
-        else
+        } else {
             $source .= '&source_potential[]=' . check($_GET['source_potential']);
+        }
+
     }
     //$querycount = 'status_potential != 4 ';
     //$querycount .= ($valores < 0) ? '' : ' AND status_potential = '.$valores;

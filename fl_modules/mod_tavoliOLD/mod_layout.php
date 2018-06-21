@@ -18,9 +18,9 @@ $totalizzatore = GQD('`fl_tavoli_commensali` AS persone LEFT JOIN fl_tavoli AS t
 
 ?>
 
-<script src="../../fl_set/jsc/fabric/fabric.min.js" typre="text/javascript"></script>
-<script src="../../fl_set/jsc/fabric/fabric.ext.js" typre="text/javascript"></script>
-<script src="../../fl_set/jsc/fabric/myCanvas.js" typre="text/javascript"></script>
+<script src="js/fabric.min.js" typre="text/javascript"></script>
+<script src="js/fabric.ext.js" typre="text/javascript"></script>
+<script src="js/myCanvas.js" typre="text/javascript"></script>
 <style>
 
 	.ui-dialog{
